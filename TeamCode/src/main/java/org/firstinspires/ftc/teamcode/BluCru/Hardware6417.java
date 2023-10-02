@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 public class Hardware6417 {
     public DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
