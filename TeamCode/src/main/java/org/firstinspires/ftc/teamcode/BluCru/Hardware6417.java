@@ -53,6 +53,10 @@ public class Hardware6417 {
         wrist       = hwMap.get(Servo.class, "Wrist");
     }
 
+    public void initDrive(HardwareMap hwMap, Pose2d pose) {
+        drive = new MecanumDrive(hwMap, pose);
+    }
+
     public void autoWrist(double position) {
         if(wrist.getPosition() != position) {
             wrist.setPosition(position);

@@ -25,10 +25,25 @@ right joystick : turn
 public class MainTeleOp extends LinearOpMode {
     Hardware6417 robot;
     enum ROBOTSTATE{
-        maneuvering
+        moving, intake, eject, preOuttake, outtake, preHang, hanging
+    }
+
+    enum SLIDESTATE {
+        zero, low, med, high, manual
+    }
+
+    enum WRISTSTATE{
+        moving, intake, preOuttake, outtake
+    }
+
+    enum WHEELSTATE{
+        intake, outtake, stop
     }
 
     ROBOTSTATE robotState, lastRobotState;
+    SLIDESTATE slideState;
+    WRISTSTATE wristState;
+    WHEELSTATE wheelState;
 
     Gamepad currentGamepad1, currentGamepad2, lastGamepad1, lastGamepad2;
 
@@ -36,11 +51,12 @@ public class MainTeleOp extends LinearOpMode {
     double vertControl, horzControl, rotateControl;
     double driveSpeed;
     double heading, headingOffset;
-    boolean grabbing;
+    double sens = 0.1;
+    boolean duoDrive;
 
     ElapsedTime totalTimer;
+    double lastTime, deltaTime;
 
-    int numOfGamepads;
     @Override
     public void runOpMode() throws InterruptedException {
         currentGamepad1 = new Gamepad();
@@ -48,9 +64,6 @@ public class MainTeleOp extends LinearOpMode {
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
         robot = new Hardware6417(hardwareMap);
-
-        grabbing = false;
-        int dunk = 0;
 
         slideZeroTime = 0;
         driveSpeed = 0;
@@ -69,12 +82,29 @@ public class MainTeleOp extends LinearOpMode {
 
         while(opModeIsActive()) {
             setNumOfGamepads();
+            // gets time at the start of loop
+            lastTime = totalTimer.milliseconds();
             lastGamepad1.copy(currentGamepad1);
             lastGamepad2.copy(currentGamepad2);
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+            switch (robotState) {
+                case moving:
+                    if(currentGamepad1.left_bumper && !currentGamepad1.right_bumper) {
+                        setRobotState(ROBOTSTATE.intake);
+                    } else if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
+                        setRobotState(ROBOTSTATE.outtake);
+                    }
+
+                    break;
+            }
+
+            // loop time: current time - time at start of loop
+            deltaTime = totalTimer.milliseconds() - lastTime;
+
             robot.telemetry(telemetry);
+            telemetry.addData("loop time", deltaTime);
             telemetry.update();
         }
     }
@@ -84,15 +114,15 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     public void setNumOfGamepads() {
-        if(gamepad2.getGamepadId() == -1) {
-            numOfGamepads = 1;
-        } else {
-            numOfGamepads = 2;
-        }
+        duoDrive = !(gamepad2.getGamepadId() == -1);
     }
 
     public void initStates() {
-        robotState = ROBOTSTATE.maneuvering;
+        robotState = ROBOTSTATE.moving;
+        lastRobotState = ROBOTSTATE.moving;
+        slideState = SLIDESTATE.zero;
+        wristState = WRISTSTATE.intake;
+        wheelState = WHEELSTATE.stop;
     }
 
     public void initRobot() {
