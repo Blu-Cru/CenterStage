@@ -84,20 +84,34 @@ public class MainTeleOp extends LinearOpMode {
             setNumOfGamepads();
             // gets time at the start of loop
             lastTime = totalTimer.milliseconds();
+
+            // sets gamepad for the loop
             lastGamepad1.copy(currentGamepad1);
             lastGamepad2.copy(currentGamepad2);
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+            // robot superstate control
             switch (robotState) {
                 case moving:
                     if(currentGamepad1.left_bumper && !currentGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.intake);
                     } else if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
-                        setRobotState(ROBOTSTATE.outtake);
+                        setRobotState(ROBOTSTATE.eject);
                     }
 
                     break;
+                case intake:
+                    if(!currentGamepad1.left_bumper && lastGamepad1.right_bumper) {
+                        setRobotState(ROBOTSTATE.moving);
+                    }
+                    break;
+                case eject:
+                    if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
+                        setRobotState(ROBOTSTATE.moving);
+                    }
+                    break;
+                case preOuttake:
             }
 
             // loop time: current time - time at start of loop
@@ -127,6 +141,7 @@ public class MainTeleOp extends LinearOpMode {
 
     public void initRobot() {
         robot.resetSliders();
-        robot.autoWrist(Constants.wristUpPos);
+        robot.autoWrist(Constants.wristMovingPos);
+        robot.setWheelPowers(0);
     }
 }

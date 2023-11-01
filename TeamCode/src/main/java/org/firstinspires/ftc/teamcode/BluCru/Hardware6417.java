@@ -19,7 +19,7 @@ import java.util.Vector;
 public class Hardware6417 {
     public DcMotorEx slider, auxSlider;
     public Servo wrist;
-    public CRServo intake;
+    public CRServo wheels;
     public MecanumDrive drive;
 
     public Hardware6417(HardwareMap hwMap) {
@@ -61,6 +61,10 @@ public class Hardware6417 {
         if(wrist.getPosition() != position) {
             wrist.setPosition(position);
         }
+    }
+
+    public void setWheelPowers(double power) {
+        wheels.setPower(power);
     }
 
     public boolean slideOuttakeReady() {

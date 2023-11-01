@@ -22,14 +22,13 @@ public class Constants {
     public static double grabberClosePos          = 0.97;
     public static double grabberOpenPos           = 0.8;
 
-    public static double wristUpPos               = 0.05;
+    public static double wristMovingPos           = 0.05;
     public static double wristDownPos             = 0.78;
-    public static double wristConeRightPos        = 0.97;
+    public static double wristPreOuttakePos       = 0.97;
+    public static double wristOuttakePos          = 0.97;
 
     /* encoder tick variables */
     public static int sliderBasePos               = 0;
-    public static int sliderStackedConePos        = 45;
-    public static int sliderConeRightPos          = 80;
     public static int sliderLowPos                = 425;
     public static int sliderMedPos                = 815;
     public static int sliderHighPos               = 1115;
