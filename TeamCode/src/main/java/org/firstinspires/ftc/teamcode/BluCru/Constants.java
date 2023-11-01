@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.BluCru;
 
 public class Constants {
     public static double sens                     = 0.1;
@@ -25,20 +25,6 @@ public class Constants {
     public static double wristUpPos               = 0.05;
     public static double wristDownPos             = 0.78;
     public static double wristConeRightPos        = 0.97;
-
-    public static double twisterCenterPos         = 0.512;
-    public static double twisterRightPos          = 0.485;
-    public static double twisterLeftPos           = 0.542;
-
-    public static double turretCenterPos          = 0.5;
-    public static double turretRightPos            = 0.96;
-    public static double turretLeftPos           = 0.04;
-
-    public static double leftOdoRetractPos        = 0.0;
-    public static double leftOdoDropPos           = 0.3;
-
-    public static double rightOdoRetractPos       = 0.0;
-    public static double rightOdoDropPos          = 0.3;
 
     /* encoder tick variables */
     public static int sliderBasePos               = 0;

@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.BluCru;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,17 +11,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
+import java.util.Vector;
+
 public class Hardware6417 {
-    public DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
-    public Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
+    public DcMotorEx slider, auxSlider;
+    public Servo wrist;
+    public CRServo intake;
+    public MecanumDrive drive;
 
     public Hardware6417(HardwareMap hwMap) {
         initSlides(hwMap);
         initIntake(hwMap);
-        initRetract(hwMap);
     }
 
     public void initSlides(HardwareMap hwMap) {
@@ -45,26 +50,7 @@ public class Hardware6417 {
     }
 
     public void initIntake(HardwareMap hwMap) {
-        turret      = hwMap.get(Servo.class, "Turret");
-        grabber     = hwMap.get(Servo.class, "Grabber");
-        twister     = hwMap.get(Servo.class, "Twister");
         wrist       = hwMap.get(Servo.class, "Wrist");
-    }
-
-    public void initRetract(HardwareMap hwMap) {
-        leftRetract = hwMap.get(Servo.class, "LeftRetract");
-        rightRetract = hwMap.get(Servo.class, "RightRetract");
-    }
-    public void autoTurret(double position) {
-        if(turret.getPosition() != position) {
-            turret.setPosition(position);
-        }
-    }
-
-    public void autoTwister(double position) {
-        if(twister.getPosition() != position) {
-            twister.setPosition(position);
-        }
     }
 
     public void autoWrist(double position) {
@@ -110,18 +96,9 @@ public class Hardware6417 {
         return slider.getCurrentPosition() < Constants.sliderIntakeDelta;
     }
 
-    public boolean turretClear() {return slider.getCurrentPosition() > Constants.sliderTurretClearPos;}
-
-    public void closeGrabber() {grabber.setPosition(Constants.grabberClosePos);}
-    public void openGrabber() {grabber.setPosition(Constants.grabberOpenPos);}
-
-    public void retractOdo() {
-        leftRetract.setPosition(Constants.leftOdoRetractPos);
-        rightRetract.setPosition(Constants.rightOdoRetractPos);
-    }
-    public void dropOdo() {
-        leftRetract.setPosition(Constants.leftOdoDropPos);
-        rightRetract.setPosition(Constants.rightOdoDropPos);
+    public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
+        Vector2d input = new Vector2d(horz, vert);
+        drive.setDrivePowers(new PoseVelocity2d(input, rotate*driveSpeed));
     }
 
     /*public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
