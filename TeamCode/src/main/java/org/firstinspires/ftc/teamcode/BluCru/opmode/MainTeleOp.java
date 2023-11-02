@@ -94,6 +94,7 @@ public class MainTeleOp extends LinearOpMode {
             // robot superstate control
             switch (robotState) {
                 case moving:
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, WHEELSTATE.stop, Constants.driveSpeedMoving);
                     if(currentGamepad1.left_bumper && !currentGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.intake);
                     } else if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
@@ -102,11 +103,13 @@ public class MainTeleOp extends LinearOpMode {
 
                     break;
                 case intake:
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, WHEELSTATE.intake, Constants.driveSpeedIntake);
                     if(!currentGamepad1.left_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;
                 case eject:
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, WHEELSTATE.outtake, Constants.driveSpeedEject);
                     if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.moving);
                     }
@@ -125,6 +128,13 @@ public class MainTeleOp extends LinearOpMode {
     public void setRobotState(ROBOTSTATE targetRobotState) {
         lastRobotState = robotState;
         robotState = targetRobotState;
+    }
+
+    public void setSubstates(SLIDESTATE slideState, WRISTSTATE wristState, WHEELSTATE wheelState, double driveSpeed) {
+        this.slideState = slideState;
+        this.wristState = wristState;
+        this.wheelState = wheelState;
+        this.driveSpeed = driveSpeed;
     }
 
     public void setNumOfGamepads() {

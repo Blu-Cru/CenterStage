@@ -8,10 +8,10 @@ public class Constants {
 
     /* servo variables */
     public static double driveSpeedIntake         = 0.5;
-    public static double driveSpeedManeuvering    = 0.75;
-    public static double driveSpeedOuttakeQueue   = 0.5;
-    public static double driveSpeedOuttakeReady   = 0.3;
-    public static double driveSpeedConeRight      = 0.25;
+    public static double driveSpeedMoving         = 0.75;
+    public static double driveSpeedPreOuttake     = 0.6;
+    public static double driveSpeedOuttake        = 0.4;
+    public static double driveSpeedEject          = 0.4;
 
     public static double slideHighPower           = 0.8;
     public static double slideMedPower            = 0.8;
