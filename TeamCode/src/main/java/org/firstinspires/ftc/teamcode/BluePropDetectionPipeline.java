@@ -17,7 +17,7 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
 
     public BluePropDetectionPipeline() {
         frameList = new ArrayList<double[]>();
-        strictLowS = 0;
+        strictLowS = 130;
         strictHighS = 255;
     }
     @Override
@@ -29,8 +29,8 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
             return input;
         }
 
-        Scalar lower = new Scalar(80,60,40);
-        Scalar upper = new Scalar(255, 255, 255);
+        Scalar lower = new Scalar(80,40,20);
+        Scalar upper = new Scalar(150, 255, 255);
 
         Mat thresh = new Mat();
         Core.inRange(mat, lower, upper, thresh);
@@ -38,12 +38,14 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
         Mat masked = new Mat();
         Core.bitwise_and(mat, mat, masked, thresh);
 
-        /*
+
         //calculate average HSV values of the white thresh values
         Scalar average = Core.mean(masked, thresh);
         Mat scaledMask = new Mat();
         //scale the average saturation to 150
         masked.convertTo(scaledMask, -1, 150 / average.val[1], 0);
+
+
 
         Mat scaledThresh = new Mat();
         //you probably want to tune this
@@ -52,13 +54,18 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
         //apply strict HSV filter onto scaledMask to get rid of any yellow other than pole
         Core.inRange(scaledMask, strictLowHSV, strictHighHSV, scaledThresh);
 
+
+
         Mat finalMask = new Mat();
         //color in scaledThresh with HSV, output into finalMask(only useful for showing result)(you can delete)
         Core.bitwise_and(mat, mat, finalMask, scaledThresh);
 
+
         Mat edges = new Mat();
         //detect edges(only useful for showing result)(you can delete)
         Imgproc.Canny(scaledThresh, edges, 100, 200);
+
+        /*
 
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
@@ -69,16 +76,16 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
             frameList.remove(0);
         }
 */
+        Imgproc.cvtColor(masked, masked, Imgproc.COLOR_HSV2RGB);
 
         // input.release();
-        //scaledThresh.release();
-        //scaledMask.release();
+        scaledThresh.release();
+        scaledMask.release();
         mat.release();
-        Imgproc.cvtColor(masked, masked, Imgproc.COLOR_HSV2RGB);
-        // masked.release();
-        //edges.release();
+        //masked.release();
+         edges.release();
         thresh.release();
-        //finalMask.release();
+        finalMask.release();
         //change the return to whatever mat you want
         //for example, if I want to look at the lenient thresh:
         // return thresh;
