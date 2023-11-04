@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -10,8 +12,9 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 public class CVMaster {
     private OpenCvWebcam webcam;
-    private BluePropDetectionPipeline pipeline;
+    public BluePropDetectionPipeline pipeline;
     private HardwareMap hardwareMap;
+
 
     public CVMaster(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -19,7 +22,7 @@ public class CVMaster {
     }
 
     public void detectProp() {
-        pipeline = new BluePropDetectionPipeline();
+        pipeline = new BluePropDetectionPipeline(1280, 720);
         webcam.setPipeline(pipeline);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -38,4 +41,6 @@ public class CVMaster {
     public void stopCamera() {
         webcam.stopStreaming();
     }
+
+
 }

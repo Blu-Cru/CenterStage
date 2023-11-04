@@ -18,8 +18,13 @@ public class DetectionTest extends LinearOpMode {
             cvMaster = new CVMaster(hardwareMap);
             cvMaster.detectProp();
             // Init
-            telemetry.addData("Status", "Initialized");
-            telemetry.update();
+            while (opModeInInit()) {
+                telemetry.addData("Status", "Initialized");
+                telemetry.addData("Average0", BluePropDetectionPipeline.average0);
+                telemetry.addData("Average1", BluePropDetectionPipeline.average1);
+                telemetry.addData("Average2", BluePropDetectionPipeline.average2);
+                telemetry.update();
+            }
             waitForStart();
             // Run
             while (opModeIsActive()) {

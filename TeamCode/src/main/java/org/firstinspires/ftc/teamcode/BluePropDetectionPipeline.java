@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -11,14 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BluePropDetectionPipeline extends OpenCvPipeline {
+    private static Rect rect0 = getRect(0.3, 0.5, 100, 100, 1280, 720);
+    private static Rect rect1 = getRect(0.5, 0.5, 100, 100, 1280, 720);
+    private static Rect rect2 = getRect(0.7, 0.5, 100, 100, 1280, 720);
+    public static Mat subMat0, subMat1, subMat2;
+    public static double average0, average1, average2;
     ArrayList<double[]> frameList;
+    public List<MatOfPoint> contours;
     public static double strictLowS;
     public static double strictHighS;
+    public static int position = 1;
 
-    public BluePropDetectionPipeline() {
+    public BluePropDetectionPipeline(int camWidth, int camHeight) {
         frameList = new ArrayList<double[]>();
         strictLowS = 130;
         strictHighS = 255;
+        contours = new ArrayList<>();
     }
     @Override
     public Mat processFrame(Mat input) {
@@ -28,6 +37,8 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
         if(mat.empty()) {
             return input;
         }
+
+
 
         Scalar lower = new Scalar(80,40,20);
         Scalar upper = new Scalar(150, 255, 255);
@@ -54,43 +65,49 @@ public class BluePropDetectionPipeline extends OpenCvPipeline {
         //apply strict HSV filter onto scaledMask to get rid of any yellow other than pole
         Core.inRange(scaledMask, strictLowHSV, strictHighHSV, scaledThresh);
 
+        Imgproc.rectangle(scaledThresh, rect0, new Scalar(255, 255, 255), 2);
+        Imgproc.rectangle(scaledThresh, rect1, new Scalar(255, 255, 255), 2);
+        Imgproc.rectangle(scaledThresh, rect2, new Scalar(255, 255, 255), 2);
 
+        // create submats for 3 detection areas
+        subMat0 = scaledThresh.submat(rect0);
+        subMat1 = scaledThresh.submat(rect1);
+        subMat2 = scaledThresh.submat(rect2);
 
-        Mat finalMask = new Mat();
-        //color in scaledThresh with HSV, output into finalMask(only useful for showing result)(you can delete)
-        Core.bitwise_and(mat, mat, finalMask, scaledThresh);
-
-
-        Mat edges = new Mat();
-        //detect edges(only useful for showing result)(you can delete)
-        Imgproc.Canny(scaledThresh, edges, 100, 200);
-
-        /*
-
-        List<MatOfPoint> contours = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        //find contours, input scaledThresh because it has hard edges
-        Imgproc.findContours(scaledThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        // get average values of each submat
+        average0 = Core.mean(subMat0).val[0];
+        average1 = Core.mean(subMat1).val[0];
+        average2 = Core.mean(subMat2).val[0];
 
         if (frameList.size() > 5) {
             frameList.remove(0);
         }
-*/
+
         Imgproc.cvtColor(masked, masked, Imgproc.COLOR_HSV2RGB);
 
         // input.release();
-        scaledThresh.release();
+        //scaledThresh.release();
         scaledMask.release();
         mat.release();
-        //masked.release();
-         edges.release();
+        masked.release();
+        //edges.release();
         thresh.release();
-        finalMask.release();
+        //finalMask.release();
         //change the return to whatever mat you want
         //for example, if I want to look at the lenient thresh:
         // return thresh;
         // note that you must not do thresh.release() if you want to return thresh
         // you also need to release the input if you return thresh(release as much as possible)
-        return masked;
+        return scaledThresh;
+    }
+
+    public static Rect getRect(double centerx, double centery, int width, int height, int camWidth, int camHeight) {
+        int subMatRectX = (int)(camWidth * centerx) - (width / 2);
+        int subMatRectY = (int)(camHeight * centery) - (height / 2);
+        int subMatRectWidth = width;
+        int subMatRectHeight = height;
+
+        Rect subMatRect = new Rect(subMatRectX, subMatRectY, subMatRectWidth, subMatRectHeight);
+        return subMatRect;
     }
 }
