@@ -91,10 +91,19 @@ public class MainTeleOp extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+            // wheel control
+            if(gamepad1.left_trigger > Constants.triggerSens) {
+                robot.setWheelPowers(-Constants.wheelSpeedOuttake * gamepad1.left_trigger);
+            } else if(gamepad1.right_trigger > Constants.triggerSens) {
+                robot.setWheelPowers(Constants.wheelSpeedIntake * gamepad1.right_trigger);
+            } else {
+                robot.setWheelPowers(Constants.wheelSpeedStop);
+            }
+
             // robot superstate control
             switch (robotState) {
                 case moving:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, WHEELSTATE.stop, Constants.driveSpeedMoving);
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, Constants.driveSpeedMoving);
                     if(currentGamepad1.left_bumper && !currentGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.intake);
                     } else if (currentGamepad1.right_bumper && !currentGamepad1.left_bumper) {
@@ -103,18 +112,23 @@ public class MainTeleOp extends LinearOpMode {
 
                     break;
                 case intake:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, WHEELSTATE.intake, Constants.driveSpeedIntake);
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, Constants.driveSpeedIntake);
                     if(!currentGamepad1.left_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;
                 case eject:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, WHEELSTATE.outtake, Constants.driveSpeedEject);
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, Constants.driveSpeedEject);
                     if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;
                 case preOuttake:
+                    setSubstates(SLIDESTATE.zero, WRISTSTATE.preOuttake, Constants.driveSpeedPreOuttake);
+                    if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
+                        setRobotState(ROBOTSTATE.outtake);
+                    }
+                    break;
             }
 
             // loop time: current time - time at start of loop
@@ -130,10 +144,9 @@ public class MainTeleOp extends LinearOpMode {
         robotState = targetRobotState;
     }
 
-    public void setSubstates(SLIDESTATE slideState, WRISTSTATE wristState, WHEELSTATE wheelState, double driveSpeed) {
+    public void setSubstates(SLIDESTATE slideState, WRISTSTATE wristState, double driveSpeed) {
         this.slideState = slideState;
         this.wristState = wristState;
-        this.wheelState = wheelState;
         this.driveSpeed = driveSpeed;
     }
 
