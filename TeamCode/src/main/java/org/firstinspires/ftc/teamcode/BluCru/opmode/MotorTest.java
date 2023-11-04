@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.BluCru.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+
+@TeleOp(name = "motor test", group = "TeleOp")
 public class MotorTest extends LinearOpMode {
     double pos = 0;
     @Override

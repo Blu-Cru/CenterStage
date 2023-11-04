@@ -8,7 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
@@ -18,18 +20,20 @@ import java.util.Vector;
 
 public class Hardware6417 {
     public DcMotorEx slider, auxSlider;
+    public ServoControllerEx wristController, wheelController;
     public Servo wrist;
     public CRServo wheels;
     public MecanumDrive drive;
+    public IMU imu;
+    public HardwareMap hwMap;
 
-    public Hardware6417(HardwareMap hwMap) {
-        initSlides(hwMap);
-        initIntake(hwMap);
+    public Hardware6417(HardwareMap hardwareMap) {
+        hwMap = hardwareMap;
     }
 
-    public void initSlides(HardwareMap hwMap) {
-        slider  = hwMap.get(DcMotorEx.class, "Slider");
-        auxSlider = hwMap.get(DcMotorEx.class, "AuxSlider");
+    public void initSlides() {
+        slider  = hwMap.get(DcMotorEx.class, "slider");
+        auxSlider = hwMap.get(DcMotorEx.class, "auxSlider");
 
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
         auxSlider.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -49,22 +53,48 @@ public class Hardware6417 {
         auxSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void initIntake(HardwareMap hwMap) {
-        wrist       = hwMap.get(Servo.class, "Wrist");
+    public void initIMU() {
+        imu = hwMap.get(IMU.class, "imu");
     }
 
-    public void initDrive(HardwareMap hwMap, Pose2d pose) {
+    public void initIntake() {
+        wrist       = hwMap.get(Servo.class, "wrist");
+        wristController = (ServoControllerEx) wrist.getController();
+
+        wheels     = hwMap.get(CRServo.class, "wheels");
+        wheelController = (ServoControllerEx) wheels.getController();
+    }
+
+    public void initDrive(Pose2d pose) {
         drive = new MecanumDrive(hwMap, pose);
     }
 
     public void autoWrist(double position) {
+        if(wristController.getPwmStatus() != ServoControllerEx.PwmStatus.ENABLED) {
+            wristController.setServoPwmEnable(wrist.getPortNumber());
+        }
         if(wrist.getPosition() != position) {
             wrist.setPosition(position);
         }
     }
 
     public void setWheelPowers(double power) {
+        if(wheelController.getPwmStatus() != ServoControllerEx.PwmStatus.ENABLED) {
+            wheelController.setServoPwmEnable(wheels.getPortNumber());
+        }
         wheels.setPower(power);
+    }
+
+    public void stopWheels() {
+        if(wheelController.getPwmStatus() != ServoControllerEx.PwmStatus.DISABLED) {
+            wheelController.setServoPwmDisable(wrist.getPortNumber());
+        }
+    }
+
+    public void stopWrist() {
+        if(wristController.getPwmStatus() != ServoControllerEx.PwmStatus.DISABLED) {
+            wristController.setServoPwmDisable(wrist.getPortNumber());
+        }
     }
 
     public boolean slideOuttakeReady() {
@@ -117,5 +147,8 @@ public class Hardware6417 {
     public void telemetry(Telemetry tele) {
         tele.addData("slider position: ", slider.getCurrentPosition());
         tele.addData("slider target pos: ", slider.getTargetPosition());
+        tele.addData("aux slider target pos: ", auxSlider.getTargetPosition());
+        tele.addData("wrist position: ", wrist.getPosition());
+        tele.addData("wheels power: ", wheels.getPower());
     }
 }
