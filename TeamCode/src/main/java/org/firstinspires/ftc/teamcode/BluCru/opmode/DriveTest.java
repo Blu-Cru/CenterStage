@@ -28,7 +28,7 @@ public class DriveTest extends LinearOpMode {
             horz = Math.pow(gamepad1.left_stick_x, 3);
             rotate = Math.pow(gamepad1.right_stick_x, 3);
 
-            drivePoseVelocity = new PoseVelocity2d(new Vector2d(vert, horz), rotate);
+            drivePoseVelocity = new PoseVelocity2d(new Vector2d(horz, vert), rotate);
 
             if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
                 robot.drive.setDrivePowers(drivePoseVelocity);
