@@ -97,11 +97,11 @@ public class MainTeleOp extends LinearOpMode {
 
             // wheel control
             if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(-Constants.wheelSpeedOuttake * gamepad1.left_trigger / 2 + 0.5);
+                robot.setWheelPowers(-Constants.wheelSpeedOuttake * gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.wheelSpeedIntake * gamepad1.right_trigger /2 + 0.5);
+                robot.setWheelPowers(Constants.wheelSpeedIntake * gamepad1.right_trigger);
             } else {
-                robot.stopWheels();
+                robot.setWheelPowers(0);
             }
 
             // robot superstate control

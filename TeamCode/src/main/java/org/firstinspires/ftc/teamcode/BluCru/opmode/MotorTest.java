@@ -16,17 +16,20 @@ public class MotorTest extends LinearOpMode {
         test.setDirection(DcMotorSimple.Direction.FORWARD);
         test.setPower(0);
         test.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        test.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        test.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         test.setTargetPosition(0);
-        test.setPower(0.5);
+        test.setPower(0);
 
         boolean lastLB1 = false;
         boolean lastRB1 = false;
         int delta = 100;
         int pos = 0;
+        double vert;
 
         waitForStart();
         while(opModeIsActive()) {
+            vert = -gamepad1.left_stick_y;
+
             delta = (int)(-gamepad1.right_stick_y*200) + 200;
             if(gamepad1.right_bumper && !lastRB1) {
                 test.setTargetPosition(test.getCurrentPosition() + 100);
@@ -37,6 +40,11 @@ public class MotorTest extends LinearOpMode {
             if(gamepad1.a) {
                 pos = test.getCurrentPosition();
             }
+            if(vert > 0.1) {
+                test.setPower(vert);
+            } else {
+                test.setPower(0);
+            }
 
             lastLB1 = gamepad1.left_bumper;
             lastRB1 = gamepad1.right_bumper;
@@ -44,6 +52,7 @@ public class MotorTest extends LinearOpMode {
             telemetry.addData("target", test.getTargetPosition());
             telemetry.addData("current", test.getCurrentPosition());
             telemetry.addData("delta", delta);
+            telemetry.addData("power", test.getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }

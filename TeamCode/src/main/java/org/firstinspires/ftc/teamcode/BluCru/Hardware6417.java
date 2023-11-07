@@ -20,7 +20,7 @@ import java.util.Vector;
 
 public class Hardware6417 {
     public DcMotorEx slider, auxSlider;
-    public ServoControllerEx wristController, wheelController;
+    public ServoControllerEx wristController;
     public Servo wrist;
     public CRServo wheels;
     public MecanumDrive drive;
@@ -62,7 +62,6 @@ public class Hardware6417 {
         wristController = (ServoControllerEx) wrist.getController();
 
         wheels     = hwMap.get(CRServo.class, "wheels");
-        wheelController = (ServoControllerEx) wheels.getController();
     }
 
     public void initDrive(Pose2d pose) {
@@ -79,16 +78,7 @@ public class Hardware6417 {
     }
 
     public void setWheelPowers(double power) {
-        if(wheelController.getPwmStatus() != ServoControllerEx.PwmStatus.ENABLED) {
-            wheelController.setServoPwmEnable(wheels.getPortNumber());
-        }
         wheels.setPower(power);
-    }
-
-    public void stopWheels() {
-        if(wheelController.getPwmStatus() != ServoControllerEx.PwmStatus.DISABLED) {
-            wheelController.setServoPwmDisable(wrist.getPortNumber());
-        }
     }
 
     public void stopWrist() {
