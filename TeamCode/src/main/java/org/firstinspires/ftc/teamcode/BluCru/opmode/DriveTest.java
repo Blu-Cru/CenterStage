@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 @TeleOp(name = "drive test", group = "TeleOp")
@@ -16,19 +17,26 @@ public class DriveTest extends LinearOpMode {
     Hardware6417 robot;
     double vert, horz, rotate;
     PoseVelocity2d drivePoseVelocity;
+    double yawOffset, yaw;
 
     @Override
     public void runOpMode() {
         robot = new Hardware6417(hardwareMap);
-        robot.initDrive(new Pose2d(0, 0, Math.PI/2));
+        robot.initDrive(new Pose2d(0, 0, 0));
 
         waitForStart();
+        yawOffset = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         while(opModeIsActive()){
             vert = -Math.pow(gamepad1.left_stick_y, 3);
             horz = -Math.pow(gamepad1.left_stick_x, 3);
             rotate = -Math.pow(gamepad1.right_stick_x, 3);
+            yaw = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
             drivePoseVelocity = new PoseVelocity2d(new Vector2d(vert, horz), rotate);
+
+            if(gamepad1.a) {
+                yawOffset = yaw;
+            }
 
             if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
                 robot.drive.setDrivePowers(drivePoseVelocity);
@@ -36,6 +44,8 @@ public class DriveTest extends LinearOpMode {
                 robot.drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
             }
 
+            telemetry.addData("yaw", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("yaw offset", yawOffset);
             telemetry.addData("vert", vert);
             telemetry.addData("horz", horz);
             telemetry.addData("rotate", rotate);
