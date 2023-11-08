@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
-@TeleOp(name = "motor test", group = "TeleOp")
-public class MotorTest extends LinearOpMode {
-    DcMotorEx[] motors = {};
+@TeleOp(name = "drive motor test", group = "TeleOp")
+public class DriveMotorTest extends LinearOpMode {
+    DcMotorEx[] motors = new DcMotorEx[4];
 
     double pos = 0;
     @Override
@@ -18,6 +18,9 @@ public class MotorTest extends LinearOpMode {
         DcMotorEx fl = hardwareMap.get(DcMotorEx.class, "frontLeft");
         DcMotorEx br = hardwareMap.get(DcMotorEx.class, "backRight");
         DcMotorEx bl = hardwareMap.get(DcMotorEx.class, "backLeft");
+
+        int index = 0;
+
         motors[0] = fr;
         motors[1] = fl;
         motors[2] = br;
@@ -39,31 +42,30 @@ public class MotorTest extends LinearOpMode {
         while(opModeIsActive()) {
             vert = -gamepad1.left_stick_y;
 
-
-
-            delta = (int)(-gamepad1.right_stick_y*200) + 200;
-            if(gamepad1.right_bumper && !lastRB1) {
-                fr.setTargetPosition(fr.getCurrentPosition() + 100);
-            }
-            if(gamepad1.left_bumper && !lastLB1) {
-                fr.setTargetPosition(fr.getCurrentPosition() - 100);
-            }
             if(gamepad1.a) {
-                pos = fr.getCurrentPosition();
+                index = 0;
             }
+            if(gamepad1.b) {
+                index = 1;
+            }
+            if(gamepad1.x) {
+                index = 2;
+            }
+            if(gamepad1.y) {
+                index = 3;
+            }
+
             if(vert > 0.1) {
-                fr.setPower(vert);
+                motors[index].setPower(vert);
             } else {
-                fr.setPower(0);
+                motors[index].setPower(0);
             }
 
             lastLB1 = gamepad1.left_bumper;
             lastRB1 = gamepad1.right_bumper;
 
-            telemetry.addData("target", fr.getTargetPosition());
-            telemetry.addData("current", fr.getCurrentPosition());
-            telemetry.addData("delta", delta);
-            telemetry.addData("power", fr.getPower());
+            telemetry.addData("index", index);
+            telemetry.addData("power", motors[index].getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }

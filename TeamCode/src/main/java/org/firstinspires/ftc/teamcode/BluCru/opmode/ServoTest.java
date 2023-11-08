@@ -12,7 +12,7 @@ public class ServoTest extends LinearOpMode {
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        Servo test = hardwareMap.get(Servo.class, "test");
+        Servo test = hardwareMap.get(Servo.class, "wheels");
         ServoControllerEx controller = (ServoControllerEx) test.getController();
         controller.setServoPwmDisable(test.getPortNumber());
         waitForStart();
