@@ -18,6 +18,8 @@ public class DriveTest extends LinearOpMode {
     double vert, horz, rotate;
     PoseVelocity2d drivePoseVelocity;
     double yawOffset, yaw;
+    boolean fieldCentric = false;
+    boolean lastLB1 = false;
 
     @Override
     public void runOpMode() {
@@ -38,12 +40,13 @@ public class DriveTest extends LinearOpMode {
                 yawOffset = yaw;
             }
 
-            if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
-                robot.drive.setDrivePowers(drivePoseVelocity);
-            } else {
-                robot.drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
+            if(gamepad1.left_bumper && !lastLB1) {
+                fieldCentric = !fieldCentric;
             }
 
+            robot.holonomicDrive(vert, horz, rotate, 1, yaw);
+
+            telemetry.addData("field centric", fieldCentric);
             telemetry.addData("yaw", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.addData("yaw offset", yawOffset);
             telemetry.addData("vert", vert);
@@ -52,4 +55,6 @@ public class DriveTest extends LinearOpMode {
             telemetry.update();
         }
     }
+
+
 }

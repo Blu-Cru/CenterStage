@@ -126,13 +126,22 @@ public class Hardware6417 {
 
     public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
         Vector2d input = new Vector2d(horz, vert);
-        drive.setDrivePowers(new PoseVelocity2d(input, rotate*driveSpeed));
+        input = rotateVector(input, -Math.toRadians(90));
+
+        if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
+            drive.setDrivePowers(new PoseVelocity2d(input, rotate));
+        } else {
+            drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
+        }
     }
 
     /*public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
         Vector2d input = new Vector2d(horz, vert).rotated(-heading - Math.toRadians(90));
         setWeightedDrivePower(new Pose2d(input.getX() * driveSpeed, input.getY() * driveSpeed, rotate * driveSpeed));
     }*/
+    public Vector2d rotateVector(Vector2d vector, double angle) {
+        return new Vector2d(vector.component1() * Math.cos(angle) - vector.component2() * Math.sin(angle), vector.component1() * Math.sin(angle) + vector.component2() * Math.cos(angle));
+    }
 
     public void telemetry(Telemetry tele) {
         tele.addData("slider position: ", slider.getCurrentPosition());

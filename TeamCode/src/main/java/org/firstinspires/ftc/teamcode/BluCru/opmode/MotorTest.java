@@ -14,14 +14,7 @@ public class MotorTest extends LinearOpMode {
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotorEx fr = hardwareMap.get(DcMotorEx.class, "frontRight");
-        DcMotorEx fl = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        DcMotorEx br = hardwareMap.get(DcMotorEx.class, "backRight");
-        DcMotorEx bl = hardwareMap.get(DcMotorEx.class, "backLeft");
-        motors[0] = fr;
-        motors[1] = fl;
-        motors[2] = br;
-        motors[3] = bl;
+        DcMotorEx test = hardwareMap.get(DcMotorEx.class, "frontRight");
 
         for(DcMotorEx motor : motors) {
             motor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -43,27 +36,27 @@ public class MotorTest extends LinearOpMode {
 
             delta = (int)(-gamepad1.right_stick_y*200) + 200;
             if(gamepad1.right_bumper && !lastRB1) {
-                fr.setTargetPosition(fr.getCurrentPosition() + 100);
+                test.setTargetPosition(test.getCurrentPosition() + 100);
             }
             if(gamepad1.left_bumper && !lastLB1) {
-                fr.setTargetPosition(fr.getCurrentPosition() - 100);
+                test.setTargetPosition(test.getCurrentPosition() - 100);
             }
             if(gamepad1.a) {
-                pos = fr.getCurrentPosition();
+                pos = test.getCurrentPosition();
             }
-            if(vert > 0.1) {
-                fr.setPower(vert);
+            if(Math.abs(vert) > 0.1) {
+                test.setPower(vert);
             } else {
-                fr.setPower(0);
+                test.setPower(0);
             }
 
             lastLB1 = gamepad1.left_bumper;
             lastRB1 = gamepad1.right_bumper;
 
-            telemetry.addData("target", fr.getTargetPosition());
-            telemetry.addData("current", fr.getCurrentPosition());
+            telemetry.addData("target", test.getTargetPosition());
+            telemetry.addData("current", test.getCurrentPosition());
             telemetry.addData("delta", delta);
-            telemetry.addData("power", fr.getPower());
+            telemetry.addData("power", test.getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }
