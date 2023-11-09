@@ -7,21 +7,22 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
-@TeleOp(name = "motor test", group = "TeleOp")
-public class MotorTest extends LinearOpMode {
-    DcMotorEx[] motors = {};
+@TeleOp(name = "dual slide test", group = "TeleOp")
+public class DualSlideTest extends LinearOpMode {
 
-    String name = "auxSlider";
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotorEx test = hardwareMap.get(DcMotorEx.class, name);
+        DcMotorEx slider = hardwareMap.get(DcMotorEx.class, "slider");
+        DcMotorEx auxSlider = hardwareMap.get(DcMotorEx.class, "auxSlider");
 
-        for(DcMotorEx motor : motors) {
-            motor.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor.setPower(0);
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
+        slider.setDirection(DcMotorSimple.Direction.REVERSE);
+        slider.setPower(0);
+        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        auxSlider.setDirection(DcMotorSimple.Direction.FORWARD);
+        auxSlider.setPower(0);
+        auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         boolean lastLB1 = false;
         boolean lastRB1 = false;
@@ -33,32 +34,31 @@ public class MotorTest extends LinearOpMode {
         while(opModeIsActive()) {
             vert = -gamepad1.left_stick_y;
 
-
-
             delta = (int)(-gamepad1.right_stick_y*200) + 200;
             if(gamepad1.right_bumper && !lastRB1) {
-                test.setTargetPosition(test.getCurrentPosition() + 100);
+                slider.setTargetPosition(slider.getCurrentPosition() + 100);
             }
             if(gamepad1.left_bumper && !lastLB1) {
-                test.setTargetPosition(test.getCurrentPosition() - 100);
+                slider.setTargetPosition(slider.getCurrentPosition() - 100);
             }
             if(gamepad1.a) {
-                pos = test.getCurrentPosition();
+                pos = slider.getCurrentPosition();
             }
             if(Math.abs(vert) > 0.1) {
-                test.setPower(vert);
+                slider.setPower(vert);
+                auxSlider.setPower(vert);
             } else {
-                test.setPower(0);
+                slider.setPower(0);
+                auxSlider.setPower(0);
             }
 
             lastLB1 = gamepad1.left_bumper;
             lastRB1 = gamepad1.right_bumper;
 
-            telemetry.addData("name", name);
-            telemetry.addData("target", test.getTargetPosition());
-            telemetry.addData("current", test.getCurrentPosition());
+            telemetry.addData("target", slider.getTargetPosition());
+            telemetry.addData("current", slider.getCurrentPosition());
             telemetry.addData("delta", delta);
-            telemetry.addData("power", test.getPower());
+            telemetry.addData("power", slider.getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }

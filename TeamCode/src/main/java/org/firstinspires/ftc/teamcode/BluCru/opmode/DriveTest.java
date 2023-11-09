@@ -27,12 +27,12 @@ public class DriveTest extends LinearOpMode {
         robot.initDrive(new Pose2d(0, 0, 0));
 
         waitForStart();
-        yawOffset = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        //yawOffset = robot.drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         while(opModeIsActive()){
             vert = -Math.pow(gamepad1.left_stick_y, 3);
-            horz = -Math.pow(gamepad1.left_stick_x, 3);
+            horz = Math.pow(gamepad1.left_stick_x, 3);
             rotate = -Math.pow(gamepad1.right_stick_x, 3);
-            yaw = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            //yaw = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
             drivePoseVelocity = new PoseVelocity2d(new Vector2d(vert, horz), rotate);
 
@@ -47,8 +47,8 @@ public class DriveTest extends LinearOpMode {
             robot.holonomicDrive(vert, horz, rotate, 1, yaw);
 
             telemetry.addData("field centric", fieldCentric);
-            telemetry.addData("yaw", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.addData("yaw offset", yawOffset);
+            //telemetry.addData("yaw", robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            //telemetry.addData("yaw offset", yawOffset);
             telemetry.addData("vert", vert);
             telemetry.addData("horz", horz);
             telemetry.addData("rotate", rotate);

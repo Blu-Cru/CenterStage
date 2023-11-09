@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.ServoControllerEx;
 @TeleOp(name = "servo test", group = "TeleOp")
 public class ServoTest extends LinearOpMode {
     double pos = 0;
-    String name = "wheels";
+    String name = "wrist";
     @Override
     public void runOpMode() throws InterruptedException {
         Servo test = hardwareMap.get(Servo.class, name);

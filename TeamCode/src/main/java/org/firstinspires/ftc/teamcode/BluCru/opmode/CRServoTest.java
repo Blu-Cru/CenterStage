@@ -14,19 +14,16 @@ public class CRServoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CRServo test = hardwareMap.get(CRServo.class, name);
-        ServoControllerEx controller = (ServoControllerEx) test.getController();
-        controller.setServoPwmDisable(test.getPortNumber());
         waitForStart();
         while(opModeIsActive()) {
             if(Math.abs(gamepad1.left_stick_y) > 0.1) {
-                controller.setServoPwmEnable(test.getPortNumber());
-                test.setPower(gamepad1.left_stick_y/2 + 0.5);
+                test.setPower(gamepad1.left_stick_y);
             } else {
-                controller.setServoPwmDisable(test.getPortNumber());
+                test.setPower(0);
             }
 
             telemetry.addData("name", name);
-            telemetry.addData("power", gamepad1.left_stick_y);
+            telemetry.addData("power", test.getPower());
             telemetry.update();
         }
     }
