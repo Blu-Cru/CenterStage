@@ -111,6 +111,17 @@ public class Hardware6417 {
         }
     }
 
+    public void setSlidePowers(double power) {
+        if(slider.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        if(auxSlider.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            auxSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        slider.setPower(power);
+        auxSlider.setPower(power);
+    }
+
     public void resetSliders() {
         slider.setPower(0);
         auxSlider.setPower(0);
