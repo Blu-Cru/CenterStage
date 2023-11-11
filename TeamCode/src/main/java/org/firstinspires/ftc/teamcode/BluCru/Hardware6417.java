@@ -26,6 +26,8 @@ public class Hardware6417 {
     public MecanumDrive drive;
     public IMU imu;
     public HardwareMap hwMap;
+//  heading offset is the heading set to forward on the field
+    private double headingOffset;
 
     public Hardware6417(HardwareMap hardwareMap) {
         hwMap = hardwareMap;
@@ -35,6 +37,7 @@ public class Hardware6417 {
         slider  = hwMap.get(DcMotorEx.class, "slider");
         auxSlider = hwMap.get(DcMotorEx.class, "auxSlider");
 
+//      set directions
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
         auxSlider.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -69,6 +72,7 @@ public class Hardware6417 {
     }
 
     public void autoWrist(double position) {
+//      enable servo pwm if it is not already enabled
         if(wristController.getPwmStatus() != ServoControllerEx.PwmStatus.ENABLED) {
             wristController.setServoPwmEnable(wrist.getPortNumber());
         }
@@ -82,6 +86,7 @@ public class Hardware6417 {
     }
 
     public void stopWrist() {
+//      disable servo pwm if it is not already disabled
         if(wristController.getPwmStatus() != ServoControllerEx.PwmStatus.DISABLED) {
             wristController.setServoPwmDisable(wrist.getPortNumber());
         }
@@ -124,7 +129,7 @@ public class Hardware6417 {
         return slider.getCurrentPosition() < Constants.sliderIntakeDelta;
     }
 
-    public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
+    public void holonomicDrive(double horz, double vert, double rotate, double driveSpeed, double heading) {
         Vector2d input = new Vector2d(horz, vert);
         input = rotateVector(input, -Math.toRadians(90));
 

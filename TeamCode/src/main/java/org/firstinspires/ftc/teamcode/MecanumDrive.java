@@ -47,6 +47,7 @@ import java.util.List;
 
 @Config
 public final class MecanumDrive {
+    private double headingOffset;
     public static class Params {
         // drive model parameters
         public double inPerTick = 0;
@@ -217,6 +218,16 @@ public final class MecanumDrive {
         leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
         rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag);
         rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
+    }
+
+    // returns heading in radians
+    public double getExternalHeading() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+    }
+
+    // sets heading offset
+    public void resetHeadingOffset() {
+        headingOffset = getExternalHeading();
     }
 
     public final class FollowTrajectoryAction implements Action {
