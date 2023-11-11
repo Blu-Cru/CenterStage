@@ -9,19 +9,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "dual slide test", group = "TeleOp")
 public class DualSlideTest extends LinearOpMode {
+    DcMotorEx slider, auxSlider;
 
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotorEx slider = hardwareMap.get(DcMotorEx.class, "slider");
-        DcMotorEx auxSlider = hardwareMap.get(DcMotorEx.class, "auxSlider");
+        slider = hardwareMap.get(DcMotorEx.class, "slider");
+        auxSlider = hardwareMap.get(DcMotorEx.class, "auxSlider");
 
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
+        resetSliders();
+
+        slider.setDirection(DcMotorSimple.Direction.FORWARD);
         slider.setPower(0);
-        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        auxSlider.setDirection(DcMotorSimple.Direction.FORWARD);
+        auxSlider.setDirection(DcMotorSimple.Direction.REVERSE);
         auxSlider.setPower(0);
-        auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         boolean lastLB1 = false;
@@ -56,11 +57,23 @@ public class DualSlideTest extends LinearOpMode {
             lastRB1 = gamepad1.right_bumper;
 
             telemetry.addData("target", slider.getTargetPosition());
-            telemetry.addData("current", slider.getCurrentPosition());
+            telemetry.addData("current", auxSlider.getCurrentPosition());
             telemetry.addData("delta", delta);
             telemetry.addData("power", slider.getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }
+    }
+    public void resetSliders() {
+        slider.setPower(0);
+        slider.setTargetPosition(0);
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        auxSlider.setPower(0);
+        auxSlider.setTargetPosition(0);
+        auxSlider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        auxSlider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 }

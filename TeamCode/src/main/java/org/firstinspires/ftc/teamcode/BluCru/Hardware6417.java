@@ -38,8 +38,8 @@ public class Hardware6417 {
         auxSlider = hwMap.get(DcMotorEx.class, "auxSlider");
 
 //      set directions
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
-        auxSlider.setDirection(DcMotorSimple.Direction.FORWARD);
+        slider.setDirection(DcMotorSimple.Direction.FORWARD);
+        auxSlider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //set all motors to zero power
         slider.setPower(0);
