@@ -5,75 +5,92 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
+import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 
 @TeleOp(name = "dual slide test", group = "TeleOp")
 public class DualSlideTest extends LinearOpMode {
-    DcMotorEx slider, auxSlider;
+    enum SLIDESTATE {
+        zero, low, med, high, manual
+    }
+    private Hardware6417 robot;
+    private int target = 0;
+
+    Gamepad currentGamepad1, currentGamepad2, lastGamepad1, lastGamepad2;
+
+    SLIDESTATE slideState = SLIDESTATE.zero;
+
+    ElapsedTime totalTimer;
+
 
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        slider = hardwareMap.get(DcMotorEx.class, "slider");
-        auxSlider = hardwareMap.get(DcMotorEx.class, "auxSlider");
-
-        resetSliders();
-
-        slider.setDirection(DcMotorSimple.Direction.FORWARD);
-        slider.setPower(0);
-        auxSlider.setDirection(DcMotorSimple.Direction.REVERSE);
-        auxSlider.setPower(0);
+        currentGamepad1 = new Gamepad();
+        currentGamepad2 = new Gamepad();
+        lastGamepad1 = new Gamepad();
+        lastGamepad2 = new Gamepad();
+        robot = new Hardware6417(hardwareMap);
+        robot.initSlides();
 
 
-        boolean lastLB1 = false;
-        boolean lastRB1 = false;
-        int delta = 100;
-        int pos = 0;
-        double vert;
+        double slideZeroTime = 0;
 
         waitForStart();
+        totalTimer = new ElapsedTime();
         while(opModeIsActive()) {
-            vert = -gamepad1.left_stick_y;
+            lastGamepad1.copy(currentGamepad1);
+            lastGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
 
-            delta = (int)(-gamepad1.right_stick_y*200) + 200;
-            if(gamepad1.right_bumper && !lastRB1) {
-                slider.setTargetPosition(slider.getCurrentPosition() + 100);
-            }
-            if(gamepad1.left_bumper && !lastLB1) {
-                slider.setTargetPosition(slider.getCurrentPosition() - 100);
-            }
             if(gamepad1.a) {
-                pos = slider.getCurrentPosition();
+                slideState = SLIDESTATE.zero;
+                if(!lastGamepad1.a) {
+                    slideZeroTime = totalTimer.milliseconds();
+                }
             }
-            if(Math.abs(vert) > 0.1) {
-                slider.setPower(vert);
-                auxSlider.setPower(vert);
-            } else {
-                slider.setPower(0);
-                auxSlider.setPower(0);
+            if(gamepad1.b) {
+                slideState = SLIDESTATE.low;
+            }
+            if(gamepad1.x) {
+                slideState = SLIDESTATE.med;
+            }
+            if(gamepad1.y) {
+                slideState = SLIDESTATE.high;
             }
 
-            lastLB1 = gamepad1.left_bumper;
-            lastRB1 = gamepad1.right_bumper;
+            // slide control
+            switch(slideState) {
+                case zero:
+                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay) {
+                        robot.resetSliders();
+                    } else {
+                        robot.autoSlider(Constants.sliderBasePos);
+                    }
+                    break;
+                case low:
+                    robot.autoSlider(Constants.sliderLowPos);
+                    break;
+                case med:
+                    robot.autoSlider(Constants.sliderMedPos);
+                    break;
+                case high:
+                    robot.autoSlider(Constants.sliderHighPos);
+                    break;
+                case manual:
+                    break;
+            }
 
-            telemetry.addData("target", slider.getTargetPosition());
-            telemetry.addData("current", auxSlider.getCurrentPosition());
-            telemetry.addData("delta", delta);
-            telemetry.addData("power", slider.getPower());
+            telemetry.addData("time since slide 0", totalTimer.milliseconds() - slideZeroTime);
+            telemetry.addData("current", robot.slider.getCurrentPosition());
+            telemetry.addData("power", robot.slider.getPower());
             telemetry.addData("saved pos", pos);
             telemetry.update();
         }
-    }
-    public void resetSliders() {
-        slider.setPower(0);
-        slider.setTargetPosition(0);
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        auxSlider.setPower(0);
-        auxSlider.setTargetPosition(0);
-        auxSlider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        auxSlider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 }

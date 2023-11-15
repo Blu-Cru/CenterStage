@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 @Config
-@TeleOp(name = "PID test", group = "TeleOp")
-public class PIDTest extends LinearOpMode {
+@TeleOp(name = "slide PID tuner", group = "TeleOp")
+public class PIDTuner extends LinearOpMode {
     private PIDController controller;
     public static double p = 0.01, i = 0, d = 0.0002;
     public static double f = 0.07;

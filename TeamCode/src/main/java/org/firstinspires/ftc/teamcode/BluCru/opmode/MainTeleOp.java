@@ -49,7 +49,7 @@ public class MainTeleOp extends LinearOpMode {
     Gamepad currentGamepad1, currentGamepad2, lastGamepad1, lastGamepad2;
 
     double slideZeroTime;
-    double vertControl, horzControl, rotateControl;
+    double vert, horz, rotate;
     double driveSpeed;
     double heading, headingOffset;
     double sens = 0.1;
@@ -95,16 +95,23 @@ public class MainTeleOp extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            // wheel control
+// driving
+            horz = Math.pow(gamepad1.left_stick_x, 3);
+            vert = -Math.pow(gamepad1.left_stick_y, 3);
+            rotate = -Math.pow(gamepad1.right_stick_x, 3);
+
+            robot.holonomicDrive(horz, vert, rotate, driveSpeed, heading);
+
+// wheel control
             if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(-Constants.wheelSpeedOuttake * gamepad1.left_trigger);
+                robot.setWheelPowers(-Constants.intakeSpeedOuttake * gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.wheelSpeedIntake * gamepad1.right_trigger);
+                robot.setWheelPowers(Constants.intakeSpeedIntake * gamepad1.right_trigger);
             } else {
                 robot.setWheelPowers(0);
             }
             
-            // robot superstate control
+// robot superstate control
             switch (robotState) {
                 case moving:
                     setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, Constants.driveSpeedMoving);
@@ -143,20 +150,20 @@ public class MainTeleOp extends LinearOpMode {
                     if(currentGamepad1.a && !lastGamepad1.a) {
                         slideZeroTime = totalTimer.milliseconds();
                     }
-                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideDownDelay) {
+                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay) {
                         robot.resetSliders();
                     } else {
-                        robot.autoSlide(Constants.sliderBasePos, Constants.slideBasePower);
+                        robot.autoSlider(Constants.sliderBasePos);
                     }
                     break;
                 case low:
-                    robot.autoSlide(Constants.sliderLowPos, Constants.slideLowPower);
+                    robot.autoSlider(Constants.sliderLowPos);
                     break;
                 case med:
-                    robot.autoSlide(Constants.sliderMedPos, Constants.slideMedPower);
+                    robot.autoSlider(Constants.sliderMedPos);
                     break;
                 case high:
-                    robot.autoSlide(Constants.sliderHighPos, Constants.slideHighPower);
+                    robot.autoSlider(Constants.sliderHighPos);
                     break;
                 case manual:
                     break;

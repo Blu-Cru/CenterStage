@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.BluCru;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
@@ -28,12 +30,16 @@ public class Hardware6417 {
     public HardwareMap hwMap;
 //  heading offset is the heading set to forward on the field
     private double headingOffset;
+    private PIDController slidePID;
 
     public Hardware6417(HardwareMap hardwareMap) {
         hwMap = hardwareMap;
     }
 
     public void initSlides() {
+// init PID
+        slidePID = new PIDController(Constants.sliderP, Constants.sliderI, Constants.sliderD);
+
         slider  = hwMap.get(DcMotorEx.class, "slider");
         auxSlider = hwMap.get(DcMotorEx.class, "auxSlider");
 
@@ -52,8 +58,8 @@ public class Hardware6417 {
         slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        auxSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        auxSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void initIMU() {
@@ -96,19 +102,10 @@ public class Hardware6417 {
         return Math.abs(slider.getTargetPosition() - slider.getCurrentPosition()) < Constants.sliderOuttakeDelta;
     }
 
-    public void autoSlide(int position, double power) {
-        if(slider.getCurrentPosition() != position) {
-            slider.setTargetPosition(position);
-            auxSlider.setTargetPosition(position);
-
-            if(slider.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
-                slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                auxSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-
-            slider.setPower(power);
-            auxSlider.setPower(power);
-        }
+    public void autoSlider(int position) {
+        int target = Range.clip(position, Constants.sliderMinPos, Constants.sliderMaxPos);
+        double power = slidePID.calculate(slider.getCurrentPosition(), target);
+        setSlidePowers(power);
     }
 
     public void setSlidePowers(double power) {
@@ -132,8 +129,8 @@ public class Hardware6417 {
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         auxSlider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        auxSlider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        auxSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public boolean sliderIntakeReady() {
