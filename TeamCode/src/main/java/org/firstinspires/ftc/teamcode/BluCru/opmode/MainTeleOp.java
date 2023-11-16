@@ -66,7 +66,8 @@ public class MainTeleOp extends LinearOpMode {
         lastGamepad2 = new Gamepad();
         robot = new Hardware6417(hardwareMap);
         robot.initSlides();
-        robot.initIntake();
+        robot.initWrist();
+        robot.initWheels();
         robot.initDrive(new Pose2d(0, 0, 0));
 
         slideZeroTime = 0;
@@ -116,7 +117,7 @@ public class MainTeleOp extends LinearOpMode {
                 case moving:
                     setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, Constants.driveSpeedMoving);
                     // press right trigger to intake
-                    if(currentGamepad1.right_trigger > Constants.triggerSens && !(lastGamepad1.right_trigger > Constants.triggerSens)) {
+                    if(currentGamepad1.right_trigger > Constants.triggerSens) {
                         setRobotState(ROBOTSTATE.intake);
                     // press left trigger to eject
                     } else if (currentGamepad1.left_trigger > Constants.triggerSens && !(lastGamepad1.left_trigger > Constants.triggerSens)) {
@@ -126,7 +127,7 @@ public class MainTeleOp extends LinearOpMode {
                     break;
                 case intake:
                     setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, Constants.driveSpeedIntake);
-                    if(!currentGamepad1.left_bumper && lastGamepad1.right_bumper) {
+                    if(!(currentGamepad1.left_trigger > Constants.triggerSens)) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;

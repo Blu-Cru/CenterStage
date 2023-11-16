@@ -50,9 +50,7 @@ public class DualSlideTest extends LinearOpMode {
 
             if(gamepad1.a) {
                 slideState = SLIDESTATE.zero;
-                if(!lastGamepad1.a) {
-                    slideZeroTime = totalTimer.milliseconds();
-                }
+                slideZeroTime = totalTimer.milliseconds();
             }
             if(gamepad1.b) {
                 slideState = SLIDESTATE.low;

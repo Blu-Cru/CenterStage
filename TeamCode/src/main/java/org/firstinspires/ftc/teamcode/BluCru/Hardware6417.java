@@ -58,6 +58,9 @@ public class Hardware6417 {
         slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        auxSlider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         auxSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -66,10 +69,12 @@ public class Hardware6417 {
         imu = hwMap.get(IMU.class, "imu");
     }
 
-    public void initIntake() {
+    public void initWrist() {
         wrist       = hwMap.get(Servo.class, "wrist");
         wristController = (ServoControllerEx) wrist.getController();
+    }
 
+    public void initWheels() {
         wheels     = hwMap.get(CRServo.class, "wheels");
     }
 
@@ -104,7 +109,7 @@ public class Hardware6417 {
 
     public void autoSlider(int position) {
         int target = Range.clip(position, Constants.sliderMinPos, Constants.sliderMaxPos);
-        double power = slidePID.calculate(slider.getCurrentPosition(), target);
+        double power = slidePID.calculate(slider.getCurrentPosition(), target) + Constants.sliderF;
         setSlidePowers(power);
     }
 
