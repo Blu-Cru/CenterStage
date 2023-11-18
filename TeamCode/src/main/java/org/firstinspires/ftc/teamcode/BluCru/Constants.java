@@ -26,6 +26,7 @@ public class Constants {
     public static double slideLowPower            = 0.8;
     public static double slideBasePower           = 0.8;
     public static int sliderBasePos               = 0;
+    public static int sliderIntakePos             = 50;
     public static int sliderLowPos                = 1000;
     public static int sliderMedPos                = 1500;
     public static int sliderHighPos               = 2000;
@@ -39,9 +40,9 @@ public class Constants {
     public static int sliderUpWristClearPos       = 200;
 
 // intake variables
-    public static double intakeSpeedIntake = 1;
-    public static double intakeSpeedOuttake = -1;
-    public static double intakeSpeedStop = 0;
+    public static double wheelIntakePower = 1;
+    public static double wheelEjectPower = -1;
+    public static double wheelStopPower = 0;
 
 // wrist variables
     public static double wristMovingPos           = 0.52;
