@@ -81,7 +81,7 @@ public class WristTest extends LinearOpMode {
             // slide control
             switch(slideState) {
                 case zero:
-                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay + 5000) {
+                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay) {
                         robot.resetSliders();
                     } else {
                         robot.autoSlider(Constants.sliderBasePos);
