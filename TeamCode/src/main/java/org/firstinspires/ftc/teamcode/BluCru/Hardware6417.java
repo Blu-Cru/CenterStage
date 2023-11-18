@@ -147,7 +147,7 @@ public class Hardware6417 {
         input = rotateVector(input, -Math.toRadians(90));
 
         if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
-            drive.setDrivePowers(new PoseVelocity2d(input, rotate));
+            drive.setDrivePowers(new PoseVelocity2d(input.times(driveSpeed), rotate*driveSpeed));
         } else {
             drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
         }

@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
-@Config
 @TeleOp(name = "wrist test", group = "TeleOp")
 public class WristTest extends LinearOpMode {
 
@@ -43,6 +42,7 @@ public class WristTest extends LinearOpMode {
         robot.initSlides();
         robot.initWrist();
         robot.initDrive(new Pose2d(0,0,0));
+        driveSpeed = 0.5;
 
 
 
