@@ -30,7 +30,7 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     enum SLIDESTATE {
-        zero, low, med, high, manual
+        zero, intake, low, med, high, manual
     }
 
     enum WRISTSTATE{
@@ -105,7 +105,7 @@ public class MainTeleOp extends LinearOpMode {
 
 // wheel control
             if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(-Constants.wheelEjectPower * gamepad1.left_trigger);
+                robot.setWheelPowers(-Constants.wheelOuttakePower * gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > Constants.triggerSens) {
                 robot.setWheelPowers(Constants.wheelIntakePower * gamepad1.right_trigger);
             } else {
@@ -118,27 +118,27 @@ public class MainTeleOp extends LinearOpMode {
                     setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, Constants.driveSpeedMoving);
                     // press right trigger to intake
                     if(currentGamepad1.right_trigger > Constants.triggerSens) {
-                        setRobotState(ROBOTSTATE.intake);
+                        setRobotState(ROBOTSTATE.eject);
                     // press left trigger to eject
                     } else if (currentGamepad1.left_trigger > Constants.triggerSens && !(lastGamepad1.left_trigger > Constants.triggerSens)) {
-                        setRobotState(ROBOTSTATE.eject);
+                        setRobotState(ROBOTSTATE.intake);
                     }
 
                     break;
                 case intake:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, Constants.driveSpeedIntake);
+                    setSubstates(SLIDESTATE.intake, WRISTSTATE.intake, Constants.driveSpeedIntake);
                     if(!(currentGamepad1.left_trigger > Constants.triggerSens)) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;
                 case eject:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.intake, Constants.driveSpeedEject);
+                    setSubstates(SLIDESTATE.intake, WRISTSTATE.intake, Constants.driveSpeedEject);
                     if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.moving);
                     }
                     break;
-                case preOuttake:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.preOuttake, Constants.driveSpeedPreOuttake);
+                case outtake:
+                    setSubstates(SLIDESTATE.med, WRISTSTATE.outtake, Constants.driveSpeedPreOuttake);
                     if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
                         setRobotState(ROBOTSTATE.outtake);
                     }

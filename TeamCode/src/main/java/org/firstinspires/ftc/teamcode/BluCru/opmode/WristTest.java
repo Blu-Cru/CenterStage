@@ -15,9 +15,12 @@ import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 @TeleOp(name = "wrist test", group = "TeleOp")
 public class WristTest extends LinearOpMode {
+    enum ROBOTSTATE {
+        moving, intake, outtake
+    }
 
     enum SLIDESTATE {
-        zero, low, med, high, manual
+        zero, intake,outtake, low, med, high, manual
     }
     private Hardware6417 robot;
     private int target = 0;
@@ -29,6 +32,7 @@ public class WristTest extends LinearOpMode {
 
     ElapsedTime totalTimer;
     double vert, horz, rotate, driveSpeed, heading;
+    double wheelPower;
 
 
     double pos = 0;
@@ -42,7 +46,9 @@ public class WristTest extends LinearOpMode {
         robot.initSlides();
         robot.initWrist();
         robot.initDrive(new Pose2d(0,0,0));
+        robot.initWheels();
         driveSpeed = 0.5;
+        wheelPower = 0;
 
 
 
@@ -78,6 +84,15 @@ public class WristTest extends LinearOpMode {
                 slideState = SLIDESTATE.high;
             }
 
+// wheels control
+            if(gamepad1.left_trigger > Constants.triggerSens) {
+                robot.setWheelPowers(Constants.wheelIntakePower);
+            }  else if(gamepad1.right_trigger > Constants.triggerSens) {
+                robot.setWheelPowers(Constants.wheelOuttakePower);
+            } else {
+                robot.setWheelPowers(Constants.wheelStopPower);
+            }
+
             // slide control
             switch(slideState) {
                 case zero:
@@ -87,7 +102,30 @@ public class WristTest extends LinearOpMode {
                         robot.autoSlider(Constants.sliderBasePos);
                     }
 
+                    if(robot.slider.getCurrentPosition() < Constants.sliderIntakeDelta) {
+                        if(gamepad1.left_trigger > Constants.triggerSens) {
+                            slideState = SLIDESTATE.intake;
+                        }
+                        if(gamepad1.right_trigger > Constants.triggerSens) {
+                            slideState = SLIDESTATE.outtake;
+                        }
+                    }
+
                     robot.autoWrist(Constants.wristMovingPos);
+                    break;
+                case intake:
+                    robot.autoSlider(Constants.sliderIntakePos);
+                    robot.stopWrist();
+                    if(!(gamepad1.left_trigger > Constants.triggerSens)) {
+                        slideState = SLIDESTATE.zero;
+                    }
+                    break;
+                case outtake:
+                    robot.autoSlider(Constants.sliderIntakePos);
+                    robot.stopWrist();
+                    if(!(gamepad1.right_trigger > Constants.triggerSens)) {
+                        slideState = SLIDESTATE.zero;
+                    }
                     break;
                 case low:
                     robot.autoSlider(Constants.sliderLowPos);

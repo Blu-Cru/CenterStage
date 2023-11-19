@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class MotorTest extends LinearOpMode {
     DcMotorEx[] motors = {};
 
-    String name = "auxSlider";
+    String name = "slider";
     double pos = 0;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,6 +22,7 @@ public class MotorTest extends LinearOpMode {
             motor.setPower(0);
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
+        test.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         boolean lastLB1 = false;
         boolean lastRB1 = false;

@@ -41,14 +41,14 @@ public class Constants {
 
 // intake variables
     public static double wheelIntakePower = 1;
-    public static double wheelEjectPower = -1;
+    public static double wheelOuttakePower = -1;
     public static double wheelStopPower = 0;
 
 // wrist variables
     public static double wristMovingPos           = 0.52;
     public static double wristDownPos             = 0.6;
     public static double wristPreOuttakePos       = 0.97;
-    public static double wristOuttakePos          = 0.97;
+    public static double wristOuttakePos          = 0.9;
 
     /* timer variables */
     public static double slideDownDelay           = 1000;

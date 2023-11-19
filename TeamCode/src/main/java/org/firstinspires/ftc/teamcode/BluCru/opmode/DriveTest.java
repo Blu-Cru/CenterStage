@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 @TeleOp(name = "drive test", group = "TeleOp")
@@ -42,6 +43,7 @@ public class DriveTest extends LinearOpMode {
 
             telemetry.addData("field centric", fieldCentric);
             telemetry.addData("yaw pitch roll", robot.drive.imu.getRobotYawPitchRollAngles());
+            telemetry.addData("yaw", robot.drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.addData("vert", vert);
             telemetry.addData("horz", horz);
             telemetry.addData("rotate", rotate);

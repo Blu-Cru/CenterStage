@@ -103,10 +103,6 @@ public class Hardware6417 {
         }
     }
 
-    public boolean slideOuttakeReady() {
-        return Math.abs(slider.getTargetPosition() - slider.getCurrentPosition()) < Constants.sliderOuttakeDelta;
-    }
-
     public void autoSlider(int position) {
         int target = Range.clip(position, Constants.sliderMinPos, Constants.sliderMaxPos);
         double power = slidePID.calculate(slider.getCurrentPosition(), target) + Constants.sliderF;
