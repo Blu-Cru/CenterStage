@@ -7,10 +7,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
+
 
 @TeleOp(name = "crservo test", group = "TeleOp")
 public class CRServoTest extends LinearOpMode {
-    String name = "wheels";
+    String name = Constants.CRServoTestName;
     @Override
     public void runOpMode() throws InterruptedException {
         CRServo test = hardwareMap.get(CRServo.class, name);

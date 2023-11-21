@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
 @Config
 @TeleOp(name = "slide PID tuner", group = "TeleOp")
-public class PIDTuner extends LinearOpMode {
+public class SliderPIDTuner extends LinearOpMode {
     private PIDController controller;
     public static double p = 0.01, i = 0, d = 0.0002;
     public static double f = 0.07;

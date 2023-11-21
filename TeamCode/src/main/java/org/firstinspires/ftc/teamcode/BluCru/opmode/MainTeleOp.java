@@ -105,9 +105,9 @@ public class MainTeleOp extends LinearOpMode {
 
 // wheel control
             if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(-Constants.wheelOuttakePower * gamepad1.left_trigger);
+                robot.setWheelPowers(-Constants.outtakeServoOuttakePower * gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.wheelIntakePower * gamepad1.right_trigger);
+                robot.setWheelPowers(Constants.outtakeServoIntakePower * gamepad1.right_trigger);
             } else {
                 robot.setWheelPowers(0);
             }

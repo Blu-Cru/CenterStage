@@ -47,10 +47,10 @@ public class IntakeTest extends LinearOpMode {
 
             if(gamepad1.left_trigger > Constants.triggerSens) {
                 robotState = ROBOTSTATE.intake;
-                wheelPower = Constants.wheelIntakePower;
+                wheelPower = Constants.outtakeServoIntakePower;
             } else if(gamepad1.right_trigger > Constants.triggerSens) {
                 robotState = ROBOTSTATE.intake;
-                wheelPower = Constants.wheelOuttakePower;
+                wheelPower = Constants.outtakeServoOuttakePower;
             } else {
                 robotState = ROBOTSTATE.moving;
                 wheelPower = Constants.wheelStopPower;

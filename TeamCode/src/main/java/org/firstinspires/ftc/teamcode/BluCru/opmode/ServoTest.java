@@ -20,7 +20,7 @@ public class ServoTest extends LinearOpMode {
         while(opModeIsActive()) {
             if(gamepad1.right_bumper) {
                 controller.setServoPwmEnable(test.getPortNumber());
-                test.setPosition(gamepad1.left_stick_y/2 + 0.5);
+                test.setPosition(-gamepad1.left_stick_y/2 + 0.5);
             } else {
                 controller.setServoPwmDisable(test.getPortNumber());
             }
