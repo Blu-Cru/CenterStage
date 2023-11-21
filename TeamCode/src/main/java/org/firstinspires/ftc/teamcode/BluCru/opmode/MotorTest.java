@@ -29,6 +29,7 @@ public class MotorTest extends LinearOpMode {
 
             telemetry.addData("name", name);
             telemetry.addData("power", test.getPower());
+            telemetry.addData("current position", test.getCurrentPosition());
             telemetry.update();
         }
     }

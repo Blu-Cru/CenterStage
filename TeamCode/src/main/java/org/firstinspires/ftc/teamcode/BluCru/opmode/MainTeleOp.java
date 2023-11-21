@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.BluCru.opmode;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -68,7 +67,6 @@ public class MainTeleOp extends LinearOpMode {
         robot.initSlides();
         robot.initWrist();
         robot.initWheels();
-        robot.initDrive(new Pose2d(0, 0, 0));
 
         slideZeroTime = 0;
         driveSpeed = 0;
@@ -101,7 +99,7 @@ public class MainTeleOp extends LinearOpMode {
             vert = -Math.pow(gamepad1.left_stick_y, 3);
             rotate = -Math.pow(gamepad1.right_stick_x, 3);
 
-            robot.holonomicDrive(horz, vert, rotate, driveSpeed, heading);
+            //robot.holonomicDrive(horz, vert, rotate, driveSpeed, heading);
 
 // wheel control
             if(gamepad1.left_trigger > Constants.triggerSens) {
@@ -170,21 +168,6 @@ public class MainTeleOp extends LinearOpMode {
                     break;
             }
 
-            // wrist control
-            switch(wristState) {
-                case moving:
-                    robot.autoWrist(Constants.wristMovingPos);
-                    break;
-                case intake:
-                    robot.stopWrist();
-                    break;
-                case preOuttake:
-                    robot.autoWrist(Constants.wristPreOuttakePos);
-                    break;
-                case outtake:
-                    robot.autoWrist(Constants.wristOuttakePos);
-                    break;
-            }
 
 
 
@@ -224,7 +207,6 @@ public class MainTeleOp extends LinearOpMode {
 
     public void initRobot() {
         robot.resetSliders();
-        robot.autoWrist(Constants.wristMovingPos);
         robot.setWheelPowers(0);
     }
 }

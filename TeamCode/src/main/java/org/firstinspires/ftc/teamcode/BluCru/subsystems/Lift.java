@@ -24,7 +24,7 @@ public class Lift implements Subsystem{
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
-        liftMotor = hardwareMap.get(DcMotorEx.class, "lift");
+        liftMotor = hardwareMap.get(DcMotorEx.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.FORWARD);

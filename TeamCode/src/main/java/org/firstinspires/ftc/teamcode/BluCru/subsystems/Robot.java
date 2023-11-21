@@ -11,6 +11,9 @@ public class Robot {
     private HardwareMap hardwareMap;
 
     public Lift lift;
+    public Intake intake;
+    public Drivetrain drivetrain;
+    public Hanger hanger;
 
     private ArrayList<Subsystem> subsystems;
 
@@ -22,6 +25,9 @@ public class Robot {
 
         subsystems = new ArrayList<>();
         subsystems.add(lift);
+        subsystems.add(intake);
+        subsystems.add(drivetrain);
+        subsystems.add(hanger);
     }
 
     // initializes subsystems

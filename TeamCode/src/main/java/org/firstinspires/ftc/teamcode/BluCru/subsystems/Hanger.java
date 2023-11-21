@@ -10,8 +10,6 @@ public class Hanger implements Subsystem {
     private DcMotorEx hangerMotor;
     private PIDController hangerPID;
 
-
-
     public Hanger(HardwareMap hardwareMap, Telemetry telemetry) {
         hangerMotor = hardwareMap.get(DcMotorEx.class, "hanger");
 
