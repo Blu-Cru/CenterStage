@@ -18,7 +18,6 @@ public class SliderPIDTuner extends LinearOpMode {
     public static double f = 0.07;
     public static int target = 0;
 
-    private DcMotorEx slider, auxSlider;
     Hardware6417 robot;
 
     @Override

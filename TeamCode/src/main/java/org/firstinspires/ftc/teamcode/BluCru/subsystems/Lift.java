@@ -57,7 +57,7 @@ public class Lift implements Subsystem{
     }
 
     public void setPower(double power) {
-        power = Range.clip(power, -0.5, 1);
+        power = Range.clip(power, -1, 1);
         liftMotor.setPower(power);
         liftMotor2.setPower(power);
     }

@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
+
 
 @TeleOp(name = "servo test", group = "TeleOp")
 public class ServoTest extends LinearOpMode {
     double pos = 0;
-    String name = "wrist";
+    String name = Constants.servoTestName;
     @Override
     public void runOpMode() throws InterruptedException {
         Servo test = hardwareMap.get(Servo.class, name);
