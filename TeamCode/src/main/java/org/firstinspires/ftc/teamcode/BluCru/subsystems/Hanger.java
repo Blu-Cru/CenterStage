@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -7,6 +8,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Hanger implements Subsystem {
     private DcMotorEx hangerMotor;
+    private PIDController hangerPID;
+
+
+
     public Hanger(HardwareMap hardwareMap, Telemetry telemetry) {
         hangerMotor = hardwareMap.get(DcMotorEx.class, "hanger");
 

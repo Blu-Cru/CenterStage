@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.BluCru.opmode;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -41,7 +40,6 @@ public class WristTest extends LinearOpMode {
         robot = new Hardware6417(hardwareMap);
         robot.initSlides();
         robot.initWrist();
-        robot.initDrive(new Pose2d(0,0,0));
         robot.initWheels();
         driveSpeed = 0.5;
         wheelPower = 0;
@@ -61,8 +59,6 @@ public class WristTest extends LinearOpMode {
             horz = Math.pow(gamepad1.left_stick_x, 3);
             vert = -Math.pow(gamepad1.left_stick_y, 3);
             rotate = -Math.pow(gamepad1.right_stick_x, 3);
-
-            robot.holonomicDrive(horz, vert, rotate, driveSpeed, heading);
 
             if(gamepad1.a) {
                 slideZeroTime = totalTimer.milliseconds();
