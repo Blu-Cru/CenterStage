@@ -13,10 +13,9 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
 public class TurnPIDTuner extends LinearOpMode {
     private PIDController controller;
-    public static double p = 0.01, i = 0, d = 0.0002;
-    public static double f = 0.07;
-    public static int target = 0;
-
+    public static double p = 0, i = 0, d = 0;
+    public static double target = 0;
+    double vert, horz, rotate;
     Drivetrain drivetrain;
 
     @Override
@@ -24,12 +23,31 @@ public class TurnPIDTuner extends LinearOpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        drivetrain = new Drivetrain(hardwareMap);
+        drivetrain.init();
+
         waitForStart();
 
         while(opModeIsActive()) {
+            horz = gamepad1.left_stick_x;
+            vert = -gamepad1.left_stick_y;
+            rotate = -gamepad1.right_stick_x;
+            if(gamepad1.right_bumper) {
+                drivetrain.resetHeadingOffset();
+            }
+            controller.setPID(p, i, d);
+            double heading = drivetrain.getRelativeHeading();
+            double PIDrotate = controller.calculate(heading, target);
+
+            if(gamepad1.a) {
+                drivetrain.drive(horz, vert, PIDrotate);
+            } else {
+                drivetrain.drive(horz, vert, rotate);
+            }
+
             telemetry.addData("target", target);
-            telemetry.addData("current", 0);
-            telemetry.addData("power", 0);
+            telemetry.addData("current heading", heading);
+            telemetry.addData("PID rotate", PIDrotate);
             telemetry.update();
         }
     }

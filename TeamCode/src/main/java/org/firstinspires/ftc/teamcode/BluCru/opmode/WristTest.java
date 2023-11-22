@@ -47,7 +47,7 @@ public class WristTest extends LinearOpMode {
 
 
         double slideZeroTime = 0;
-        robot.autoWrist(Constants.outtakeWristIntakePos);
+        robot.autoWrist(Constants.outtakeWristRetractPos);
         waitForStart();
         totalTimer = new ElapsedTime();
         while(opModeIsActive()) {
@@ -91,7 +91,7 @@ public class WristTest extends LinearOpMode {
                     if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay) {
                         robot.resetSliders();
                     } else {
-                        robot.autoSlider(Constants.sliderBasePos);
+                        robot.autoSlider(Constants.sliderRetractPos);
                     }
 
                     if(robot.slider.getCurrentPosition() < Constants.sliderIntakeDelta) {
@@ -103,7 +103,7 @@ public class WristTest extends LinearOpMode {
                         }
                     }
 
-                    robot.autoWrist(Constants.outtakeWristIntakePos);
+                    robot.autoWrist(Constants.outtakeWristRetractPos);
                     break;
                 case intake:
                     robot.autoSlider(Constants.sliderIntakePos);
@@ -123,10 +123,10 @@ public class WristTest extends LinearOpMode {
                     robot.autoSlider(Constants.sliderLowPos);
                     if(goDown) {
                         robot.autoWrist(Constants.outtakeWristOuttakePos);
-                    } else if(robot.slider.getCurrentPosition() > Constants.sliderUpWristClearPos) {
+                    } else if(robot.slider.getCurrentPosition() > Constants.sliderWristClearPos) {
                         robot.autoWrist(Constants.outtakeWristOuttakePos);
                     } else {
-                        robot.autoWrist(Constants.outtakeWristIntakePos);
+                        robot.autoWrist(Constants.outtakeWristRetractPos);
                     }
                     if(totalTimer.milliseconds() - slideZeroTime > Constants.slideDownDelay && goDown) {
                         slideState = slideState.zero;
@@ -136,11 +136,11 @@ public class WristTest extends LinearOpMode {
                 case med:
                     robot.autoSlider(Constants.sliderMedPos);
                     if(goDown) {
-                        robot.autoWrist(Constants.outtakeWristIntakePos);
-                    } else if(robot.slider.getCurrentPosition() > Constants.sliderUpWristClearPos) {
+                        robot.autoWrist(Constants.outtakeWristRetractPos);
+                    } else if(robot.slider.getCurrentPosition() > Constants.sliderWristClearPos) {
                         robot.autoWrist(Constants.outtakeWristOuttakePos);
                     } else {
-                        robot.autoWrist(Constants.outtakeWristIntakePos);
+                        robot.autoWrist(Constants.outtakeWristRetractPos);
                     }
                     if(totalTimer.milliseconds() - slideZeroTime > Constants.slideDownDelay && goDown) {
                         slideState = slideState.zero;
@@ -150,11 +150,11 @@ public class WristTest extends LinearOpMode {
                 case high:
                     robot.autoSlider(Constants.sliderHighPos);
                     if(goDown) {
-                        robot.autoWrist(Constants.outtakeWristIntakePos);
-                    } else if(robot.slider.getCurrentPosition() > Constants.sliderUpWristClearPos) {
+                        robot.autoWrist(Constants.outtakeWristRetractPos);
+                    } else if(robot.slider.getCurrentPosition() > Constants.sliderWristClearPos) {
                         robot.autoWrist(Constants.outtakeWristOuttakePos);
                     } else {
-                        robot.autoWrist(Constants.outtakeWristIntakePos);
+                        robot.autoWrist(Constants.outtakeWristRetractPos);
                     }
                     if(totalTimer.milliseconds() - slideZeroTime > Constants.slideDownDelay && goDown) {
                         slideState = slideState.zero;

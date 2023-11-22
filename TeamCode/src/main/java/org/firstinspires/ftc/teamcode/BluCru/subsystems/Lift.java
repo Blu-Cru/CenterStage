@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -21,7 +20,7 @@ public class Lift implements Subsystem{
     public int targetPos = 0;
     private int currentPos;
 
-    private ElapsedTime liftZeroTimer;
+    private ElapsedTime sliderStallTimer;
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
@@ -51,7 +50,7 @@ public class Lift implements Subsystem{
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        liftZeroTimer = new ElapsedTime();
+        sliderStallTimer = new ElapsedTime();
     }
 
     public void update() {
@@ -78,8 +77,8 @@ public class Lift implements Subsystem{
         targetPos = pos;
     }
 
-    public void resetLiftZeroTimer() {
-        liftZeroTimer.reset();
+    public void resetSliderStallTimer() {
+        sliderStallTimer.reset();
     }
 
     public int getTargetPos() {

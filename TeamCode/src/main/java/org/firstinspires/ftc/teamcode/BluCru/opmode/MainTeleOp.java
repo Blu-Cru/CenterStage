@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
+import org.firstinspires.ftc.teamcode.BluCru.TeleOpStateMachine;
+import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
 
 
 /*
@@ -23,59 +25,16 @@ right joystick : turn
  */
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
-    Hardware6417 robot;
-    enum ROBOTSTATE{
-        moving, intake, eject, preOuttake, outtake, preHang, hanging
-    }
-
-    enum SLIDESTATE {
-        zero, intake, low, med, high, manual
-    }
-
-    enum WRISTSTATE{
-        moving, intake, preOuttake, outtake
-    }
-
-    enum WHEELSTATE{
-        intake, outtake, stop
-    }
-
-    ROBOTSTATE robotState, lastRobotState;
-    SLIDESTATE slideState;
-    WRISTSTATE wristState;
-    WHEELSTATE wheelState;
-
-    Gamepad currentGamepad1, currentGamepad2, lastGamepad1, lastGamepad2;
-
-    double slideZeroTime;
-    double vert, horz, rotate;
-    double driveSpeed;
-    double heading, headingOffset;
-    double sens = 0.1;
-    boolean duoDrive;
-
+    Robot robot;
+    TeleOpStateMachine teleOpStateMachine;
     ElapsedTime totalTimer;
     double lastTime, deltaTime;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        currentGamepad1 = new Gamepad();
-        currentGamepad2 = new Gamepad();
-        lastGamepad1 = new Gamepad();
-        lastGamepad2 = new Gamepad();
-        robot = new Hardware6417(hardwareMap);
-        robot.initSlides();
-        robot.initWrist();
-        robot.initWheels();
-
-        slideZeroTime = 0;
-        driveSpeed = 0;
-//        heading = robot.getRawExternalHeading();
-        headingOffset = 0;
-
-        initStates();
-        initRobot();
-
+        robot = new Robot(telemetry, hardwareMap);
+        teleOpStateMachine = new TeleOpStateMachine(robot);
+        robot.init();
         telemetry.addData("Status", "Initialized");
 
         waitForStart();
@@ -84,129 +43,15 @@ public class MainTeleOp extends LinearOpMode {
         totalTimer = new ElapsedTime();
 
         while(opModeIsActive()) {
-            setNumOfGamepads();
-            // gets time at the start of loop
             lastTime = totalTimer.milliseconds();
-
-            // sets gamepad for the loop
-            lastGamepad1.copy(currentGamepad1);
-            lastGamepad2.copy(currentGamepad2);
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
-
-// driving
-            horz = Math.pow(gamepad1.left_stick_x, 3);
-            vert = -Math.pow(gamepad1.left_stick_y, 3);
-            rotate = -Math.pow(gamepad1.right_stick_x, 3);
-
-            //robot.holonomicDrive(horz, vert, rotate, driveSpeed, heading);
-
-// wheel control
-            if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(-Constants.outtakeServoOuttakePower * gamepad1.left_trigger);
-            } else if(gamepad1.right_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.outtakeServoIntakePower * gamepad1.right_trigger);
-            } else {
-                robot.setWheelPowers(0);
-            }
-            
-// robot superstate control
-            switch (robotState) {
-                case moving:
-                    setSubstates(SLIDESTATE.zero, WRISTSTATE.moving, Constants.driveSpeedMoving);
-                    // press right trigger to intake
-                    if(currentGamepad1.right_trigger > Constants.triggerSens) {
-                        setRobotState(ROBOTSTATE.eject);
-                    // press left trigger to eject
-                    } else if (currentGamepad1.left_trigger > Constants.triggerSens && !(lastGamepad1.left_trigger > Constants.triggerSens)) {
-                        setRobotState(ROBOTSTATE.intake);
-                    }
-
-                    break;
-                case intake:
-                    setSubstates(SLIDESTATE.intake, WRISTSTATE.intake, Constants.driveSpeedIntake);
-                    if(!(currentGamepad1.left_trigger > Constants.triggerSens)) {
-                        setRobotState(ROBOTSTATE.moving);
-                    }
-                    break;
-                case eject:
-                    setSubstates(SLIDESTATE.intake, WRISTSTATE.intake, Constants.driveSpeedEject);
-                    if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
-                        setRobotState(ROBOTSTATE.moving);
-                    }
-                    break;
-                case outtake:
-                    setSubstates(SLIDESTATE.med, WRISTSTATE.outtake, Constants.driveSpeedPreOuttake);
-                    if(!currentGamepad1.right_bumper && lastGamepad1.right_bumper) {
-                        setRobotState(ROBOTSTATE.outtake);
-                    }
-                    break;
-            }
-
-            // slide control
-            switch(slideState) {
-                case zero:
-                    if(currentGamepad1.a && !lastGamepad1.a) {
-                        slideZeroTime = totalTimer.milliseconds();
-                    }
-                    if(totalTimer.milliseconds() - slideZeroTime > Constants.slideStallDelay) {
-                        robot.resetSliders();
-                    } else {
-                        robot.autoSlider(Constants.sliderBasePos);
-                    }
-                    break;
-                case low:
-                    robot.autoSlider(Constants.sliderLowPos);
-                    break;
-                case med:
-                    robot.autoSlider(Constants.sliderMedPos);
-                    break;
-                case high:
-                    robot.autoSlider(Constants.sliderHighPos);
-                    break;
-                case manual:
-                    break;
-            }
-
-
-
+            teleOpStateMachine.updateStates(gamepad1, gamepad2);
 
             // loop time: current time - time at start of loop
             deltaTime = totalTimer.milliseconds() - lastTime;
 
-            robot.telemetry(telemetry);
-            telemetry.addData("robot state", robotState);
-            telemetry.addData("slide state", slideState);
-            telemetry.addData("wrist state", wristState);
+            teleOpStateMachine.telemetry(telemetry);
             telemetry.addData("loop time", deltaTime);
             telemetry.update();
         }
-    }
-    public void setRobotState(ROBOTSTATE targetRobotState) {
-        lastRobotState = robotState;
-        robotState = targetRobotState;
-    }
-
-    public void setSubstates(SLIDESTATE slideState, WRISTSTATE wristState, double driveSpeed) {
-        this.slideState = slideState;
-        this.wristState = wristState;
-        this.driveSpeed = driveSpeed;
-    }
-
-    public void setNumOfGamepads() {
-        duoDrive = !(gamepad2.getGamepadId() == -1);
-    }
-
-    public void initStates() {
-        robotState = ROBOTSTATE.moving;
-        lastRobotState = ROBOTSTATE.moving;
-        slideState = SLIDESTATE.zero;
-        wristState = WRISTSTATE.intake;
-        wheelState = WHEELSTATE.stop;
-    }
-
-    public void initRobot() {
-        robot.resetSliders();
-        robot.setWheelPowers(0);
     }
 }

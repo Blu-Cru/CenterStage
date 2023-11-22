@@ -21,6 +21,10 @@ public class DriveTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
 
+            if(gamepad1.a) {
+                drivetrain.resetHeadingOffset();
+            }
+
             drivetrain.drive(horz, vert, rotate);
 
             telemetry.addData("external heading", drivetrain.getExternalHeading());

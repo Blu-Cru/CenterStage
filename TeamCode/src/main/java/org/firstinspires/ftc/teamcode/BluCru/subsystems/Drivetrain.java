@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double drivePower;
 
-    // heading while facing the starting wall
+    // heading while facing forwards
     private double headingOffset;
     private boolean fieldCentric;
 
@@ -18,7 +18,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void init() {
-
+        headingOffset = getExternalHeading();
+        fieldCentric = true;
     }
 
     public void update() {
@@ -45,5 +46,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void setDrivePower(double power) {
         drivePower = power;
+    }
+
+    public void resetHeadingOffset() {
+        this.headingOffset = this.getExternalHeading();
+    }
+
+    public double getRelativeHeading() {
+        return getExternalHeading() - headingOffset;
     }
 }

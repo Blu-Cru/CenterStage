@@ -28,9 +28,9 @@ public class LiftTest extends LinearOpMode {
         intake.init();
         waitForStart();
         while(opModeIsActive()) {
-            intake.setOuttakeWristPosition(Constants.outtakeWristIntakePos);
+            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
             if(gamepad1.a) {
-                lift.resetLiftZeroTimer();
+                lift.resetSliderStallTimer();
                 liftState = LIFTSTATE.ZERO;
             }
             if(gamepad1.b) {
@@ -45,7 +45,7 @@ public class LiftTest extends LinearOpMode {
 
             switch(liftState) {
                 case ZERO:
-                    lift.setTargetPos(Constants.sliderBasePos);
+                    lift.setTargetPos(Constants.sliderRetractPos);
                     break;
                 case LOW:
                     lift.setTargetPos(Constants.sliderLowPos);
