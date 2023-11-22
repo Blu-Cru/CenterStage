@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
+import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
 public class Lift implements Subsystem{
+    public LiftState liftState;
     private DcMotorEx liftMotor, liftMotor2;
     private PIDController liftPID;
 
@@ -29,6 +31,8 @@ public class Lift implements Subsystem{
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.FORWARD);
         liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+
+        liftState = LiftState.RETRACT;
     }
 
     public void init() {

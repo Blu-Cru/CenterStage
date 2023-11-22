@@ -4,16 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.BluCru.Alliance;
+import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
 import org.firstinspires.ftc.teamcode.BluCru.vision.CVMaster;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="DetectionTest", group="Linear Opmode")
-public class DetectionTest extends LinearOpMode {
+@Autonomous(name="prop detection test", group="Linear Opmode")
+public class PropDetectionTest extends LinearOpMode {
     CVMaster cvMaster;
     Alliance alliance = Alliance.BLUE;
 

@@ -1,20 +1,13 @@
-package org.firstinspires.ftc.teamcode.BluCru;
+package org.firstinspires.ftc.teamcode.BluCru.states;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
 
 public class TeleOpStateMachine {
-    public enum RobotState {
-        RETRACT,
-        INTAKE,
-        LIFTING,
-        OUTTAKE,
-        PREPARE_TO_RETRACT
-    }
-
     private Robot robot;
     private RobotState robotState;
 
