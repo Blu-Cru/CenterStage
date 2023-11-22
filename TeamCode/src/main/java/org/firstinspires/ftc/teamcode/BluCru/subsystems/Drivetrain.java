@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double drivePower;
