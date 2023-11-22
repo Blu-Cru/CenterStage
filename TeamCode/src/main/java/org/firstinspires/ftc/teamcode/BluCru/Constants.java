@@ -19,7 +19,7 @@ public class Constants {
 // slider variables
     public static double sliderP                  = 0.01;
     public static double sliderI                  = 0;
-    public static double sliderD                  = 0.0005;
+    public static double sliderD                  = 0.0003;
     public static double sliderF                  = 0.08;
     public static int sliderBasePos               = 0;
     public static int sliderIntakePos             = 50;
@@ -41,8 +41,8 @@ public class Constants {
     public static double intakeWristDownPos       = 0.5;
 
 // outtake wrist variables
-    public static double outtakeWristIntakePos    = 0.52;
-    public static double outtakeWristOuttakePos   = 0.6;
+    public static double outtakeWristIntakePos    = 0.4;
+    public static double outtakeWristOuttakePos   = 0.7;
 
     /* timer variables */
     public static double slideDownDelay           = 1000;
@@ -51,7 +51,7 @@ public class Constants {
     public static double wristTurretTurnDelay     = 0.35;
 
 // test hardware names
-    public static String motorTestName            = "intakeMotor";
+    public static String motorTestName            = "front left";
     public static String servoTestName            = "intakeServo";
     public static String CRServoTestName          = "intakeCRServo";
 }

@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
+
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,16 +16,17 @@ public class Intake implements Subsystem{
     private CRServo outtakeServo;
     private Servo intakeWristServo;
     private Servo outtakeWristServo;
+    private ServoController outtakeWristController;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
+        outtakeWristServo = hardwareMap.get(Servo.class, "outtake wrist");
+        outtakeWristController = (ServoControllerEx) outtakeWristServo.getController();
 
         // set direction
-        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
     }
 
     public void init() {
-        //set all motors to zero power
+        /*//set all motors to zero power
         intakeMotor.setPower(0);
 
         //set brake behavior
@@ -32,15 +35,22 @@ public class Intake implements Subsystem{
         // reset motor encoders
         intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);*/
 
         // set servo powers and positions
-        outtakeServo.setPower(0);
-        intakeWristServo.setPosition(Constants.intakeWristRetractPos);
+        // outtakeServo.setPower(0);
+        // intakeWristServo.setPosition(Constants.intakeWristRetractPos);
         outtakeWristServo.setPosition(Constants.outtakeWristIntakePos);
     }
 
     public void update() {
 
+    }
+
+    public void setOuttakeWristPosition(double position) {
+        if(outtakeWristController.getPwmStatus() != ServoControllerEx.PwmStatus.ENABLED) {
+            outtakeWristController.pwmEnable();
+        }
+        outtakeWristServo.setPosition(position);
     }
 }

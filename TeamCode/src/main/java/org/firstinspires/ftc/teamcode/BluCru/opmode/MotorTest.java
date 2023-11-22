@@ -19,6 +19,9 @@ public class MotorTest extends LinearOpMode {
         double vert;
         waitForStart();
         while(opModeIsActive()) {
+            name = Constants.motorTestName;
+            test = hardwareMap.get(DcMotorEx.class, name);
+
             vert = -gamepad1.left_stick_y;
 
             if(Math.abs(vert) > 0.1) {

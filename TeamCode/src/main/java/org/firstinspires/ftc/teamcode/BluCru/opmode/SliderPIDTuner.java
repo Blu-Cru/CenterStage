@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
+import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
 
 @Config
 @TeleOp(name = "slide PID tuner", group = "TeleOp")
@@ -18,25 +19,24 @@ public class SliderPIDTuner extends LinearOpMode {
     public static double f = 0.07;
     public static int target = 0;
 
-    Hardware6417 robot;
+    Lift lift;
 
     @Override
     public void runOpMode() throws InterruptedException {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot = new Hardware6417(hardwareMap);
-
-        robot.initSlides();
+        lift = new Lift(hardwareMap, telemetry);
+        lift.init();
 
         waitForStart();
 
         while(opModeIsActive()) {
             controller.setPID(p, i, d);
-            int sliderPos = robot.slider.getCurrentPosition();
+            int sliderPos = lift.getCurrentPos();
             double power = controller.calculate(sliderPos, target) + f;
 
-            robot.setSlidePowers(power);
+            lift.setPower(power);
 
             telemetry.addData("target", target);
             telemetry.addData("current", sliderPos);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -28,7 +29,7 @@ public class Lift implements Subsystem{
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
+        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     public void init() {
@@ -58,7 +59,7 @@ public class Lift implements Subsystem{
         currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
-        if(currentPos < 10 || liftZeroTimer.seconds() > 3) {
+        if(targetPos == 0 && currentPos < 10) {
             setPower(0);
         } else if(Math.abs(targetPos - currentPos) < 10) {
             setPower(ff);

@@ -23,9 +23,7 @@ public class DriveTest extends LinearOpMode {
 
             drivetrain.drive(horz, vert, rotate);
 
-            telemetry.addData("target", 0);
-            telemetry.addData("current", 0);
-            telemetry.addData("power", 0);
+            telemetry.addData("external heading", drivetrain.getExternalHeading());
             telemetry.update();
         }
     }
