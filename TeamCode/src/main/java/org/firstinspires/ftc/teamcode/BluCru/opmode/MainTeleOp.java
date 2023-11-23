@@ -42,6 +42,7 @@ public class MainTeleOp extends LinearOpMode {
         while(opModeIsActive()) {
             lastTime = totalTimer.milliseconds();
             teleOpStateMachine.updateStates(gamepad1, gamepad2);
+            teleOpStateMachine.updateRobot(gamepad1, gamepad2);
 
             // loop time: current time - time at start of loop
             deltaTime = totalTimer.milliseconds() - lastTime;

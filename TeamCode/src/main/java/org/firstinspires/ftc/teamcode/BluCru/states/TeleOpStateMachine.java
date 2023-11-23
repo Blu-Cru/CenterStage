@@ -94,16 +94,22 @@ public class TeleOpStateMachine {
                 break;
             case INTAKE:
                 robot.lift.setTargetPos(Constants.sliderIntakePos);
+                robot.drivetrain.setDrivePower(Constants.driveSpeedIntake);
                 break;
             case LIFTING:
+                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
                 break;
             case OUTTAKE:
+                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
                 break;
             case PREPARE_TO_RETRACT:
+                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
                 break;
         }
 
-    // driving
+        robot.lift.update();
+
+        // driving
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
             robot.drivetrain.resetHeadingOffset();

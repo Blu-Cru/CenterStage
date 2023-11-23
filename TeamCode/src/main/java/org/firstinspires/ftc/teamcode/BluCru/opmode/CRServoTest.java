@@ -19,7 +19,7 @@ public class CRServoTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             if(Math.abs(gamepad1.left_stick_y) > 0.1) {
-                test.setPower(gamepad1.left_stick_y);
+                test.setPower(-gamepad1.left_stick_y);
             } else {
                 test.setPower(0);
             }

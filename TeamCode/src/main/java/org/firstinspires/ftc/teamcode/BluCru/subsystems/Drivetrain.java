@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
-    private double drivePower;
+    private double drivePower = 0.5;
 
     // heading while facing forwards
     private double headingOffset;
@@ -54,6 +54,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public double getRelativeHeading() {
-        return getExternalHeading() - headingOffset;
+        double heading = getExternalHeading() - headingOffset;
+        if(heading > Math.PI) {
+            heading -= 2*Math.PI;
+        } else if(heading < -Math.PI) {
+            heading += 2*Math.PI;
+        }
+        return heading;
     }
 }

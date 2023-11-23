@@ -9,18 +9,25 @@ import com.qualcomm.robotcore.hardware.ServoController;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BluCru.states.IntakeState;
 
 public class Intake implements Subsystem{
+    public IntakeState intakeState;
     private DcMotorEx intakeRollers;
     private CRServo outtakeRollers;
     private Servo intakeWrist;
     private Servo outtakeWrist;
     private ServoController outtakeWristController;
 
+    public double rollersPower;
+
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
+        intakeState = IntakeState.RETRACT;
+
         outtakeWrist = hardwareMap.get(Servo.class, "outtake wrist");
         outtakeWristController = outtakeWrist.getController();
-        outtakeRollers = hardwareMap.get(CRServo.class, "outtake");
+        outtakeRollers = hardwareMap.get(CRServo.class, "outtake rollers");
+        intakeRollers = hardwareMap.get(DcMotorEx.class, "intake rollers");
 
         // intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
 
@@ -29,16 +36,17 @@ public class Intake implements Subsystem{
     }
 
     public void init() {
-        /*//set all motors to zero power
-        intakeMotor.setPower(0);
+        rollersPower = 0;
+        //set all motors to zero power
+        intakeRollers.setPower(0);
 
         //set brake behavior
-        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        intakeRollers.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
 
         // reset motor encoders
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeRollers.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);*/
+        intakeRollers.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         // set servo powers and positions
         outtakeRollers.setPower(0);
@@ -47,7 +55,12 @@ public class Intake implements Subsystem{
     }
 
     public void update() {
-        // intakeMotor.setPower(intakePower);
+        intakeRollers.setPower(Constants.intakeRollersIntakePower * rollersPower);
+        outtakeRollers.setPower(Constants.outtakeRollersIntakePower * rollersPower);
+    }
+
+    public void setRollersPower(double power) {
+        rollersPower = power;
     }
 
     public void setOuttakeWristPosition(double position) {
@@ -63,5 +76,9 @@ public class Intake implements Subsystem{
 
     public void setOuttakeRollersPower(double power) {
         outtakeRollers.setPower(power);
+    }
+
+    public double getIntakeRollersPower() {
+        return intakeRollers.getPower();
     }
 }

@@ -78,9 +78,9 @@ public class WristTest extends LinearOpMode {
 
 // wheels control
             if(gamepad1.left_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.outtakeServoIntakePower);
+                robot.setWheelPowers(Constants.outtakeRollersIntakePower);
             }  else if(gamepad1.right_trigger > Constants.triggerSens) {
-                robot.setWheelPowers(Constants.outtakeServoOuttakePower);
+                robot.setWheelPowers(Constants.outtakeRollersOuttakePower);
             } else {
                 robot.setWheelPowers(0);
             }
@@ -104,13 +104,6 @@ public class WristTest extends LinearOpMode {
                     }
 
                     robot.autoWrist(Constants.outtakeWristRetractPos);
-                    break;
-                case intake:
-                    robot.autoSlider(Constants.sliderIntakePos);
-                    robot.stopWrist();
-                    if(!(gamepad1.left_trigger > Constants.triggerSens)) {
-                        slideState = SLIDESTATE.zero;
-                    }
                     break;
                 case outtake:
                     robot.autoSlider(Constants.sliderIntakePos);

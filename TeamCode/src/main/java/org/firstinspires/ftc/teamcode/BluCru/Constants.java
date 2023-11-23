@@ -30,15 +30,19 @@ public class Constants {
     public static int sliderWristClearPos         = 500;
 
 // outtake servo variables
-    public static double outtakeServoIntakePower = 1;
-    public static double outtakeServoOuttakePower = -1;
+    public static double outtakeRollersIntakePower = 1;
+    public static double outtakeRollersOuttakePower = -1;
+
+// intake rollers variables
+    public static double intakeRollersIntakePower = 1;
+    public static double intakeRollersOuttakePower = -1;
 
 // intake wrist variables
     public static double intakeWristRetractPos    = 0.5;
     public static double intakeWristDownPos       = 0.5;
 
 // outtake wrist variables
-    public static double outtakeWristRetractPos = 0.4;
+    public static double outtakeWristRetractPos   = 0.42;
     public static double outtakeWristOuttakePos   = 0.7;
 
     /* timer variables */
@@ -50,5 +54,5 @@ public class Constants {
 // test hardware names
     public static String motorTestName            = "front left";
     public static String servoTestName            = "intakeServo";
-    public static String CRServoTestName          = "intakeCRServo";
+    public static String CRServoTestName          = "outtake";
 }
