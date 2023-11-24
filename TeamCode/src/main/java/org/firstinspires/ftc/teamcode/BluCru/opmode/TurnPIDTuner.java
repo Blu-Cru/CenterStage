@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
 
@@ -37,18 +38,26 @@ public class TurnPIDTuner extends LinearOpMode {
             }
             controller.setPID(p, i, d);
             double heading = drivetrain.getRelativeHeading();
-            double PIDrotate = controller.calculate(heading, target);
 
             if(gamepad1.a) {
-                drivetrain.drive(horz, vert, PIDrotate);
-            } else {
-                drivetrain.drive(horz, vert, rotate);
+                target = 0;
+                rotate = getPIDRotate(heading);
             }
+            if(gamepad1.b) {
+                target = Math.toRadians(90);
+                rotate = getPIDRotate(heading);
+            }
+
+            drivetrain.drive(horz, vert, rotate);
 
             telemetry.addData("target", target);
             telemetry.addData("current heading", heading);
-            telemetry.addData("PID rotate", PIDrotate);
+            telemetry.addData("rotate", rotate);
             telemetry.update();
         }
+    }
+
+    public double getPIDRotate(double heading) {
+        return Range.clip(controller.calculate(heading, target), -1, 1);
     }
 }

@@ -60,9 +60,7 @@ public class LiftTest extends LinearOpMode {
 
             lift.update();
 
-            telemetry.addData("target", lift.getTargetPos());
-            telemetry.addData("current", lift.getCurrentPos());
-            telemetry.addData("liftState", liftState);
+            lift.telemetry(telemetry);
             telemetry.update();
         }
     }

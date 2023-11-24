@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
@@ -19,6 +20,7 @@ public class Lift implements Subsystem{
     private double PID;
     private double ff = Constants.sliderF;
 
+    public double power;
     public int targetPos = 0;
     private int currentPos;
 
@@ -62,13 +64,31 @@ public class Lift implements Subsystem{
         currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
-        if(targetPos == 0 && currentPos < 10) {
-            setPower(0);
-        } else if(Math.abs(targetPos - currentPos) < 10) {
-            setPower(ff);
-        } else {
-            setPower(PID);
+        switch(liftState) {
+            case RETRACT:
+                targetPos = Constants.sliderRetractPos;
+                if(currentPos < Constants.sliderRetractPos + 10 || sliderStallTimer.seconds() < 3) {
+                    power = 0;
+                    resetEncoder();
+                } else {
+                    power = PID;
+                }
+            case AUTO:
+                if(targetPos == 0 && currentPos < 10) {
+                    power = 0;
+                } else if(Math.abs(targetPos - currentPos) < 10) {
+                    power = ff;
+                } else {
+                    power = PID;
+                }
+                break;
+            case MANUAL:
+                // manual power is set in TeleOpStateMachine
+                targetPos = currentPos;
+                break;
         }
+
+        setPower(power);
     }
 
     public void setPower(double power) {
@@ -85,11 +105,33 @@ public class Lift implements Subsystem{
         sliderStallTimer.reset();
     }
 
+    public void resetEncoder() {
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public int getTargetPos() {
         return targetPos;
     }
 
     public int getCurrentPos() {
         return liftMotor.getCurrentPosition();
+    }
+
+    public double getCurrent(DcMotorEx motor) {
+        return motor.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("liftState", liftState);
+        telemetry.addData("targetPos", targetPos);
+        telemetry.addData("power", liftMotor.getPower());
+        telemetry.addData("currentPos", getCurrentPos());
+        telemetry.addData("current", getCurrent(liftMotor));
+        telemetry.addData("current2", getCurrent(liftMotor2));
+        telemetry.addData("stallTimer", sliderStallTimer.seconds());
     }
 }

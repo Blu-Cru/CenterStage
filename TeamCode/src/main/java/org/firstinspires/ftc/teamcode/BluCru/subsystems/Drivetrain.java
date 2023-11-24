@@ -4,13 +4,14 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double drivePower = 0.5;
 
-    // heading while facing forwards
+    // heading while facing intake
     private double headingOffset;
     private boolean fieldCentric;
 
@@ -30,7 +31,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public void drive(double x, double y, double rotate) {
         Vector2d input;
         if (fieldCentric) {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90) + Math.toRadians(getRawExternalHeading()) - Math.toRadians(headingOffset));
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
         } else {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90));
         }
@@ -61,5 +62,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
             heading += 2*Math.PI;
         }
         return heading;
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("heading", getExternalHeading());
+        telemetry.addData("heading offset", headingOffset);
+        telemetry.addData("relative heading", getRelativeHeading());
+        telemetry.addData("x", getPoseEstimate().getX());
+        telemetry.addData("y", getPoseEstimate().getY());
+        telemetry.addData("field centric", fieldCentric);
+        telemetry.update();
     }
 }

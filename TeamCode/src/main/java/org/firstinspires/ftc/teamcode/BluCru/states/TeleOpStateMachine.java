@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.states;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
@@ -14,12 +13,9 @@ public class TeleOpStateMachine {
     private Gamepad lastGamepad1;
     private Gamepad lastGamepad2;
 
-    private ElapsedTime liftRetractTimer;
-
     public TeleOpStateMachine(Robot robot) {
         this.robot = robot;
         robotState = RobotState.RETRACT;
-        liftRetractTimer = new ElapsedTime();
 
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
@@ -31,52 +27,72 @@ public class TeleOpStateMachine {
             case RETRACT:
                 if(gamepad2.a && robot.lift.getCurrentPos() < Constants.sliderIntakeDelta) {
                     robotState = RobotState.INTAKE;
+                    robot.intake.wristState = WristState.INTAKE;
                 }
                 if(gamepad2.b) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderLowPos);
                     robotState = RobotState.LIFTING;
                 }
                 if(gamepad2.x) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderMedPos);
                     robotState = RobotState.LIFTING;
                 }
                 if(gamepad2.y) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderHighPos);
                     robotState = RobotState.LIFTING;
                 }
                 break;
             case INTAKE:
                 if(!gamepad2.a && lastGamepad2.a) {
+                    robot.intake.wristState = WristState.RETRACT;
                     robotState = RobotState.RETRACT;
                 }
                 break;
             case LIFTING:
                 if(robot.lift.getCurrentPos() > Constants.sliderWristClearPos) {
                     robotState = RobotState.OUTTAKE;
+                    robot.intake.wristState = WristState.OUTTAKE;
                 }
                 if(gamepad2.a) {
+                    robot.lift.liftState = LiftState.RETRACT;
                     robot.lift.resetSliderStallTimer();
                     robotState = RobotState.RETRACT;
                 }
                 break;
             case OUTTAKE:
-                if(gamepad2.a && !lastGamepad2.a) {
-                    liftRetractTimer.reset();
-                    robotState = RobotState.PREPARE_TO_RETRACT;
+                if(gamepad2.dpad_down) {
+                    robot.intake.toggleWrist();
                 }
-                break;
-            case PREPARE_TO_RETRACT:
+                // manual lift control
+                if(Math.abs(gamepad2.right_stick_y) > 0.1) {
+                    robot.lift.liftState = LiftState.MANUAL;
+                    robot.lift.power = -gamepad2.right_stick_y;
+                } else {
+                    robot.lift.liftState = LiftState.AUTO;
+                }
+
+                // slider presets
                 if(gamepad2.b) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderLowPos);
-                    robotState = RobotState.LIFTING;
                 }
                 if(gamepad2.x) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderMedPos);
-                    robotState = RobotState.LIFTING;
                 }
                 if(gamepad2.y) {
+                    robot.lift.liftState = LiftState.AUTO;
                     robot.lift.setTargetPos(Constants.sliderHighPos);
-                    robotState = RobotState.LIFTING;
+                }
+
+                // retract
+                if(gamepad2.a && robot.intake.wristState == WristState.RETRACT) {
+                    robot.lift.liftState = LiftState.RETRACT;
+                    robot.lift.resetSliderStallTimer();
+                    robotState = RobotState.RETRACT;
                 }
                 break;
         }
@@ -89,25 +105,41 @@ public class TeleOpStateMachine {
     public void updateRobot(Gamepad gamepad1, Gamepad gamepad2) {
         switch (robotState) {
             case RETRACT:
-                robot.lift.setTargetPos(Constants.sliderIntakePos);
+                if(gamepad2.left_trigger > Constants.triggerSens) {
+                    robot.intake.outtakeRollersPower = gamepad2.left_trigger;
+                } else if(gamepad2.right_trigger > Constants.triggerSens) {
+                    robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
+                } else {
+                    robot.intake.outtakeRollersPower = 0;
+                }
+
+                // driving
                 robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
                 break;
             case INTAKE:
+                // rollers power
+                if(gamepad2.left_trigger > Constants.triggerSens) {
+                    robot.intake.outtakeRollersPower = gamepad2.left_trigger;
+                    robot.intake.intakeRollersPower = gamepad2.left_trigger;
+                } else if(gamepad2.right_trigger > Constants.triggerSens) {
+                    robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
+                    robot.intake.intakeRollersPower = -gamepad2.right_trigger;
+                } else {
+                    robot.intake.outtakeRollersPower = 0;
+                    robot.intake.intakeRollersPower = 0;
+                }
+
                 robot.lift.setTargetPos(Constants.sliderIntakePos);
                 robot.drivetrain.setDrivePower(Constants.driveSpeedIntake);
                 break;
             case LIFTING:
-                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
+                robot.drivetrain.setDrivePower(Constants.driveSpeedLifting);
                 break;
             case OUTTAKE:
                 robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
                 break;
-            case PREPARE_TO_RETRACT:
-                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
-                break;
         }
 
-        robot.lift.update();
 
         // driving
         // resets heading offset (face forwards)
@@ -115,9 +147,12 @@ public class TeleOpStateMachine {
             robot.drivetrain.resetHeadingOffset();
         }
         robot.drivetrain.drive(Math.pow(gamepad1.left_stick_x, 3), Math.pow(-gamepad1.left_stick_y, 3), Math.pow(-gamepad1.right_stick_x, 3));
+
+        robot.update();
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("robot state", robotState);
+        robot.telemetry();
     }
 }

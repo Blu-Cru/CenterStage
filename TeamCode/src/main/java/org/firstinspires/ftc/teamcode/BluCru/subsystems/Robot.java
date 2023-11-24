@@ -43,6 +43,11 @@ public class Robot {
         for(Subsystem subsystem : subsystems) {
             subsystem.update();
         }
-        telemetry.update();
+    }
+
+    public void telemetry() {
+        for(Subsystem subsystem : subsystems) {
+            subsystem.telemetry(telemetry);
+        }
     }
 }

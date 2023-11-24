@@ -26,13 +26,13 @@ public class IntakeTest extends LinearOpMode {
             rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.left_trigger > 0.1) {
-                intake.setRollersPower(gamepad1.left_trigger);
+                intake.setOuttakeRollersPower(gamepad1.left_trigger);
                 intake.stopOuttakeWrist();
             } else if (gamepad1.right_trigger > 0.1) {
-                intake.setRollersPower(-gamepad1.right_trigger);
+                intake.setOuttakeRollersPower(-gamepad1.right_trigger);
                 intake.stopOuttakeWrist();
             } else {
-                intake.setRollersPower(0);
+                intake.setOuttakeRollersPower(0);
                 intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
             }
 

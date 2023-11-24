@@ -9,20 +9,21 @@ import com.qualcomm.robotcore.hardware.ServoController;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BluCru.states.IntakeState;
+import org.firstinspires.ftc.teamcode.BluCru.states.WristState;
 
 public class Intake implements Subsystem{
-    public IntakeState intakeState;
+    public WristState wristState;
     private DcMotorEx intakeRollers;
     private CRServo outtakeRollers;
     private Servo intakeWrist;
     private Servo outtakeWrist;
     private ServoController outtakeWristController;
 
-    public double rollersPower;
+    public double outtakeRollersPower;
+    public double intakeRollersPower;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
-        intakeState = IntakeState.RETRACT;
+        wristState = WristState.RETRACT;
 
         outtakeWrist = hardwareMap.get(Servo.class, "outtake wrist");
         outtakeWristController = outtakeWrist.getController();
@@ -36,7 +37,7 @@ public class Intake implements Subsystem{
     }
 
     public void init() {
-        rollersPower = 0;
+        outtakeRollersPower = 0;
         //set all motors to zero power
         intakeRollers.setPower(0);
 
@@ -55,12 +56,20 @@ public class Intake implements Subsystem{
     }
 
     public void update() {
-        intakeRollers.setPower(Constants.intakeRollersIntakePower * rollersPower);
-        outtakeRollers.setPower(Constants.outtakeRollersIntakePower * rollersPower);
-    }
+        switch(wristState) {
+            case RETRACT:
+                setOuttakeWristPosition(Constants.outtakeWristRetractPos);
+                break;
+            case INTAKE:
+                stopOuttakeWrist();
+                break;
+            case OUTTAKE:
+                setOuttakeWristPosition(Constants.outtakeWristOuttakePos);
+                break;
+        }
 
-    public void setRollersPower(double power) {
-        rollersPower = power;
+        outtakeRollers.setPower(outtakeRollersPower);
+        intakeRollers.setPower(intakeRollersPower);
     }
 
     public void setOuttakeWristPosition(double position) {
@@ -80,5 +89,19 @@ public class Intake implements Subsystem{
 
     public double getIntakeRollersPower() {
         return intakeRollers.getPower();
+    }
+
+    public void toggleWrist() {
+        if(wristState == WristState.RETRACT) {
+            wristState = WristState.OUTTAKE;
+        } else if (wristState == WristState.OUTTAKE){
+            wristState = WristState.RETRACT;
+        }
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Intake Rollers Power", intakeRollers.getPower());
+        telemetry.addData("Outtake Rollers Power", outtakeRollers.getPower());
+        telemetry.addData("Outtake Wrist Position", outtakeWrist.getPosition());
     }
 }

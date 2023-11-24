@@ -10,7 +10,7 @@ public class Constants {
 // drive variables
     public static double driveSpeedIntake         = 0.5;
     public static double driveSpeedRetract = 0.75;
-    public static double driveSpeedPreOuttake     = 0.6;
+    public static double driveSpeedLifting     = 0.6;
     public static double driveSpeedOuttake        = 0.4;
     public static double driveSpeedEject          = 0.4;
 
@@ -27,7 +27,7 @@ public class Constants {
     public static int sliderIntakeDelta           = 50;
     public static int sliderMaxPos                = 1800;
     public static int sliderMinPos                = 0;
-    public static int sliderWristClearPos         = 500;
+    public static int sliderWristClearPos         = 700;
 
 // outtake servo variables
     public static double outtakeRollersIntakePower = 1;

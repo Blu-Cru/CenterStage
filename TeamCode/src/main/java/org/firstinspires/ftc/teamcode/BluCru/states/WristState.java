@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.BluCru.states;
 
-public enum IntakeState {
+public enum WristState {
     RETRACT,
     INTAKE,
-    LIFTING,
-    OUTTAKE,
-    PREPARE_TO_RETRACT
+    OUTTAKE
 }

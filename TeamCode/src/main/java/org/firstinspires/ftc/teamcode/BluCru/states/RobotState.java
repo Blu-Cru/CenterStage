@@ -5,5 +5,4 @@ public enum RobotState {
     INTAKE,
     LIFTING,
     OUTTAKE,
-    PREPARE_TO_RETRACT
 }
