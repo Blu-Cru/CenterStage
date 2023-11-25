@@ -118,14 +118,7 @@ public class TeleOpStateMachine {
                 robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
                 break;
             case INTAKE:
-                // intake rollers
-                if(gamepad2.left_trigger > Constants.triggerSens) {
-                    robot.intake.intakeRollersPower = gamepad2.left_trigger;
-                } else if(gamepad2.right_trigger > Constants.triggerSens) {
-                    robot.intake.intakeRollersPower = -gamepad2.right_trigger;
-                } else {
-                    robot.intake.intakeRollersPower = 0;
-                }
+
 
                 robot.lift.setTargetPos(Constants.sliderIntakePos);
                 robot.drivetrain.setDrivePower(Constants.driveSpeedIntake);
@@ -138,11 +131,20 @@ public class TeleOpStateMachine {
                 break;
         }
 
-        // rollers in the bucket
+        // intake rollers
         if(gamepad2.left_trigger > Constants.triggerSens) {
-            robot.intake.outtakeRollersPower = gamepad2.left_trigger;
+            robot.intake.intakeRollersPower = gamepad2.left_trigger;
         } else if(gamepad2.right_trigger > Constants.triggerSens) {
-            robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
+            robot.intake.intakeRollersPower = -gamepad2.right_trigger;
+        } else {
+            robot.intake.intakeRollersPower = 0;
+        }
+
+        // rollers in the bucket
+        if(gamepad2.left_bumper) {
+            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
+        } else if(gamepad2.right_bumper) {
+            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
         } else {
             robot.intake.outtakeRollersPower = 0;
         }

@@ -15,7 +15,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double drivePower = 0.5;
 
     // heading while facing intake
-    private double headingOffset;
     private boolean fieldCentric;
 
     private PIDController turnPID;
@@ -27,7 +26,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void init() {
-        headingOffset = getExternalHeading();
         fieldCentric = true;
     }
 
@@ -77,7 +75,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void resetHeadingOffset() {
-        this.headingOffset = this.getExternalHeading();
+        super.setExternalHeading(0);
     }
 
     public double getPIDRotate(double heading, double target) {
@@ -85,7 +83,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public double getRelativeHeading() {
-        double heading = getExternalHeading() - headingOffset;
+        double heading = getExternalHeading();
         if(heading > Math.PI) {
             heading -= 2*Math.PI;
         } else if(heading < -Math.PI) {
@@ -96,7 +94,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("heading", getExternalHeading());
-        telemetry.addData("heading offset", headingOffset);
         telemetry.addData("relative heading", getRelativeHeading());
         telemetry.addData("x", getPoseEstimate().getX());
         telemetry.addData("y", getPoseEstimate().getY());
