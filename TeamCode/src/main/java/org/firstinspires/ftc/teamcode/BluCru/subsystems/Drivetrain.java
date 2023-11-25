@@ -79,6 +79,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public double getPIDRotate(double heading, double target) {
+        if(heading - target < -Math.PI) {
+            heading += 2*Math.PI;
+        } else if(heading - target > Math.PI) {
+            heading -= 2*Math.PI;
+        }
         return Range.clip(turnPID.calculate(heading, target), -1, 1);
     }
 

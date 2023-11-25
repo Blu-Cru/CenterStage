@@ -13,8 +13,6 @@ public class TeleOpStateMachine {
     private Gamepad lastGamepad1;
     private Gamepad lastGamepad2;
 
-    public Alliance alliance;
-
     public TeleOpStateMachine(Robot robot) {
         this.robot = robot;
         robotState = RobotState.RETRACT;
@@ -160,13 +158,12 @@ public class TeleOpStateMachine {
         }
         // a turns to intake
         if(gamepad1.a) {
-            if(alliance == Alliance.BLUE)
-                robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
-            else
-                robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
+            robot.drivetrain.driveToHeading(horz, vert, Math.PI);
         } else if(gamepad1.b) {
             // b turns to backboard
-            robot.drivetrain.driveToHeading(horz, vert, 0);
+            robot.drivetrain.driveToHeading(horz, vert, -Math.PI/2);
+        } else if(gamepad1.x) {
+            robot.drivetrain.driveToHeading(horz, vert, Math.PI/2);
         } else {
             // otherwise, drive normally
             robot.drivetrain.drive(horz, vert, rotate);
