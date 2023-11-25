@@ -26,4 +26,8 @@ public class Hanger implements Subsystem {
     public void update() {
 
     }
+
+    public void telemetry(Telemetry telemetry) {
+
+    }
 }

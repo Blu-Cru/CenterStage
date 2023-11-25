@@ -24,7 +24,7 @@ public class Lift implements Subsystem{
     public int targetPos = 0;
     private int currentPos;
 
-    private ElapsedTime sliderStallTimer;
+    private ElapsedTime liftStallTimer;
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
@@ -56,7 +56,7 @@ public class Lift implements Subsystem{
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        sliderStallTimer = new ElapsedTime();
+        liftStallTimer = new ElapsedTime();
     }
 
     public void update() {
@@ -67,7 +67,7 @@ public class Lift implements Subsystem{
         switch(liftState) {
             case RETRACT:
                 targetPos = Constants.sliderRetractPos;
-                if(currentPos < Constants.sliderRetractPos + 10 || sliderStallTimer.seconds() < 3) {
+                if(liftStallTimer.seconds() > 3) {
                     power = 0;
                     resetEncoder();
                 } else {
@@ -91,6 +91,11 @@ public class Lift implements Subsystem{
         setPower(power);
     }
 
+    public void retractLift() {
+        resetLiftStallTimer();
+        liftState = LiftState.RETRACT;
+    }
+
     public void setPower(double power) {
         power = Range.clip(power, -1, 1);
         liftMotor.setPower(power);
@@ -101,8 +106,8 @@ public class Lift implements Subsystem{
         targetPos = pos;
     }
 
-    public void resetSliderStallTimer() {
-        sliderStallTimer.reset();
+    public void resetLiftStallTimer() {
+        liftStallTimer.reset();
     }
 
     public void resetEncoder() {
@@ -132,6 +137,6 @@ public class Lift implements Subsystem{
         telemetry.addData("currentPos", getCurrentPos());
         telemetry.addData("current", getCurrent(liftMotor));
         telemetry.addData("current2", getCurrent(liftMotor2));
-        telemetry.addData("stallTimer", sliderStallTimer.seconds());
+        telemetry.addData("stallTimer", liftStallTimer.seconds());
     }
 }

@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -15,8 +18,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double headingOffset;
     private boolean fieldCentric;
 
+    private PIDController turnPID;
+    public double targetHeading = 0;
+
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
+        turnPID = new PIDController(Constants.turnP, Constants.turnI, Constants.turnD);
     }
 
     public void init() {
@@ -46,12 +53,35 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         }
     }
 
+    public void driveToHeading(double x, double y, double targetHeading) {
+        Vector2d input;
+        if (fieldCentric) {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
+        } else {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
+        }
+
+        x = input.getX();
+        y = input.getY();
+        double rotate = getPIDRotate(getRelativeHeading(), targetHeading);
+
+        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
+            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
+        } else {
+            setWeightedDrivePower(new Pose2d(0, 0, 0));
+        }
+    }
+
     public void setDrivePower(double power) {
         drivePower = power;
     }
 
     public void resetHeadingOffset() {
         this.headingOffset = this.getExternalHeading();
+    }
+
+    public double getPIDRotate(double heading, double target) {
+        return Range.clip(turnPID.calculate(heading, target), -1, 1);
     }
 
     public double getRelativeHeading() {
@@ -71,6 +101,5 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         telemetry.addData("x", getPoseEstimate().getX());
         telemetry.addData("y", getPoseEstimate().getY());
         telemetry.addData("field centric", fieldCentric);
-        telemetry.update();
     }
 }

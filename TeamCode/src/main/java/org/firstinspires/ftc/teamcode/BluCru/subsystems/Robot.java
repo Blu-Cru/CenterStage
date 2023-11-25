@@ -45,7 +45,7 @@ public class Robot {
         }
     }
 
-    public void telemetry() {
+    public void telemetry(Telemetry telemetry) {
         for(Subsystem subsystem : subsystems) {
             subsystem.telemetry(telemetry);
         }

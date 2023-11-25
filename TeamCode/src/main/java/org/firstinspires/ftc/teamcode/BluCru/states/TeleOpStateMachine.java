@@ -13,6 +13,8 @@ public class TeleOpStateMachine {
     private Gamepad lastGamepad1;
     private Gamepad lastGamepad2;
 
+    public Alliance alliance;
+
     public TeleOpStateMachine(Robot robot) {
         this.robot = robot;
         robotState = RobotState.RETRACT;
@@ -57,13 +59,13 @@ public class TeleOpStateMachine {
                     robot.intake.wristState = WristState.OUTTAKE;
                 }
                 if(gamepad2.a) {
-                    robot.lift.liftState = LiftState.RETRACT;
-                    robot.lift.resetSliderStallTimer();
+                    robot.lift.retractLift();
+                    robot.lift.resetLiftStallTimer();
                     robotState = RobotState.RETRACT;
                 }
                 break;
             case OUTTAKE:
-                if(gamepad2.dpad_down) {
+                if(gamepad2.dpad_down && !lastGamepad2.dpad_down) {
                     robot.intake.toggleWrist();
                 }
                 // manual lift control
@@ -90,8 +92,7 @@ public class TeleOpStateMachine {
 
                 // retract
                 if(gamepad2.a && robot.intake.wristState == WristState.RETRACT) {
-                    robot.lift.liftState = LiftState.RETRACT;
-                    robot.lift.resetSliderStallTimer();
+                    robot.lift.retractLift();
                     robotState = RobotState.RETRACT;
                 }
                 break;
@@ -117,15 +118,12 @@ public class TeleOpStateMachine {
                 robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
                 break;
             case INTAKE:
-                // rollers power
+                // intake rollers
                 if(gamepad2.left_trigger > Constants.triggerSens) {
-                    robot.intake.outtakeRollersPower = gamepad2.left_trigger;
                     robot.intake.intakeRollersPower = gamepad2.left_trigger;
                 } else if(gamepad2.right_trigger > Constants.triggerSens) {
-                    robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
                     robot.intake.intakeRollersPower = -gamepad2.right_trigger;
                 } else {
-                    robot.intake.outtakeRollersPower = 0;
                     robot.intake.intakeRollersPower = 0;
                 }
 
@@ -140,19 +138,43 @@ public class TeleOpStateMachine {
                 break;
         }
 
+        // rollers in the bucket
+        if(gamepad2.left_trigger > Constants.triggerSens) {
+            robot.intake.outtakeRollersPower = gamepad2.left_trigger;
+        } else if(gamepad2.right_trigger > Constants.triggerSens) {
+            robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
+        } else {
+            robot.intake.outtakeRollersPower = 0;
+        }
+
+        double horz = Math.pow(gamepad1.left_stick_x, 3);
+        double vert = Math.pow(-gamepad1.left_stick_y, 3);
+        double rotate = Math.pow(-gamepad1.right_stick_x, 3);
 
         // driving
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
             robot.drivetrain.resetHeadingOffset();
         }
-        robot.drivetrain.drive(Math.pow(gamepad1.left_stick_x, 3), Math.pow(-gamepad1.left_stick_y, 3), Math.pow(-gamepad1.right_stick_x, 3));
+        // a turns to intake
+        if(gamepad1.a) {
+            if(alliance == Alliance.BLUE)
+                robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
+            else
+                robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
+        } else if(gamepad1.b) {
+            // b turns to backboard
+            robot.drivetrain.driveToHeading(horz, vert, 0);
+        } else {
+            // otherwise, drive normally
+            robot.drivetrain.drive(horz, vert, rotate);
+        }
 
         robot.update();
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("robot state", robotState);
-        robot.telemetry();
+        robot.telemetry(telemetry);
     }
 }

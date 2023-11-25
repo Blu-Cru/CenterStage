@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 
 @Config
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
@@ -18,6 +19,7 @@ public class TurnPIDTuner extends LinearOpMode {
     public static double target = 0;
     double vert, horz, rotate;
     Drivetrain drivetrain;
+    Intake intake;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,6 +28,9 @@ public class TurnPIDTuner extends LinearOpMode {
 
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.init();
+
+        intake = new Intake(hardwareMap, telemetry);
+        intake.init();
 
         waitForStart();
 

@@ -58,12 +58,14 @@ public class Intake implements Subsystem{
     public void update() {
         switch(wristState) {
             case RETRACT:
+                intakeRollersPower = 0;
                 setOuttakeWristPosition(Constants.outtakeWristRetractPos);
                 break;
             case INTAKE:
-                stopOuttakeWrist();
+                setOuttakeWristPosition(Constants.outtakeWristIntakePos);
                 break;
             case OUTTAKE:
+                intakeRollersPower = 0;
                 setOuttakeWristPosition(Constants.outtakeWristOuttakePos);
                 break;
         }
