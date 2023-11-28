@@ -45,9 +45,9 @@ public class Constants {
     public static double intakeWristDownPos       = 0.5;
 
 // outtake wrist variables
-    public static double outtakeWristRetractPos   = 0.42;
-    public static double outtakeWristOuttakePos   = 0.7;
-    public static double outtakeWristIntakePos    = 0.44;
+    public static double outtakeWristRetractPos   = 0.28;
+    public static double outtakeWristOuttakePos   = 0.52;
+    public static double outtakeWristIntakePos    = 0.3;
 
     /* timer variables */
     public static double slideDownDelay           = 1000;
