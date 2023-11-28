@@ -4,15 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 
 @TeleOp(name = "drive test", group = "TeleOp")
 public class DriveTest extends LinearOpMode {
     Drivetrain drivetrain;
+    TwoWheelTrackingLocalizer localizer;
 
     double vert, horz, rotate;
     @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain(hardwareMap);
+        localizer = new TwoWheelTrackingLocalizer(hardwareMap, drivetrain);
         drivetrain.setDrivePower(0.5);
 
         waitForStart();
@@ -28,6 +31,8 @@ public class DriveTest extends LinearOpMode {
             drivetrain.drive(horz, vert, rotate);
 
             telemetry.addData("external heading", drivetrain.getExternalHeading());
+            telemetry.addData("parallel encoder", localizer.getWheelPositions().get(0));
+            telemetry.addData("perpendicular encoder", localizer.getWheelPositions().get(1));
             telemetry.update();
         }
     }
