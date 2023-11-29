@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.opmode;
+package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;

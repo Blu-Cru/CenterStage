@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.opmode;
+package org.firstinspires.ftc.teamcode.BluCru.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

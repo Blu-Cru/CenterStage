@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.opmode;
+package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
