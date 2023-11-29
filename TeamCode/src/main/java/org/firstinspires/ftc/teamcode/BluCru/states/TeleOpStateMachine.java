@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.BluCru.states;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
@@ -25,9 +26,10 @@ public class TeleOpStateMachine {
     public void updateStates(Gamepad gamepad1, Gamepad gamepad2) {
         switch (robotState) {
             case RETRACT:
-                if(gamepad2.a && robot.lift.getCurrentPos() < Constants.sliderIntakeDelta) {
+                if(gamepad2.left_trigger > Constants.triggerSens && robot.lift.getCurrentPos() < Constants.sliderIntakeDelta) {
                     robotState = RobotState.INTAKE;
                     robot.intake.wristState = WristState.INTAKE;
+                    robot.intake.intakeTimer.reset();
                 }
                 if(gamepad2.b) {
                     robot.lift.liftState = LiftState.AUTO;
@@ -46,7 +48,7 @@ public class TeleOpStateMachine {
                 }
                 break;
             case INTAKE:
-                if(!gamepad2.a && lastGamepad2.a) {
+                if(!(gamepad2.left_trigger > Constants.triggerSens) && lastGamepad2.left_trigger > Constants.triggerSens) {
                     robot.intake.wristState = WristState.RETRACT;
                     robotState = RobotState.RETRACT;
                 }
@@ -104,14 +106,6 @@ public class TeleOpStateMachine {
     public void updateRobot(Gamepad gamepad1, Gamepad gamepad2) {
         switch (robotState) {
             case RETRACT:
-                if(gamepad2.left_trigger > Constants.triggerSens) {
-                    robot.intake.outtakeRollersPower = gamepad2.left_trigger;
-                } else if(gamepad2.right_trigger > Constants.triggerSens) {
-                    robot.intake.outtakeRollersPower = -gamepad2.right_trigger;
-                } else {
-                    robot.intake.outtakeRollersPower = 0;
-                }
-
                 // driving
                 robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
                 break;
@@ -129,22 +123,23 @@ public class TeleOpStateMachine {
                 break;
         }
 
-        // intake rollers
-        if(gamepad2.left_trigger > Constants.triggerSens) {
-            robot.intake.intakeRollersPower = gamepad2.left_trigger;
-        } else if(gamepad2.right_trigger > Constants.triggerSens) {
-            robot.intake.intakeRollersPower = -gamepad2.right_trigger;
-        } else {
-            robot.intake.intakeRollersPower = 0;
-        }
 
-        // rollers in the bucket
         if(gamepad2.left_bumper) {
             robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
         } else if(gamepad2.right_bumper) {
             robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
+        } else if (gamepad2.left_trigger > Constants.triggerSens){
+            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
         } else {
             robot.intake.outtakeRollersPower = 0;
+        }
+
+        if(gamepad2.left_trigger > Constants.triggerSens) {
+            robot.intake.intakeRollersPower = Constants.intakeRollersIntakePower * gamepad2.left_trigger;
+        } else if (gamepad2.right_trigger > Constants.triggerSens){
+            robot.intake.intakeRollersPower = Constants.intakeRollersOuttakePower * gamepad2.right_trigger;
+        } else {
+            robot.intake.intakeRollersPower = 0;
         }
 
         double horz = Math.pow(gamepad1.left_stick_x, 3);
@@ -156,17 +151,18 @@ public class TeleOpStateMachine {
         if(gamepad1.right_stick_button) {
             robot.drivetrain.resetHeadingOffset();
         }
-        // a turns to intake
-        if(gamepad1.a) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.PI);
-        } else if(gamepad1.b) {
-            // b turns to backboard
-            robot.drivetrain.driveToHeading(horz, vert, -Math.PI/2);
+        if(gamepad1.b) {
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
         } else if(gamepad1.x) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.PI/2);
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
         } else {
             // otherwise, drive normally
             robot.drivetrain.drive(horz, vert, rotate);
+        }
+
+        if(gamepad1.left_bumper && gamepad1.right_bumper) {
+            robot.drivetrain.resetIMU();
+            gamepad1.rumble(50);
         }
 
         robot.update();

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
@@ -18,6 +19,8 @@ public class Intake implements Subsystem{
     private Servo intakeWrist;
     private Servo outtakeWrist;
     private ServoController outtakeWristController;
+
+    public ElapsedTime intakeTimer;
 
     public double outtakeRollersPower;
     public double intakeRollersPower;
@@ -53,19 +56,19 @@ public class Intake implements Subsystem{
         outtakeRollers.setPower(0);
         // intakeWristServo.setPosition(Constants.intakeWristRetractPos);
         outtakeWrist.setPosition(Constants.outtakeWristRetractPos);
+
+        intakeTimer = new ElapsedTime();
     }
 
     public void update() {
         switch(wristState) {
             case RETRACT:
-                intakeRollersPower = 0;
                 setOuttakeWristPosition(Constants.outtakeWristRetractPos);
                 break;
             case INTAKE:
                 setOuttakeWristPosition(Constants.outtakeWristIntakePos);
                 break;
             case OUTTAKE:
-                intakeRollersPower = 0;
                 setOuttakeWristPosition(Constants.outtakeWristOuttakePos);
                 break;
         }

@@ -18,17 +18,17 @@ public class Constants {
     public static double driveSpeedEject          = 0.4;
 
 // slider variables
-    public static double sliderP                  = 0.01;
+    public static double sliderP                  = 0.007;
     public static double sliderI                  = 0;
-    public static double sliderD                  = 0.0003;
+    public static double sliderD                  = 0.0001;
     public static double sliderF                  = 0.08;
     public static int sliderRetractPos = 0;
     public static int sliderIntakePos             = 50;
-    public static int sliderLowPos                = 1000;
-    public static int sliderMedPos                = 1500;
-    public static int sliderHighPos               = 2000;
+    public static int sliderLowPos                = 1500;
+    public static int sliderMedPos                = 2000;
+    public static int sliderHighPos               = 2100;
     public static int sliderIntakeDelta           = 50;
-    public static int sliderMaxPos                = 1800;
+    public static int sliderMaxPos                = 2100;
     public static int sliderMinPos                = 0;
     public static int sliderWristClearPos         = 700;
 
@@ -40,20 +40,14 @@ public class Constants {
     public static double intakeRollersIntakePower = 1;
     public static double intakeRollersOuttakePower = -1;
 
-// intake wrist variables
-    public static double intakeWristRetractPos    = 0.5;
-    public static double intakeWristDownPos       = 0.5;
-
 // outtake wrist variables
     public static double outtakeWristRetractPos   = 0.28;
-    public static double outtakeWristOuttakePos   = 0.52;
-    public static double outtakeWristIntakePos    = 0.3;
+    public static double outtakeWristOuttakePos   = 0.57;
+    public static double outtakeWristIntakePos    = 0.31;
 
     /* timer variables */
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
-    public static double wristGrabDelay           = 0.3;
-    public static double wristTurretTurnDelay     = 0.35;
 
 // test hardware names
     public static String motorTestName            = "front left";

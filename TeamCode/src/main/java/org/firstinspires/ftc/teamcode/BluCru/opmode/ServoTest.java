@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.BluCru.Constants;
 @TeleOp(name = "servo test", group = "TeleOp")
 public class ServoTest extends LinearOpMode {
     public static double position = 0.5;
-    public static String name = "outtake wrist";
+    public static String name = Constants.servoTestName;
     @Override
     public void runOpMode() throws InterruptedException {
         Servo test = hardwareMap.get(Servo.class, name);
