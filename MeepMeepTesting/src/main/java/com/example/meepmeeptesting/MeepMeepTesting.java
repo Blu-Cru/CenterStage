@@ -10,24 +10,25 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
-        RoadRunnerBotEntity placementClose = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 12)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(10, 61, Math.toRadians(90)))
-                                .lineToConstantHeading(new Vector2d(10, 59))
-                                .splineToSplineHeading(new Pose2d(10, 40, Math.toRadians(30)), Math.toRadians(-120))
-                                .splineToLinearHeading(new Pose2d(10, 38, Math.toRadians(30)), Math.toRadians(-150))
-                                .build()
-                );
-
-        RoadRunnerBotEntity placementClose2 = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity swervePlacementLeft = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 12)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(10, -61, Math.toRadians(-90)))
-                                .lineToConstantHeading(new Vector2d(10, -59))
+                                .splineToConstantHeading(new Vector2d(10, -60), Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(13, -50), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(9, -38, Math.toRadians(-30)), Math.toRadians(150))
+                                .build()
+                );
+
+        RoadRunnerBotEntity swervePlacementRight = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 12)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-34, -61, Math.toRadians(-90)))
+                                .splineToConstantHeading(new Vector2d(-34, -60), Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(-37, -50), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(-33, -38, Math.toRadians(-150)), Math.toRadians(30))
                                 .build()
                 );
 
@@ -82,8 +83,8 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(placementClose)
-                .addEntity(placementClose2)
+                .addEntity(swervePlacementLeft)
+                .addEntity(swervePlacementRight)
                 .start();
     }
 }
