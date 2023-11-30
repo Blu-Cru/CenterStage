@@ -31,7 +31,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         fieldCentric = true;
     }
 
-    public void update() {
+    public void updateTrajectory() {
 
     }
 
@@ -76,8 +76,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         drivePower = power;
     }
 
+    // resets heading (do while in scoring position)
     public void resetHeadingOffset() {
-        super.setExternalHeading(0);
+        super.setExternalHeading(Math.toRadians(90));
     }
 
     public double getPIDRotate(double heading, double target) {

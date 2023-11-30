@@ -34,7 +34,7 @@ public class PropDetectionPipeline extends OpenCvPipeline {
     ArrayList<double[]> frameList;
     public static double strictLowS;
     public static double strictHighS;
-    public static int position = 1;
+    public int position = 1;
 
     public PropDetectionPipeline(int camWidth, int camHeight, Alliance alliance) {
         // initialize frameList
