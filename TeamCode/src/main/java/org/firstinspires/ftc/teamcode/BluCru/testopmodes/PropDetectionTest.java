@@ -17,7 +17,7 @@ public class PropDetectionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        cvMaster = new CVMaster(hardwareMap);
+        cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
         cvMaster.detectProp();
         // Init
         while (opModeInInit()) {

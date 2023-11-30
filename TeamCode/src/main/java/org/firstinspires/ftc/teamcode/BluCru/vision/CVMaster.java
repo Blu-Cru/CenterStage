@@ -16,9 +16,10 @@ public class CVMaster {
     private HardwareMap hardwareMap;
 
 
-    public CVMaster(HardwareMap hardwareMap) {
+    public CVMaster(HardwareMap hardwareMap, Alliance alliance) {
         this.hardwareMap = hardwareMap;
         this.webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"));
+        this.alliance = alliance;
     }
 
     public void detectProp() {

@@ -14,6 +14,14 @@ import java.util.ArrayList;
 
 @Config
 public class PropDetectionPipeline extends OpenCvPipeline {
+    private Alliance alliance;
+
+    private static double blueLowH = 80;
+    private static double blueHighH = 150;
+    private static double redLowH1 = 0;
+    private static double redHighH1 = 22;
+    private static double redLowH2 = 230;
+    private static double redHighH2 = 255;
     private static double blueStrictLowS = 130;
     private static double blueStrictHighS = 255;
     private static double redStrictLowS = 130;
@@ -33,13 +41,7 @@ public class PropDetectionPipeline extends OpenCvPipeline {
         frameList = new ArrayList<double[]>();
 
         // set strict HSV values based on alliance
-        if (alliance == Alliance.BLUE) {
-            strictLowS = blueStrictLowS;
-            strictHighS = blueStrictHighS;
-        } else {
-            strictLowS = redStrictLowS;
-            strictHighS = redStrictHighS;
-        }
+        alliance = alliance;
     }
     @Override
     public Mat processFrame(Mat input) {
@@ -50,12 +52,32 @@ public class PropDetectionPipeline extends OpenCvPipeline {
             return input;
         }
 
-        //apply HSV filter
-        Scalar lower = new Scalar(80,40,20);
-        Scalar upper = new Scalar(150, 255, 255);
-
         Mat thresh = new Mat();
-        Core.inRange(mat, lower, upper, thresh);
+
+
+        //apply HSV filter
+        if(alliance == Alliance.BLUE) {
+            Scalar lower = new Scalar(blueLowH,40,20);
+            Scalar upper = new Scalar(blueHighH, 255, 255);
+
+            Core.inRange(mat, lower, upper, thresh);
+        } else {
+            Scalar lower1 = new Scalar(redLowH1, 40, 20);
+            Scalar upper1 = new Scalar(redHighH1, 255, 255);
+
+            Scalar lower2 = new Scalar(redLowH2, 40, 20);
+            Scalar upper2 = new Scalar(redHighH2, 255, 255);
+
+            Mat thresh1 = new Mat();
+            Mat thresh2 = new Mat();
+
+            Core.inRange(mat, lower1, upper1, thresh1);
+            Core.inRange(mat, lower2, upper2, thresh2);
+
+            Core.bitwise_or(thresh1, thresh2, thresh);
+        }
+
+
 
         Mat masked = new Mat();
         Core.bitwise_and(mat, mat, masked, thresh);

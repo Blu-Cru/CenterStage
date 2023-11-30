@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
+
 @Config
 @TeleOp(name = "servo test", group = "TeleOp")
 public class ServoTest extends LinearOpMode {

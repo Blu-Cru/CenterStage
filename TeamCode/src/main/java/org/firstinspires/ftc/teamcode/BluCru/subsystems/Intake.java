@@ -74,7 +74,11 @@ public class Intake implements Subsystem{
         }
 
         outtakeRollers.setPower(outtakeRollersPower);
-        intakeRollers.setPower(intakeRollersPower);
+        if(intakeTimer.seconds() > 0.25) {
+            intakeRollers.setPower(intakeRollersPower);
+        } else {
+            intakeRollers.setPower(0);
+        }
     }
 
     public void setOuttakeWristPosition(double position) {

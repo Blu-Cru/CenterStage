@@ -25,7 +25,7 @@ public class Constants {
     public static int sliderRetractPos = 0;
     public static int sliderIntakePos             = 50;
     public static int sliderLowPos                = 1500;
-    public static int sliderMedPos                = 2000;
+    public static int sliderMedPos                = 1800;
     public static int sliderHighPos               = 2100;
     public static int sliderIntakeDelta           = 50;
     public static int sliderMaxPos                = 2100;
@@ -37,8 +37,8 @@ public class Constants {
     public static double outtakeRollersOuttakePower = -1;
 
 // intake rollers variables
-    public static double intakeRollersIntakePower = 1;
-    public static double intakeRollersOuttakePower = -1;
+    public static double intakeRollersIntakePower = 0.5;
+    public static double intakeRollersOuttakePower = -0.5;
 
 // outtake wrist variables
     public static double outtakeWristRetractPos   = 0.28;
