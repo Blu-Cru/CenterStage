@@ -20,6 +20,8 @@ public class RedRightAuto extends LinearOpMode {
     Path path;
     ElapsedTime runtime;
 
+    double lastHeading;
+
     TrajectorySequence placementFar;
     TrajectorySequence placementClose;
     TrajectorySequence placementCenter;
@@ -40,6 +42,7 @@ public class RedRightAuto extends LinearOpMode {
 
         cvMaster.detectProp();
         robot.init();
+        robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
         while(opModeInInit()) {
 
             telemetry.addData("average0", cvMaster.pipeline.average0);
@@ -74,11 +77,21 @@ public class RedRightAuto extends LinearOpMode {
                     break;
                 case PARK:
                     break;
+                case STOP:
+                    robot.drivetrain.stop();
+                    break;
+            }
+
+            if(robot.drivetrain.isBusy()) {
+                if(robot.drivetrain.getExternalHeading() == 0 && lastHeading == 0) {
+                    path = Path.STOP;
+                }
             }
 
             robot.update();
             robot.drivetrain.updateTrajectory();
 
+            telemetry.addData("poseEstimate: ", robot.drivetrain.getPoseEstimate());
             telemetry.addData("path:", path);
             telemetry.addData("runtime:", runtime.seconds());
             telemetry.update();

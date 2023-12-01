@@ -117,4 +117,14 @@ public class Trajectories {
         }
         return sequence;
     }
+
+    public Pose2d getStartPose() {
+        switch (side) {
+            case CLOSE:
+                return closeStartingPose;
+            case FAR:
+                return farStartingPose;
+        }
+        return null;
+    }
 }

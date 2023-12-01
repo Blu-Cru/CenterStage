@@ -16,12 +16,12 @@ import java.util.ArrayList;
 public class PropDetectionPipeline extends OpenCvPipeline {
     private Alliance alliance;
 
-    private static double blueLowH = 80;
-    private static double blueHighH = 100;
-    private static double redLowH1 = 0;
-    private static double redHighH1 = 22;
-    private static double redLowH2 = 230;
-    private static double redHighH2 = 255;
+    public static double blueLowH = 80;
+    public static double blueHighH = 100;
+    public static double redLowH1 = 0;
+    public static double redHighH1 = 22;
+    public static double redLowH2 = 230;
+    public static double redHighH2 = 255;
     private static double blueStrictLowS = 130;
     private static double blueStrictHighS = 255;
     private static double redStrictLowS = 130;
@@ -41,7 +41,7 @@ public class PropDetectionPipeline extends OpenCvPipeline {
         frameList = new ArrayList<double[]>();
 
         // set strict HSV values based on alliance
-        alliance = alliance;
+        this.alliance = alliance;
     }
     @Override
     public Mat processFrame(Mat input) {
