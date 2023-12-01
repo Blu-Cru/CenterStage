@@ -228,6 +228,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         return trajectorySequenceRunner.isBusy();
     }
 
+    public void stop() {
+        trajectorySequenceRunner.stop();
+        setDriveSignal(new DriveSignal());
+    }
+
     public void setMode(DcMotor.RunMode runMode) {
         for (DcMotorEx motor : motors) {
             motor.setMode(runMode);

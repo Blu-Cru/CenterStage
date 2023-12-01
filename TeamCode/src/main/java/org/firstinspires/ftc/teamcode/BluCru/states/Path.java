@@ -4,5 +4,6 @@ public enum Path {
     PLACEMENT,
     SQUARE,
     DEPOSIT,
-    PARK
+    PARK,
+    STOP
 }

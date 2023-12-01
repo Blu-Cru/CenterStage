@@ -104,6 +104,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         super.resetIMU();
     }
 
+    public void stop() {
+        super.stop();
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("heading", getExternalHeading());
         telemetry.addData("relative heading", getRelativeHeading());
