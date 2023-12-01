@@ -17,7 +17,7 @@ public class PropDetectionPipeline extends OpenCvPipeline {
     private Alliance alliance;
 
     private static double blueLowH = 80;
-    private static double blueHighH = 150;
+    private static double blueHighH = 100;
     private static double redLowH1 = 0;
     private static double redHighH1 = 22;
     private static double redLowH2 = 230;

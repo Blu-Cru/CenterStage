@@ -31,7 +31,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         fieldCentric = true;
     }
 
-    public void updateTrajectory() {
+    public void update() {
 
     }
 

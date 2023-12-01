@@ -17,7 +17,7 @@ public class BlueLeftAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(telemetry, hardwareMap);
-        trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE, robot);
+        trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE);
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
 
         robot.init();
