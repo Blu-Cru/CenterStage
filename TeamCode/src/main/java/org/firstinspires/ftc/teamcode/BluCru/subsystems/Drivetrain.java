@@ -29,6 +29,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void init() {
         fieldCentric = true;
+        resetIMU();
     }
 
     public void update() {

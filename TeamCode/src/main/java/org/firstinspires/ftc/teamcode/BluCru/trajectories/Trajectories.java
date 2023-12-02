@@ -2,10 +2,15 @@ package org.firstinspires.ftc.teamcode.BluCru.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
+import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 import org.firstinspires.ftc.teamcode.BluCru.states.Side;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class Trajectories {
@@ -19,19 +24,12 @@ public class Trajectories {
     private static Pose2d farPlacementClosePose;
     private static Pose2d farPlacementCenterPose;
 
-    private static final Pose2d redRightStartingPose = new Pose2d(13.5, -63, Math.toRadians(-90));
-    private static final Pose2d redRightPlacementLeftPose = new Pose2d(5, -38, Math.toRadians(-45));
-    private static final Pose2d redRightPlacementRightPose = new Pose2d(17, -40, Math.toRadians(-135));
-    private static final Pose2d redRightPlacementCenterPose = new Pose2d(13.5, -30, Math.toRadians(-90));
+    private static Pose2d squarePose;
 
-    private static final Pose2d redLeftStartingPose = new Pose2d(-34.5, -63, Math.toRadians(-90));
-    private static final Pose2d redLeftPlacementLeftPose = new Pose2d(-43, -38, Math.toRadians(-45));
-
-    private static final Pose2d blueRightStartingPose = new Pose2d(-37.5, 63, Math.toRadians(90));
-    private static final Pose2d blueRightPlacementLeftPose = new Pose2d(-29, 38, Math.toRadians(135));
-
-    private static final Pose2d blueLeftStartingPose = new Pose2d(10.5, 63, Math.toRadians(90));
-    private static final Pose2d blueLeftPlacementLeftPose = new Pose2d(19, 38, Math.toRadians(135));
+    private static double slowTurnVelocity = 10;
+    private static double slowTurnAccel = Math.toRadians(30);
+    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
 
     Side side;
     double reflect;
@@ -45,14 +43,17 @@ public class Trajectories {
         this.side = side;
 
         closeStartingPose = new Pose2d(12, -63 * reflect, Math.toRadians(-90 * reflect));
-        closePlacementFarPose = new Pose2d(5, -38 * reflect, Math.toRadians(-45 * reflect));
+        closePlacementFarPose = new Pose2d(4.5, -39 * reflect, Math.toRadians(-45 * reflect));
         closePlacementClosePose = new Pose2d(17, -40 * reflect, Math.toRadians(-135 * reflect));
-        closePlacementCenterPose = new Pose2d(13.5, -30 * reflect, Math.toRadians(-90 * reflect));
+        closePlacementCenterPose = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
 
         farStartingPose = new Pose2d(-36, -63 * reflect, Math.toRadians(-90 * reflect));
-        farPlacementFarPose = new Pose2d(-43, -38 * reflect, Math.toRadians(-45 * reflect));
+        farPlacementFarPose = new Pose2d(-43.5, -39 * reflect, Math.toRadians(-45 * reflect));
         farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
-        farPlacementCenterPose = new Pose2d(-34.5, -30 * reflect, Math.toRadians(-90 * reflect));
+        farPlacementCenterPose = new Pose2d(-33, -30 * reflect, Math.toRadians(-90 * reflect));
+
+
+        squarePose = new Pose2d(45, -36 * reflect, Math.toRadians(180));
     }
 
     public TrajectorySequence placementFar(Robot robot) {
@@ -60,15 +61,17 @@ public class Trajectories {
         switch (side) {
             case CLOSE:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
-                        .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
+                        .splineTo(new Vector2d(12, -55 * reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(closePlacementFarPose, Math.toRadians(135 * reflect))
                         .build();
                 break;
             case FAR:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
-                        .splineToConstantHeading(new Vector2d(-36, -50*reflect), Math.toRadians(90 * reflect))
+                        .splineTo(new Vector2d(-36, -55*reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(farPlacementFarPose, Math.toRadians(135 * reflect))
                         .build();
                 break;
@@ -81,6 +84,7 @@ public class Trajectories {
         switch (side) {
             case CLOSE:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
                         .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(closePlacementClosePose, Math.toRadians(45 * reflect))
@@ -88,6 +92,7 @@ public class Trajectories {
                 break;
             case FAR:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
                         .splineToConstantHeading(new Vector2d(-36, -50 * reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(farPlacementClosePose, Math.toRadians(45 * reflect))
@@ -102,6 +107,7 @@ public class Trajectories {
         switch (side) {
             case CLOSE:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
                         .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(closePlacementCenterPose, Math.toRadians(90 * reflect))
@@ -109,9 +115,72 @@ public class Trajectories {
                 break;
             case FAR:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                        .setVelConstraint(slowVelocity)
                         .setTangent(Math.toRadians(90 * reflect))
                         .splineToConstantHeading(new Vector2d(-36, -50 * reflect), Math.toRadians(90 * reflect))
                         .splineToSplineHeading(farPlacementCenterPose, Math.toRadians(90 * reflect))
+                        .build();
+                break;
+        }
+        return sequence;
+    }
+
+    public TrajectorySequence squareFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        switch(side) {
+            case CLOSE:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementFarPose)
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(-45*reflect)
+                        .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                            robot.lift.liftState = LiftState.AUTO;
+                            robot.lift.setTargetPos(Constants.sliderLowPos);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                            robot.intake.toggleWrist();
+                        })
+                        .splineToLinearHeading(squarePose,0)
+                        .build();
+                break;
+            case FAR:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementFarPose)
+                        .setVelConstraint(normalVelocity)
+                        .build();
+                break;
+        }
+        return sequence;
+    }
+
+    public TrajectorySequence squareCenter(Robot robot) {
+        TrajectorySequence sequence = null;
+        switch(side) {
+            case CLOSE:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementCenterPose)
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(-90 * reflect))
+                        .splineToLinearHeading(squarePose, 0)
+                        .build();
+                break;
+            case FAR:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementCenterPose)
+                        .build();
+                break;
+        }
+        return sequence;
+    }
+
+    public TrajectorySequence squareClose(Robot robot) {
+        TrajectorySequence sequence = null;
+        switch(side) {
+            case CLOSE:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementClosePose)
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(-135 * reflect))
+                        .splineToLinearHeading(squarePose, 0)
+                        .build();
+                break;
+            case FAR:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementClosePose)
                         .build();
                 break;
         }

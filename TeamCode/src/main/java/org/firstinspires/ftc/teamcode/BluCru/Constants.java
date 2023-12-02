@@ -37,8 +37,8 @@ public class Constants {
     public static double outtakeRollersOuttakePower = -1;
 
 // intake rollers variables
-    public static double intakeRollersIntakePower = 0.5;
-    public static double intakeRollersOuttakePower = -0.5;
+    public static double intakeRollersIntakePower = 0.75;
+    public static double intakeRollersOuttakePower = -0.75;
 
 // outtake wrist variables
     public static double outtakeWristRetractPos   = 0.28;

@@ -16,24 +16,26 @@ import java.util.ArrayList;
 public class PropDetectionPipeline extends OpenCvPipeline {
     private Alliance alliance;
 
+    public static double rect0x = 0.15;
+    public static double rect0y = 0.7;
+    public static double rect1x = 0.55;
+    public static double rect1y = 0.7;
+    public static double rect2x = 0.95;
+    public static double rect2y = 0.7;
+
     public static double blueLowH = 80;
-    public static double blueHighH = 100;
-    public static double redLowH1 = 0;
-    public static double redHighH1 = 22;
-    public static double redLowH2 = 230;
-    public static double redHighH2 = 255;
-    private static double blueStrictLowS = 130;
-    private static double blueStrictHighS = 255;
-    private static double redStrictLowS = 130;
-    private static double redStrictHighS = 255;
-    private static Rect rect0 = getRect(0.3, 0.5, 100, 100, 1280, 720);
-    private static Rect rect1 = getRect(0.5, 0.5, 100, 100, 1280, 720);
-    private static Rect rect2 = getRect(0.7, 0.5, 100, 100, 1280, 720);
-    public static Mat subMat0, subMat1, subMat2;
-    public static double average0, average1, average2;
+    public static double blueHighH = 150;
+    public static double redLowH = 140;
+    public static double redHighH = 255;
+    private static Rect rect0 = getRect(rect0x, rect0y, 100, 100, 1280, 720);
+    private static Rect rect1 = getRect(rect1x, rect1y, 100, 100, 1280, 720);
+    private static Rect rect2 = getRect(rect2x, rect2y, 100, 100, 1280, 720);
+    private Mat subMat0, subMat1, subMat2;
+    public double average0, average1, average2;
+    private double max;
     ArrayList<double[]> frameList;
-    public static double strictLowS;
-    public static double strictHighS;
+    public static double strictLowS = 50;
+    public static double strictHighS = 255;
     public int position = 1;
 
     public PropDetectionPipeline(int camWidth, int camHeight, Alliance alliance) {
@@ -62,19 +64,10 @@ public class PropDetectionPipeline extends OpenCvPipeline {
 
             Core.inRange(mat, lower, upper, thresh);
         } else {
-            Scalar lower1 = new Scalar(redLowH1, 40, 20);
-            Scalar upper1 = new Scalar(redHighH1, 255, 255);
+            Scalar lower = new Scalar(redLowH, 40, 20);
+            Scalar upper = new Scalar(redHighH, 255, 255);
 
-            Scalar lower2 = new Scalar(redLowH2, 40, 20);
-            Scalar upper2 = new Scalar(redHighH2, 255, 255);
-
-            Mat thresh1 = new Mat();
-            Mat thresh2 = new Mat();
-
-            Core.inRange(mat, lower1, upper1, thresh1);
-            Core.inRange(mat, lower2, upper2, thresh2);
-
-            Core.bitwise_or(thresh1, thresh2, thresh);
+            Core.inRange(mat, lower, upper, thresh);
         }
 
 
@@ -111,6 +104,15 @@ public class PropDetectionPipeline extends OpenCvPipeline {
         average0 = Core.mean(subMat0).val[0];
         average1 = Core.mean(subMat1).val[0];
         average2 = Core.mean(subMat2).val[0];
+
+        max = Math.max(Math.max(average0, average1), average2);
+        if(max == average0) {
+            position = 0;
+        } else if(max == average1) {
+            position = 1;
+        } else {
+            position = 2;
+        }
 
         if (frameList.size() > 5) {
             frameList.remove(0);
