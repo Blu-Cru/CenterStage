@@ -31,6 +31,7 @@ public class Constants {
     public static int sliderMaxPos                = 2100;
     public static int sliderMinPos                = 0;
     public static int sliderWristClearPos         = 700;
+    public static int sliderAutoPos               = 1400;
 
 // outtake servo variables
     public static double outtakeRollersIntakePower = 1;
@@ -46,6 +47,7 @@ public class Constants {
     public static double outtakeWristIntakePos    = 0.31;
 
     /* timer variables */
+    public static double farAutoDelay             = 15; // seconds
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
 

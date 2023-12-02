@@ -24,9 +24,11 @@ public class PropDetectionPipeline extends OpenCvPipeline {
     public static double rect2y = 0.7;
 
     public static double blueLowH = 80;
-    public static double blueHighH = 150;
-    public static double redLowH = 140;
-    public static double redHighH = 255;
+    public static double blueHighH = 140;
+    public static double redLowH1 = 0;
+    public static double redHighH1 = 20;
+    public static double redLowH2 = 150;
+    public static double redHighH2 = 180;
     private static Rect rect0 = getRect(rect0x, rect0y, 100, 100, 1280, 720);
     private static Rect rect1 = getRect(rect1x, rect1y, 100, 100, 1280, 720);
     private static Rect rect2 = getRect(rect2x, rect2y, 100, 100, 1280, 720);
@@ -64,10 +66,19 @@ public class PropDetectionPipeline extends OpenCvPipeline {
 
             Core.inRange(mat, lower, upper, thresh);
         } else {
-            Scalar lower = new Scalar(redLowH, 40, 20);
-            Scalar upper = new Scalar(redHighH, 255, 255);
+            Scalar lower1 = new Scalar(redLowH1, 40, 20);
+            Scalar upper1 = new Scalar(redHighH1, 255, 255);
 
-            Core.inRange(mat, lower, upper, thresh);
+            Scalar lower2 = new Scalar(redLowH2, 40, 20);
+            Scalar upper2 = new Scalar(redHighH2, 255, 255);
+
+            Mat thresh1 = new Mat();
+            Mat thresh2 = new Mat();
+
+            Core.inRange(mat, lower2, upper2, thresh2);
+            Core.inRange(mat, lower1, upper1, thresh1);
+
+            Core.bitwise_or(thresh1, thresh2, thresh);
         }
 
 

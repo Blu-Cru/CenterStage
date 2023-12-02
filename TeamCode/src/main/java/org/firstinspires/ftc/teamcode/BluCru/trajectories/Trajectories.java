@@ -26,10 +26,15 @@ public class Trajectories {
 
     private static Pose2d squarePose;
 
-    private static double slowTurnVelocity = 10;
-    private static double slowTurnAccel = Math.toRadians(30);
+    private static Pose2d depositFarPose;
+    private static Pose2d depositCenterPose;
+    private static Pose2d depositClosePose;
+
+    private static Pose2d parkPose;
+
     private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(30, 2, DriveConstants.TRACK_WIDTH);
 
     Side side;
     double reflect;
@@ -45,15 +50,20 @@ public class Trajectories {
         closeStartingPose = new Pose2d(12, -63 * reflect, Math.toRadians(-90 * reflect));
         closePlacementFarPose = new Pose2d(4.5, -39 * reflect, Math.toRadians(-45 * reflect));
         closePlacementClosePose = new Pose2d(17, -40 * reflect, Math.toRadians(-135 * reflect));
-        closePlacementCenterPose = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
+        closePlacementCenterPose = new Pose2d(15, -32 * reflect, Math.toRadians(-90 * reflect));
 
         farStartingPose = new Pose2d(-36, -63 * reflect, Math.toRadians(-90 * reflect));
         farPlacementFarPose = new Pose2d(-43.5, -39 * reflect, Math.toRadians(-45 * reflect));
         farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
-        farPlacementCenterPose = new Pose2d(-33, -30 * reflect, Math.toRadians(-90 * reflect));
-
+        farPlacementCenterPose = new Pose2d(-33, -32 * reflect, Math.toRadians(-90 * reflect));
 
         squarePose = new Pose2d(45, -36 * reflect, Math.toRadians(180));
+
+        depositFarPose = new Pose2d(48, -32 * reflect, Math.toRadians(180));
+        depositCenterPose = new Pose2d(48, -36 * reflect, Math.toRadians(180));
+        depositClosePose = new Pose2d(48, -40 * reflect, Math.toRadians(180));
+
+        parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
     }
 
     public TrajectorySequence placementFar(Robot robot) {
@@ -132,19 +142,19 @@ public class Trajectories {
                 sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementFarPose)
                         .setVelConstraint(normalVelocity)
                         .setTangent(-45*reflect)
-                        .UNSTABLE_addTemporalMarkerOffset(2, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(3, () -> {
-                            robot.intake.toggleWrist();
-                        })
                         .splineToLinearHeading(squarePose,0)
                         .build();
                 break;
             case FAR:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementFarPose)
                         .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(-45 * reflect))
+                        .splineToLinearHeading(new Pose2d(-36, -45*reflect, Math.toRadians(-90*reflect)), Math.toRadians(-45 * reflect))
+                        .setTangent(Math.toRadians(90 * reflect))
+                        .splineToConstantHeading(new Vector2d(-36, -18*reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(new Pose2d(-30, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
                         .build();
                 break;
         }
@@ -163,6 +173,14 @@ public class Trajectories {
                 break;
             case FAR:
                 sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementCenterPose)
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(-90 * reflect))
+                        .splineToConstantHeading(new Vector2d(-55, -36*reflect), Math.toRadians(90 * reflect))
+                        .splineTo(new Vector2d(-55, -24*reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(new Pose2d(-45, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
                         .build();
                 break;
         }
@@ -180,10 +198,183 @@ public class Trajectories {
                         .build();
                 break;
             case FAR:
-                sequence = robot.drivetrain.trajectorySequenceBuilder(closePlacementClosePose)
+                sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementClosePose)
+                        .setVelConstraint(normalVelocity)
+                        .splineToConstantHeading(new Vector2d(-45, -35*reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(new Pose2d(-32, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
                         .build();
                 break;
         }
+        return sequence;
+    }
+
+    public TrajectorySequence depositFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(squarePose)
+                .setVelConstraint(slowVelocity)
+                .setTangent(Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.lift.liftState = LiftState.AUTO;
+                    robot.lift.setTargetPos(Constants.sliderAutoPos);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(1.25, () -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2.5,() -> {
+                    robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
+                })
+                .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                .waitSeconds(3)
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.outtakeRollersPower = 0;
+                })
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence depositCenter(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(squarePose)
+                .setVelConstraint(slowVelocity)
+                .setTangent(Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.lift.liftState = LiftState.AUTO;
+                    robot.lift.setTargetPos(Constants.sliderAutoPos);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(1.25, () -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2.5,() -> {
+                    robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
+                })
+                .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
+                .waitSeconds(3)
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.outtakeRollersPower = 0;
+                })
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence depositClose(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(squarePose)
+                .setVelConstraint(slowVelocity)
+                .setTangent(Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.lift.liftState = LiftState.AUTO;
+                    robot.lift.setTargetPos(Constants.sliderAutoPos);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(1.25, () -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2.5,() -> {
+                    robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
+                })
+                .splineToConstantHeading(depositClosePose.vec(), Math.toRadians(0))
+                .waitSeconds(3)
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.outtakeRollersPower = 0;
+                })
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(depositFarPose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                    robot.lift.liftState = LiftState.RETRACT;
+                    robot.lift.setTargetPos(0);
+                })
+                .splineToConstantHeading(new Vector2d(36, -45*reflect), Math.toRadians(-90 * reflect))
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkCenter(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(depositClosePose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                    robot.lift.liftState = LiftState.RETRACT;
+                    robot.lift.setTargetPos(0);
+                })
+                .splineToConstantHeading(new Vector2d(45, -18*reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkClose(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(depositClosePose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.toggleWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                    robot.lift.liftState = LiftState.RETRACT;
+                    robot.lift.setTargetPos(0);
+                })
+                .splineToConstantHeading(new Vector2d(45, -18*reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkFarFromFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementFarPose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(-45 * reflect))
+                .splineToLinearHeading(new Pose2d(-36, -45*reflect, Math.toRadians(-90*reflect)), Math.toRadians(-45 * reflect))
+                .setTangent(Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-36, -18*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-30, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                .setVelConstraint(fastVelocity)
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkCloseFromFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementClosePose)
+                .setVelConstraint(normalVelocity)
+                .splineToConstantHeading(new Vector2d(-45, -35*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-32, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
+                .setVelConstraint(fastVelocity)
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence parkCenterFromFar(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(farPlacementCenterPose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(-90 * reflect))
+                .splineToConstantHeading(new Vector2d(-55, -36*reflect), Math.toRadians(90 * reflect))
+                .splineTo(new Vector2d(-55, -24*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-45, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                .setVelConstraint(fastVelocity)
+                .splineToConstantHeading(parkPose.vec(), Math.toRadians(0))
+                .build();
         return sequence;
     }
 

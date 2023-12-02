@@ -21,13 +21,28 @@ public class BlueLeftAuto extends LinearOpMode {
     Path path;
     ElapsedTime runtime;
 
-    double lastHeading;
+    int position;
 
     TrajectorySequence placementFar;
     TrajectorySequence placementClose;
     TrajectorySequence placementCenter;
 
+    TrajectorySequence squareFar;
+    TrajectorySequence squareCenter;
+    TrajectorySequence squareClose;
+
+    TrajectorySequence depositFar;
+    TrajectorySequence depositCenter;
+    TrajectorySequence depositClose;
+
+    TrajectorySequence parkFar;
+    TrajectorySequence parkCenter;
+    TrajectorySequence parkClose;
+
     TrajectorySequence placement;
+    TrajectorySequence square;
+    TrajectorySequence deposit;
+    TrajectorySequence park;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,49 +52,95 @@ public class BlueLeftAuto extends LinearOpMode {
         path = Path.PLACEMENT;
         runtime = new ElapsedTime();
 
+        robot.init();
+
+        telemetry.addData("robot init", "complete");
+        telemetry.update();
+
         placementFar = trajectories.placementFar(robot);
         placementClose = trajectories.placementClose(robot);
         placementCenter = trajectories.placementCenter(robot);
 
-        cvMaster.detectProp();
-        robot.init();
-        robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
-        while(opModeInInit()) {
+        squareFar = trajectories.squareFar(robot);
+        squareCenter = trajectories.squareCenter(robot);
+        squareClose = trajectories.squareClose(robot);
 
+        depositFar = trajectories.depositFar(robot);
+        depositCenter = trajectories.depositCenter(robot);
+        depositClose = trajectories.depositClose(robot);
+
+        parkFar = trajectories.parkFar(robot);
+        parkCenter = trajectories.parkCenter(robot);
+        parkClose = trajectories.parkClose(robot);
+
+        cvMaster.detectProp();
+
+        while(!isStopRequested() && opModeInInit()) {
+            position = cvMaster.pipeline.position;
+
+            telemetry.addData("build trajectories", "complete");
             telemetry.addData("average0", cvMaster.pipeline.average0);
             telemetry.addData("average1", cvMaster.pipeline.average1);
             telemetry.addData("average2", cvMaster.pipeline.average2);
-            telemetry.addData("position", cvMaster.pipeline.position);
+            telemetry.addData("position", position);
             telemetry.update();
         }
 
-        switch(cvMaster.pipeline.position) {
+        switch(position) {
             case 0:
-                placement = placementFar;
+                placement = placementClose;
+                square = squareClose;
+                deposit = depositClose;
+                park = parkClose;
                 break;
             case 1:
                 placement = placementCenter;
+                square = squareCenter;
+                deposit = depositCenter;
+                park = parkCenter;
                 break;
             case 2:
-                placement = placementClose;
+                placement = placementFar;
+                square = squareFar;
+                deposit = depositFar;
+                park = parkFar;
                 break;
         }
 
         waitForStart();
 
+        robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
         cvMaster.stopCamera();
         runtime.reset();
+
+        robot.drivetrain.followTrajectorySequenceAsync(placement);
 
         while(!isStopRequested() && opModeIsActive()) {
             switch(path) {
                 case PLACEMENT:
-                    robot.drivetrain.followTrajectorySequenceAsync(placement);
-                    path = Path.PARK;
+                    if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(square);
+                        path = Path.SQUARE;
+                    }
+                    break;
+                case SQUARE:
+                    if(!robot.drivetrain.isBusy()) {
+                        path = Path.DEPOSIT;
+                    }
+                    break;
+                case DEPOSIT:
+                    if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(park);
+                        path = Path.PARK;
+                    }
                     break;
                 case PARK:
+                    if(!robot.drivetrain.isBusy()) {
+                        path = Path.STOP;
+                    }
                     break;
                 case STOP:
-                    robot.drivetrain.setDriveSignal(new DriveSignal());
+                    // auto finished
                     break;
             }
 

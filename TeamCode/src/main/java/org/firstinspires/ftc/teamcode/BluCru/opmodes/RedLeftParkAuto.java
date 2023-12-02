@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.BluCru.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.BluCru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Red Left 2+0 Auto", group = "BluCru")
-public class RedLeftAuto extends LinearOpMode {
+@Autonomous(name = "Red Left PARK Auto", group = "BluCru")
+public class RedLeftParkAuto extends LinearOpMode {
     Robot robot;
     Trajectories trajectories;
     CVMaster cvMaster;
@@ -27,28 +27,18 @@ public class RedLeftAuto extends LinearOpMode {
     TrajectorySequence placementClose;
     TrajectorySequence placementCenter;
 
-    TrajectorySequence squareFar;
-    TrajectorySequence squareCenter;
-    TrajectorySequence squareClose;
-
-    TrajectorySequence depositFar;
-    TrajectorySequence depositCenter;
-    TrajectorySequence depositClose;
-
     TrajectorySequence parkFar;
     TrajectorySequence parkCenter;
     TrajectorySequence parkClose;
 
     TrajectorySequence placement;
-    TrajectorySequence square;
-    TrajectorySequence deposit;
     TrajectorySequence park;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(telemetry, hardwareMap);
-        trajectories = new Trajectories(Alliance.BLUE, Side.FAR);
-        cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
+        trajectories = new Trajectories(Alliance.RED, Side.FAR);
+        cvMaster = new CVMaster(hardwareMap, Alliance.RED);
         path = Path.PLACEMENT;
         runtime = new ElapsedTime();
 
@@ -61,17 +51,9 @@ public class RedLeftAuto extends LinearOpMode {
         placementClose = trajectories.placementClose(robot);
         placementCenter = trajectories.placementCenter(robot);
 
-        squareFar = trajectories.squareFar(robot);
-        squareCenter = trajectories.squareCenter(robot);
-        squareClose = trajectories.squareClose(robot);
-
-        depositFar = trajectories.depositFar(robot);
-        depositCenter = trajectories.depositCenter(robot);
-        depositClose = trajectories.depositClose(robot);
-
-//        parkFar = trajectories.parkFar(robot);
-//        parkCenter = trajectories.parkCenter(robot);
-//        parkClose = trajectories.parkClose(robot);
+        parkFar = trajectories.parkFarFromFar(robot);
+        parkCenter = trajectories.parkCenterFromFar(robot);
+        parkClose = trajectories.parkCloseFromFar(robot);
 
         cvMaster.detectProp();
 
@@ -89,21 +71,15 @@ public class RedLeftAuto extends LinearOpMode {
         switch(position) {
             case 0:
                 placement = placementFar;
-                square = squareFar;
-                deposit = depositFar;
-                // park = parkFar;
+                park = parkFar;
                 break;
             case 1:
                 placement = placementCenter;
-                square = squareCenter;
-                deposit = depositCenter;
-                // park = parkCenter;
+                park = parkCenter;
                 break;
             case 2:
                 placement = placementClose;
-                square = squareClose;
-                deposit = depositClose;
-                // park = parkClose;
+                park = parkClose;
                 break;
         }
 
@@ -119,18 +95,7 @@ public class RedLeftAuto extends LinearOpMode {
             switch(path) {
                 case PLACEMENT:
                     if(!robot.drivetrain.isBusy()) {
-                        robot.drivetrain.followTrajectorySequenceAsync(square);
-                        path = Path.SQUARE;
-                    }
-                    break;
-                case SQUARE:
-                    if(!robot.drivetrain.isBusy()) {
-                        path = Path.DEPOSIT;
-                    }
-                    break;
-                case DEPOSIT:
-                    if(!robot.drivetrain.isBusy()) {
-                        // robot.drivetrain.followTrajectorySequenceAsync(park);
+                        robot.drivetrain.followTrajectorySequenceAsync(park);
                         path = Path.PARK;
                     }
                     break;
