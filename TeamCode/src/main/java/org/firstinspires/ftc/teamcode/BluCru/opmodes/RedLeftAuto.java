@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
 import org.firstinspires.ftc.teamcode.BluCru.states.Path;
 import org.firstinspires.ftc.teamcode.BluCru.states.Side;
@@ -47,8 +48,8 @@ public class RedLeftAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(telemetry, hardwareMap);
-        trajectories = new Trajectories(Alliance.BLUE, Side.FAR);
-        cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
+        trajectories = new Trajectories(Alliance.RED, Side.FAR);
+        cvMaster = new CVMaster(hardwareMap, Alliance.RED);
         path = Path.PLACEMENT;
         runtime = new ElapsedTime();
 
@@ -109,6 +110,8 @@ public class RedLeftAuto extends LinearOpMode {
 
         waitForStart();
 
+        sleep((long) Constants.farAutoDelay);
+
         robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
         cvMaster.stopCamera();
         runtime.reset();
@@ -125,6 +128,7 @@ public class RedLeftAuto extends LinearOpMode {
                     break;
                 case SQUARE:
                     if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
                         path = Path.DEPOSIT;
                     }
                     break;

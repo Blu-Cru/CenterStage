@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
 import org.firstinspires.ftc.teamcode.BluCru.states.Path;
 import org.firstinspires.ftc.teamcode.BluCru.states.Side;
@@ -109,6 +110,8 @@ public class BlueRightAuto extends LinearOpMode {
 
         waitForStart();
 
+        sleep((long) Constants.farAutoDelay);
+
         robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
         cvMaster.stopCamera();
         runtime.reset();
@@ -125,6 +128,7 @@ public class BlueRightAuto extends LinearOpMode {
                     break;
                 case SQUARE:
                     if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
                         path = Path.DEPOSIT;
                     }
                     break;

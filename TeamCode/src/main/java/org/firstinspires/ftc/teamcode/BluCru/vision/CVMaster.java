@@ -43,6 +43,10 @@ public class CVMaster {
         webcam.stopStreaming();
     }
 
+    public boolean webcamIsCalibrated() {
+        return !webcam.equals(null);
+    }
+
     public void setAlliance(Alliance alliance) {
         this.alliance = alliance;
     }

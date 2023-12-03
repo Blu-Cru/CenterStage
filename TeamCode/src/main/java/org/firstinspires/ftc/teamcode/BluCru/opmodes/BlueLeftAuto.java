@@ -125,6 +125,7 @@ public class BlueLeftAuto extends LinearOpMode {
                     break;
                 case SQUARE:
                     if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
                         path = Path.DEPOSIT;
                     }
                     break;

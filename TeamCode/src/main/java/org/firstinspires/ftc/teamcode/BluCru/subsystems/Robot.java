@@ -24,12 +24,13 @@ public class Robot {
         lift = new Lift(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
         drivetrain = new Drivetrain(hardwareMap);
+        hanger = new Hanger(hardwareMap, telemetry);
 
         subsystems = new ArrayList<>();
         subsystems.add(lift);
         subsystems.add(intake);
         subsystems.add(drivetrain);
-        // subsystems.add(hanger);
+        subsystems.add(hanger);
     }
 
     // initializes subsystems

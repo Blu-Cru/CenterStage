@@ -75,10 +75,13 @@ public class PropDetectionPipeline extends OpenCvPipeline {
             Mat thresh1 = new Mat();
             Mat thresh2 = new Mat();
 
+
             Core.inRange(mat, lower2, upper2, thresh2);
             Core.inRange(mat, lower1, upper1, thresh1);
 
             Core.bitwise_or(thresh1, thresh2, thresh);
+            thresh1.release();
+            thresh2.release();
         }
 
 

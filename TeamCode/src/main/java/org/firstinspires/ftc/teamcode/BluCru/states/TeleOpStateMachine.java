@@ -98,6 +98,11 @@ public class TeleOpStateMachine {
                 break;
         }
 
+        // plane launcher
+        if(gamepad2.dpad_up && !lastGamepad2.dpad_up) {
+            robot.intake.togglePlane();
+        }
+
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
     }
@@ -141,6 +146,16 @@ public class TeleOpStateMachine {
         } else {
             robot.intake.intakeRollersPower = 0;
         }
+
+        if(Math.abs(gamepad2.left_stick_y) > 0.1) {
+            robot.hanger.hangerState = HangerState.MANUAL;
+            robot.hanger.setPower(-gamepad2.left_stick_y);
+        } else {
+            robot.hanger.hangerState = HangerState.MANUAL;
+            robot.hanger.setPower(0);
+        }
+
+        // DRIVING
 
         double horz = Math.pow(gamepad1.left_stick_x, 3);
         double vert = Math.pow(-gamepad1.left_stick_y, 3);

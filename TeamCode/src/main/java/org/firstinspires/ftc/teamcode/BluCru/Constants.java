@@ -30,12 +30,20 @@ public class Constants {
     public static int sliderIntakeDelta           = 50;
     public static int sliderMaxPos                = 2100;
     public static int sliderMinPos                = 0;
-    public static int sliderWristClearPos         = 700;
-    public static int sliderAutoPos               = 1400;
+    public static int sliderWristClearPos         = 1200;
+    public static int sliderAutoPos               = 1250;
+
+// hanger motor variables
+    public static double hangerP = 0.005;
+    public static double hangerI = 0;
+    public static double hangerD = 0;
+    public static int hangerUpPos = 4000;
+    public static int hangerHangPos = 2500;
 
 // outtake servo variables
     public static double outtakeRollersIntakePower = 1;
     public static double outtakeRollersOuttakePower = -1;
+    public static double outtakeRollersOuttakeAutoPower = -0.7;
 
 // intake rollers variables
     public static double intakeRollersIntakePower = 0.75;
@@ -46,13 +54,17 @@ public class Constants {
     public static double outtakeWristOuttakePos   = 0.57;
     public static double outtakeWristIntakePos    = 0.31;
 
+// plane variables
+    public static double planeRetractPos = 0.7;
+    public static double planeLaunchPos = 0.4;
+
     /* timer variables */
-    public static double farAutoDelay             = 15; // seconds
+    public static double farAutoDelay             = 15000; // seconds
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
 
 // test hardware names
-    public static String motorTestName            = "front left";
-    public static String servoTestName            = "intakeServo";
+    public static String motorTestName            = "hanger";
+    public static String servoTestName            = "plane";
     public static String CRServoTestName          = "outtake";
 }

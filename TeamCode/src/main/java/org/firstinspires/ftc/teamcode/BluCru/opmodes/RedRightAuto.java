@@ -53,6 +53,7 @@ public class RedRightAuto extends LinearOpMode {
         runtime = new ElapsedTime();
 
         robot.init();
+        cvMaster.detectProp();
 
         telemetry.addData("robot init", "complete");
         telemetry.update();
@@ -73,12 +74,15 @@ public class RedRightAuto extends LinearOpMode {
         parkCenter = trajectories.parkCenter(robot);
         parkClose = trajectories.parkClose(robot);
 
-        cvMaster.detectProp();
+        telemetry.addData("build trajectories", "complete");
+        telemetry.update();
+
+        sleep(400);
+
 
         while(!isStopRequested() && opModeInInit()) {
             position = cvMaster.pipeline.position;
 
-            telemetry.addData("build trajectories", "complete");
             telemetry.addData("average0", cvMaster.pipeline.average0);
             telemetry.addData("average1", cvMaster.pipeline.average1);
             telemetry.addData("average2", cvMaster.pipeline.average2);
@@ -125,6 +129,7 @@ public class RedRightAuto extends LinearOpMode {
                     break;
                 case SQUARE:
                     if(!robot.drivetrain.isBusy()) {
+                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
                         path = Path.DEPOSIT;
                     }
                     break;

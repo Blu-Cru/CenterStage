@@ -18,12 +18,16 @@ public class Intake implements Subsystem{
     private CRServo outtakeRollers;
     private Servo intakeWrist;
     private Servo outtakeWrist;
+    private Servo plane;
+    private ServoController planeController;
     private ServoController outtakeWristController;
 
     public ElapsedTime intakeTimer;
 
     public double outtakeRollersPower;
     public double intakeRollersPower;
+
+    private boolean planeRetracted = true;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         wristState = WristState.RETRACT;
@@ -34,6 +38,9 @@ public class Intake implements Subsystem{
         intakeRollers = hardwareMap.get(DcMotorEx.class, "intake rollers");
 
         // intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
+
+        plane = hardwareMap.get(Servo.class, "plane");
+        planeController = plane.getController();
 
         // set direction
         // intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
@@ -57,6 +64,8 @@ public class Intake implements Subsystem{
         // intakeWristServo.setPosition(Constants.intakeWristRetractPos);
         outtakeWrist.setPosition(Constants.outtakeWristRetractPos);
 
+        plane.setPosition(Constants.planeRetractPos);
+
         intakeTimer = new ElapsedTime();
     }
 
@@ -71,6 +80,12 @@ public class Intake implements Subsystem{
             case OUTTAKE:
                 setOuttakeWristPosition(Constants.outtakeWristOuttakePos);
                 break;
+        }
+
+        if(planeRetracted) {
+            plane.setPosition(Constants.planeRetractPos);
+        } else {
+            plane.setPosition(Constants.planeLaunchPos);
         }
 
         outtakeRollers.setPower(outtakeRollersPower);
@@ -106,6 +121,10 @@ public class Intake implements Subsystem{
         } else if (wristState == WristState.OUTTAKE){
             wristState = WristState.RETRACT;
         }
+    }
+
+    public void togglePlane() {
+        planeRetracted = !planeRetracted;
     }
 
     public void telemetry(Telemetry telemetry) {
