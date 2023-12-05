@@ -99,7 +99,7 @@ public class TeleOpStateMachine {
         }
 
         // plane launcher
-        if(gamepad2.dpad_up && !lastGamepad2.dpad_up) {
+        if(gamepad2.dpad_right && !lastGamepad2.dpad_right) {
             robot.intake.togglePlane();
         }
 
@@ -148,10 +148,8 @@ public class TeleOpStateMachine {
         }
 
         if(Math.abs(gamepad2.left_stick_y) > 0.1) {
-            robot.hanger.hangerState = HangerState.MANUAL;
             robot.hanger.setPower(-gamepad2.left_stick_y);
         } else {
-            robot.hanger.hangerState = HangerState.MANUAL;
             robot.hanger.setPower(0);
         }
 

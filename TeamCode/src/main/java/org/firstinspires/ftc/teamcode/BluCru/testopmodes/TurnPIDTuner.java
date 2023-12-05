@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 
 @Config
+@Disabled
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
 public class TurnPIDTuner extends LinearOpMode {
     private PIDController controller;

@@ -67,9 +67,12 @@ public class Lift implements Subsystem{
         switch(liftState) {
             case RETRACT:
                 targetPos = Constants.sliderRetractPos;
-                if((7 > liftStallTimer.seconds() && liftStallTimer.seconds() > 3) || currentPos < 10) {
+                if(2.5 > liftStallTimer.seconds() && liftStallTimer.seconds() > 2 && currentPos < 30) {
                     power = 0;
                     resetEncoder();
+                }
+                if(currentPos < 10) {
+                    power = 0;
                 } else {
                     power = PID;
                 }

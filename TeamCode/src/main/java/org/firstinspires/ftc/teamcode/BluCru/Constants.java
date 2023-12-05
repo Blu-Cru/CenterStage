@@ -30,8 +30,8 @@ public class Constants {
     public static int sliderIntakeDelta           = 50;
     public static int sliderMaxPos                = 2100;
     public static int sliderMinPos                = 0;
-    public static int sliderWristClearPos         = 1200;
-    public static int sliderAutoPos               = 1250;
+    public static int sliderWristClearPos         = 1000;
+    public static int sliderAutoPos               = 1150;
 
 // hanger motor variables
     public static double hangerP = 0.005;
@@ -50,16 +50,16 @@ public class Constants {
     public static double intakeRollersOuttakePower = -0.75;
 
 // outtake wrist variables
-    public static double outtakeWristRetractPos   = 0.28;
+    public static double outtakeWristRetractPos   = 0.27;
     public static double outtakeWristOuttakePos   = 0.57;
-    public static double outtakeWristIntakePos    = 0.31;
+    public static double outtakeWristIntakePos    = 0.30;
 
 // plane variables
     public static double planeRetractPos = 0.7;
-    public static double planeLaunchPos = 0.4;
+    public static double planeLaunchPos = 0.9;
 
     /* timer variables */
-    public static double farAutoDelay             = 15000; // seconds
+    public static double farAutoDelay             = 10000; // seconds
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
 

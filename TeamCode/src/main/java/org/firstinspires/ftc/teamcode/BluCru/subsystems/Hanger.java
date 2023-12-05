@@ -8,13 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.BluCru.states.HangerState;
 
 public class Hanger implements Subsystem {
-    public HangerState hangerState = HangerState.MANUAL;
-
     private DcMotorEx hangerMotor;
-    private PIDController hangerPID;
 
     private double PID;
     public double power;
@@ -28,7 +24,6 @@ public class Hanger implements Subsystem {
     }
 
     public void init() {
-        hangerPID = new PIDController(Constants.hangerP, Constants.hangerI, Constants.hangerD);
 
         targetPos = 0;
         hangerMotor.setPower(0);
@@ -38,16 +33,6 @@ public class Hanger implements Subsystem {
     }
 
     public void update() {
-        currentPos = hangerMotor.getCurrentPosition();
-        PID = hangerPID.calculate(currentPos, targetPos);
-
-        switch(hangerState) {
-            case AUTO:
-                    hangerMotor.setPower(PID);
-                break;
-            case MANUAL:
-                break;
-        }
 
     }
 

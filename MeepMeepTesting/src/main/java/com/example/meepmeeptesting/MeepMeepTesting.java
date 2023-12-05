@@ -44,8 +44,10 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(closePlacementClosePose)
                                 .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(-90 * reflect))
-                                .splineToSplineHeading(new Pose2d(28, -50 * reflect, Math.toRadians(180)), 0)
+                                .setTangent(Math.toRadians(180))
+                                .splineToLinearHeading(new Pose2d(17, -50 * reflect, Math.toRadians(180)), 0)
+                                .setTangent(0)
+                                .splineTo(new Vector2d(30, -50 * reflect), 0)
                                 .splineToConstantHeading(squarePose.vec(), 0)
                                 .build()
                 );

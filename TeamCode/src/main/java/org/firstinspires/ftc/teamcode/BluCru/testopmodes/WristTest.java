@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.Hardware6417;
 
+@Disabled
 @TeleOp(name = "wrist test", group = "TeleOp")
 public class WristTest extends LinearOpMode {
     enum ROBOTSTATE {

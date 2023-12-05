@@ -131,5 +131,7 @@ public class Intake implements Subsystem{
         telemetry.addData("Intake Rollers Power", intakeRollers.getPower());
         telemetry.addData("Outtake Rollers Power", outtakeRollers.getPower());
         telemetry.addData("Outtake Wrist Position", outtakeWrist.getPosition());
+        telemetry.addData("plane retracted: ", planeRetracted);
+        telemetry.addData("plane position: ", plane.getPosition());
     }
 }
