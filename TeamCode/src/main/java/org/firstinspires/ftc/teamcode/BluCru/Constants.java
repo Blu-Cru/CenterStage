@@ -7,52 +7,64 @@ public class Constants {
     public static double sens                     = 0.1;
     public static double triggerSens              = 0.5;
 
-    public static double manualServoDelta         = .01;
-
 // drive variables
+    public static double turnP                    = 1.2;
+    public static double turnI                    = 0;
+    public static double turnD                    = 0;
     public static double driveSpeedIntake         = 0.5;
-    public static double driveSpeedMoving         = 0.75;
-    public static double driveSpeedPreOuttake     = 0.6;
+    public static double driveSpeedRetract = 0.75;
+    public static double driveSpeedLifting     = 0.6;
     public static double driveSpeedOuttake        = 0.4;
     public static double driveSpeedEject          = 0.4;
 
 // slider variables
-    public static double sliderP                  = 0.01;
+    public static double sliderP                  = 0.007;
     public static double sliderI                  = 0;
-    public static double sliderD                  = 0.0005;
+    public static double sliderD                  = 0.0001;
     public static double sliderF                  = 0.08;
-    public static double slideHighPower           = 0.8;
-    public static double slideMedPower            = 0.8;
-    public static double slideLowPower            = 0.8;
-    public static double slideBasePower           = 0.8;
-    public static int sliderBasePos               = 0;
+    public static int sliderRetractPos = 0;
     public static int sliderIntakePos             = 50;
-    public static int sliderLowPos                = 1000;
-    public static int sliderMedPos                = 1500;
-    public static int sliderHighPos               = 2000;
-    public static int sliderDunkDelta             = 100;
+    public static int sliderLowPos                = 1500;
+    public static int sliderMedPos                = 1800;
+    public static int sliderHighPos               = 2100;
     public static int sliderIntakeDelta           = 50;
-    public static int sliderOuttakeDelta          = 150;
-    public static int sliderMaxPos                = 1800;
+    public static int sliderMaxPos                = 2100;
     public static int sliderMinPos                = 0;
-    public static int coneClearDelta              = 180;
-    public static int sliderDownWristClearPos     = 600;
-    public static int sliderUpWristClearPos       = 200;
+    public static int sliderWristClearPos         = 1000;
+    public static int sliderAutoPos               = 1150;
 
-// intake variables
-    public static double wheelIntakePower = 1;
-    public static double wheelOuttakePower = -1;
-    public static double wheelStopPower = 0;
+// hanger motor variables
+    public static double hangerP = 0.005;
+    public static double hangerI = 0;
+    public static double hangerD = 0;
+    public static int hangerUpPos = 4000;
+    public static int hangerHangPos = 2500;
 
-// wrist variables
-    public static double wristMovingPos           = 0.52;
-    public static double wristDownPos             = 0.6;
-    public static double wristPreOuttakePos       = 0.97;
-    public static double wristOuttakePos          = 0.9;
+// outtake servo variables
+    public static double outtakeRollersIntakePower = 1;
+    public static double outtakeRollersOuttakePower = -1;
+    public static double outtakeRollersOuttakeAutoPower = -0.7;
+
+// intake rollers variables
+    public static double intakeRollersIntakePower = 0.75;
+    public static double intakeRollersOuttakePower = -0.75;
+
+// outtake wrist variables
+    public static double outtakeWristRetractPos   = 0.27;
+    public static double outtakeWristOuttakePos   = 0.57;
+    public static double outtakeWristIntakePos    = 0.30;
+
+// plane variables
+    public static double planeRetractPos = 0.7;
+    public static double planeLaunchPos = 0.9;
 
     /* timer variables */
+    public static double farAutoDelay             = 10000; // seconds
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
-    public static double wristGrabDelay           = 0.3;
-    public static double wristTurretTurnDelay     = 0.35;
+
+// test hardware names
+    public static String motorTestName            = "hanger";
+    public static String servoTestName            = "plane";
+    public static String CRServoTestName          = "outtake";
 }

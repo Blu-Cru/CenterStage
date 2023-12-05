@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.BluCru;
 
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,17 +12,12 @@ import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-
-import java.util.Vector;
 
 public class Hardware6417 {
     public DcMotorEx slider, auxSlider;
     public ServoControllerEx wristController;
     public Servo wrist;
     public CRServo wheels;
-    public MecanumDrive drive;
     public IMU imu;
     public HardwareMap hwMap;
 //  heading offset is the heading set to forward on the field
@@ -78,9 +70,6 @@ public class Hardware6417 {
         wheels     = hwMap.get(CRServo.class, "wheels");
     }
 
-    public void initDrive(Pose2d pose) {
-        drive = new MecanumDrive(hwMap, pose);
-    }
 
     public void autoWrist(double position) {
 //      enable servo pwm if it is not already enabled
@@ -136,25 +125,6 @@ public class Hardware6417 {
 
     public boolean sliderIntakeReady() {
         return slider.getCurrentPosition() < Constants.sliderIntakeDelta;
-    }
-
-    public void holonomicDrive(double horz, double vert, double rotate, double driveSpeed, double heading) {
-        Vector2d input = new Vector2d(horz, vert);
-        input = rotateVector(input, -Math.toRadians(90));
-
-        if(Math.max(Math.max(Math.abs(vert), Math.abs(horz)), Math.abs(rotate)) > 0.1) {
-            drive.setDrivePowers(new PoseVelocity2d(input.times(driveSpeed), rotate*driveSpeed));
-        } else {
-            drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
-        }
-    }
-
-    /*public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
-        Vector2d input = new Vector2d(horz, vert).rotated(-heading - Math.toRadians(90));
-        setWeightedDrivePower(new Pose2d(input.getX() * driveSpeed, input.getY() * driveSpeed, rotate * driveSpeed));
-    }*/
-    public Vector2d rotateVector(Vector2d vector, double angle) {
-        return new Vector2d(vector.component1() * Math.cos(angle) - vector.component2() * Math.sin(angle), vector.component1() * Math.sin(angle) + vector.component2() * Math.cos(angle));
     }
 
     public void telemetry(Telemetry tele) {
