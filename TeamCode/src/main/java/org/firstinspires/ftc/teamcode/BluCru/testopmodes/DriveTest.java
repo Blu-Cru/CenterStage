@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,6 +19,8 @@ public class DriveTest extends LinearOpMode {
         localizer = new TwoWheelTrackingLocalizer(hardwareMap, drivetrain);
         drivetrain.setDrivePower(0.5);
 
+        localizer.setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
+
         waitForStart();
         while(opModeIsActive()) {
             vert = -gamepad1.left_stick_y;
@@ -30,9 +33,8 @@ public class DriveTest extends LinearOpMode {
 
             drivetrain.drive(horz, vert, rotate);
 
-            telemetry.addData("external heading", drivetrain.getExternalHeading());
-            telemetry.addData("parallel encoder", localizer.getWheelPositions().get(0));
-            telemetry.addData("perpendicular encoder", localizer.getWheelPositions().get(1));
+            telemetry.addData("pose estimate", localizer.getPoseEstimate());
+            telemetry.addData("pose velocity", localizer.getPoseVelocity());
             telemetry.update();
         }
     }
