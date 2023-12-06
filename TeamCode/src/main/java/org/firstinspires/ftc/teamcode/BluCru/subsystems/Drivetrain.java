@@ -36,6 +36,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     }
 
+    public void drive(Pose2d input, double rotate) {
+        
+    }
+
     public void drive(double x, double y, double rotate) {
         Vector2d input;
         if (fieldCentric) {
