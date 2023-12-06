@@ -14,6 +14,11 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
+    public static Vector2d flVector = new Vector2d(0.47817, 0.8783);
+    public static Vector2d frVector = new Vector2d(-0.47817, 0.8783);
+    public static Vector2d blVector = frVector;
+    public static Vector2d brVector = flVector;
+
     private double drivePower = 0.5;
 
     // heading while facing intake
@@ -34,6 +39,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void update() {
 
+    }
+
+    public void drive(Vector2d driveVector, double rotate) {
+        double driveMag = Range.clip(driveVector.norm(), 0, 1);
+
+        double flAngle = driveVector.angleBetween(flVector);
+        double frAngle = driveVector.angleBetween(frVector);
+
+        if(Math.abs(flAngle) < Math.abs(frAngle)) {
+
+        }
     }
 
     public void drive(double x, double y, double rotate) {
@@ -111,7 +127,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("heading", getExternalHeading());
-        telemetry.addData("relative heading", getRelativeHeading());
         telemetry.addData("x", getPoseEstimate().getX());
         telemetry.addData("y", getPoseEstimate().getY());
         telemetry.addData("field centric", fieldCentric);
