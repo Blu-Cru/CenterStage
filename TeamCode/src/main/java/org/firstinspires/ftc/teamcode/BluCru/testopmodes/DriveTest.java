@@ -33,6 +33,8 @@ public class DriveTest extends LinearOpMode {
 
             drivetrain.drive(horz, vert, rotate);
 
+            drivetrain.update();
+
             telemetry.addData("pose estimate", localizer.getPoseEstimate());
             telemetry.addData("pose velocity", localizer.getPoseVelocity());
             telemetry.update();

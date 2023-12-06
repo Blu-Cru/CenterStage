@@ -19,7 +19,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public static Vector2d blVector = frVector;
     public static Vector2d brVector = flVector;
 
+    public static double maxAcceleration; // inches per second squared
+    public static double maxVelocity = 50; // inches per second
+
     private double drivePower = 0.5;
+    private Pose2d pose;
+    private double velocity;
+    private double acceleration;
+    private Pose2d lastPose;
+    private double lastVelocity;
+    private double lastTime;
 
     // heading while facing intake
     private boolean fieldCentric;
@@ -38,7 +47,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void update() {
-
+        pose = getPoseEstimate();
+        velocity = pose.vec().distTo(lastPose.vec()) / (System.currentTimeMillis() - lastTime);
+        acceleration = (velocity - lastVelocity) / (System.currentTimeMillis() - lastTime);
+        lastPose = pose;
+        lastVelocity = velocity;
+        lastTime = System.currentTimeMillis();
     }
 
     public void drive(Vector2d driveVector, double rotate) {
