@@ -59,7 +59,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         lastTime = System.currentTimeMillis();
     }
 
-    public void driveClipAcceleration(Vector2d inputVector, double rotate) {
+    public Vector2d calculateDriveVector(Vector2d inputVector) {
         // scale down so magnitude isnt greater than 1
         inputVector = inputVector.div(inputVector.norm()).times(Range.clip(inputVector.norm(), 0, 1));
 
@@ -71,9 +71,28 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         Vector2d driveVector;
         driveVector = lastDriveVector.plus(delta.times(deltaMag));
 
-        drive(driveVector, rotate);
+        lastDriveVector = driveVector;
 
-        lastDriveVector = inputVector;
+        return driveVector;
+    }
+
+    public void testDrive(Vector2d input, double rotate) {
+        if (fieldCentric) {
+            input = input.rotated(Math.toRadians(-90) - getRelativeHeading());
+        } else {
+            input = input.rotated(Math.toRadians(-90));
+        }
+
+        input = calculateDriveVector(input);
+
+        double x = input.getX();
+        double y = input.getY();
+
+        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
+            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
+        } else {
+            setWeightedDrivePower(new Pose2d(0, 0, 0));
+        }
     }
 
     public void drive(Vector2d input, double rotate) {

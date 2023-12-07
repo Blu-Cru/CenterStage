@@ -33,10 +33,12 @@ public class DriveTest extends LinearOpMode {
                 drivetrain.resetHeadingOffset();
             }
 
-            drivetrain.driveClipAcceleration(new Vector2d(horz, vert), rotate);
+            drivetrain.testDrive(new Vector2d(horz, vert), rotate);
 
             drivetrain.update();
 
+            drivetrain.telemetry(telemetry);
+            drivetrain.testTelemetry(telemetry);
             telemetry.addData("pose estimate", localizer.getPoseEstimate());
             telemetry.addData("pose velocity", localizer.getPoseVelocity());
             telemetry.addData("rotate", rotate);
