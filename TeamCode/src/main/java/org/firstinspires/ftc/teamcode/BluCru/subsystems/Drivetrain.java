@@ -20,15 +20,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public static Vector2d brVector = flVector;
 
     public static double maxAcceleration; // inches per second squared
-    public static double maxVelocity = 50; // inches per second
+    public static double maxDriveVectorDelta = 4; // magnitude per second
 
     private double drivePower = 0.5;
+    private double dt;
     private Pose2d pose;
     private double velocity;
     private double acceleration;
     private Pose2d lastPose;
     private double lastVelocity;
     private double lastTime;
+
+    private Vector2d lastDriveVector;
 
     // heading while facing intake
     private boolean fieldCentric;
@@ -44,38 +47,48 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public void init() {
         fieldCentric = true;
         resetIMU();
+        lastDriveVector = new Vector2d(0,0);
+        lastPose = new Pose2d(0,0,0);
+        lastTime = System.currentTimeMillis();
+        lastVelocity = 0;
     }
 
     public void update() {
+        dt = System.currentTimeMillis() - lastTime;
         pose = getPoseEstimate();
-        velocity = pose.vec().distTo(lastPose.vec()) / (System.currentTimeMillis() - lastTime);
-        acceleration = (velocity - lastVelocity) / (System.currentTimeMillis() - lastTime);
+        velocity = pose.vec().distTo(lastPose.vec()) / dt;
+        acceleration = (velocity - lastVelocity) / dt;
         lastPose = pose;
         lastVelocity = velocity;
         lastTime = System.currentTimeMillis();
     }
 
-    public void drive(Vector2d driveVector, double rotate) {
-        double driveMag = Range.clip(driveVector.norm(), 0, 1);
+    public void driveClipAcceleration(Vector2d inputVector, double rotate) {
+        // scale down so magnitude isnt greater than 1
+        inputVector = inputVector.div(inputVector.norm()).times(Range.clip(inputVector.norm(), 0, 1));
 
-        double flAngle = driveVector.angleBetween(flVector);
-        double frAngle = driveVector.angleBetween(frVector);
+        Vector2d delta = inputVector.minus(lastDriveVector);
 
-        if(Math.abs(flAngle) < Math.abs(frAngle)) {
+        // keep delta magnitude below max drive vector velocity
+        double deltaMag = Range.clip(delta.norm() / dt, 0, maxDriveVectorDelta / 1000);
 
-        }
+        Vector2d driveVector;
+        driveVector = lastDriveVector.plus(delta.times(deltaMag));
+
+        drive(driveVector, rotate);
+
+        lastDriveVector = inputVector;
     }
 
-    public void drive(double x, double y, double rotate) {
-        Vector2d input;
+    public void drive(Vector2d input, double rotate) {
         if (fieldCentric) {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
+            input = input.rotated(Math.toRadians(-90) - getRelativeHeading());
         } else {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
+            input = input.rotated(Math.toRadians(-90));
         }
 
-        x = input.getX();
-        y = input.getY();
+        double x = input.getX();
+        double y = input.getY();
 
         if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));

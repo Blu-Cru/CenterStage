@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -37,7 +38,7 @@ public class IntakeTest extends LinearOpMode {
             }
 
             intake.update();
-            drivetrain.drive(horz, vert, rotate);
+            drivetrain.drive(new Vector2d(horz, vert), rotate);
 
             telemetry.addData("left trigger", gamepad1.left_trigger);
             telemetry.addData("intake rollers power", intake.getIntakeRollersPower());

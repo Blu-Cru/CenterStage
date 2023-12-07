@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -55,7 +56,7 @@ public class TurnPIDTuner extends LinearOpMode {
                 rotate = getPIDRotate(heading);
             }
 
-            drivetrain.drive(horz, vert, rotate);
+            drivetrain.drive(new Vector2d(horz, vert), rotate);
 
             telemetry.addData("target", target);
             telemetry.addData("current heading", heading);

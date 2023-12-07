@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.states;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Const;
@@ -174,7 +175,7 @@ public class TeleOpStateMachine {
             robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
         } else {
             // otherwise, drive normally
-            robot.drivetrain.drive(horz, vert, rotate);
+            robot.drivetrain.drive(new Vector2d(horz, vert), rotate);
         }
 
         if(gamepad1.left_bumper && gamepad1.right_bumper) {
