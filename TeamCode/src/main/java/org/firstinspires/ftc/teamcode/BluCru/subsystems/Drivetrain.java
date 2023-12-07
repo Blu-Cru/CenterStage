@@ -14,11 +14,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
-    public static Vector2d flVector = new Vector2d(0.47817, 0.8783);
-    public static Vector2d frVector = new Vector2d(-0.47817, 0.8783);
-    public static Vector2d blVector = frVector;
-    public static Vector2d brVector = flVector;
-
     public static double maxAcceleration; // inches per second squared
     public static double maxDriveVectorDelta = 4; // magnitude per second
 
@@ -54,6 +49,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void update() {
+        updatePoseEstimate();
         dt = System.currentTimeMillis() - lastTime;
         pose = getPoseEstimate();
         velocity = pose.vec().distTo(lastPose.vec()) / dt;
@@ -122,7 +118,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     // resets heading (do while in scoring position)
     public void resetHeadingOffset() {
-        super.setExternalHeading(Math.toRadians(90));
+        super.setExternalHeading(Math.toRadians(0));
     }
 
     public double getPIDRotate(double heading, double target) {
@@ -153,6 +149,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     }
 
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("heading", getExternalHeading());
+        telemetry.addData("x", getPoseEstimate().getX());
+        telemetry.addData("y", getPoseEstimate().getY());
+        telemetry.addData("field centric", fieldCentric);
+    }
+
+    public void testTelemetry(Telemetry telemetry) {
+        telemetry.addData("drive power", drivePower);
+        telemetry.addData("dt", dt);
+        telemetry.addData("pose", pose);
+        telemetry.addData("velocity", velocity);
+        telemetry.addData("acceleration", acceleration);
         telemetry.addData("heading", getExternalHeading());
         telemetry.addData("x", getPoseEstimate().getX());
         telemetry.addData("y", getPoseEstimate().getY());

@@ -160,7 +160,7 @@ public class TeleOpStateMachine {
         double vert = Math.pow(-gamepad1.left_stick_y, 3);
         double rotate = Math.pow(-gamepad1.right_stick_x, 3);
 
-        if(gamepad1.right_stick_button) {
+        if(gamepad2.right_stick_button) {
             robot.lift.resetEncoder();
         }
 

@@ -29,14 +29,13 @@ public class DriveTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
 
-            if(gamepad1.a) {
+            if(gamepad1.right_stick_button) {
                 drivetrain.resetHeadingOffset();
             }
 
             drivetrain.driveClipAcceleration(new Vector2d(horz, vert), rotate);
 
             drivetrain.update();
-            localizer.update();
 
             telemetry.addData("pose estimate", localizer.getPoseEstimate());
             telemetry.addData("pose velocity", localizer.getPoseVelocity());
