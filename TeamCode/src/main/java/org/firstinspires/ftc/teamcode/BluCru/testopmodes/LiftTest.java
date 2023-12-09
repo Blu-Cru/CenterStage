@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
+import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
 
@@ -12,14 +13,6 @@ public class LiftTest extends LinearOpMode {
     Lift lift;
     Intake intake;
 
-    enum LIFTSTATE {
-        ZERO,
-        LOW,
-        MED,
-        HIGH
-    }
-
-    LIFTSTATE liftState = LIFTSTATE.ZERO;
     @Override
     public void runOpMode() throws InterruptedException {
         lift = new Lift(hardwareMap, telemetry);
@@ -31,32 +24,21 @@ public class LiftTest extends LinearOpMode {
             intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
             if(gamepad1.a) {
                 lift.resetLiftStallTimer();
-                liftState = LIFTSTATE.ZERO;
+                lift.liftState = LiftState.RETRACT;
             }
             if(gamepad1.b) {
-                liftState = LIFTSTATE.LOW;
+                lift.setTargetPos(Constants.sliderLowPos);
+                lift.liftState = LiftState.AUTO;
             }
             if(gamepad1.x) {
-                liftState = LIFTSTATE.MED;
+                lift.setTargetPos(Constants.sliderMedPos);
+                lift.liftState = LiftState.AUTO;
             }
             if(gamepad1.y) {
-                liftState = LIFTSTATE.HIGH;
+                lift.setTargetPos(Constants.sliderHighPos);
+                lift.liftState = LiftState.AUTO;
             }
 
-            switch(liftState) {
-                case ZERO:
-                    lift.setTargetPos(Constants.sliderRetractPos);
-                    break;
-                case LOW:
-                    lift.setTargetPos(Constants.sliderLowPos);
-                    break;
-                case MED:
-                    lift.setTargetPos(Constants.sliderMedPos);
-                    break;
-                case HIGH:
-                    lift.setTargetPos(Constants.sliderHighPos);
-                    break;
-            }
 
             lift.update();
 
