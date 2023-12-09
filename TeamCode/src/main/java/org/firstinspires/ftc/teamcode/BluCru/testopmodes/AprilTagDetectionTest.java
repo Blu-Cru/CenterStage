@@ -48,7 +48,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 
-@Disabled
 @TeleOp(name = "AprilTag test", group = "Concept")
 public class AprilTagDetectionTest extends LinearOpMode {
 

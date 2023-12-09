@@ -15,9 +15,9 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public static double maxAcceleration; // inches per second squared
-    public static double maxDriveVectorDelta = 4; // magnitude per second
+    public static double maxDriveVectorDelta = 11; // magnitude per second
 
-    private double drivePower = 0.5;
+    public double drivePower = 0.5;
     private double dt;
     private Pose2d pose;
     private double velocity;
@@ -27,9 +27,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private double lastTime;
 
     private Vector2d lastDriveVector;
+    private double lastRotate;
 
     // heading while facing intake
-    private boolean fieldCentric;
+    public boolean fieldCentric;
 
     private PIDController turnPID;
     public double targetHeading = 0;
@@ -43,6 +44,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         fieldCentric = true;
         resetIMU();
         lastDriveVector = new Vector2d(0,0);
+        lastRotate = 0;
         lastPose = new Pose2d(0,0,0);
         lastTime = System.currentTimeMillis();
         lastVelocity = 0;
@@ -83,7 +85,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
             input = input.rotated(Math.toRadians(-90));
         }
 
-        input = calculateDriveVector(input);
+//        Vector2d driveVector = calculateDriveVector(input);
 
         double x = input.getX();
         double y = input.getY();
@@ -102,8 +104,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
             input = input.rotated(Math.toRadians(-90));
         }
 
-        double x = input.getX();
-        double y = input.getY();
+        Vector2d delta = input.minus(lastDriveVector);
+        double deltaMag = Range.clip(delta.norm(), 0, (maxDriveVectorDelta / 1000) * dt);
+        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
+        lastDriveVector = driveVector;
+
+        double x = driveVector.getX();
+        double y = driveVector.getY();
 
         if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
@@ -119,6 +126,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         } else {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90));
         }
+
+        Vector2d delta = input.minus(lastDriveVector);
+        double deltaMag = Range.clip(delta.norm(), 0, (maxDriveVectorDelta / 1000) * dt);
+        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
+        lastDriveVector = driveVector;
 
         x = input.getX();
         y = input.getY();

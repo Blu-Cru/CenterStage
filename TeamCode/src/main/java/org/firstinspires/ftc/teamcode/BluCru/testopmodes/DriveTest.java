@@ -18,10 +18,11 @@ public class DriveTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain(hardwareMap);
         localizer = new TwoWheelTrackingLocalizer(hardwareMap, drivetrain);
-        drivetrain.setDrivePower(0.5);
 
         localizer.setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
         drivetrain.init();
+        drivetrain.fieldCentric = false;
+        drivetrain.drivePower = 0.75;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -33,15 +34,13 @@ public class DriveTest extends LinearOpMode {
                 drivetrain.resetHeadingOffset();
             }
 
-            drivetrain.testDrive(new Vector2d(horz, vert), rotate);
+
+            drivetrain.drive(new Vector2d(horz, vert), rotate);
+
 
             drivetrain.update();
 
-            drivetrain.telemetry(telemetry);
             drivetrain.testTelemetry(telemetry);
-            telemetry.addData("pose estimate", localizer.getPoseEstimate());
-            telemetry.addData("pose velocity", localizer.getPoseVelocity());
-            telemetry.addData("rotate", rotate);
             telemetry.update();
         }
     }
