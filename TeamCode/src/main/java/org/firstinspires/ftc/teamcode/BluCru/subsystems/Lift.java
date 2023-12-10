@@ -87,7 +87,7 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // manual power is set in TeleOpStateMachine
-                targetPos = currentPos;
+                targetPos = currentPos + inversePID(power);
                 break;
         }
 
@@ -97,6 +97,10 @@ public class Lift implements Subsystem{
     public void retractLift() {
         resetLiftStallTimer();
         liftState = LiftState.RETRACT;
+    }
+
+    public int inversePID(double power) {
+        return (int) (power  / Constants.sliderP);
     }
 
     public void setPower(double power) {
