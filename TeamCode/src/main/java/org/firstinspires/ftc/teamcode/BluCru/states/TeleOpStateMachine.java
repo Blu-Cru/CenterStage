@@ -167,7 +167,8 @@ public class TeleOpStateMachine {
         // driving
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
-            robot.drivetrain.resetHeadingOffset();
+            robot.drivetrain.resetIMU();
+            gamepad1.rumble(100);
         }
         if(gamepad1.b) {
             robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
@@ -176,11 +177,6 @@ public class TeleOpStateMachine {
         } else {
             // otherwise, drive normally
             robot.drivetrain.drive(new Vector2d(horz, vert), rotate);
-        }
-
-        if(gamepad1.left_bumper && gamepad1.right_bumper) {
-            robot.drivetrain.resetIMU();
-            gamepad1.rumble(50);
         }
 
         robot.update();

@@ -42,7 +42,7 @@ public class TurnPIDTuner extends LinearOpMode {
             vert = -gamepad1.left_stick_y;
             rotate = -gamepad1.right_stick_x;
             if(gamepad1.right_stick_button) {
-                drivetrain.resetHeadingOffset();
+                drivetrain.resetIMU();
             }
             controller.setPID(p, i, d);
             double heading = drivetrain.getRelativeHeading();

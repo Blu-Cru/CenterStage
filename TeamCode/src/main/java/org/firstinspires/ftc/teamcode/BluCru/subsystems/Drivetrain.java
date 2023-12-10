@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -11,13 +9,13 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
-    public static double maxAcceleration; // inches per second squared
-    public static double maxDriveVectorDelta = 11; // magnitude per second
+    public static double maxAccelDriveVectorDelta = 8; // magnitude per second
+    public static double maxDecelDriveVectorDelta = 20; // magnitude per second
 
     public double drivePower = 0.5;
+
     private double dt;
     private Pose2d pose;
     private double velocity;
@@ -25,6 +23,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private Pose2d lastPose;
     private double lastVelocity;
     private double lastTime;
+
+    private double heading;
 
     private Vector2d lastDriveVector;
     private double lastRotate;
@@ -48,6 +48,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         lastPose = new Pose2d(0,0,0);
         lastTime = System.currentTimeMillis();
         lastVelocity = 0;
+        heading = getRelativeHeading();
     }
 
     public void update() {
@@ -59,55 +60,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         lastPose = pose;
         lastVelocity = velocity;
         lastTime = System.currentTimeMillis();
-    }
-
-    public Vector2d calculateDriveVector(Vector2d inputVector) {
-        // scale down so magnitude isnt greater than 1
-        inputVector = inputVector.div(inputVector.norm()).times(Range.clip(inputVector.norm(), 0, 1));
-
-        Vector2d delta = inputVector.minus(lastDriveVector);
-
-        // keep delta magnitude below max drive vector velocity
-        double deltaMag = Range.clip(delta.norm() / dt, 0, maxDriveVectorDelta / 1000);
-
-        Vector2d driveVector;
-        driveVector = lastDriveVector.plus(delta.times(deltaMag));
-
-        lastDriveVector = driveVector;
-
-        return driveVector;
-    }
-
-    public void testDrive(Vector2d input, double rotate) {
-        if (fieldCentric) {
-            input = input.rotated(Math.toRadians(-90) - getRelativeHeading());
-        } else {
-            input = input.rotated(Math.toRadians(-90));
-        }
-
-//        Vector2d driveVector = calculateDriveVector(input);
-
-        double x = input.getX();
-        double y = input.getY();
-
-        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
-            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
-        } else {
-            setWeightedDrivePower(new Pose2d(0, 0, 0));
-        }
+        heading = getRelativeHeading();
     }
 
     public void drive(Vector2d input, double rotate) {
-        if (fieldCentric) {
-            input = input.rotated(Math.toRadians(-90) - getRelativeHeading());
-        } else {
-            input = input.rotated(Math.toRadians(-90));
-        }
-
-        Vector2d delta = input.minus(lastDriveVector);
-        double deltaMag = Range.clip(delta.norm(), 0, (maxDriveVectorDelta / 1000) * dt);
-        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
-        lastDriveVector = driveVector;
+        Vector2d driveVector = calculateDriveVector(input);
 
         double x = driveVector.getX();
         double y = driveVector.getY();
@@ -119,37 +76,50 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         }
     }
 
-    public void driveToHeading(double x, double y, double targetHeading) {
-        Vector2d input;
-        if (fieldCentric) {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
-        } else {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
-        }
+    public void driveToHeading(Vector2d input, double rotate) {
+        Vector2d driveVector = calculateDriveVector(input);
 
-        Vector2d delta = input.minus(lastDriveVector);
-        double deltaMag = Range.clip(delta.norm(), 0, (maxDriveVectorDelta / 1000) * dt);
-        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
-        lastDriveVector = driveVector;
+        double x = driveVector.getX();
+        double y = driveVector.getY();
 
-        x = input.getX();
-        y = input.getY();
-        double rotate = getPIDRotate(getRelativeHeading(), targetHeading);
-
-        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
+        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
         } else {
             setWeightedDrivePower(new Pose2d(0, 0, 0));
         }
     }
 
-    public void setDrivePower(double power) {
-        drivePower = power;
+    public Vector2d calculateDriveVector(Vector2d input) {
+        // scale down so magnitude isnt greater than 1
+        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
+
+        // rotate input vector to match robot heading
+        if (fieldCentric) {
+            input = input.rotated(Math.toRadians(-90) - heading);
+        } else {
+            input = input.rotated(Math.toRadians(-90));
+        }
+
+        // calculate the delta between the last drive vector and the current drive vector
+        Vector2d delta = input.minus(lastDriveVector);
+        double deltaMag;
+
+        // if we are decelerating, limit the delta to the max decel delta
+        if(input.norm() < lastDriveVector.norm()) {
+            deltaMag = Range.clip(delta.norm(), 0, (maxDecelDriveVectorDelta / 1000) * dt);
+        } else {
+            // otherwise, limit the delta to the max accel delta
+            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta / 1000) * dt);
+        }
+        // add the delta to the last drive vector
+        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
+        lastDriveVector = driveVector;
+
+        return driveVector;
     }
 
-    // resets heading (do while in scoring position)
-    public void resetHeadingOffset() {
-        super.setExternalHeading(Math.toRadians(0));
+    public void setDrivePower(double power) {
+        drivePower = power;
     }
 
     public double getPIDRotate(double heading, double target) {
@@ -171,6 +141,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         return heading;
     }
 
+    // resets IMU (facing forwards)
     public void resetIMU() {
         super.resetIMU();
     }

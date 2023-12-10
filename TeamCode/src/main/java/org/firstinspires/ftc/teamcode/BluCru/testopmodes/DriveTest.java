@@ -31,7 +31,7 @@ public class DriveTest extends LinearOpMode {
             rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.right_stick_button) {
-                drivetrain.resetHeadingOffset();
+                drivetrain.resetIMU();
             }
 
 
