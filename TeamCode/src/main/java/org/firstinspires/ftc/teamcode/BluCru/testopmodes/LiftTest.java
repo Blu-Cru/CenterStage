@@ -26,6 +26,7 @@ public class LiftTest extends LinearOpMode {
         intake = new Intake(hardwareMap, telemetry);
         lift.init();
         intake.init();
+
         waitForStart();
         while(opModeIsActive()) {
             intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
@@ -45,16 +46,16 @@ public class LiftTest extends LinearOpMode {
 
             switch(liftState) {
                 case ZERO:
-                    lift.setTargetPos(Constants.sliderRetractPos);
+                    lift.setMotionProfileTargetPosition(0);
                     break;
                 case LOW:
-                    lift.setTargetPos(Constants.sliderLowPos);
+                    lift.setMotionProfileTargetPosition(Constants.sliderLowPos);
                     break;
                 case MED:
-                    lift.setTargetPos(Constants.sliderMedPos);
+                    lift.setMotionProfileTargetPosition(Constants.sliderMedPos);
                     break;
                 case HIGH:
-                    lift.setTargetPos(Constants.sliderHighPos);
+                    lift.setMotionProfileTargetPosition(Constants.sliderHighPos);
                     break;
             }
 

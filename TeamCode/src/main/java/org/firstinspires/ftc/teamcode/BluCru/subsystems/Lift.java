@@ -26,6 +26,9 @@ public class Lift implements Subsystem{
 
     private ElapsedTime liftStallTimer;
 
+    private LiftMotionProfile liftMotionProfile;
+    private ElapsedTime liftMotionProfileTimer;
+
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
         liftMotor = hardwareMap.get(DcMotorEx.class, "lift1");
@@ -57,10 +60,13 @@ public class Lift implements Subsystem{
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftStallTimer = new ElapsedTime();
+
+        liftMotionProfile = new LiftMotionProfile(0, 0);
+        setMotionProfileConstraints(100, 50);
     }
 
     public void update() {
-        targetPos = Range.clip(targetPos, Constants.sliderMinPos, Constants.sliderMaxPos);
+        targetPos = liftMotionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
         currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
@@ -92,6 +98,15 @@ public class Lift implements Subsystem{
         }
 
         setPower(power);
+    }
+
+    public void setMotionProfileTargetPosition(int targetPos) {
+        liftMotionProfile = new LiftMotionProfile(targetPos, currentPos);
+        liftMotionProfileTimer.reset();
+    }
+
+    public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
+        liftMotionProfile.setConstraints(maxVelocity, maxAcceleration);
     }
 
     public void retractLift() {
