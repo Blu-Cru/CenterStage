@@ -105,7 +105,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         double deltaMag;
 
         // if we are decelerating, limit the delta to the max decel delta
-        if(input.norm() < lastDriveVector.norm()) {
+        if(lastDriveVector.angleBetween(delta) > Math.PI / 2) {
             deltaMag = Range.clip(delta.norm(), 0, (maxDecelDriveVectorDelta / 1000) * dt);
         } else {
             // otherwise, limit the delta to the max accel delta
