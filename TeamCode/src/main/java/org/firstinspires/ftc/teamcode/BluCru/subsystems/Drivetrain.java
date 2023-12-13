@@ -76,11 +76,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         }
     }
 
-    public void driveToHeading(Vector2d input, double rotate) {
+    public void driveToHeading(Vector2d input, double targetHeading) {
         Vector2d driveVector = calculateDriveVector(input);
 
         double x = driveVector.getX();
         double y = driveVector.getY();
+
+        double rotate = getPIDRotate(heading, targetHeading);
 
         if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
