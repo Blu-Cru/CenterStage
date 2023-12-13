@@ -14,7 +14,8 @@ public class DistanceSensors implements Subsystem {
     double rightDistance;
     double leftDistance;
     public double angle; // angle of the robot relative to the wall, 0 being dead on, 90 being parallel turned counter clockwise
-    public double averageDistance;
+    private double averageDistance;
+    public double distanceFromWall; // distance from the wall, 0 being touching the wall
 
     public DistanceSensors(HardwareMap hardwareMap) {
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "right distance");
@@ -31,6 +32,7 @@ public class DistanceSensors implements Subsystem {
         leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
         angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
         averageDistance = (rightDistance + leftDistance) / 2;
+        distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
     }
 
     @Override

@@ -36,7 +36,7 @@ public class DistancePIDTest extends LinearOpMode {
             } else if(gamepad1.x) {
                 drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
             } else if(gamepad1.a) {
-                drivetrain.driveToDistance(horz, vert, 5, distanceSensors.averageDistance, 90);
+                drivetrain.driveToDistance(horz, vert, 5, distanceSensors.distanceFromWall, 90);
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }

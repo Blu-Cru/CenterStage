@@ -83,7 +83,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void driveToDistance(double x, double y, double targetDistance, double currentDistance, double targetHeading) {
         Vector2d input;
-        x = distancePID.calculate(currentDistance, targetDistance);
+        x = Range.clip(distancePID.calculate(currentDistance, targetDistance), -1, 1);
         if (fieldCentric) {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
         } else {
