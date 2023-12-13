@@ -21,7 +21,7 @@ public class Lift implements Subsystem{
     private double ff = Constants.sliderF;
 
     public double power;
-    public int targetPos = 0;
+    public int targetPos;
     private int currentPos;
 
     private ElapsedTime liftStallTimer;
@@ -38,6 +38,8 @@ public class Lift implements Subsystem{
         liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         liftState = LiftState.RETRACT;
+
+        targetPos = 0;
     }
 
     public void init() {
@@ -60,6 +62,7 @@ public class Lift implements Subsystem{
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftStallTimer = new ElapsedTime();
+        liftMotionProfileTimer = new ElapsedTime();
 
         liftMotionProfile = new LiftMotionProfile(0, 0);
         setMotionProfileConstraints(100, 50);
@@ -157,8 +160,11 @@ public class Lift implements Subsystem{
         telemetry.addData("targetPos", targetPos);
         telemetry.addData("power", liftMotor.getPower());
         telemetry.addData("currentPos", getCurrentPos());
-        telemetry.addData("current", getCurrent(liftMotor));
-        telemetry.addData("current2", getCurrent(liftMotor2));
         telemetry.addData("stallTimer", liftStallTimer.seconds());
+        telemetry.addData("motionProfileTimer", liftMotionProfileTimer.seconds());
+    }
+
+    public void motionProfileTelemetry(Telemetry telemetry) {
+        liftMotionProfile.telemetry(telemetry);
     }
 }
