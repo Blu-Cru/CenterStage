@@ -4,10 +4,17 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DistanceSensors implements Subsystem {
+    public static double DISTANCE_SENSOR_OFFSET = 0; // distance between distance sensors in inches
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
+
+    double rightDistance;
+    double leftDistance;
+    public double angle; // angle of the robot relative to the wall, 0 being dead on, 90 being parallel turned counter clockwise
+    public double averageDistance;
 
     public DistanceSensors(HardwareMap hardwareMap) {
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "right distance");
@@ -20,11 +27,17 @@ public class DistanceSensors implements Subsystem {
 
     @Override
     public void update() {
-
+        rightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
+        leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
+        angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
+        averageDistance = (rightDistance + leftDistance) / 2;
     }
 
     @Override
     public void telemetry(Telemetry telemetry) {
-
+        telemetry.addData("right distance", rightDistance);
+        telemetry.addData("left distance", leftDistance);
+        telemetry.addData("angle", angle);
+        telemetry.addData("average distance", averageDistance);
     }
 }

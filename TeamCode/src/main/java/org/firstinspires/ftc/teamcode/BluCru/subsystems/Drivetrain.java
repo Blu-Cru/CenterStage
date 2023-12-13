@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -13,7 +14,11 @@ import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+@Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
+    public static double turnP = 1.2, turnI = 0, turnD = 0;
+    public static double distanceP = 0, distanceI = 0, distanceD = 0;
+
     private double drivePower = 0.5;
 
     // heading while facing intake
@@ -22,9 +27,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private PIDController turnPID;
     public double targetHeading = 0;
 
+    private PIDController distancePID;
+
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
-        turnPID = new PIDController(Constants.turnP, Constants.turnI, Constants.turnD);
+        turnPID = new PIDController(turnP, turnI, turnD);
+        distancePID = new PIDController(distanceP, distanceI, distanceD);
     }
 
     public void init() {
@@ -56,6 +64,26 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void driveToHeading(double x, double y, double targetHeading) {
         Vector2d input;
+        if (fieldCentric) {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
+        } else {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
+        }
+
+        x = input.getX();
+        y = input.getY();
+        double rotate = getPIDRotate(getRelativeHeading(), targetHeading);
+
+        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
+            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
+        } else {
+            setWeightedDrivePower(new Pose2d(0, 0, 0));
+        }
+    }
+
+    public void driveToDistance(double x, double y, double targetDistance, double currentDistance, double targetHeading) {
+        Vector2d input;
+        x = distancePID.calculate(currentDistance, targetDistance);
         if (fieldCentric) {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
         } else {
