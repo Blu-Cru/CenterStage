@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DistanceSensors implements Subsystem {
-    public static double DISTANCE_SENSOR_OFFSET = 0; // distance between distance sensors in inches
+    public static double DISTANCE_SENSOR_OFFSET = 6.5; // distance between distance sensors in inches
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
 
@@ -28,8 +28,16 @@ public class DistanceSensors implements Subsystem {
 
     @Override
     public void update() {
-        rightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
-        leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
+        double rawRightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
+        double rawLeftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
+
+        if(rawRightDistance < 60) {
+            rightDistance = rawRightDistance;
+        }
+
+        if(rawLeftDistance < 60) {
+            leftDistance = rawLeftDistance;
+        }
         angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
         averageDistance = (rightDistance + leftDistance) / 2;
         distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
@@ -41,5 +49,6 @@ public class DistanceSensors implements Subsystem {
         telemetry.addData("left distance", leftDistance);
         telemetry.addData("angle", angle);
         telemetry.addData("average distance", averageDistance);
+        telemetry.addData("distance from wall", distanceFromWall);
     }
 }

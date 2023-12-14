@@ -16,8 +16,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
-    public static double turnP = 1.2, turnI = 0, turnD = 0;
-    public static double distanceP = 0, distanceI = 0, distanceD = 0;
+    public static double turnP = 4, turnI = 0.2, turnD = 0.3;
+    public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
 
     private double drivePower = 0.5;
 
@@ -42,6 +42,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
 
     public void update() {
 
+    }
+
+    public void setDistancePID(double p, double i, double d) {
+        distancePID.setP(p);
+        distancePID.setI(i);
+        distancePID.setD(d);
     }
 
     public void drive(double x, double y, double rotate) {
