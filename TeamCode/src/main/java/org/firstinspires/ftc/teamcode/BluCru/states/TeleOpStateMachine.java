@@ -176,7 +176,7 @@ public class TeleOpStateMachine {
             robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
         } else {
             // otherwise, drive normally
-            robot.drivetrain.drive(new Vector2d(horz, vert), rotate);
+            robot.drivetrain.drive(horz, vert, rotate);
         }
 
         robot.update();
