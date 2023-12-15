@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
+
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -10,9 +14,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+@Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     public static double maxAccelDriveVectorDelta = 8; // magnitude per second
     public static double maxDecelDriveVectorDelta = 20; // magnitude per second
+    public static double turnP = 4, turnI = 0.2, turnD = 0.3;
+    public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
 
     public double drivePower = 0.5;
 
@@ -35,9 +42,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private PIDController turnPID;
     public double targetHeading = 0;
 
+    private PIDController distancePID;
+
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
-        turnPID = new PIDController(Constants.turnP, Constants.turnI, Constants.turnD);
+        turnPID = new PIDController(turnP, turnI, turnD);
+        distancePID = new PIDController(distanceP, distanceI, distanceD);
     }
 
     public void init() {
@@ -63,11 +73,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         heading = getRelativeHeading();
     }
 
-    public void drive(Vector2d input, double rotate) {
-        Vector2d driveVector = calculateDriveVector(input);
+    public void drive(double x, double y, double rotate) {
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
-        double x = driveVector.getX();
-        double y = driveVector.getY();
+        x = driveVector.getX();
+        y = driveVector.getY();
 
         if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
@@ -76,11 +86,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         }
     }
 
-    public void driveToHeading(Vector2d input, double targetHeading) {
-        Vector2d driveVector = calculateDriveVector(input);
+    public void driveToHeading(double x, double y, double targetHeading) {
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x,y));
 
-        double x = driveVector.getX();
-        double y = driveVector.getY();
+        x = driveVector.getX();
+        y = driveVector.getY();
 
         double rotate = getPIDRotate(heading, targetHeading);
 
@@ -118,6 +128,26 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         lastDriveVector = driveVector;
 
         return driveVector;
+    }
+
+    public void driveToDistance(double x, double y, double targetDistance, double currentDistance, double targetHeading) {
+        Vector2d input;
+        x = Range.clip(distancePID.calculate(currentDistance, targetDistance), -1, 1);
+        if (fieldCentric) {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - getRelativeHeading());
+        } else {
+            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
+        }
+
+        x = input.getX();
+        y = input.getY();
+        double rotate = getPIDRotate(getRelativeHeading(), targetHeading);
+
+        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
+            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
+        } else {
+            setWeightedDrivePower(new Pose2d(0, 0, 0));
+        }
     }
 
     public void setDrivePower(double power) {

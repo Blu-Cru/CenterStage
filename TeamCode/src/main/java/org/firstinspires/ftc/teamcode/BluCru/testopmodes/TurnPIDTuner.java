@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 
 @Config
-@Disabled
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
 public class TurnPIDTuner extends LinearOpMode {
     private PIDController controller;
