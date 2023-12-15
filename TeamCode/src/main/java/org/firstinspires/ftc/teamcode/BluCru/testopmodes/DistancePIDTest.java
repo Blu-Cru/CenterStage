@@ -36,7 +36,7 @@ public class DistancePIDTest extends LinearOpMode {
             distanceSensors.update();
 
             if(gamepad1.left_bumper && gamepad1.right_bumper) {
-                drivetrain.resetHeadingOffset();
+                drivetrain.resetIMU();
             }
 
             if(gamepad1.b) {
@@ -44,7 +44,7 @@ public class DistancePIDTest extends LinearOpMode {
             } else if(gamepad1.x) {
                 drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
             } else if(gamepad1.a) {
-                drivetrain.driveToDistance(horz, vert, targetDistance, distanceSensors.distanceFromWall, Math.toRadians(90));
+                drivetrain.driveToDistanceToHeading(horz, vert, distanceSensors.distanceFromWall, targetDistance, Math.toRadians(90));
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }
