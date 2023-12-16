@@ -38,7 +38,7 @@ public class IntakeTest extends LinearOpMode {
             }
 
             intake.update();
-            drivetrain.drive(new Vector2d(horz, vert), rotate);
+            drivetrain.drive(horz, vert, rotate);
 
             telemetry.addData("left trigger", gamepad1.left_trigger);
             telemetry.addData("intake rollers power", intake.getIntakeRollersPower());

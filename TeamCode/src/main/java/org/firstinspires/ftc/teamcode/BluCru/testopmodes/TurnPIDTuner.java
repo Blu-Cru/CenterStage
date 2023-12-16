@@ -55,7 +55,7 @@ public class TurnPIDTuner extends LinearOpMode {
                 rotate = getPIDRotate(heading);
             }
 
-            drivetrain.drive(new Vector2d(horz, vert), rotate);
+            drivetrain.drive(horz, vert, rotate);
 
             telemetry.addData("target", target);
             telemetry.addData("current heading", heading);

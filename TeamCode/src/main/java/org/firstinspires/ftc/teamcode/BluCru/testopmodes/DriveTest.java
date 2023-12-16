@@ -35,7 +35,7 @@ public class DriveTest extends LinearOpMode {
             }
 
 
-            drivetrain.drive(new Vector2d(horz, vert), rotate);
+            drivetrain.drive(horz, vert, rotate);
 
 
             drivetrain.update();
