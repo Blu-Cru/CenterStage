@@ -19,12 +19,13 @@ public class DistancePIDTest extends LinearOpMode {
 
     double vert, horz, rotate;
 
+    double targetHeading;
+
     @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         drivetrain.init();
-        distanceSensors.init();
 
         waitForStart();
 
@@ -33,18 +34,21 @@ public class DistancePIDTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
 
-            distanceSensors.update();
+            drivetrain.distanceSensors.update();
 
             if(gamepad1.left_bumper && gamepad1.right_bumper) {
                 drivetrain.resetIMU();
             }
 
             if(gamepad1.b) {
-                drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
+                targetHeading = Math.toRadians(90);
+                drivetrain.driveToHeading(horz, vert, targetHeading);
             } else if(gamepad1.x) {
-                drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
+                targetHeading = Math.toRadians(-90);
+                drivetrain.driveToHeading(horz, vert, targetHeading);
             } else if(gamepad1.a) {
-                drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, Math.toRadians(90));
+                targetHeading = Math.toRadians(90);
+                drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }
@@ -52,7 +56,7 @@ public class DistancePIDTest extends LinearOpMode {
             drivetrain.setDistancePID(distanceP, distanceI, distanceD);
 
             distanceSensors.telemetry(telemetry);
-            telemetry.addData("heading error", drivetrain.heading - distanceSensors.angle);
+            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
             telemetry.update();
         }
     }

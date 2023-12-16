@@ -40,7 +40,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private PIDController turnPID;
     public double targetHeading = 0;
 
-    DistanceSensors distanceSensors;
+    public DistanceSensors distanceSensors;
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap) {
@@ -154,6 +154,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         } else {
             setWeightedDrivePower(new Pose2d(0, 0, 0));
         }
+    }
+
+    public double getDistanceSensorAngleError(double targetHeading) {
+        distanceSensors.update();
+        return heading - targetHeading - distanceSensors.angle;
     }
 
     public void setDrivePower(double power) {

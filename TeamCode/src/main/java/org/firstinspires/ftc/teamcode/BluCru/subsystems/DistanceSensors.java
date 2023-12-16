@@ -24,7 +24,11 @@ public class DistanceSensors implements Subsystem {
     }
     @Override
     public void init() {
-
+        rightDistance = 0;
+        leftDistance = 0;
+        angle = 0;
+        averageDistance = 0;
+        distanceFromWall = 0;
     }
 
     @Override
