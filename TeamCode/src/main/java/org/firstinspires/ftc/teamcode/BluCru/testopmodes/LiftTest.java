@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -9,8 +10,12 @@ import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
 
+@Config
 @TeleOp(name = "lift test", group = "TeleOp")
 public class LiftTest extends LinearOpMode {
+    public static double maxVelocity = 1000;
+    public static double maxAcceleration = 2000;
+
     Lift lift;
     Intake intake;
     Gamepad lastGamepad1;
@@ -37,6 +42,8 @@ public class LiftTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
+            lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
+
             intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
             if(gamepad1.a) {
                 lift.setMotionProfileTargetPosition(0);

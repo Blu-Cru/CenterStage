@@ -67,7 +67,6 @@ public class Lift implements Subsystem{
         liftMotionProfileTimer = new ElapsedTime();
 
         liftMotionProfile = new LiftMotionProfile(0, 0);
-        setMotionProfileConstraints(100, 50);
     }
 
     public void update() {
