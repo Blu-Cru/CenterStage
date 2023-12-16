@@ -52,6 +52,7 @@ public class DistancePIDTest extends LinearOpMode {
             drivetrain.setDistancePID(distanceP, distanceI, distanceD);
 
             distanceSensors.telemetry(telemetry);
+            telemetry.addData("heading error", drivetrain.heading - distanceSensors.angle);
             telemetry.update();
         }
     }

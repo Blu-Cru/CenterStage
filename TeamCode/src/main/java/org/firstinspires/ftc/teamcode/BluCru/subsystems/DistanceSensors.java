@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DistanceSensors implements Subsystem {
     public static double DISTANCE_SENSOR_OFFSET = 6.5; // distance between distance sensors in inches
+    public static double DISTANCE_SENSOR_MAX = 60; // max distance the distance sensors can read
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
 
@@ -31,16 +32,13 @@ public class DistanceSensors implements Subsystem {
         double rawRightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
         double rawLeftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
 
-        if(rawRightDistance < 60) {
+        if(rawRightDistance < DISTANCE_SENSOR_MAX && rawLeftDistance < DISTANCE_SENSOR_MAX) {
             rightDistance = rawRightDistance;
-        }
-
-        if(rawLeftDistance < 60) {
             leftDistance = rawLeftDistance;
+            angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
+            averageDistance = (rightDistance + leftDistance) / 2;
+            distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
         }
-        angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
-        averageDistance = (rightDistance + leftDistance) / 2;
-        distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
     }
 
     @Override
