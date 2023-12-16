@@ -13,12 +13,14 @@ import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
 public class Lift implements Subsystem{
+    public static double liftP = 0.007, liftI = 0, liftD = 0.0001, liftF = 0.08;
+
     public LiftState liftState;
     private DcMotorEx liftMotor, liftMotor2;
     private PIDController liftPID;
 
     private double PID;
-    private double ff = Constants.sliderF;
+    private double ff = liftF;
 
     public double power;
     public int targetPos;
@@ -44,7 +46,7 @@ public class Lift implements Subsystem{
 
     public void init() {
         setTargetPos(0);
-        liftPID = new PIDController(Constants.sliderP, Constants.sliderI, Constants.sliderD);
+        liftPID = new PIDController(liftP, liftI, liftD);
 
         //set all motors to zero power
         liftMotor.setPower(0);
@@ -96,7 +98,7 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // manual power is set in TeleOpStateMachine
-                targetPos = currentPos + inversePID(power);
+                targetPos = currentPos + liftInverseP(power);
                 break;
         }
 
@@ -106,6 +108,7 @@ public class Lift implements Subsystem{
     public void setMotionProfileTargetPosition(int targetPos) {
         liftMotionProfile = new LiftMotionProfile(targetPos, currentPos);
         liftMotionProfileTimer.reset();
+        liftPID.reset();
     }
 
     public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
@@ -117,8 +120,8 @@ public class Lift implements Subsystem{
         liftState = LiftState.RETRACT;
     }
 
-    public int inversePID(double power) {
-        return (int) (power  / Constants.sliderP);
+    public int liftInverseP(double power) {
+        return (int) (power  / liftP);
     }
 
     public void setPower(double power) {

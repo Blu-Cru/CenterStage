@@ -17,8 +17,8 @@ public class LiftMotionProfile {
     public LiftMotionProfile(int targetPosition, int initialPosition) {
         this.targetPosition = targetPosition;
         this.initialPosition = initialPosition;
-        this.maxVelocity = 700;
-        this.maxAcceleration = 700;
+        this.maxVelocity = 1000;
+        this.maxAcceleration = 2000;
         if(targetPosition < initialPosition) {
             flip = -1;
         } else {
