@@ -12,11 +12,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
-public class Drivetrain extends SampleMecanumDrive implements Subsystem{
+public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double maxAccelDriveVectorDelta = 8; // magnitude per second
     public static double maxDecelDriveVectorDelta = 50; // magnitude per second
     public static double turnP = 4, turnI = 0.2, turnD = 0.3;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
+    public static double angleTolerance = 0.5; // radians
+    public static double distanceMax = 70; // inches
 
     public double drivePower = 0.5;
 
@@ -39,12 +41,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
     private PIDController turnPID;
     public double targetHeading = 0;
 
+    DistanceSensors distanceSensors;
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
         turnPID = new PIDController(turnP, turnI, turnD);
         distancePID = new PIDController(distanceP, distanceI, distanceD);
+        distanceSensors = new DistanceSensors(hardwareMap);
     }
 
     public void init() {
@@ -127,9 +131,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         return driveVector;
     }
 
-    public void driveToDistanceToHeading(double x, double y, double currentDistance, double targetDistance, double targetHeading) {
+    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
+        distanceSensors.update();
         Vector2d input;
-        x = Range.clip(distancePID.calculate(currentDistance, targetDistance), -1, 1);
+        x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
         if (fieldCentric) {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90) - heading);
         } else {
@@ -174,13 +179,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem{
         return heading;
     }
 
-    // resets IMU (facing forwards)
+    // resets IMU (intake facing forwards)
     public void resetIMU() {
         super.resetIMU();
-    }
-
-    public void stop() {
-        super.stop();
     }
 
     public void telemetry(Telemetry telemetry) {
