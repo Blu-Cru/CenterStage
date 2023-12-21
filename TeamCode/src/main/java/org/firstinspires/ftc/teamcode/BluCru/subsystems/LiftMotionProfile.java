@@ -47,8 +47,10 @@ public class LiftMotionProfile {
 
         if(d1 > halfDistance) {
             t1 = Math.sqrt(2 * halfDistance / maxAcceleration);
-            d1 = halfDistance;
         }
+        d1 = 0.5 * maxAcceleration * t1 * t1;
+        maxVelocity = maxAcceleration * t1;
+
         d2 = distance - 2 * d1;
         t2 = d2 / maxVelocity;
 

@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -21,14 +25,6 @@ public class LiftTest extends LinearOpMode {
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
 
-    enum LIFTSTATE {
-        ZERO,
-        LOW,
-        MED,
-        HIGH
-    }
-
-    LIFTSTATE liftState = LIFTSTATE.ZERO;
     @Override
     public void runOpMode() throws InterruptedException {
         lift = new Lift(hardwareMap, telemetry);
@@ -45,17 +41,33 @@ public class LiftTest extends LinearOpMode {
             lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
 
             intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
-            if(gamepad1.a) {
-                lift.setMotionProfileTargetPosition(0);
+            if(gamepad1.a && !lastGamepad1.a) {
+                CommandScheduler.getInstance().schedule(
+                    new SequentialCommandGroup(
+                            new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
+                    )
+                );
             }
             if(gamepad1.b && !lastGamepad1.b) {
-                lift.setMotionProfileTargetPosition(Constants.sliderLowPos);
+                CommandScheduler.getInstance().schedule(
+                    new SequentialCommandGroup(
+                            new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos))
+                    )
+                );
             }
             if(gamepad1.x && !lastGamepad1.x) {
-                lift.setMotionProfileTargetPosition(Constants.sliderMedPos);
+                CommandScheduler.getInstance().schedule(
+                    new SequentialCommandGroup(
+                            new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderMedPos))
+                    )
+                );
             }
             if(gamepad1.y && !lastGamepad1.y) {
-                lift.setMotionProfileTargetPosition(Constants.sliderHighPos);
+                CommandScheduler.getInstance().schedule(
+                    new SequentialCommandGroup(
+                            new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderHighPos))
+                    )
+                );
             }
 
 
