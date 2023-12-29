@@ -9,29 +9,31 @@ import com.noahbres.meepmeep.roadrunner.SampleMecanumDrive;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
-    public static double reflect = 1.0;
+    static double reflect = 1;
 
-    static Pose2d closeStartingPose = new Pose2d(12, -63 * reflect, Math.toRadians(-90 * reflect));
-    static Pose2d closePlacementFarPose = new Pose2d(4.5, -39 * reflect, Math.toRadians(-45 * reflect));
-    static Pose2d closePlacementClosePose = new Pose2d(17, -40 * reflect, Math.toRadians(-135 * reflect));
-    static Pose2d closePlacementCenterPose = new Pose2d(15, -32 * reflect, Math.toRadians(-90 * reflect));
+    private static Pose2d closeStartingPose = new Pose2d(12, -62 * reflect, Math.toRadians(-90 * reflect));
+    private static Pose2d closePlacementFarPose = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
+    private static Pose2d closePlacementClosePose = new Pose2d(17.5, -40 * reflect, Math.toRadians(-135 * reflect));
+    private static Pose2d closePlacementCenterPose = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
 
-    static Pose2d farStartingPose = new Pose2d(-36, -63 * reflect, Math.toRadians(-90 * reflect));
-    static Pose2d farPlacementFarPose = new Pose2d(-43.5, -39 * reflect, Math.toRadians(-45 * reflect));
-    static Pose2d farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
-    static Pose2d farPlacementCenterPose = new Pose2d(-33, -32 * reflect, Math.toRadians(-90 * reflect));
+    private static Pose2d farStartingPose = new Pose2d(-36, -62 * reflect, Math.toRadians(-90 * reflect));
+    private static Pose2d farPlacementFarPose = new Pose2d(-44, -39 * reflect, Math.toRadians(-45 * reflect));
+    private static Pose2d farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
+    private static Pose2d farPlacementCenterPose = new Pose2d(-33, -31 * reflect, Math.toRadians(-90 * reflect));
 
-    static Pose2d squarePose = new Pose2d(45, -36 * reflect, Math.toRadians(180));
+    private static Pose2d squareFarPose = new Pose2d(50, -29 * reflect, Math.toRadians(180));
+    private static Pose2d squareCenterPose = new Pose2d(50, -36 * reflect, Math.toRadians(180));
+    private static Pose2d squareClosePose = new Pose2d(50, -43 * reflect, Math.toRadians(180));
 
-    static Pose2d depositFarPose = new Pose2d(48, -32 * reflect, Math.toRadians(180));
-    static Pose2d depositCenterPose = new Pose2d(48, -36 * reflect, Math.toRadians(180));
-    static Pose2d depositClosePose = new Pose2d(48, -40 * reflect, Math.toRadians(180));
+    private static Pose2d depositFarPose = new Pose2d(52, -29 * reflect, Math.toRadians(180));
+    private static Pose2d depositCenterPose = new Pose2d(52, -36 * reflect, Math.toRadians(180));
+    private static Pose2d depositClosePose = new Pose2d(52, -43 * reflect, Math.toRadians(180));
 
-    static Pose2d parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
+    private static Pose2d parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
 
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(180), 14);
     private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(180), 14);
-    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(30, 2, 14);
+    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(40, 2, 14);
 
 
 
@@ -40,61 +42,18 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity test = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
+                .setConstraints(40, 40, Math.toRadians(180), Math.toRadians(180), 10)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(closePlacementClosePose)
                                 .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(180))
-                                .splineToLinearHeading(new Pose2d(17, -50 * reflect, Math.toRadians(180)), 0)
-                                .setTangent(0)
-                                .splineTo(new Vector2d(30, -50 * reflect), 0)
-                                .splineToConstantHeading(squarePose.vec(), 0)
+                                .setTangent(Math.toRadians(225 * reflect))
+                                .splineToConstantHeading(new Vector2d(20, -52 * reflect), 0)
+                                .splineToSplineHeading(new Pose2d(32, -52 * reflect, Math.toRadians(180)), 0)
+                                .splineToConstantHeading(squareClosePose.vec(), 0)
                                 .build()
                 );
 
-        RoadRunnerBotEntity squareClose = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(farPlacementClosePose)
-                                .setVelConstraint(normalVelocity)
-                                .splineToConstantHeading(new Vector2d(-45, -35*reflect), Math.toRadians(90 * reflect))
-                                .splineToSplineHeading(new Pose2d(-32, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
-                                .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
-                                .build()
-                );
 
-        RoadRunnerBotEntity squareCenter = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(farPlacementCenterPose)
-                                .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(-90 * reflect))
-                                .splineToConstantHeading(new Vector2d(-55, -36*reflect), Math.toRadians(90 * reflect))
-                                .splineTo(new Vector2d(-55, -24*reflect), Math.toRadians(90 * reflect))
-                                .splineToSplineHeading(new Pose2d(-45, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
-                                .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
-                                .build()
-                );
-
-        RoadRunnerBotEntity squareFar = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(farPlacementFarPose)
-                                .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(-45 * reflect))
-                                .splineToLinearHeading(new Pose2d(-36, -45*reflect, Math.toRadians(-90*reflect)), Math.toRadians(-45 * reflect))
-                                .setTangent(Math.toRadians(90 * reflect))
-                                .splineToConstantHeading(new Vector2d(-36, -18*reflect), Math.toRadians(90 * reflect))
-                                .splineToSplineHeading(new Pose2d(-30, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(25, -10*reflect), Math.toRadians(0))
-                                .splineToConstantHeading(squarePose.vec(), Math.toRadians(0))
-                                .build()
-                );
 
         RoadRunnerBotEntity swervePlacementLeft = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
