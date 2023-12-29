@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.BluCru.states;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
@@ -59,8 +58,8 @@ public class TeleOpStateMachine {
                     robot.intake.wristState = WristState.OUTTAKE;
                 }
                 if(gamepad2.a) {
-                    robot.lift.retractLift();
-                    robot.lift.resetLiftStallTimer();
+                    robot.lift.retract();
+                    robot.lift.resetStallTimer();
                     robotState = RobotState.RETRACT;
                 }
                 break;
@@ -92,7 +91,7 @@ public class TeleOpStateMachine {
 
                 // retract
                 if(gamepad2.a && robot.intake.wristState == WristState.RETRACT) {
-                    robot.lift.retractLift();
+                    robot.lift.retract();
                     robotState = RobotState.RETRACT;
                 }
                 break;

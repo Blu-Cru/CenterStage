@@ -128,9 +128,9 @@ public class PropDetectionPipeline extends OpenCvPipeline {
             position = 2;
         }
 
-        if (frameList.size() > 5) {
+        /*if (frameList.size() > 5) {
             frameList.remove(0);
-        }
+        }*/
 
         Imgproc.cvtColor(masked, masked, Imgproc.COLOR_HSV2RGB);
 

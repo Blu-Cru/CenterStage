@@ -238,7 +238,7 @@ public class Trajectories {
                     robot.intake.toggleWrist();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.5,() -> {
-                    robot.lift.resetLiftStallTimer();
+                    robot.lift.resetStallTimer();
                     robot.lift.liftState = LiftState.RETRACT;
                     robot.lift.setTargetPos(0);
                 })
@@ -273,7 +273,7 @@ public class Trajectories {
                     robot.intake.toggleWrist();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.5,() -> {
-                    robot.lift.resetLiftStallTimer();
+                    robot.lift.resetStallTimer();
                     robot.lift.liftState = LiftState.RETRACT;
                     robot.lift.setTargetPos(0);
                 })
@@ -308,7 +308,7 @@ public class Trajectories {
                     robot.intake.outtakeRollersPower = 0;
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.5,() -> {
-                    robot.lift.resetLiftStallTimer();
+                    robot.lift.resetStallTimer();
                     robot.lift.liftState = LiftState.RETRACT;
                     robot.lift.setTargetPos(0);
                 })
