@@ -44,64 +44,14 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(180), Math.toRadians(180), 10)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(closePlacementClosePose)
+                        drive.trajectorySequenceBuilder(farPlacementClosePose)
                                 .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(225 * reflect))
-                                .splineToConstantHeading(new Vector2d(20, -52 * reflect), 0)
-                                .splineToSplineHeading(new Pose2d(32, -52 * reflect, Math.toRadians(180)), 0)
-                                .splineToConstantHeading(squareClosePose.vec(), 0)
-                                .build()
-                );
-
-
-
-        RoadRunnerBotEntity swervePlacementLeft = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(13.5, -63, Math.toRadians(-90)))
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(new Vector2d(13.5, -52), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(5, -38, Math.toRadians(-45)), Math.toRadians(135))
-                                .build()
-                );
-
-        RoadRunnerBotEntity swervePlacementRight = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-34.5, -63, Math.toRadians(-90)))
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(new Vector2d(-34.5, -53), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(-31, -40, Math.toRadians(-135)), Math.toRadians(45))
-                                .build()
-                );
-
-        RoadRunnerBotEntity depositScanFromPlacementLeft = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(8, -38, Math.toRadians(-30)))
-                                .splineToSplineHeading(new Pose2d(40, -35, Math.toRadians(180)), Math.toRadians(0))
-                                .build()
-                );
-
-        RoadRunnerBotEntity depositScanFromPlacementCenter = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(13, -30, Math.toRadians(-120)))
-                                .splineToSplineHeading(new Pose2d(40, -35, Math.toRadians(180)), Math.toRadians(0))
-                                .build()
-                );
-
-        RoadRunnerBotEntity depositCenter = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 10)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(40, -35, Math.toRadians(180)))
-                                .setTangent(0)
-                                .splineToConstantHeading(new Vector2d(60, -35), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-45, -35*reflect), Math.toRadians(90 * reflect))
+                                .setVelConstraint(fastVelocity)
+                                .splineToSplineHeading(new Pose2d(-32, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(30, -10*reflect), Math.toRadians(0))
+                                .setVelConstraint(normalVelocity)
+                                .splineToConstantHeading(new Vector2d(45, -43*reflect), Math.toRadians(0))
                                 .build()
                 );
 
