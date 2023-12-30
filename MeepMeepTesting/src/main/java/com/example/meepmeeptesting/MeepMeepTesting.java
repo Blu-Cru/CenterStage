@@ -29,6 +29,8 @@ public class MeepMeepTesting {
     private static Pose2d depositCenterPose = new Pose2d(52, -36 * reflect, Math.toRadians(180));
     private static Pose2d depositClosePose = new Pose2d(52, -43 * reflect, Math.toRadians(180));
 
+    private static Pose2d alignClosePose = new Pose2d(-58, -36*reflect, Math.toRadians(180));
+
     private static Pose2d parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
 
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(10, Math.toRadians(180), 14);
@@ -44,12 +46,10 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(360), 10)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(farStartingPose)
+                        drive.trajectorySequenceBuilder(alignClosePose)
                                 .setVelConstraint(normalVelocity)
-                                .setTangent(Math.toRadians(90*reflect))
-                                .splineToConstantHeading(new Vector2d(-38, -50 * reflect), Math.toRadians(115*reflect))
-                                .splineToSplineHeading(new Pose2d(-55, -36 * reflect, Math.toRadians(180)), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(-60, -36*reflect), Math.toRadians(180))
+                                .setTangent(Math.toRadians(60*reflect))
+                                .splineToLinearHeading(new Pose2d(-46, -18*reflect, Math.toRadians(135*reflect)),0)
                                 .build()
                 );
 

@@ -26,6 +26,8 @@ public class Trajectories {
     public static Pose2d farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
     public static Pose2d farPlacementCenterPose = new Pose2d(-33, -31 * reflect, Math.toRadians(-90 * reflect));
 
+//    public static Pose2d farPlacementClosePose = new Pose2d(-30, -18*reflect, Math.toRadians(135*reflect));
+
     public static Pose2d alignClosePose = new Pose2d(-60, -36*reflect, Math.toRadians(180));
 
     public static Pose2d depositFarPose = new Pose2d(52, -29 * reflect, Math.toRadians(180));
@@ -369,6 +371,28 @@ public class Trajectories {
                 .splineToConstantHeading(new Vector2d(-38, -50 * reflect), Math.toRadians(115*reflect))
                 .splineToSplineHeading(new Pose2d(-55, -36 * reflect, Math.toRadians(180)), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(-60, -36*reflect), Math.toRadians(180))
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence stackPlacementClose(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(alignClosePose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(45*reflect))
+                .splineToConstantHeading(new Vector2d(-40, -18*reflect), 0)
+                .splineToSplineHeading(new Pose2d(-30, -18*reflect, Math.toRadians(135*reflect)), 0)
+                .build();
+        return sequence;
+    }
+
+    public TrajectorySequence stackPlacementCenter(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(alignClosePose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(45*reflect))
+                .setTangent(Math.toRadians(60*reflect))
+                .splineToLinearHeading(new Pose2d(-46, -18*reflect, Math.toRadians(135*reflect)),0)
                 .build();
         return sequence;
     }
