@@ -31,8 +31,8 @@ public class MeepMeepTesting {
 
     private static Pose2d parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
 
-    private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(15, Math.toRadians(180), 14);
-    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(180), 14);
+    private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(10, Math.toRadians(180), 14);
+    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, 10, 14);
     private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(40, 2, 14);
 
 
@@ -42,16 +42,14 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity test = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(40, 40, Math.toRadians(180), Math.toRadians(180), 10)
+                .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(360), 10)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(farPlacementClosePose)
+                        drive.trajectorySequenceBuilder(farStartingPose)
                                 .setVelConstraint(normalVelocity)
-                                .splineToConstantHeading(new Vector2d(-45, -35*reflect), Math.toRadians(90 * reflect))
-                                .setVelConstraint(fastVelocity)
-                                .splineToSplineHeading(new Pose2d(-32, -10*reflect, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(30, -10*reflect), Math.toRadians(0))
-                                .setVelConstraint(normalVelocity)
-                                .splineToConstantHeading(new Vector2d(45, -43*reflect), Math.toRadians(0))
+                                .setTangent(Math.toRadians(90*reflect))
+                                .splineToConstantHeading(new Vector2d(-38, -50 * reflect), Math.toRadians(115*reflect))
+                                .splineToSplineHeading(new Pose2d(-55, -36 * reflect, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-60, -36*reflect), Math.toRadians(180))
                                 .build()
                 );
 

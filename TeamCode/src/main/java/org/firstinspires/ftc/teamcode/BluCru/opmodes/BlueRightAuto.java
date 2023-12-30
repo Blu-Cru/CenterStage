@@ -62,10 +62,6 @@ public class BlueRightAuto extends LinearOpMode {
         placementClose = trajectories.placementClose(robot);
         placementCenter = trajectories.placementCenter(robot);
 
-        squareFar = trajectories.squareFar(robot);
-        squareCenter = trajectories.squareCenter(robot);
-        squareClose = trajectories.squareClose(robot);
-
         depositFar = trajectories.depositFar(robot);
         depositCenter = trajectories.depositCenter(robot);
         depositClose = trajectories.depositClose(robot);

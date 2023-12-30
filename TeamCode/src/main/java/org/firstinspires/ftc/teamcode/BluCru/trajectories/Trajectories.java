@@ -26,9 +26,7 @@ public class Trajectories {
     public static Pose2d farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
     public static Pose2d farPlacementCenterPose = new Pose2d(-33, -31 * reflect, Math.toRadians(-90 * reflect));
 
-    public static Pose2d squareFarPose = new Pose2d(50, -29 * reflect, Math.toRadians(180));
-    public static Pose2d squareCenterPose = new Pose2d(50, -36 * reflect, Math.toRadians(180));
-    public static Pose2d squareClosePose = new Pose2d(50, -43 * reflect, Math.toRadians(180));
+    public static Pose2d alignClosePose = new Pose2d(-60, -36*reflect, Math.toRadians(180));
 
     public static Pose2d depositFarPose = new Pose2d(52, -29 * reflect, Math.toRadians(180));
     public static Pose2d depositCenterPose = new Pose2d(52, -36 * reflect, Math.toRadians(180));
@@ -42,14 +40,14 @@ public class Trajectories {
     private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(30, 2, DriveConstants.TRACK_WIDTH);
 
     Side side;
+    Placements placements;
+    Poses poses;
 
     public Trajectories(Alliance alliance, Side side) {
-        if(alliance == Alliance.RED) {
-            reflect = 1.0;
-        } else {
-            reflect = -1.0;
-        }
         this.side = side;
+        this.poses = new Poses(alliance);
+
+        this.placements = new Placements(side);
     }
 
     public TrajectorySequence placementFar(Robot robot) {
@@ -360,6 +358,18 @@ public class Trajectories {
                         .build();
                 break;
         }
+        return sequence;
+    }
+
+    public TrajectorySequence alignCloseStack(Robot robot) {
+        TrajectorySequence sequence = null;
+        sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                .setVelConstraint(normalVelocity)
+                .setTangent(Math.toRadians(90*reflect))
+                .splineToConstantHeading(new Vector2d(-38, -50 * reflect), Math.toRadians(115*reflect))
+                .splineToSplineHeading(new Pose2d(-55, -36 * reflect, Math.toRadians(180)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-60, -36*reflect), Math.toRadians(180))
+                .build();
         return sequence;
     }
 
