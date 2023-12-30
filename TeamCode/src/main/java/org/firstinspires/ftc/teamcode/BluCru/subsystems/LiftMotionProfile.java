@@ -6,6 +6,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class LiftMotionProfile {
+    public static double fastVelocity = 10000;
+    public static double fastAccel = 10000;
+
     public double maxVelocity;
     public double maxAcceleration;
     public int targetPosition ;
