@@ -18,10 +18,6 @@ public class Constants {
     public static double driveSpeedEject          = 0.4;
 
 // slider variables
-    public static double sliderP                  = 0.007;
-    public static double sliderI                  = 0;
-    public static double sliderD                  = 0.0001;
-    public static double sliderF                  = 0.08;
     public static int sliderRetractPos = 0;
     public static int sliderIntakePos             = 50;
     public static int sliderLowPos                = 1500;

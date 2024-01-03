@@ -13,18 +13,23 @@ import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
 public class Lift implements Subsystem{
+    public static double liftP = 0.007, liftI = 0, liftD = 0.0001, liftF = 0.08;
+
     public LiftState liftState;
     private DcMotorEx liftMotor, liftMotor2;
     private PIDController liftPID;
 
     private double PID;
-    private double ff = Constants.sliderF;
+    private double ff = liftF;
 
     public double power;
-    public int targetPos = 0;
+    public int targetPos;
     private int currentPos;
 
     private ElapsedTime liftStallTimer;
+
+    private LiftMotionProfile liftMotionProfile;
+    private ElapsedTime liftMotionProfileTimer;
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
@@ -35,11 +40,13 @@ public class Lift implements Subsystem{
         liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         liftState = LiftState.RETRACT;
+
+        targetPos = 0;
     }
 
     public void init() {
         setTargetPos(0);
-        liftPID = new PIDController(Constants.sliderP, Constants.sliderI, Constants.sliderD);
+        liftPID = new PIDController(liftP, liftI, liftD);
 
         //set all motors to zero power
         liftMotor.setPower(0);
@@ -57,10 +64,13 @@ public class Lift implements Subsystem{
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftStallTimer = new ElapsedTime();
+        liftMotionProfileTimer = new ElapsedTime();
+
+        liftMotionProfile = new LiftMotionProfile(0, 0);
     }
 
     public void update() {
-        targetPos = Range.clip(targetPos, Constants.sliderMinPos, Constants.sliderMaxPos);
+        targetPos = liftMotionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
         currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
@@ -87,16 +97,30 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // manual power is set in TeleOpStateMachine
-                targetPos = currentPos;
+                targetPos = currentPos + inverseP(power);
                 break;
         }
 
         setPower(power);
     }
 
-    public void retractLift() {
-        resetLiftStallTimer();
+    public void setMotionProfileTargetPosition(int targetPos) {
+        liftMotionProfile = new LiftMotionProfile(targetPos, currentPos);
+        liftMotionProfileTimer.reset();
+        liftPID.reset();
+    }
+
+    public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
+        liftMotionProfile.setConstraints(maxVelocity, maxAcceleration);
+    }
+
+    public void retract() {
+        resetStallTimer();
         liftState = LiftState.RETRACT;
+    }
+
+    public int inverseP(double power) {
+        return (int) (power  / liftP);
     }
 
     public void setPower(double power) {
@@ -109,7 +133,7 @@ public class Lift implements Subsystem{
         targetPos = pos;
     }
 
-    public void resetLiftStallTimer() {
+    public void resetStallTimer() {
         liftStallTimer.reset();
     }
 
@@ -138,8 +162,11 @@ public class Lift implements Subsystem{
         telemetry.addData("targetPos", targetPos);
         telemetry.addData("power", liftMotor.getPower());
         telemetry.addData("currentPos", getCurrentPos());
-        telemetry.addData("current", getCurrent(liftMotor));
-        telemetry.addData("current2", getCurrent(liftMotor2));
         telemetry.addData("stallTimer", liftStallTimer.seconds());
+        telemetry.addData("motionProfileTimer", liftMotionProfileTimer.seconds());
+    }
+
+    public void motionProfileTelemetry(Telemetry telemetry) {
+        liftMotionProfile.telemetry(telemetry);
     }
 }
