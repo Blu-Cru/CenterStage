@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -53,7 +54,9 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.b && !lastGamepad1.b) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos))
+                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos)),
+                                new WaitCommand(3500),
+                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
                 );
             }
