@@ -103,7 +103,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public Vector2d calculateDriveVector(Vector2d input) {
         // scale down so magnitude isnt greater than 1
-        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
+//        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
 
         // rotate input vector to match robot heading
         if (fieldCentric) {
@@ -114,17 +114,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // calculate the delta between the last drive vector and the current drive vector
         Vector2d delta = input.minus(lastDriveVector);
-        double deltaMag;
+        double deltaMag = 1;
 
         // if we are decelerating, limit the delta to the max decel delta
-        if(lastDriveVector.angleBetween(delta) > Math.PI / 2) {
-            deltaMag = Range.clip(delta.norm(), 0, (maxDecelDriveVectorDelta / 1000) * dt);
+        if(lastDriveVector.norm() > input.norm()) {
+            deltaMag = Range.clip(delta.norm(), 0, maxDecelDriveVectorDelta / 1000 * dt);
         } else {
             // otherwise, limit the delta to the max accel delta
-            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta / 1000) * dt);
+
+            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta / 1000 * dt));
         }
         // add the delta to the last drive vector
-        Vector2d driveVector = lastDriveVector.plus(delta.times(deltaMag));
+        Vector2d driveVector = lastDriveVector.plus(delta.div(delta.norm()).times(deltaMag));
         lastDriveVector = driveVector;
 
         return driveVector;
