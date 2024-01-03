@@ -109,8 +109,8 @@ public class MainTeleOp extends LinearOpMode {
                     robot.intake.wristState = WristState.OUTTAKE;
                 }
                 if(gamepad2.a) {
-                    robot.lift.retractLift();
-                    robot.lift.resetLiftStallTimer();
+                    robot.lift.setTargetPos(0);
+                    robot.lift.resetStallTimer();
                     robotState = RobotState.RETRACT;
                 }
                 break;
@@ -142,7 +142,7 @@ public class MainTeleOp extends LinearOpMode {
 
                 // retract
                 if(gamepad2.a && robot.intake.wristState == WristState.RETRACT) {
-                    robot.lift.retractLift();
+                    robot.lift.setTargetPos(0);
                     robotState = RobotState.RETRACT;
                 }
                 break;
