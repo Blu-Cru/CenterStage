@@ -184,7 +184,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
-        this.setExternalHeading(Math.toRadians(0));
+        this.setExternalHeading(Math.toRadians(90));
     }
 
     public void followTrajectoryAsync(Trajectory trajectory) {

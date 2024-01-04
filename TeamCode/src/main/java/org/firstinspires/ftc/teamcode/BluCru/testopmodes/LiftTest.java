@@ -55,7 +55,7 @@ public class LiftTest extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos)),
-                                new WaitCommand(3500),
+                                new WaitCommand(100),
                                 new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
                 );

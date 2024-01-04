@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 @Config
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
 public class TurnPIDTuner extends LinearOpMode {
-    private PIDController controller;
     public static double p = 1.2, i = 0, d = 0;
     public static double target = 0;
     double vert, horz, rotate;
@@ -25,11 +24,11 @@ public class TurnPIDTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.init();
+        drivetrain.drivePower = 1;
 
         intake = new Intake(hardwareMap, telemetry);
         intake.init();
@@ -43,28 +42,22 @@ public class TurnPIDTuner extends LinearOpMode {
             if(gamepad1.right_stick_button) {
                 drivetrain.resetIMU();
             }
-            controller.setPID(p, i, d);
-            double heading = drivetrain.getRelativeHeading();
+            drivetrain.setTurnPID(p, i, d);
 
             if(gamepad1.a) {
                 target = 0;
-                rotate = getPIDRotate(heading);
-            }
-            if(gamepad1.b) {
+                drivetrain.driveToHeading(horz, vert, target);
+            } else if(gamepad1.b) {
                 target = Math.toRadians(90);
-                rotate = getPIDRotate(heading);
+                drivetrain.driveToHeading(horz, vert, target);
+            } else {
+                drivetrain.drive(horz, vert, rotate);
             }
 
-            drivetrain.drive(horz, vert, rotate);
-
+            drivetrain.update();
+            drivetrain.telemetry(telemetry);
             telemetry.addData("target", target);
-            telemetry.addData("current heading", heading);
-            telemetry.addData("rotate", rotate);
             telemetry.update();
         }
-    }
-
-    public double getPIDRotate(double heading) {
-        return Range.clip(controller.calculate(heading, target), -1, 1);
     }
 }

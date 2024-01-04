@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
-    public static double maxAccelDriveVectorDelta = 8; // magnitude per second
-    public static double maxDecelDriveVectorDelta = 50; // magnitude per second
-    public static double turnP = 4, turnI = 0.1, turnD = 0.3;
+    public static double maxAccelDriveVectorDelta = 5; // magnitude per second at power 1
+    public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
+    public static double turnP = 2.6, turnI = 0, turnD = 0.15;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
     public static double angleTolerance = 0.5; // radians
 
@@ -79,11 +79,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         x = driveVector.getX();
         y = driveVector.getY();
 
-        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
-            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
-        } else {
-            setWeightedDrivePower(new Pose2d(0, 0, 0));
-        }
+        setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
     }
 
     public void driveToHeading(double x, double y, double targetHeading) {
@@ -92,13 +88,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         x = driveVector.getX();
         y = driveVector.getY();
 
-        double rotate = getPIDRotate(heading, targetHeading);
+        double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
 
-        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.1) {
-            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
-        } else {
-            setWeightedDrivePower(new Pose2d(0, 0, 0));
-        }
+        setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate));
+
     }
 
     public Vector2d calculateDriveVector(Vector2d input) {
@@ -107,7 +100,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // rotate input vector to match robot heading
         if (fieldCentric) {
-            input = input.rotated(Math.toRadians(-90) - heading);
+            input = input.rotated(-heading);
         } else {
             input = input.rotated(Math.toRadians(-90));
         }
@@ -118,14 +111,20 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // if we are decelerating, limit the delta to the max decel delta
         if(lastDriveVector.norm() > input.norm()) {
-            deltaMag = Range.clip(delta.norm(), 0, maxDecelDriveVectorDelta / 1000 * dt);
+            deltaMag = Range.clip(delta.norm(), 0, (maxDecelDriveVectorDelta * dt / 1000.0));
         } else {
             // otherwise, limit the delta to the max accel delta
 
-            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta / 1000 * dt));
+            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta * dt / 1000.0));
         }
+
+        Vector2d driveVector;
         // add the delta to the last drive vector
-        Vector2d driveVector = lastDriveVector.plus(delta.div(delta.norm()).times(deltaMag));
+        if(delta.norm() != 0) {
+            driveVector = lastDriveVector.plus(delta.div(delta.norm()).times(deltaMag));
+        } else {
+            driveVector = lastDriveVector;
+        }
         lastDriveVector = driveVector;
 
         return driveVector;
@@ -141,14 +140,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
         if (fieldCentric) {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90) - heading);
+            input = new Vector2d(x, y).rotated( - heading);
         } else {
             input = new Vector2d(x, y).rotated(Math.toRadians(-90));
         }
 
         x = input.getX();
         y = input.getY();
-        double rotate = getPIDRotate(heading, targetHeading);
+        double rotate = Range.clip(getPIDRotate(heading, targetHeading), drivePower, drivePower);
 
         if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
             setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
@@ -170,11 +169,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         distancePID.setPID(p, i, d);
     }
 
+    public void setTurnPID(double p, double i, double d) {
+        turnPID.setPID(p, i, d);
+    }
+
     public double getPIDRotate(double heading, double target) {
         if(heading - target < -Math.PI) {
             heading += 2*Math.PI;
         } else if(heading - target > Math.PI) {
-            heading -= 2*Math.PI;
+            heading -= 2 * Math.PI;
         }
         return Range.clip(turnPID.calculate(heading, target), -1, 1);
     }
@@ -204,12 +207,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("drive power", drivePower);
         telemetry.addData("dt", dt);
-        telemetry.addData("pose", pose);
-        telemetry.addData("velocity", velocity);
-        telemetry.addData("acceleration", acceleration);
-        telemetry.addData("heading", getExternalHeading());
-        telemetry.addData("x", getPoseEstimate().getX());
-        telemetry.addData("y", getPoseEstimate().getY());
+        telemetry.addData("last drive vector", lastDriveVector);
         telemetry.addData("field centric", fieldCentric);
     }
 }

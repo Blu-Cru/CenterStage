@@ -21,26 +21,31 @@ public class DriveTest extends LinearOpMode {
 
         localizer.setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
         drivetrain.init();
-        drivetrain.fieldCentric = false;
-        drivetrain.drivePower = 0.75;
+        drivetrain.fieldCentric = true;
+        drivetrain.drivePower = 1;
 
         waitForStart();
         while(opModeIsActive()) {
-            vert = -gamepad1.left_stick_y;
-            horz = gamepad1.left_stick_x;
-            rotate = -gamepad1.right_stick_x;
+            vert = Math.pow(-gamepad1.left_stick_y, 3);
+            horz = Math.pow(gamepad1.left_stick_x, 3);
+            rotate = Math.pow(-gamepad1.right_stick_x, 3);
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetIMU();
+                gamepad1.rumble(150);
             }
 
-
-            drivetrain.drive(horz, vert, rotate);
-
+            if(gamepad1.b) {
+                drivetrain.driveToHeading(horz, vert, 0);
+            } else if (gamepad1.x) {
+                drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+            } else {
+                drivetrain.drive(horz, vert, rotate);
+            }
 
             drivetrain.update();
-
             drivetrain.testTelemetry(telemetry);
+            drivetrain.telemetry(telemetry);
             telemetry.update();
         }
     }
