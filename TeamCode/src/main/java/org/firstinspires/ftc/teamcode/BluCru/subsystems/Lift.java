@@ -32,11 +32,16 @@ public class Lift implements Subsystem{
     public double power;
     public int targetPos;
     private int currentPos;
+    private int lastPos;
 
     private ElapsedTime liftStallTimer;
 
     private LiftMotionProfile liftMotionProfile;
     private ElapsedTime liftMotionProfileTimer;
+
+    private double dt;
+    private double lastTime;
+    private double velocity;
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
@@ -47,8 +52,6 @@ public class Lift implements Subsystem{
         liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         liftState = LiftState.RETRACT;
-
-        liftMotionProfile = new LiftMotionProfile(0, 0, fastVelocity, fastAccel);
 
         targetPos = 0;
     }
@@ -74,10 +77,17 @@ public class Lift implements Subsystem{
 
         liftStallTimer = new ElapsedTime();
         liftMotionProfileTimer = new ElapsedTime();
+        liftMotionProfile = new LiftMotionProfile(0, 0, fastVelocity, fastAccel);
+
+        lastTime = System.currentTimeMillis();
     }
 
     public void update() {
+        dt = System.currentTimeMillis() - lastTime;
         currentPos = getCurrentPos();
+        velocity = (currentPos - lastPos) / dt;
+        lastPos = currentPos;
+        lastTime = System.currentTimeMillis();
         PID = liftPID.calculate(currentPos, targetPos);
 
         switch(liftState) {
@@ -95,7 +105,7 @@ public class Lift implements Subsystem{
                 break;
             case MoPro:
                 targetPos = liftMotionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
-                if(targetPos == 0 && currentPos < -5) {
+                if(targetPos == 0 && currentPos < 0) {
                     power = 0;
                 } else if(Math.abs(targetPos - currentPos) < 10) {
                     power = ff;
@@ -123,7 +133,7 @@ public class Lift implements Subsystem{
 
     public void setMotionProfileTargetPosition(int targetPos) {
         liftState = LiftState.MoPro;
-        liftMotionProfile = new LiftMotionProfile(targetPos, currentPos);
+        liftMotionProfile = new LiftMotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel);
         liftMotionProfileTimer.reset();
         liftPID.reset();
     }
