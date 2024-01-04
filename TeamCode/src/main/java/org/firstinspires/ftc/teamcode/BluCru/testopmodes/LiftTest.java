@@ -77,6 +77,8 @@ public class LiftTest extends LinearOpMode {
                 );
             }
 
+            CommandScheduler.getInstance().run();
+
             lastGamepad1.copy(gamepad1);
             lastGamepad2.copy(gamepad2);
 
