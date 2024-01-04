@@ -17,6 +17,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
     public static double turnP = 2.6, turnI = 0, turnD = 0.15;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
+    public static double drivePowerIntake = 0.4, drivePowerRetract = 0.8, drivePowerLifting = 0.6, drivePowerOuttake = 0.4;
     public static double angleTolerance = 0.5; // radians
 
     public double drivePower = 0.5;
@@ -95,6 +96,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public Vector2d calculateDriveVector(Vector2d input) {
+        // scale acceleration to match drive power
+        double scaledAccelDelta = maxAccelDriveVectorDelta / drivePower;
+        double scaledDecelDelta = maxDecelDriveVectorDelta / drivePower;
+
         // scale down so magnitude isnt greater than 1
 //        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
 
@@ -111,11 +116,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // if we are decelerating, limit the delta to the max decel delta
         if(lastDriveVector.norm() > input.norm()) {
-            deltaMag = Range.clip(delta.norm(), 0, (maxDecelDriveVectorDelta * dt / 1000.0));
+            deltaMag = Range.clip(delta.norm(), 0, (scaledDecelDelta * dt / 1000.0));
         } else {
             // otherwise, limit the delta to the max accel delta
 
-            deltaMag = Range.clip(delta.norm(), 0, (maxAccelDriveVectorDelta * dt / 1000.0));
+            deltaMag = Range.clip(delta.norm(), 0, (scaledAccelDelta * dt / 1000.0));
         }
 
         Vector2d driveVector;
@@ -198,6 +203,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("drive power", drivePower);
         telemetry.addData("heading", getExternalHeading());
         telemetry.addData("x", getPoseEstimate().getX());
         telemetry.addData("y", getPoseEstimate().getY());
@@ -205,7 +211,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void testTelemetry(Telemetry telemetry) {
-        telemetry.addData("drive power", drivePower);
         telemetry.addData("dt", dt);
         telemetry.addData("last drive vector", lastDriveVector);
         telemetry.addData("field centric", fieldCentric);

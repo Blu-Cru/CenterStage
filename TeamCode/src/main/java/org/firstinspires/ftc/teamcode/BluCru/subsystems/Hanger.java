@@ -37,7 +37,7 @@ public class Hanger implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-
+        telemetry.addData("hanger pos", hangerMotor.getCurrentPosition());
     }
 
     public void setPower(double power) {

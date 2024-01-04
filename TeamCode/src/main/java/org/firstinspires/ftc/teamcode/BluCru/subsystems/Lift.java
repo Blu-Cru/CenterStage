@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
 public class Lift implements Subsystem{
     public static double liftP = 0.007, liftI = 0, liftD = 0.0001, liftF = 0.08;
+    public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
+    public static int liftMinPos = 0, liftMaxPos = 2000;
 
     public LiftState liftState;
     private DcMotorEx liftMotor, liftMotor2;
@@ -153,8 +155,10 @@ public class Lift implements Subsystem{
         return liftMotor.getCurrentPosition();
     }
 
-    public double getCurrent(DcMotorEx motor) {
-        return motor.getCurrent(CurrentUnit.AMPS);
+    public double getCurrent() {
+        double current1 = liftMotor.getCurrent(CurrentUnit.AMPS);
+        double current2 = liftMotor2.getCurrent(CurrentUnit.AMPS);
+        return (current1 + current2) / 2;
     }
 
     public void telemetry(Telemetry telemetry) {

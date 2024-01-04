@@ -8,9 +8,6 @@ public class Constants {
     public static double triggerSens              = 0.5;
 
 // drive variables
-    public static double turnP                    = 1.2;
-    public static double turnI                    = 0;
-    public static double turnD                    = 0;
     public static double driveSpeedIntake         = 0.5;
     public static double driveSpeedRetract = 0.75;
     public static double driveSpeedLifting     = 0.6;
@@ -58,9 +55,4 @@ public class Constants {
     public static double farAutoDelay             = 10000; // seconds
     public static double slideDownDelay           = 1000;
     public static double slideStallDelay          = 3000; //milliseconds
-
-// test hardware names
-    public static String motorTestName            = "hanger";
-    public static String servoTestName            = "plane";
-    public static String CRServoTestName          = "outtake";
 }
