@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -12,10 +13,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 
+@Config
 public class Lift implements Subsystem{
     public static double liftP = 0.007, liftI = 0, liftD = 0.0001, liftF = 0.08;
     public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
     public static int liftMinPos = 0, liftMaxPos = 2000;
+
+    public static double fastVelocity = 10000.0, fastAccel = 20000.0;
+    public static double slowVelocity = 5000.0, slowAccel = 10000.0;
 
     public LiftState liftState;
     private DcMotorEx liftMotor, liftMotor2;
@@ -43,6 +48,8 @@ public class Lift implements Subsystem{
 
         liftState = LiftState.RETRACT;
 
+        liftMotionProfile = new LiftMotionProfile(0, 0, fastVelocity, fastAccel);
+
         targetPos = 0;
     }
 
@@ -67,8 +74,6 @@ public class Lift implements Subsystem{
 
         liftStallTimer = new ElapsedTime();
         liftMotionProfileTimer = new ElapsedTime();
-
-        liftMotionProfile = new LiftMotionProfile(0, 0);
     }
 
     public void update() {
