@@ -72,7 +72,6 @@ public class Lift implements Subsystem{
     }
 
     public void update() {
-        targetPos = liftMotionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
         currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
@@ -88,8 +87,19 @@ public class Lift implements Subsystem{
                 } else {
                     power = PID;
                 }
+                break;
+            case MoPro:
+                targetPos = liftMotionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
+                if(targetPos == 0 && currentPos < -5) {
+                    power = 0;
+                } else if(Math.abs(targetPos - currentPos) < 10) {
+                    power = ff;
+                } else {
+                    power = PID;
+                }
+                break;
             case AUTO:
-                if(targetPos == 0 && currentPos < 10) {
+                if(targetPos == 0 && currentPos < -5) {
                     power = 0;
                 } else if(Math.abs(targetPos - currentPos) < 10) {
                     power = ff;
@@ -98,7 +108,7 @@ public class Lift implements Subsystem{
                 }
                 break;
             case MANUAL:
-                // manual power is set in TeleOpStateMachine
+                // set manual power in opmode
                 targetPos = currentPos + inverseP(power);
                 break;
         }
@@ -107,6 +117,7 @@ public class Lift implements Subsystem{
     }
 
     public void setMotionProfileTargetPosition(int targetPos) {
+        liftState = LiftState.MoPro;
         liftMotionProfile = new LiftMotionProfile(targetPos, currentPos);
         liftMotionProfileTimer.reset();
         liftPID.reset();

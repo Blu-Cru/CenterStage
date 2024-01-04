@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BluCru.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +10,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
+@Config
 public class Hanger implements Subsystem {
+    public static double p = 0.005, i = 0, d = 0;
+
     private DcMotorEx hangerMotor;
 
     private double PID;
