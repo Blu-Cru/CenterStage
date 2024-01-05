@@ -124,7 +124,7 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // set manual power in opmode
-                targetPos = currentPos + inverseP(power);
+//                targetPos = currentPos + inverseP(power);
                 break;
         }
 
@@ -190,8 +190,9 @@ public class Lift implements Subsystem{
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("liftState", liftState);
         telemetry.addData("targetPos", targetPos);
-        telemetry.addData("power", liftMotor.getPower());
         telemetry.addData("currentPos", getCurrentPos());
+        telemetry.addData("power", liftMotor.getPower());
+        telemetry.addData("current", getCurrent());
         telemetry.addData("stallTimer", liftStallTimer.seconds());
         telemetry.addData("motionProfileTimer", liftMotionProfileTimer.seconds());
     }

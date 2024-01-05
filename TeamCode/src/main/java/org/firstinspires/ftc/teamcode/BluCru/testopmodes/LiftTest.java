@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -32,6 +34,8 @@ public class LiftTest extends LinearOpMode {
         intake = new Intake(hardwareMap, telemetry);
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         lift.init();
         lift.liftState = LiftState.AUTO;
@@ -75,6 +79,15 @@ public class LiftTest extends LinearOpMode {
                                 new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderHighPos))
                         )
                 );
+            }
+
+            if(Math.abs(gamepad1.left_stick_y) > 0.1) {
+                lift.liftState = LiftState.MANUAL;
+                lift.power = -gamepad1.left_stick_y;
+            }
+            if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
+                lift.liftState = LiftState.AUTO;
+                lift.setMotionProfileTargetPosition(lift.inverseP(lift.power));
             }
 
             CommandScheduler.getInstance().run();
