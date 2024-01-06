@@ -112,7 +112,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // calculate the delta between the last drive vector and the current drive vector
         Vector2d delta = input.minus(lastDriveVector);
-        double deltaMag = 1;
+        double deltaMag;
 
         // if we are decelerating, limit the delta to the max decel delta
         if(lastDriveVector.norm() > input.norm()) {
@@ -137,28 +137,27 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
         distanceSensors.update();
-        Vector2d input;
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x,y));
 
 //        if(heading - distanceSensors.angle < angleTolerance) {
 //            x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
 //        }
 
-        x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
-        if (fieldCentric) {
-            input = new Vector2d(x, y).rotated( - heading);
-        } else {
-            input = new Vector2d(x, y).rotated(Math.toRadians(-90));
-        }
+        double component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
+        // set component in direction opposite target heading
+        driveVector = setComponent(driveVector, component, heading - targetHeading - Math.PI);
 
-        x = input.getX();
-        y = input.getY();
-        double rotate = Range.clip(getPIDRotate(heading, targetHeading), drivePower, drivePower);
+        x = driveVector.getX();
+        y = driveVector.getY();
+        double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
 
-        if (Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(rotate)) > 0.05) {
-            setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
-        } else {
-            setWeightedDrivePower(new Pose2d(0, 0, 0));
-        }
+        setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate));
+    }
+
+    public Vector2d setComponent(Vector2d vector, double component, double angle) {
+        vector = vector.rotated(-angle);
+        vector = new Vector2d(component, vector.getY());
+        return vector.rotated(angle);
     }
 
     public double getDistanceSensorAngleError(double targetHeading) {
