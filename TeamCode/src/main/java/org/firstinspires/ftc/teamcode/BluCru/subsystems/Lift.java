@@ -18,6 +18,7 @@ public class Lift implements Subsystem{
     public static double liftP = 0.007, liftI = 0, liftD = 0.0001, liftF = 0.08;
     public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
     public static int liftMinPos = 0, liftMaxPos = 2000;
+    public static double stallCurrent = 4.0;
 
     public static double fastVelocity = 10000.0, fastAccel = 20000.0;
     public static double slowVelocity = 5000.0, slowAccel = 10000.0;
@@ -85,7 +86,7 @@ public class Lift implements Subsystem{
     public void update() {
         dt = System.currentTimeMillis() - lastTime;
         currentPos = getCurrentPos();
-        velocity = (currentPos - lastPos) / dt;
+        velocity = (currentPos - lastPos) * 1000.0 / dt;
         lastPos = currentPos;
         lastTime = System.currentTimeMillis();
         PID = liftPID.calculate(currentPos, targetPos);
@@ -114,7 +115,7 @@ public class Lift implements Subsystem{
                 }
                 break;
             case AUTO:
-                if(targetPos == 0 && currentPos < -5) {
+                if(targetPos == 0 && currentPos < 3) {
                     power = 0;
                 } else if(Math.abs(targetPos - currentPos) < 10) {
                     power = ff;
@@ -192,6 +193,7 @@ public class Lift implements Subsystem{
         telemetry.addData("targetPos", targetPos);
         telemetry.addData("currentPos", getCurrentPos());
         telemetry.addData("power", liftMotor.getPower());
+        telemetry.addData("velocity", velocity);
         telemetry.addData("current", getCurrent());
         telemetry.addData("stallTimer", liftStallTimer.seconds());
         telemetry.addData("motionProfileTimer", liftMotionProfileTimer.seconds());

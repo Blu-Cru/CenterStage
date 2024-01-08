@@ -58,9 +58,9 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.b && !lastGamepad1.b) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos)),
-                                new WaitCommand(100),
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
+                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos))
+//                                new WaitCommand(2000),
+//                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
                 );
             }

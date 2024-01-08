@@ -58,11 +58,11 @@ public class LiftMotionProfile {
     }
 
     public int calculateTargetPosition(double time) {
-        t1 = (vMax - vI) / aMax;
-        d1 = (0.5 * aMax * t1 * t1) + (vI * t1);
+        t1 = Math.abs((vMax * flip - vI) / aMax);
+        d1 = Math.abs((0.5 * aMax * t1 * t1) * flip + (vI * t1));
 
         // 0 is the period before initial, when the lift accelerates from 0 velo to vi
-        t0 = vI / aMax;
+        t0 = Math.abs(vI / aMax);
         d0 = (vI * vI) / (2.0 * aMax);
 
         double distance = Math.abs(xTarget - xI) + d0;
@@ -81,15 +81,18 @@ public class LiftMotionProfile {
 
         t3 = vMax / aMax;
 
+        int instantTargetPos;
         if(time < t1) {
-            return (int) ((0.5 * aMax * time * time + vI * time) * flip + xI);
+            instantTargetPos = (int) ((0.5 * aMax * time * time) * flip + vI * time + xI);
         } else if(time < t1 + t2) {
-            return (int) ((d1 + vMax * (time - t1)) * flip + xI);
+            instantTargetPos = (int) ((d1 + vMax * (time - t1)) * flip + xI);
         } else if(time < t1 + t2 + t3) {
-            return (int) ((d1 + d2 + vMax * (time - t1 - t2) - 0.5 * aMax * (time - t1 - t2) * (time - t1 - t2)) * flip + xI);
+            instantTargetPos = (int) ((d1 + d2 + vMax * (time - t1 - t2) - 0.5 * aMax * (time - t1 - t2) * (time - t1 - t2)) * flip + xI);
         } else {
-            return xTarget;
+            instantTargetPos = xTarget;
         }
+
+        return instantTargetPos;
     }
 
     public void setConstraints(double maxVelocity, double maxAcceleration) {
@@ -98,12 +101,15 @@ public class LiftMotionProfile {
     }
 
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("t0", t0);
         telemetry.addData("t1", t1);
         telemetry.addData("t2", t2);
         telemetry.addData("t3", t3);
+        telemetry.addData("d0", d0);
         telemetry.addData("d1", d1);
         telemetry.addData("d2", d2);
         telemetry.addData("d3", d3);
+        telemetry.addData("vI", vI);
         telemetry.addData("target position", xTarget);
         telemetry.addData("initial position", xI);
         telemetry.addData("max velocity", vMax);
