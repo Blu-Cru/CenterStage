@@ -65,14 +65,18 @@ public class LiftMotionProfile {
 
     public void calculate() {
         if(decel) {
+            // time it takes to stop
             t0 = Math.abs(vI / aMax);
+            // displacement for stopping (should be flipped)
             d0 = -(vI * vI) / (2.0 * aMax);
 
+            // time to accel to max velocity
             t1 = vMax / aMax;
+            // distance to accel
             d1 = 0.5 * aMax * t1 * t1;
 
-            double distance = Math.abs(xTarget - xI);
-            double halfDistance = Math.abs(xTarget - xI) / 2.0;
+            double distance = Math.abs(xTarget - xI + d0);
+            double halfDistance = distance / 2.0;
 
             if(d1 > halfDistance) {
                 t1 = Math.sqrt(2 * halfDistance / aMax);
@@ -88,7 +92,24 @@ public class LiftMotionProfile {
             t0 = 0.0;
             d0 = 0.0;
 
+            t1 = Math.abs((vMax * flip - vI) / aMax);
+            d1 = Math.abs((0.5 * aMax * t1 * t1) * flip + (vI * t1));
 
+            double xAccel = (vI * vI) / (2.0 * aMax);
+            double distance = Math.abs(xTarget - xI) + xAccel;
+            double halfDistance = distance / 2.0;
+
+            if(d1 > halfDistance - xAccel) {
+                d1 = halfDistance - xAccel;
+                t1 = Math.sqrt(2 * halfDistance / aMax);
+            }
+
+            vMax = aMax * t1 + Math.abs(vI);
+
+            d2 = distance - 2 * (xAccel + d1);
+            t2 = d2 / vMax;
+
+            t3 = vMax / aMax;
         }
     }
 
@@ -118,13 +139,13 @@ public class LiftMotionProfile {
 
         int instantTargetPos;
         if(time < t0) {
-            instantTargetPos = (int) (vI * time + aMax * time * time / 2.0);
+            instantTargetPos = (int) ((vI * time) + (aMax * time * time / 2.0) * flip + xI);
         } else if(time < t0 + t1) {
-            instantTargetPos = (int) ((0.5 * aMax * (time - t0) * (time - t0) + d0) * flip + xI);
+            instantTargetPos = (int) ((d0 + 0.5 * aMax * (time - t0) * (time - t0)) * flip + xI);
         } else if(time < t0 + t1 + t2) {
             instantTargetPos = (int) ((d0 + d1 + vMax * (time - t0 - t1)) * flip + xI);
         } else if(time < t0 + t1 + t2 + t3) {
-            instantTargetPos = (int) ((d0 + d1 + d2 + vMax * (time - t0 - t1 - t2) - 0.5 * aMax * (time - t1 - t2) * (time - t1 - t2)) * flip + xI);
+            instantTargetPos = (int) ((d0 + d1 + d2 + vMax * (time - t0 - t1 - t2) - 0.5 * aMax * (time - t0 - t1 - t2) * (time - t0 - t1 - t2)) * flip + xI);
         } else {
             instantTargetPos = xTarget;
         }

@@ -21,8 +21,8 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.LiftMotionProfile;
 @Config
 @TeleOp(name = "lift test", group = "TeleOp")
 public class LiftTest extends LinearOpMode {
-    public static double maxVelocity = 13000;
-    public static double maxAcceleration = 20000;
+    public static double maxVelocity = 400;
+    public static double maxAcceleration = 300;
 
     Lift lift;
 //    Intake intake;
