@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.BluCru.Constants;
 import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.BluCru.subsystems.LiftMotionProfile;
 
 @Config
 @TeleOp(name = "lift test", group = "TeleOp")
@@ -24,14 +25,14 @@ public class LiftTest extends LinearOpMode {
     public static double maxAcceleration = 20000;
 
     Lift lift;
-    Intake intake;
+//    Intake intake;
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
 
     @Override
     public void runOpMode() throws InterruptedException {
         lift = new Lift(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+//        intake = new Intake(hardwareMap, telemetry);
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
@@ -39,13 +40,13 @@ public class LiftTest extends LinearOpMode {
 
         lift.init();
         lift.liftState = LiftState.AUTO;
-        intake.init();
+//        intake.init();
 
         waitForStart();
         while(opModeIsActive()) {
             lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
 
-            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
+//            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
 
             if(gamepad1.a && !lastGamepad1.a) {
                 CommandScheduler.getInstance().schedule(
@@ -58,7 +59,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.b && !lastGamepad1.b) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderLowPos))
+                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(1000, 0, -5000, maxVelocity, maxAcceleration)))
 //                                new WaitCommand(2000),
 //                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
@@ -68,7 +69,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.x && !lastGamepad1.x) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderMedPos))
+                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(0, 1000, -500, maxVelocity, maxAcceleration)))
                         )
                 );
             }
@@ -76,7 +77,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.y && !lastGamepad1.y) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(Constants.sliderHighPos))
+                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(1000, 0, 0, maxVelocity, maxAcceleration)))
                         )
                 );
             }
