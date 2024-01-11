@@ -23,6 +23,11 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.LiftMotionProfile;
 public class LiftTest extends LinearOpMode {
     public static double maxVelocity = 400;
     public static double maxAcceleration = 300;
+    public static double testVelocity = 400;
+    public static double testAccel = 400;
+    public static int testInitial = 0;
+    public static int testFinal = 1000;
+    public static double testVI = -400;
 
     Lift lift;
 //    Intake intake;
@@ -59,7 +64,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.b && !lastGamepad1.b) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(1000, 0, -5000, maxVelocity, maxAcceleration)))
+                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(testFinal, testInitial, testVI, testVelocity, testAccel)))
 //                                new WaitCommand(2000),
 //                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
