@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
 public class LiftTest extends LinearOpMode {
     public static double maxVelocity = 13000;
     public static double maxAcceleration = 20000;
+    public static int run = 0;
 
     Lift lift;
     Intake intake;
