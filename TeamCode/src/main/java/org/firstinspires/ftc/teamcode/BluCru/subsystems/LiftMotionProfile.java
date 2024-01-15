@@ -18,6 +18,8 @@ public class LiftMotionProfile {
     public boolean decel;
     double t0, t1, t2, t3;
     double d0, d1, d2, d3;
+    double v0, v1, v2, v3;
+    double a0, a1, a2, a3;
 
     public LiftMotionProfile(int xTarget, int xI) {
         this.xTarget = xTarget;
@@ -68,14 +70,14 @@ public class LiftMotionProfile {
             // time it takes to stop
             t0 = Math.abs(vI / aMax);
             // displacement for stopping (should be flipped)
-            d0 = -(vI * vI) / (2.0 * aMax);
+            d0 = -(0.5 * aMax * t0 * t0);
 
             // time to accel to max velocity
             t1 = vMax / aMax;
             // distance to accel
             d1 = 0.5 * aMax * t1 * t1;
 
-            double distance = Math.abs(xTarget - xI + d0);
+            double distance = Math.abs(xTarget - xI + Math.abs(d0));
             double halfDistance = distance / 2.0;
 
             if(d1 > halfDistance) {
@@ -88,6 +90,7 @@ public class LiftMotionProfile {
             t2 = d2 / vMax;
 
             t3 = t1;
+            d3 = d1;
         } else {
             t0 = 0.0;
             d0 = 0.0;
@@ -138,14 +141,19 @@ public class LiftMotionProfile {
 //        t3 = vMax / aMax;
 
         int instantTargetPos;
+        double dt;
         if(time < t0) {
-            instantTargetPos = (int) ((vI * time) + (aMax * time * time / 2.0) * flip + xI);
+            dt = time;
+            instantTargetPos = (int) ((vI * dt) + ((aMax * dt * dt / 2.0) * flip) + xI);
         } else if(time < t0 + t1) {
-            instantTargetPos = (int) ((d0 + 0.5 * aMax * (time - t0) * (time - t0)) * flip + xI);
+            dt = time - t0;
+            instantTargetPos = (int) ((d0 + 0.5 * aMax * dt * dt) * flip + xI);
         } else if(time < t0 + t1 + t2) {
-            instantTargetPos = (int) ((d0 + d1 + vMax * (time - t0 - t1)) * flip + xI);
+            dt = time - t0 - t1;
+            instantTargetPos = (int) ((d0 + d1 + vMax * dt) * flip + xI);
         } else if(time < t0 + t1 + t2 + t3) {
-            instantTargetPos = (int) ((d0 + d1 + d2 + vMax * (time - t0 - t1 - t2) - 0.5 * aMax * (time - t0 - t1 - t2) * (time - t0 - t1 - t2)) * flip + xI);
+            dt = time - t0 - t1 - t2;
+            instantTargetPos = (int) ((d0 + d1 + d2 + vMax * dt - 0.5 * aMax * dt * dt) * flip + xI);
         } else {
             instantTargetPos = xTarget;
         }

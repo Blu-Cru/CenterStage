@@ -21,18 +21,20 @@ import org.firstinspires.ftc.teamcode.BluCru.subsystems.LiftMotionProfile;
 @Config
 @TeleOp(name = "lift test", group = "TeleOp")
 public class LiftTest extends LinearOpMode {
-    public static double maxVelocity = 400;
-    public static double maxAcceleration = 300;
-    public static double testVelocity = 400;
-    public static double testAccel = 400;
+    public static double maxVelocity = 400.0;
+    public static double maxAcceleration = 300.0;
+    public static double testVelocity = 400.0;
+    public static double testAccel = 400.0;
     public static int testInitial = 0;
     public static int testFinal = 1000;
-    public static double testVI = -400;
+    public static double testVI = -400.0;
+    public static int run = 0;
 
     Lift lift;
 //    Intake intake;
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
+    private int lastRun = run;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,7 +51,7 @@ public class LiftTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
+//            lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
 
 //            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
 
@@ -61,7 +63,7 @@ public class LiftTest extends LinearOpMode {
                 );
             }
 
-            if(gamepad1.b && !lastGamepad1.b) {
+            if(run != lastRun || (gamepad1.b && !lastGamepad1.b)) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(testFinal, testInitial, testVI, testVelocity, testAccel)))
@@ -96,6 +98,7 @@ public class LiftTest extends LinearOpMode {
                 lift.setMotionProfileTargetPosition(lift.inverseP(lift.power));
             }
 
+            lastRun = run;
             CommandScheduler.getInstance().run();
 
             lastGamepad1.copy(gamepad1);
