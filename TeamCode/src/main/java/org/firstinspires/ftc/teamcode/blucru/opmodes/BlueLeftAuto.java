@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.states.Path;
+import org.firstinspires.ftc.teamcode.blucru.states.AutoState;
 import org.firstinspires.ftc.teamcode.blucru.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
@@ -17,7 +17,7 @@ public class BlueLeftAuto extends LinearOpMode {
     Robot robot;
     Trajectories trajectories;
     CVMaster cvMaster;
-    Path path;
+    AutoState autoState;
     ElapsedTime runtime;
 
     int position;
@@ -48,7 +48,7 @@ public class BlueLeftAuto extends LinearOpMode {
         robot = new Robot(telemetry, hardwareMap);
         trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE);
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
-        path = Path.PLACEMENT;
+        autoState = AutoState.PLACEMENT;
         runtime = new ElapsedTime();
 
         robot.init();
@@ -111,28 +111,28 @@ public class BlueLeftAuto extends LinearOpMode {
         robot.drivetrain.followTrajectorySequenceAsync(placement);
 
         while(!isStopRequested() && opModeIsActive()) {
-            switch(path) {
+            switch(autoState) {
                 case PLACEMENT:
                     if(!robot.drivetrain.isBusy()) {
                         robot.drivetrain.followTrajectorySequenceAsync(square);
-                        path = Path.SQUARE;
+                        autoState = AutoState.SQUARE;
                     }
                     break;
                 case SQUARE:
                     if(!robot.drivetrain.isBusy()) {
                         robot.drivetrain.followTrajectorySequenceAsync(deposit);
-                        path = Path.DEPOSIT;
+                        autoState = AutoState.DEPOSIT;
                     }
                     break;
                 case DEPOSIT:
                     if(!robot.drivetrain.isBusy()) {
                         robot.drivetrain.followTrajectorySequenceAsync(park);
-                        path = Path.PARK;
+                        autoState = AutoState.PARK;
                     }
                     break;
                 case PARK:
                     if(!robot.drivetrain.isBusy()) {
-                        path = Path.STOP;
+                        autoState = AutoState.STOP;
                     }
                     break;
                 case STOP:
@@ -144,7 +144,7 @@ public class BlueLeftAuto extends LinearOpMode {
             robot.drivetrain.updateTrajectory();
 
             telemetry.addData("poseEstimate: ", robot.drivetrain.getPoseEstimate());
-            telemetry.addData("path:", path);
+            telemetry.addData("path:", autoState);
             telemetry.addData("runtime:", runtime.seconds());
             telemetry.update();
         }

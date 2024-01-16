@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.Constants;
 import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.states.Path;
+import org.firstinspires.ftc.teamcode.blucru.states.AutoState;
 import org.firstinspires.ftc.teamcode.blucru.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
@@ -18,7 +18,7 @@ public class RedLeftParkAuto extends LinearOpMode {
     Robot robot;
     Trajectories trajectories;
     CVMaster cvMaster;
-    Path path;
+    AutoState autoState;
     ElapsedTime runtime;
 
     int position;
@@ -39,7 +39,7 @@ public class RedLeftParkAuto extends LinearOpMode {
         robot = new Robot(telemetry, hardwareMap);
         trajectories = new Trajectories(Alliance.RED, Side.FAR);
         cvMaster = new CVMaster(hardwareMap, Alliance.RED);
-        path = Path.PLACEMENT;
+        autoState = AutoState.PLACEMENT;
         runtime = new ElapsedTime();
 
         robot.init();
@@ -94,11 +94,11 @@ public class RedLeftParkAuto extends LinearOpMode {
         robot.drivetrain.followTrajectorySequenceAsync(placement);
 
         while(!isStopRequested() && opModeIsActive()) {
-            switch(path) {
+            switch(autoState) {
                 case PLACEMENT:
                     if(!robot.drivetrain.isBusy()) {
                         robot.drivetrain.followTrajectorySequenceAsync(park);
-                        path = Path.PARK;
+                        autoState = AutoState.PARK;
                     }
                     break;
                 case PARK:
@@ -112,7 +112,7 @@ public class RedLeftParkAuto extends LinearOpMode {
             robot.drivetrain.updateTrajectory();
 
             telemetry.addData("poseEstimate: ", robot.drivetrain.getPoseEstimate());
-            telemetry.addData("path:", path);
+            telemetry.addData("path:", autoState);
             telemetry.addData("runtime:", runtime.seconds());
             telemetry.update();
         }
