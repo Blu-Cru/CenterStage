@@ -1,0 +1,11 @@
+package org.firstinspires.ftc.teamcode.blucru.trajectories;
+
+import org.firstinspires.ftc.teamcode.blucru.states.Side;
+
+public class Placements {
+    Side side;
+
+    public Placements(Side side) {
+        this.side = side;
+    }
+}
