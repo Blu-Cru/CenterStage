@@ -13,6 +13,7 @@ public class MotionProfile {
     public double vI;
     public double flip;
     public boolean decel;
+    public double xDecel;
     double t0, t1, t2, t3;
     double d0, d1, d2, d3;
     double v0, v1, v2, v3;
@@ -56,11 +57,24 @@ public class MotionProfile {
         this.aMax = aMax;
         if(xTarget < xI) {
             flip = -1;
-            decel = vI > 0;
+//            decel = vI > 0;
         } else {
             flip = 1;
-            decel = vI < 0;
+//            decel = vI < 0;
         }
+
+        xDecel = vI < 0 ? -(vI * vI) / (2.0 * aMax) : (vI * vI) / (2.0 * aMax);
+
+        if(vI < 0 && xTarget > xI + xDecel) {
+            decel = true;
+        } else if(vI > 0 && xTarget < xI + xDecel) {
+            decel = true;
+        } else {
+            decel = false;
+        }
+
+        // absolute delta x to stop
+
         calculate();
     }
 
@@ -76,7 +90,7 @@ public class MotionProfile {
             // distance to accel
             d1 = 0.5 * aMax * t1 * t1;
 
-            double distance = Math.abs(xTarget - xI + Math.abs(d0));
+            double distance = Math.abs(xTarget - xI - xDecel);
             double halfDistance = distance / 2.0;
 
             if(d1 > halfDistance) {
