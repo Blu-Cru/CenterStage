@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru;
+package org.firstinspires.ftc.teamcode.blucru;
 
 import com.acmerobotics.dashboard.config.Config;
 
