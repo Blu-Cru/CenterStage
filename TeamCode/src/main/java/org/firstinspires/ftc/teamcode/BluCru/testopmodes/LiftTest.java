@@ -19,6 +19,13 @@ import org.firstinspires.ftc.teamcode.blucru.subsystems.MotionProfile;
 public class LiftTest extends LinearOpMode {
     public static double maxVelocity = 400.0;
     public static double maxAcceleration = 300.0;
+    public static int xI = 0;
+    public static int xTarget = 200;
+    public static double vI = 600;
+    public static double vMax = 200;
+    public static double aMax = 200;
+    public static int run = 0;
+    int lastRun = run;
 
     Lift lift;
 //    Intake intake;
@@ -40,6 +47,13 @@ public class LiftTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
+            if(run != lastRun) {
+                CommandScheduler.getInstance().schedule(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> lift.setMotionProfile(new MotionProfile(xTarget, xI, vI, vMax, aMax)))
+                        )
+                );
+            }
 //            lift.setMotionProfileConstraints(maxVelocity, maxAcceleration);
 
 //            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
@@ -89,6 +103,7 @@ public class LiftTest extends LinearOpMode {
     }
 
     public void update() {
+        lastRun = run;
         CommandScheduler.getInstance().run();
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
