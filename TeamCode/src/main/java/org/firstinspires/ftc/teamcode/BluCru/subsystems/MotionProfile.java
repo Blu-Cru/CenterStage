@@ -13,11 +13,13 @@ public class MotionProfile {
     public double vI;
     public double flip;
     public boolean decel;
-    public double xDecel;
+    public double xDecel, xAccel;
+    public double tAccel;
     double t0, t1, t2, t3;
     double d0, d1, d2, d3;
     double v0, v1, v2, v3;
     double a0, a1, a2, a3;
+    double distance;
 
     public MotionProfile(int xTarget, int xI) {
         this.xTarget = xTarget;
@@ -55,15 +57,16 @@ public class MotionProfile {
         this.vMax = vMax;
         this.vI = vI;
         this.aMax = aMax;
-        if(xTarget < xI) {
+
+        xDecel = vI < 0 ? -(vI * vI) / (2.0 * aMax) : (vI * vI) / (2.0 * aMax);
+
+        if(xTarget < xI + xDecel) {
             flip = -1;
 //            decel = vI > 0;
         } else {
             flip = 1;
 //            decel = vI < 0;
         }
-
-        xDecel = vI < 0 ? -(vI * vI) / (2.0 * aMax) : (vI * vI) / (2.0 * aMax);
 
         if(vI < 0 && xTarget > xI + xDecel) {
             decel = true;
@@ -90,7 +93,7 @@ public class MotionProfile {
             // distance to accel
             d1 = 0.5 * aMax * t1 * t1;
 
-            double distance = Math.abs(xTarget - xI - xDecel);
+            distance = Math.abs(xTarget - xI - xDecel);
             double halfDistance = distance / 2.0;
 
             if(d1 > halfDistance) {
@@ -111,13 +114,15 @@ public class MotionProfile {
             t1 = Math.abs((vMax * flip - vI) / aMax);
             d1 = Math.abs((0.5 * aMax * t1 * t1) * flip + (vI * t1));
 
-            double xAccel = (vI * vI) / (2.0 * aMax);
-            double distance = Math.abs(xTarget - xI) + xAccel;
+            xAccel = (vI * vI) / (2.0 * aMax);
+            tAccel = Math.sqrt(2.0 * xAccel / aMax);
+
+            distance = Math.abs(xTarget - xI) + xAccel;
             double halfDistance = distance / 2.0;
 
             if(d1 > halfDistance - xAccel) {
                 d1 = halfDistance - xAccel;
-                t1 = Math.sqrt(2 * halfDistance / aMax);
+                t1 = Math.sqrt(2.0 * halfDistance / aMax) - tAccel;
             }
 
             vMax = aMax * t1 + Math.abs(vI);
@@ -126,6 +131,7 @@ public class MotionProfile {
             t2 = d2 / vMax;
 
             t3 = vMax / aMax;
+            d3 = Math.abs(vMax * t3 - (0.5 * aMax * t3 * t3));
         }
     }
 
@@ -167,6 +173,10 @@ public class MotionProfile {
         telemetry.addData("d2", d2);
         telemetry.addData("d3", d3);
         telemetry.addData("vI", vI);
+        telemetry.addData("decel", decel);
+        telemetry.addData("xDecel", xDecel);
+        telemetry.addData("xAccel", xAccel);
+        telemetry.addData("distance", distance);
         telemetry.addData("target position", xTarget);
         telemetry.addData("initial position", xI);
         telemetry.addData("max velocity", vMax);

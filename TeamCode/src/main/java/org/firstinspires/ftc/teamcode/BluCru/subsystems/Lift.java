@@ -25,7 +25,7 @@ public class Lift implements Subsystem{
 
     public LiftState liftState;
     private DcMotorEx liftMotor;
-    private DcMotorEx liftMotor2;
+//    private DcMotorEx liftMotor2;
     private PIDController liftPID;
 
     private double PID;
@@ -46,10 +46,10 @@ public class Lift implements Subsystem{
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // declares motors
         liftMotor = hardwareMap.get(DcMotorEx.class, "lift1");
-        liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
+//        liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+//        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         liftState = LiftState.AUTO;
 
@@ -62,18 +62,18 @@ public class Lift implements Subsystem{
 
         //set all motors to zero power
         liftMotor.setPower(0);
-        liftMotor2.setPower(0);
+//        liftMotor2.setPower(0);
 
         //set brake behavior
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // reset motor encoders
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motionProfileTimer = new ElapsedTime();
         motionProfile = new MotionProfile(0, 0, fastVelocity, fastAccel);
@@ -136,7 +136,7 @@ public class Lift implements Subsystem{
     public void setPower(double power) {
         power = Range.clip(power, -1, 1);
         liftMotor.setPower(power);
-        liftMotor2.setPower(power);
+//        liftMotor2.setPower(power);
     }
 
     public void setTargetPos(int pos) {
@@ -145,10 +145,10 @@ public class Lift implements Subsystem{
 
     public void resetEncoder() {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public int getTargetPos() {
@@ -161,8 +161,9 @@ public class Lift implements Subsystem{
 
     public double getCurrent() {
         double current1 = liftMotor.getCurrent(CurrentUnit.AMPS);
-        double current2 = liftMotor2.getCurrent(CurrentUnit.AMPS);
-        return (current1 + current2) / 2;
+        return current1;
+//        double current2 = liftMotor2.getCurrent(CurrentUnit.AMPS);
+//        return (current1 + current2) / 2;
     }
 
     public void telemetry(Telemetry telemetry) {
