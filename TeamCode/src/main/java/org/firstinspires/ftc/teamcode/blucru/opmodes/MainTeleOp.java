@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -80,13 +81,13 @@ public class MainTeleOp extends LinearOpMode {
         // driving
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
-            robot.drivetrain.resetIMU();
+            robot.drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
         } else if(gamepad1.x) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(0));
         } else {
             // otherwise, drive normally
             robot.drivetrain.drive(horz, vert, rotate);
