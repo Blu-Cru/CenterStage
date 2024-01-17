@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.subsystems;
+package org.firstinspires.ftc.teamcode.blucru.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.Constants;
+import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 
 @Config
 public class Lift implements Subsystem{

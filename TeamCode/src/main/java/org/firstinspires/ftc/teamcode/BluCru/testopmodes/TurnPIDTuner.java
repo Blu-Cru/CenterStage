@@ -1,17 +1,13 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
 
 @Config
 @TeleOp(name = "turn PID tuner", group = "TeleOp")

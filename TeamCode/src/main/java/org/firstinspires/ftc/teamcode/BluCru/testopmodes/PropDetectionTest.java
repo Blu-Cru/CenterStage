@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
-import org.firstinspires.ftc.teamcode.BluCru.vision.CVMaster;
+import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 
 @Autonomous(name="prop detection test", group="Linear Opmode")
 public class PropDetectionTest extends LinearOpMode {

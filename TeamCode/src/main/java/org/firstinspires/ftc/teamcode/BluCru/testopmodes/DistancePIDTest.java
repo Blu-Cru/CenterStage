@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.DistanceSensors;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.DistanceSensors;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
 
 @Config
 @TeleOp(name = "Distance test", group = "TeleOp")
