@@ -149,7 +149,7 @@ public class MainTeleOp extends LinearOpMode {
 
         // plane launcher
         if(gamepad2.dpad_right && !lastGamepad2.dpad_right) {
-            robot.intake.togglePlane();
+//            robot.intake.togglePlane();
         }
 
         lastGamepad1.copy(gamepad1);
