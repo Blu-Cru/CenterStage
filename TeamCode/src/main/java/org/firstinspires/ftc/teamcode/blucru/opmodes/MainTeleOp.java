@@ -32,7 +32,6 @@ public class MainTeleOp extends LinearOpMode {
 
     private Gamepad lastGamepad1;
     private Gamepad lastGamepad2;
-//    TeleOpStateMachine teleOpStateMachine;
     ElapsedTime totalTimer;
     double lastTime, deltaTime;
 
@@ -72,6 +71,38 @@ public class MainTeleOp extends LinearOpMode {
         robot.init();
     }
 
+    public void read() {
+        // DRIVING
+        double horz = Math.pow(gamepad1.left_stick_x, 3);
+        double vert = Math.pow(-gamepad1.left_stick_y, 3);
+        double rotate = Math.pow(-gamepad1.right_stick_x, 3);
+
+        // driving
+        // resets heading offset (face forwards)
+        if(gamepad1.right_stick_button) {
+            robot.drivetrain.resetIMU();
+            gamepad1.rumble(100);
+        }
+        if(gamepad1.b) {
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
+        } else if(gamepad1.x) {
+            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
+        } else {
+            // otherwise, drive normally
+            robot.drivetrain.drive(horz, vert, rotate);
+        }
+        switch(robotState) {
+            case RETRACT:
+                // set drive power
+
+                break;
+            case INTAKE:
+                break;
+            case OUTTAKE:
+                break;
+        }
+    }
+
     public void updateStates() {
         switch (robotState) {
             case RETRACT:
@@ -80,35 +111,10 @@ public class MainTeleOp extends LinearOpMode {
 //                    robot.intake.wristState = WristState.INTAKE;
                     robot.intake.intakeTimer.reset();
                 }
-                if(gamepad2.b) {
-                    robot.lift.liftState = LiftState.AUTO;
-                    robot.lift.setTargetPos(Constants.sliderLowPos);
-                    robotState = RobotState.LIFTING;
-                }
-                if(gamepad2.x) {
-                    robot.lift.liftState = LiftState.AUTO;
-                    robot.lift.setTargetPos(Constants.sliderMedPos);
-                    robotState = RobotState.LIFTING;
-                }
-                if(gamepad2.y) {
-                    robot.lift.liftState = LiftState.AUTO;
-                    robot.lift.setTargetPos(Constants.sliderHighPos);
-                    robotState = RobotState.LIFTING;
-                }
                 break;
             case INTAKE:
                 if(!(gamepad2.left_trigger > Constants.triggerSens) && lastGamepad2.left_trigger > Constants.triggerSens) {
 //                    robot.intake.wristState = WristState.RETRACT;
-                    robotState = RobotState.RETRACT;
-                }
-                break;
-            case LIFTING:
-                if(robot.lift.getCurrentPos() > Constants.sliderWristClearPos) {
-                    robotState = RobotState.OUTTAKE;
-//                    robot.intake.wristState = WristState.OUTTAKE;
-                }
-                if(gamepad2.a) {
-                    robot.lift.setTargetPos(0);
                     robotState = RobotState.RETRACT;
                 }
                 break;
@@ -162,13 +168,8 @@ public class MainTeleOp extends LinearOpMode {
                 robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
                 break;
             case INTAKE:
-
-
                 robot.lift.setTargetPos(Constants.sliderIntakePos);
                 robot.drivetrain.setDrivePower(Constants.driveSpeedIntake);
-                break;
-            case LIFTING:
-                robot.drivetrain.setDrivePower(Constants.driveSpeedLifting);
                 break;
             case OUTTAKE:
                 robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);

@@ -5,10 +5,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
@@ -17,7 +19,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
     public static double turnP = 2.6, turnI = 0, turnD = 0.15;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
-    public static double drivePowerIntake = 0.4, drivePowerRetract = 0.8, drivePowerLifting = 0.6, drivePowerOuttake = 0.4;
+    public static double DRIVE_POWER_INTAKE = 0.4, DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
     public static double angleTolerance = 0.5; // radians
 
     public double drivePower = 0.5;
@@ -171,7 +173,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void setDrivePower(double power) {
-        drivePower = power;
+        drivePower = Range.clip(power, 0.0, 1.0);
     }
 
     public void setDistancePID(double p, double i, double d) {
@@ -199,6 +201,31 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             heading += 2*Math.PI;
         }
         return heading;
+    }
+
+    public void setDrivePower(RobotState robotState, Gamepad gamepad1) {
+        double drivePowerMultiplier;
+        if(gamepad1.left_trigger > 0.1) {
+            drivePowerMultiplier = 1.0 - (0.5 * gamepad1.left_trigger);
+        } else if (gamepad1.right_trigger > 0.1) {
+            drivePowerMultiplier = 1.0 + (0.3 * gamepad1.right_trigger);
+        } else {
+            drivePowerMultiplier = 1.0;
+        }
+
+        double power = 0.0;
+        switch (robotState) {
+            case RETRACT:
+                power = DRIVE_POWER_RETRACT * drivePowerMultiplier;
+                break;
+            case INTAKE:
+                power = DRIVE_POWER_INTAKE * drivePowerMultiplier;
+                break;
+            case OUTTAKE:
+                power = DRIVE_POWER_OUTTAKE * drivePowerMultiplier;
+                break;
+        }
+        setDrivePower(power);
     }
 
     // resets IMU (intake facing forwards)
