@@ -19,6 +19,9 @@ public class Lift implements Subsystem{
     public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
     public static int liftMinPos = 0, liftMaxPos = 2000;
 
+    public static double TICKS_PER_REV = 384.5;
+    public static double PULLEY_RADIUS = 1.25; // inches
+
     public static double fastVelocity = 10000.0, fastAccel = 20000.0;
     public static double slowVelocity = 5000.0, slowAccel = 10000.0;
 
@@ -81,7 +84,6 @@ public class Lift implements Subsystem{
     }
 
     public void write() {
-        currentPos = getCurrentPos();
         PID = liftPID.calculate(currentPos, targetPos);
 
         switch(liftState) {
@@ -179,6 +181,10 @@ public class Lift implements Subsystem{
         double current1 = liftMotor.getCurrent(CurrentUnit.AMPS);
         double current2 = liftMotor2.getCurrent(CurrentUnit.AMPS);
         return (current1 + current2) / 2;
+    }
+
+    public double toTicks(double inches) {
+        return inches / (2 * Math.PI * PULLEY_RADIUS) * TICKS_PER_REV;
     }
 
     public void telemetry(Telemetry telemetry) {
