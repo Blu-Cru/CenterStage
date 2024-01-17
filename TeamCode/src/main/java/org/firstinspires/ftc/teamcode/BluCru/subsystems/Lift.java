@@ -38,7 +38,7 @@ public class Lift implements Subsystem{
 
     private ElapsedTime liftStallTimer;
 
-    private MotionProfiler motionProfiler;
+    private MotionProfile motionProfile;
     private ElapsedTime liftMotionProfileTimer;
 
     private double dt;
@@ -79,7 +79,7 @@ public class Lift implements Subsystem{
 
         liftStallTimer = new ElapsedTime();
         liftMotionProfileTimer = new ElapsedTime();
-        motionProfiler = new MotionProfiler(0, 0, fastVelocity, fastAccel);
+        motionProfile = new MotionProfile(0, 0, fastVelocity, fastAccel);
 
         lastTime = System.currentTimeMillis();
     }
@@ -106,7 +106,7 @@ public class Lift implements Subsystem{
                 }
                 break;
             case MoPro:
-                targetPos = motionProfiler.calculateTargetPosition(liftMotionProfileTimer.seconds());
+                targetPos = motionProfile.calculateTargetPosition(liftMotionProfileTimer.seconds());
                 if(targetPos == 0 && currentPos < 0) {
                     power = 0;
                 } else if(Math.abs(targetPos - currentPos) < 10) {
@@ -135,18 +135,18 @@ public class Lift implements Subsystem{
 
     public void setMotionProfileTargetPosition(int targetPos) {
         liftState = LiftState.MoPro;
-        motionProfiler = new MotionProfiler(targetPos, currentPos, velocity, fastVelocity, fastAccel);
+        motionProfile = new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel);
         liftMotionProfileTimer.reset();
         liftPID.reset();
     }
 
     public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
-        motionProfiler.setConstraints(maxVelocity, maxAcceleration);
+        motionProfile.setConstraints(maxVelocity, maxAcceleration);
     }
 
-    public void setMotionProfiler(MotionProfiler profile) {
+    public void setMotionProfiler(MotionProfile profile) {
         liftState = LiftState.MoPro;
-        motionProfiler = profile;
+        motionProfile = profile;
         liftMotionProfileTimer.reset();
         liftPID.reset();
     }
@@ -208,6 +208,6 @@ public class Lift implements Subsystem{
     }
 
     public void motionProfileTelemetry(Telemetry telemetry) {
-        motionProfiler.telemetry(telemetry);
+        motionProfile.telemetry(telemetry);
     }
 }

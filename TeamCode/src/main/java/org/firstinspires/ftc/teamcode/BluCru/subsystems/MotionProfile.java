@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-public class MotionProfiler {
+public class MotionProfile {
     public double vMax;
     public double aMax;
     public int xTarget;
@@ -18,7 +18,7 @@ public class MotionProfiler {
     double v0, v1, v2, v3;
     double a0, a1, a2, a3;
 
-    public MotionProfiler(int xTarget, int xI) {
+    public MotionProfile(int xTarget, int xI) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = 1000;
@@ -32,7 +32,7 @@ public class MotionProfiler {
         calculate();
     }
 
-    public MotionProfiler(int xTarget, int xI, double vMax, double aMax) {
+    public MotionProfile(int xTarget, int xI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
@@ -48,7 +48,7 @@ public class MotionProfiler {
         calculate();
     }
 
-    public MotionProfiler(int xTarget, int xI, double vI, double vMax, double aMax) {
+    public MotionProfile(int xTarget, int xI, double vI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
