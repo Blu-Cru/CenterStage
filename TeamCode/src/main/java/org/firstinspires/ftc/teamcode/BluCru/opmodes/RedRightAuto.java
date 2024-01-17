@@ -1,16 +1,15 @@
-package org.firstinspires.ftc.teamcode.BluCru.opmodes;
+package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
-import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
-import org.firstinspires.ftc.teamcode.BluCru.states.Path;
-import org.firstinspires.ftc.teamcode.BluCru.states.Side;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.BluCru.trajectories.Trajectories;
-import org.firstinspires.ftc.teamcode.BluCru.vision.CVMaster;
+import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.states.Path;
+import org.firstinspires.ftc.teamcode.blucru.states.Side;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
+import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "Red Right Auto", group = "BluCru")

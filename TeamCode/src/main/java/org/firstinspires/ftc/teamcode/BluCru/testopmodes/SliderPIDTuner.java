@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
 
 @Config
 @Disabled

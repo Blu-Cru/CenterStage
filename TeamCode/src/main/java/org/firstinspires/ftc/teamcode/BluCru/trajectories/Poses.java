@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.BluCru.trajectories;
+package org.firstinspires.ftc.teamcode.blucru.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
 
 public class Poses {
     public static Pose2d closeStartingPose;

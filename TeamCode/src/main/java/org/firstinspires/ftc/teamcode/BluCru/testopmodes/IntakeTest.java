@@ -1,12 +1,11 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.Constants;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
 
 @TeleOp(name = "intake test", group = "TeleOp")
 public class IntakeTest extends LinearOpMode {

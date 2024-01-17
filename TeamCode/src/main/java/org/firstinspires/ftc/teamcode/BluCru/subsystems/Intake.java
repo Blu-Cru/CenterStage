@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.subsystems;
+package org.firstinspires.ftc.teamcode.blucru.subsystems;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,10 +7,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
+import org.firstinspires.ftc.teamcode.blucru.Constants;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BluCru.states.WristState;
+import org.firstinspires.ftc.teamcode.blucru.states.WristState;
 
 public class Intake implements Subsystem{
     public WristState wristState;
