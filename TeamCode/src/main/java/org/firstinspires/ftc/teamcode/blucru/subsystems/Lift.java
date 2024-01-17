@@ -41,7 +41,7 @@ public class Lift implements Subsystem{
     private LiftMotionProfile liftMotionProfile;
     private ElapsedTime liftMotionProfileTimer;
 
-    public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Lift(HardwareMap hardwareMap) {
         // declares motors
         liftMotor = hardwareMap.get(DcMotorEx.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");

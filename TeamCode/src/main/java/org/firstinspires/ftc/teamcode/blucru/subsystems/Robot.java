@@ -21,8 +21,8 @@ public class Robot {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
-        lift = new Lift(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+        lift = new Lift(hardwareMap);
+        intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         hanger = new Hanger(hardwareMap, telemetry);
 

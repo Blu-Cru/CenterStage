@@ -28,8 +28,8 @@ public class SliderPIDTuner extends LinearOpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        intake = new Intake(hardwareMap, telemetry);
-        lift = new Lift(hardwareMap, telemetry);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
         lift.init();
         intake.init();
 

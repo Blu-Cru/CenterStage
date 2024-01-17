@@ -15,7 +15,7 @@ public class IntakeTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake(hardwareMap, telemetry);
+        intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         intake.init();
         drivetrain.init();

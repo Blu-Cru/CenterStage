@@ -14,7 +14,7 @@ public class Plane implements Subsystem{
     Servo plane;
     ServoControllerEx planeController;
 
-    boolean planeReleased = false;
+    boolean released = false;
 
     public Plane(HardwareMap hardwareMap) {
         plane = hardwareMap.get(Servo.class, "plane");
@@ -32,7 +32,7 @@ public class Plane implements Subsystem{
 
     @Override
     public void write() {
-        if(planeReleased) {
+        if(released) {
             planeController.pwmEnable();
             plane.setPosition(PLANE_RELEASED);
         } else {
@@ -41,10 +41,10 @@ public class Plane implements Subsystem{
     }
 
     public void releasePlane() {
-        planeReleased = true;
+        released = true;
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("plane released", planeReleased);
+        telemetry.addData("plane released", released);
     }
 }

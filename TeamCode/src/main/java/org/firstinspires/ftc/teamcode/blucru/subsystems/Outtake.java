@@ -11,21 +11,15 @@ public class Outtake implements Subsystem{
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT + 0.2;
 
-    public static double TURRET_CENTER = 0.5;
-    // 90 degrees change
-    public static double TURRET_LEFT = TURRET_CENTER - 0.3;
-    public static double TURRET_RIGHT = TURRET_CENTER + 0.3;
-
     public static double BACK_LOCKED = 0.5;
     public static double BACK_UNLOCKED = BACK_LOCKED + 0.1;
 
     public static double FRONT_LOCKED = 0.5;
     public static double FRONT_UNLOCKED = FRONT_LOCKED - 0.1;
 
-    public final double TURRET_RADIUS = 5.984; // inches
-
-    Servo wrist, turret, backLock, frontLock;
+    Servo wrist, backLock, frontLock;
     Lift lift;
+    Turret turret;
 
     boolean wristRetracted;
     double wristPos;
@@ -34,9 +28,11 @@ public class Outtake implements Subsystem{
 
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
-        turret = hardwareMap.get(Servo.class, "turret");
         backLock = hardwareMap.get(Servo.class, "back");
         frontLock = hardwareMap.get(Servo.class, "front");
+
+        lift = new Lift(hardwareMap);
+        turret = new Turret(hardwareMap);
 
         wristRetracted = true;
         wristPos = WRIST_RETRACT;
@@ -44,23 +40,29 @@ public class Outtake implements Subsystem{
 
     public void init() {
         lift.init();
+        turret.init();
         wrist.setPosition(wristPos);
-        turret.setPosition(TURRET_CENTER);
         backLock.setPosition(BACK_LOCKED);
         frontLock.setPosition(FRONT_LOCKED);
     }
 
     public void read() {
         lift.read();
+        turret.read();
         wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
     }
 
     public void write() {
         lift.write();
+        turret.write();
         wrist.setPosition(wristPos);
     }
 
     public void telemetry(Telemetry telemetry) {
-
+        lift.telemetry(telemetry);
+        turret.telemetry(telemetry);
+        telemetry.addData("wrist retracted", wristRetracted);
+        telemetry.addData("wrist pos", wristPos);
+        telemetry.addData("target height", targetHeight);
     }
 }

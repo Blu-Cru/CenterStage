@@ -26,7 +26,7 @@ public class TurnPIDTuner extends LinearOpMode {
         drivetrain.init();
         drivetrain.drivePower = 1;
 
-        intake = new Intake(hardwareMap, telemetry);
+        intake = new Intake(hardwareMap);
         intake.init();
 
         waitForStart();

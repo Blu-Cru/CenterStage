@@ -27,8 +27,8 @@ public class LiftTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        lift = new Lift(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+        lift = new Lift(hardwareMap);
+        intake = new Intake(hardwareMap);
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
