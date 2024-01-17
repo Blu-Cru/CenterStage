@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.blucru.subsystems.LiftMotionProfile;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.MotionProfiler;
 
 @Config
 @TeleOp(name = "lift test", group = "TeleOp")
@@ -62,7 +62,7 @@ public class LiftTest extends LinearOpMode {
             if(run != lastRun || (gamepad1.b && !lastGamepad1.b)) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(testFinal, testInitial, testVI, testVelocity, testAccel)))
+                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfiler(testFinal, testInitial, testVI, testVelocity, testAccel)))
 //                                new WaitCommand(2000),
 //                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
@@ -72,7 +72,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.x && !lastGamepad1.x) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(0, 1000, -500, maxVelocity, maxAcceleration)))
+                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfiler(0, 1000, -500, maxVelocity, maxAcceleration)))
                         )
                 );
             }
@@ -80,7 +80,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.y && !lastGamepad1.y) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfile(new LiftMotionProfile(1000, 0, 0, maxVelocity, maxAcceleration)))
+                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfiler(1000, 0, 0, maxVelocity, maxAcceleration)))
                         )
                 );
             }

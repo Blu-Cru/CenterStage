@@ -5,10 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-public class LiftMotionProfile {
-    public final double FAST_VELOCITY = 10000;
-    public final double FAST_ACCEL = 10000;
-
+public class MotionProfiler {
     public double vMax;
     public double aMax;
     public int xTarget;
@@ -21,7 +18,7 @@ public class LiftMotionProfile {
     double v0, v1, v2, v3;
     double a0, a1, a2, a3;
 
-    public LiftMotionProfile(int xTarget, int xI) {
+    public MotionProfiler(int xTarget, int xI) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = 1000;
@@ -32,9 +29,10 @@ public class LiftMotionProfile {
         } else {
             flip = 1;
         }
+        calculate();
     }
 
-    public LiftMotionProfile(int xTarget, int xI, double vMax, double aMax) {
+    public MotionProfiler(int xTarget, int xI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
@@ -47,9 +45,10 @@ public class LiftMotionProfile {
             flip = 1;
             decel = vI < 0;
         }
+        calculate();
     }
 
-    public LiftMotionProfile(int xTarget, int xI, double vI, double vMax, double aMax) {
+    public MotionProfiler(int xTarget, int xI, double vI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
@@ -117,31 +116,9 @@ public class LiftMotionProfile {
     }
 
     public int calculateTargetPosition(double time) {
-//        t1 = Math.abs((vMax * flip - vI) / aMax);
-//        d1 = Math.abs((0.5 * aMax * t1 * t1) * flip + (vI * t1));
-//
-//        // 0 is the period before initial, when the lift accelerates from 0 velo to vi
-//        t0 = Math.abs(vI / aMax);
-//        d0 = (vI * vI) / (2.0 * aMax);
-//
-//        double distance = Math.abs(xTarget - xI) + d0;
-//        double halfDistance = distance / 2.0;
-//
-//        if(d1 + d0 > halfDistance) {
-//            d1 = halfDistance - d0;
-//            t1 = Math.sqrt(2 * halfDistance / aMax) - t0;
-//        }
-//
-//        vMax = aMax * t1 + vI;
-//
-//        // 2 is cruise period, lift is at max velo
-//        d2 = distance - 2 * (d0 + d1);
-//        t2 = d2 / vMax;
-//
-//        t3 = vMax / aMax;
-
         int instantTargetPos;
         double dt;
+
         if(time < t0) {
             dt = time;
             instantTargetPos = (int) ((vI * dt) + ((aMax * dt * dt / 2.0) * flip) + xI);
