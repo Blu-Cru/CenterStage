@@ -110,7 +110,6 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 if(gamepad2.a) {
                     robot.lift.setTargetPos(0);
-                    robot.lift.resetStallTimer();
                     robotState = RobotState.RETRACT;
                 }
                 break;

@@ -153,8 +153,6 @@ public class Trajectories {
                             robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.resetStallTimer();
-                            robot.lift.liftState = LiftState.RETRACT;
                             robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)
@@ -193,8 +191,6 @@ public class Trajectories {
                             robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.resetStallTimer();
-                            robot.lift.liftState = LiftState.RETRACT;
                             robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)
@@ -234,8 +230,6 @@ public class Trajectories {
                             robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.resetStallTimer();
-                            robot.lift.liftState = LiftState.RETRACT;
                             robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)
@@ -273,8 +267,6 @@ public class Trajectories {
                         robot.intake.toggleWrist();
                     })
                     .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                        robot.lift.resetStallTimer();
-                        robot.lift.liftState = LiftState.RETRACT;
                         robot.lift.setTargetPos(0);
                     })
                     .waitSeconds(2)
@@ -315,8 +307,6 @@ public class Trajectories {
                             robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.resetStallTimer();
-                            robot.lift.liftState = LiftState.RETRACT;
                             robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)
@@ -352,8 +342,6 @@ public class Trajectories {
                             robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.resetStallTimer();
-                            robot.lift.liftState = LiftState.RETRACT;
                             robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)

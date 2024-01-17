@@ -54,7 +54,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.a && !lastGamepad1.a) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
+                                new InstantCommand(() -> lift.setMotionProfileTargetPos(0))
                         )
                 );
             }
@@ -62,7 +62,7 @@ public class LiftTest extends LinearOpMode {
             if(run != lastRun || (gamepad1.b && !lastGamepad1.b)) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfile(testFinal, testInitial, testVI, testVelocity, testAccel)))
+                                new InstantCommand(() -> lift.setMotionProfile(new MotionProfile(testFinal, testInitial, testVI, testVelocity, testAccel)))
 //                                new WaitCommand(2000),
 //                                new InstantCommand(() -> lift.setMotionProfileTargetPosition(0))
                         )
@@ -72,7 +72,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.x && !lastGamepad1.x) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfile(0, 1000, -500, maxVelocity, maxAcceleration)))
+                                new InstantCommand(() -> lift.setMotionProfile(new MotionProfile(0, 1000, -500, maxVelocity, maxAcceleration)))
                         )
                 );
             }
@@ -80,7 +80,7 @@ public class LiftTest extends LinearOpMode {
             if(gamepad1.y && !lastGamepad1.y) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.setMotionProfiler(new MotionProfile(1000, 0, 0, maxVelocity, maxAcceleration)))
+                                new InstantCommand(() -> lift.setMotionProfile(new MotionProfile(1000, 0, 0, maxVelocity, maxAcceleration)))
                         )
                 );
             }
@@ -91,7 +91,7 @@ public class LiftTest extends LinearOpMode {
             }
             if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
                 lift.liftState = LiftState.AUTO;
-                lift.setMotionProfileTargetPosition(lift.inverseP(lift.power));
+                lift.setMotionProfileTargetPos(lift.inverseP(lift.power));
             }
 
             lastRun = run;
