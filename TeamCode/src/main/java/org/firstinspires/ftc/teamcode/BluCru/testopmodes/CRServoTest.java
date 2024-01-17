@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.BluCru.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
 @Config
 @TeleOp(name = "crservo test", group = "TeleOp")

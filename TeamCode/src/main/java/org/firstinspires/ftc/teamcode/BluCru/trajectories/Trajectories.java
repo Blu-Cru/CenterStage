@@ -1,14 +1,14 @@
-package org.firstinspires.ftc.teamcode.BluCru.trajectories;
+package org.firstinspires.ftc.teamcode.blucru.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
-import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
-import org.firstinspires.ftc.teamcode.BluCru.states.Side;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.Constants;
+import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.states.Side;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;

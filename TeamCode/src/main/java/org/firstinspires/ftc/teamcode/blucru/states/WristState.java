@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.states;
+package org.firstinspires.ftc.teamcode.blucru.states;
 
 public enum WristState {
     RETRACT,

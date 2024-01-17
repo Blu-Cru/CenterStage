@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BluCru.opmodes;
+package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
-import org.firstinspires.ftc.teamcode.BluCru.states.LiftState;
-import org.firstinspires.ftc.teamcode.BluCru.states.RobotState;
-import org.firstinspires.ftc.teamcode.BluCru.states.WristState;
-import org.firstinspires.ftc.teamcode.BluCru.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.Constants;
+import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.states.WristState;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 
 
 /*

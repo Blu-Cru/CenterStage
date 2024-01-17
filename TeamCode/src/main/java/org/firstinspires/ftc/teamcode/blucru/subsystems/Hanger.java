@@ -1,14 +1,10 @@
-package org.firstinspires.ftc.teamcode.BluCru.subsystems;
+package org.firstinspires.ftc.teamcode.blucru.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BluCru.Constants;
 
 @Config
 public class Hanger implements Subsystem {

@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.BluCru.vision;
+package org.firstinspires.ftc.teamcode.blucru.vision;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.BluCru.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
