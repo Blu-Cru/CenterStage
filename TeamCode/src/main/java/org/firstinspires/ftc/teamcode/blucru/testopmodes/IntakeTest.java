@@ -25,17 +25,6 @@ public class IntakeTest extends LinearOpMode {
             vert = -gamepad1.left_stick_y;
             rotate = -gamepad1.right_stick_x;
 
-            if(gamepad1.left_trigger > 0.1) {
-                intake.setOuttakeRollersPower(gamepad1.left_trigger);
-                intake.stopOuttakeWrist();
-            } else if (gamepad1.right_trigger > 0.1) {
-                intake.setOuttakeRollersPower(-gamepad1.right_trigger);
-                intake.stopOuttakeWrist();
-            } else {
-                intake.setOuttakeRollersPower(0);
-                intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
-            }
-
             intake.write();
             drivetrain.drive(horz, vert, rotate);
 

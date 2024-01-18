@@ -12,13 +12,17 @@ public class Outtake implements Subsystem{
     public static double WRIST_OUTTAKE = WRIST_RETRACT + 0.2;
 
     public static double BACK_LOCKED = 0.5;
-    public static double BACK_UNLOCKED = BACK_LOCKED + 0.1;
+    public static double BACK_UNLOCKED = BACK_LOCKED + 0.2;
 
     public static double FRONT_LOCKED = 0.5;
-    public static double FRONT_UNLOCKED = FRONT_LOCKED - 0.1;
+    public static double FRONT_UNLOCKED = FRONT_LOCKED - 0.2;
+
+    public static double LOW_HEIGHT = 12.0; // inches
+    public static double MED_HEIGHT = 15.0; // inches
+    public static double HIGH_HEIGHT = 18.0;
 
     Servo wrist, backLock, frontLock;
-    Lift lift;
+    public Lift lift;
     Turret turret;
 
     boolean wristRetracted;
@@ -56,6 +60,11 @@ public class Outtake implements Subsystem{
         lift.write();
         turret.write();
         wrist.setPosition(wristPos);
+    }
+
+    public void setManualSlidePower(double power) {
+        lift.power = power;
+        targetHeight = targetHeight + lift.toInches(lift.inverseP(power));
     }
 
     public void telemetry(Telemetry telemetry) {

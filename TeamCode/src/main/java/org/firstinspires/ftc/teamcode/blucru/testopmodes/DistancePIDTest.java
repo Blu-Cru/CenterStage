@@ -34,7 +34,7 @@ public class DistancePIDTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
 
-            drivetrain.distanceSensors.write();
+//            drivetrain.distanceSensors.write();
 
             if(gamepad1.left_bumper && gamepad1.right_bumper) {
                 drivetrain.resetIMU();
@@ -56,7 +56,7 @@ public class DistancePIDTest extends LinearOpMode {
             drivetrain.setDistancePID(distanceP, distanceI, distanceD);
 
             distanceSensors.telemetry(telemetry);
-            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
+//            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
             telemetry.update();
         }
     }

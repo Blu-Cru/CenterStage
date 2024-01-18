@@ -10,10 +10,12 @@ public class Robot {
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
 
-    public Lift lift;
+    public Outtake outtake;
     public Intake intake;
     public Drivetrain drivetrain;
     public Hanger hanger;
+    public Plane plane;
+    PurplePixelHolder purplePixelHolder;
 
     private ArrayList<Subsystem> subsystems;
 
@@ -21,16 +23,20 @@ public class Robot {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
-        lift = new Lift(hardwareMap);
+        outtake = new Outtake(hardwareMap);
         intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         hanger = new Hanger(hardwareMap, telemetry);
+        plane = new Plane(hardwareMap);
+        purplePixelHolder = new PurplePixelHolder(hardwareMap);
 
         subsystems = new ArrayList<>();
-        subsystems.add(lift);
+        subsystems.add(outtake);
         subsystems.add(intake);
         subsystems.add(drivetrain);
         subsystems.add(hanger);
+        subsystems.add(plane);
+        subsystems.add(purplePixelHolder);
     }
 
     // initializes subsystems

@@ -134,26 +134,26 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(45, -29*reflect), 0)
                         .setVelConstraint(slowVelocity)
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderAutoPos);
+                            robot.outtake.lift.liftState = LiftState.AUTO;
+                            robot.outtake.lift.setTargetPos(Constants.sliderAutoPos);
                         })
-                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-                            robot.intake.toggleWrist();
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                            robot.intake.toggleWrist();
+//                        })
                         .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                             robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderLowPos);
                             robot.intake.outtakeRollersPower = 0;
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                            robot.intake.toggleWrist();
+//                            robot.intake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.setTargetPos(0);
+//                            robot.lift.setTargetPos(0);
                         })
                         .waitSeconds(2)
                         .build();
@@ -171,28 +171,28 @@ public class Trajectories {
                     .setVelConstraint(normalVelocity)
                     .splineToConstantHeading(new Vector2d(45, -29*reflect), Math.toRadians(0))
                         .setVelConstraint(slowVelocity)
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderAutoPos);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                            robot.intake.outtakeRollersPower = 0;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.setTargetPos(0);
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderAutoPos);
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.intake.outtakeRollersPower = 0;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
+//                            robot.lift.setTargetPos(0);
+//                        })
                         .waitSeconds(2)
                         .build();
                 break;
@@ -210,28 +210,28 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(20, -36 * reflect), 0)
                         .splineToSplineHeading(new Pose2d(45, -36*reflect, Math.toRadians(180)), 0)
                         .setVelConstraint(slowVelocity)
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderAutoPos);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                            robot.intake.outtakeRollersPower = 0;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.setTargetPos(0);
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderAutoPos);
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.intake.outtakeRollersPower = 0;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
+//                            robot.lift.setTargetPos(0);
+//                        })
                         .waitSeconds(2)
                         .build();
                 break;
@@ -247,28 +247,28 @@ public class Trajectories {
                     .setVelConstraint(normalVelocity)
                     .splineToConstantHeading(new Vector2d(45, -36 * reflect), Math.toRadians(0))
                     .setVelConstraint(slowVelocity)
-                    .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                        robot.lift.liftState = LiftState.AUTO;
-                        robot.lift.setTargetPos(Constants.sliderAutoPos);
-                    })
-                    .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                        robot.intake.toggleWrist();
-                    })
-                    .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
-                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                        robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                    })
-                    .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                        robot.lift.liftState = LiftState.AUTO;
-                        robot.lift.setTargetPos(Constants.sliderLowPos);
-                        robot.intake.outtakeRollersPower = 0;
-                    })
-                    .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                        robot.intake.toggleWrist();
-                    })
-                    .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                        robot.lift.setTargetPos(0);
-                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                        robot.lift.liftState = LiftState.AUTO;
+//                        robot.lift.setTargetPos(Constants.sliderAutoPos);
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+//                        robot.intake.toggleWrist();
+//                    })
+//                    .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
+//                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                        robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                        robot.lift.liftState = LiftState.AUTO;
+//                        robot.lift.setTargetPos(Constants.sliderLowPos);
+//                        robot.intake.outtakeRollersPower = 0;
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+//                        robot.intake.toggleWrist();
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
+//                        robot.lift.setTargetPos(0);
+//                    })
                     .waitSeconds(2)
                     .build();
                 break;
@@ -287,28 +287,28 @@ public class Trajectories {
                         .splineToSplineHeading(new Pose2d(32, -52 * reflect, Math.toRadians(180)), 0)
                         .splineToConstantHeading(new Vector2d(45, -43*reflect), 0)
                         .setVelConstraint(slowVelocity)
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderAutoPos);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .splineToConstantHeading(depositClosePose.vec(), Math.toRadians(0))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                            robot.intake.outtakeRollersPower = 0;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.setTargetPos(0);
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderAutoPos);
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .splineToConstantHeading(depositClosePose.vec(), Math.toRadians(0))
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.intake.outtakeRollersPower = 0;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
+//                            robot.lift.setTargetPos(0);
+//                        })
                         .waitSeconds(2)
                         .build();
                 break;
@@ -322,28 +322,28 @@ public class Trajectories {
                         .setVelConstraint(normalVelocity)
                         .splineToConstantHeading(new Vector2d(45, -43*reflect), Math.toRadians(0))
                         .setVelConstraint(slowVelocity)
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderAutoPos);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .splineToConstantHeading(depositClosePose.vec(), Math.toRadians(0))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                            robot.lift.liftState = LiftState.AUTO;
-                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                            robot.intake.outtakeRollersPower = 0;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
-                            robot.intake.toggleWrist();
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
-                            robot.lift.setTargetPos(0);
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderAutoPos);
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .splineToConstantHeading(depositClosePose.vec(), Math.toRadians(0))
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                            robot.lift.liftState = LiftState.AUTO;
+//                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.intake.outtakeRollersPower = 0;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
+//                            robot.intake.toggleWrist();
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(1.1,() -> {
+//                            robot.lift.setTargetPos(0);
+//                        })
                         .waitSeconds(2)
                         .build();
                 break;

@@ -43,14 +43,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private PIDController turnPID;
     public double targetHeading = 0;
 
-    public DistanceSensors distanceSensors;
+//    public DistanceSensors distanceSensors;
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
         turnPID = new PIDController(turnP, turnI, turnD);
         distancePID = new PIDController(distanceP, distanceI, distanceD);
-        distanceSensors = new DistanceSensors(hardwareMap);
+//        distanceSensors = new DistanceSensors(hardwareMap);
     }
 
     public void init() {
@@ -142,14 +142,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-        distanceSensors.read();
+//        distanceSensors.read();
         Vector2d input;
 
 //        if(heading - distanceSensors.angle < angleTolerance) {
 //            x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
 //        }
 
-        x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
+//        x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
         if (fieldCentric) {
             input = new Vector2d(x, y).rotated( - heading);
         } else {
@@ -167,10 +167,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
     }
 
-    public double getDistanceSensorAngleError(double targetHeading) {
-        distanceSensors.read();
-        return heading - targetHeading - distanceSensors.angle;
-    }
+//    public double getDistanceSensorAngleError(double targetHeading) {
+//        distanceSensors.read();
+//        return heading - targetHeading - distanceSensors.angle;
+//    }
 
     public void setDrivePower(double power) {
         drivePower = Range.clip(power, 0.0, 1.0);

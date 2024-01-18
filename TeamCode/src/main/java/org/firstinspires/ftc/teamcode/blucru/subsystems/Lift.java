@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -21,7 +22,7 @@ public class Lift implements Subsystem{
     public final int tolerance = 5; // ticks
 
     public static double TICKS_PER_REV = 384.5;
-    public static double PULLEY_RADIUS = 1.25; // inches
+    public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
 
     public static double fastVelocity = 10000.0, fastAccel = 20000.0;
     public static double slowVelocity = 2500.0, slowAccel = 5000.0;
@@ -51,8 +52,8 @@ public class Lift implements Subsystem{
         liftMotor = hardwareMap.get(DcMotorEx.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
-        liftMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+        liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
 
         liftState = LiftState.AUTO;
 
@@ -173,7 +174,11 @@ public class Lift implements Subsystem{
     }
 
     public double toTicks(double inches) {
-        return inches / (2 * Math.PI * PULLEY_RADIUS) * TICKS_PER_REV;
+        return inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV;
+    }
+
+    public double toInches(double ticks) {
+        return ticks * PULLEY_CIRCUMFERENCE / TICKS_PER_REV;
     }
 
     public void telemetry(Telemetry telemetry) {
