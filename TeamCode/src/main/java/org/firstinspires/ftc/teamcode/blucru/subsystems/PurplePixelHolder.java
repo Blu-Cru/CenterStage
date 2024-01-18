@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PurplePixelHolder implements Subsystem{
-    public static double RETRACTED = 0.5;
     public static double EXTENDED = 0.5;
+    public static double RETRACTED = EXTENDED - 0.333;
 
     private Servo purplePixelHolder;
 

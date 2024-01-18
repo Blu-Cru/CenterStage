@@ -21,10 +21,12 @@ public class DriveTest extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
         drivetrain.init();
         drivetrain.fieldCentric = true;
-        drivetrain.drivePower = 1;
+        drivetrain.drivePower = 0.5;
 
         waitForStart();
         while(opModeIsActive()) {
+            drivetrain.read();
+
             vert = Math.pow(-gamepad1.left_stick_y, 3);
             horz = Math.pow(gamepad1.left_stick_x, 3);
             rotate = Math.pow(-gamepad1.right_stick_x, 3);

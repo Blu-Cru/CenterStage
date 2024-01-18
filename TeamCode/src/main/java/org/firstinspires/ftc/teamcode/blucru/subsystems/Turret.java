@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Turret implements Subsystem{
     public final double TURRET_RADIUS = 5.984; // inches
     public final double BUCKET_WIDTH = 1.733; // inches
-    public static double TURRET_CENTER = 0.5; // position of turret servo at 270 degrees
+    public static double TURRET_CENTER = 0.52; // position of turret servo at 270 degrees
 
     private Servo turret;
 
@@ -37,7 +37,7 @@ public class Turret implements Subsystem{
     }
 
     public double toTicks(double targetAngle) {
-        double rawTicks = ((targetAngle - 270.0) / 300.0) + TURRET_CENTER;
+        double rawTicks = ((targetAngle - 270.0) /270.0) + TURRET_CENTER;
         return Range.clip(rawTicks, 0.0, 1.0);
     }
 

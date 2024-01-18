@@ -138,7 +138,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
         lastDriveVector = driveVector;
 
-        return driveVector;
+        return input;
     }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
@@ -244,6 +244,5 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("dt", dt);
         telemetry.addData("last drive vector", lastDriveVector);
-        telemetry.addData("field centric", fieldCentric);
     }
 }

@@ -35,7 +35,7 @@ public class IntakeWrist implements Subsystem{
     }
 
     public double toTicks(double targetAngle) {
-        double rawTicks = (-(targetAngle) / 300.0) + PARALLEL_POS;
+        double rawTicks = (-(targetAngle) / 270.0) + PARALLEL_POS;
         return Range.clip(rawTicks, 0.0, 1.0);
     }
 

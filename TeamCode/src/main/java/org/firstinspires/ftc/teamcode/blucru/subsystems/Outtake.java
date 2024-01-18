@@ -7,15 +7,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.5;
+    public static double WRIST_RETRACT = 0.31;
     // 60 degrees change
-    public static double WRIST_OUTTAKE = WRIST_RETRACT + 0.2;
+    public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
     public static double BACK_LOCKED = 0.5;
     public static double BACK_UNLOCKED = BACK_LOCKED + 0.2;
 
-    public static double FRONT_LOCKED = 0.5;
-    public static double FRONT_UNLOCKED = FRONT_LOCKED - 0.2;
+    public static double FRONT_LOCKED = 0.62;
+    public static double FRONT_UNLOCKED = FRONT_LOCKED + 0.22;
 
     public static double LOW_HEIGHT = 12.0; // inches
     public static double MED_HEIGHT = 15.0; // inches

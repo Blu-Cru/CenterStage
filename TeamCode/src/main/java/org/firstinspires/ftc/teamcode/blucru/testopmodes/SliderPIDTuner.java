@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
 
 @Config
-@Disabled
 @TeleOp(name = "slide PID tuner", group = "TeleOp")
 public class SliderPIDTuner extends LinearOpMode {
     private PIDController controller;
@@ -21,17 +20,17 @@ public class SliderPIDTuner extends LinearOpMode {
     public static int target = 0;
 
     Lift lift;
-    Intake intake;
+//    Intake intake;
 
     @Override
     public void runOpMode() throws InterruptedException {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        intake = new Intake(hardwareMap);
+//        intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
         lift.init();
-        intake.init();
+//        intake.init();
 
         waitForStart();
 
