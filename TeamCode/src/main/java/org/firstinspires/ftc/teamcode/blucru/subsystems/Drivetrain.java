@@ -55,7 +55,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void init() {
         fieldCentric = true;
-        resetIMU();
+        resetHeading();
         lastDriveVector = new Vector2d(0,0);
         lastRotate = 0;
         lastPose = new Pose2d(0,0,0);
@@ -143,14 +143,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
 //        distanceSensors.update();
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x,y));
+        Vector2d distanceVector = new Vector2d(x,y);
 
         double component;
-        if(Math.abs(targetHeading - heading - distanceSensors.angle) < angleTolerance && distanceSensors.sensing) {
-            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
+        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < angleTolerance && distanceSensors.sensing) {
+            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
-            driveVector = setComponent(driveVector, component, heading - targetHeading - Math.PI);
+            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading) - Math.PI);
         }
+
+        Vector2d driveVector = calculateDriveVector(distanceVector);
 
         x = driveVector.getX();
         y = driveVector.getY();
@@ -192,7 +194,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public double getRelativeHeading() {
-        double heading = getExternalHeading();
+        double heading = getPoseEstimate().getHeading();
         if(heading > Math.PI) {
             heading -= 2*Math.PI;
         } else if(heading < -Math.PI) {
@@ -224,8 +226,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     // resets IMU (intake facing forwards)
-    public void resetIMU() {
-
+    public void resetHeading() {
+        setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
     }
 
     public void telemetry(Telemetry telemetry) {

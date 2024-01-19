@@ -54,6 +54,10 @@ public class DistanceSensors implements Subsystem {
 
     }
 
+    public double getAngleError(double angle) {
+        return angle - this.angle;
+    }
+
     @Override
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("angle", angle);

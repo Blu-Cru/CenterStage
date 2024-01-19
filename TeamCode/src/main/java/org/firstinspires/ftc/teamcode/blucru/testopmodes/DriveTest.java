@@ -37,14 +37,22 @@ public class DriveTest extends LinearOpMode {
             rotate = Math.pow(-gamepad1.right_stick_x, 3);
 
             if(gamepad1.right_stick_button) {
-                drivetrain.resetIMU();
+                drivetrain.resetHeading();
                 gamepad1.rumble(150);
             }
 
             if(gamepad1.b) {
-                drivetrain.driveToHeading(horz, vert, 0);
+                if(gamepad1.left_bumper) {
+                    drivetrain.driveToDistanceToHeading(horz, vert, 10, Math.toRadians(180));
+                } else {
+                    drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+                }
             } else if (gamepad1.x) {
-                drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+                if(gamepad1.left_bumper) {
+                    drivetrain.driveToDistanceToHeading(horz, vert, 10, 0);
+                } else {
+                    drivetrain.driveToHeading(horz, vert, 0);
+                }
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }

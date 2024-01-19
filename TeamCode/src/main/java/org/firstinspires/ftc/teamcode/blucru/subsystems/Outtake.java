@@ -105,6 +105,10 @@ public class Outtake implements Subsystem{
         turret.targetAngle = angleDeg;
     }
 
+    public double getTurretAngle() {
+        return turret.targetAngle;
+    }
+
     public void toggleWrist() {
         wristRetracted = !wristRetracted;
     }

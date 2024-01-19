@@ -36,15 +36,22 @@ public class TurnPIDTuner extends LinearOpMode {
             vert = -gamepad1.left_stick_y;
             rotate = -gamepad1.right_stick_x;
             if(gamepad1.right_stick_button) {
-                drivetrain.resetIMU();
+                drivetrain.resetHeading();
+                gamepad1.rumble(100);
             }
             drivetrain.setTurnPID(p, i, d);
 
             if(gamepad1.a) {
-                target = 0;
+                target = Math.toRadians(-90);
                 drivetrain.driveToHeading(horz, vert, target);
             } else if(gamepad1.b) {
+                target = 0;
+                drivetrain.driveToHeading(horz, vert, target);
+            } else if(gamepad1.y) {
                 target = Math.toRadians(90);
+                drivetrain.driveToHeading(horz, vert, target);
+            } else if(gamepad1.x) {
+                target = Math.toRadians(180);
                 drivetrain.driveToHeading(horz, vert, target);
             } else {
                 drivetrain.drive(horz, vert, rotate);

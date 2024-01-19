@@ -177,10 +177,15 @@ public class MainTeleOp extends LinearOpMode {
                         robot.outtake.setTurretAngle(gamepad2.right_trigger * 90 + 270);
                     }
                 } else {
-                    if(gamepad2.dpad_down) {
+                    robot.outtake.setTurretAngle(270);
+                }
+
+                if(robot.outtake.getTurretAngle() == 270) {
+                    if(gamepad2.dpad_down && !lastGamepad2.dpad_down) {
                         robot.outtake.toggleWrist();
                     }
-                    robot.outtake.setTurretAngle(270);
+                } else {
+                    robot.outtake.wristRetracted = false;
                 }
 
                 if(gamepad2.b && !lastGamepad2.b) {
