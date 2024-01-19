@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.Constants;
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
@@ -39,6 +40,7 @@ public class MainTeleOp extends LinearOpMode {
     private Gamepad lastGamepad1;
     private Gamepad lastGamepad2;
     ElapsedTime totalTimer;
+    ElapsedTime outtakeTimer;
     double lastTime, deltaTime;
 
     @Override
@@ -107,6 +109,16 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 break;
             case INTAKE:
+                break;
+            case LIFTING:
+                if(robot.outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
+                    robotState = RobotState.OUTTAKE;
+                    robot.outtake.wristRetracted = false;
+                }
+
+                if(gamepad2.a) {
+                    robot.outtake.outtakeState = OuttakeState.RETRACT;
+                }
                 break;
             case OUTTAKE:
                 if(Math.abs(gamepad2.right_stick_y) > 0.1) {
@@ -193,23 +205,23 @@ public class MainTeleOp extends LinearOpMode {
         }
 
 
-        if(gamepad2.left_bumper) {
-            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
-        } else if(gamepad2.right_bumper) {
-            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
-        } else if (gamepad2.left_trigger > Constants.triggerSens){
-            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
-        } else {
-            robot.intake.outtakeRollersPower = 0;
-        }
+//        if(gamepad2.left_bumper) {
+//            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
+//        } else if(gamepad2.right_bumper) {
+//            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
+//        } else if (gamepad2.left_trigger > Constants.triggerSens){
+//            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
+//        } else {
+//            robot.intake.outtakeRollersPower = 0;
+//        }
 
-        if(gamepad2.left_trigger > Constants.triggerSens) {
-            robot.intake.intakeRollersPower = Constants.intakeRollersIntakePower * gamepad2.left_trigger;
-        } else if (gamepad2.right_trigger > Constants.triggerSens){
-            robot.intake.intakeRollersPower = Constants.intakeRollersOuttakePower * gamepad2.right_trigger;
-        } else {
-            robot.intake.intakeRollersPower = 0;
-        }
+//        if(gamepad2.left_trigger > Constants.triggerSens) {
+//            robot.intake.intakeRollersPower = Constants.intakeRollersIntakePower * gamepad2.left_trigger;
+//        } else if (gamepad2.right_trigger > Constants.triggerSens){
+//            robot.intake.intakeRollersPower = Constants.intakeRollersOuttakePower * gamepad2.right_trigger;
+//        } else {
+//            robot.intake.intakeRollersPower = 0;
+//        }
 
         if(Math.abs(gamepad2.left_stick_y) > 0.1) {
             robot.hanger.setPower(-gamepad2.left_stick_y);

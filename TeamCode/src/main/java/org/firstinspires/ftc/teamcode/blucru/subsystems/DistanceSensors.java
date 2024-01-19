@@ -7,8 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DistanceSensors implements Subsystem {
-    public static double DISTANCE_SENSOR_OFFSET = 6.5; // distance between distance sensors in inches
-    public static double DISTANCE_SENSOR_MAX = 60; // max distance the distance sensors can read
+    public static double DISTANCE_SENSOR_OFFSET = 5.875; // distance between distance sensors in inches
+    public static double DISTANCE_SENSOR_MAX = 45; // max distance the distance sensors can read
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
 
@@ -17,6 +17,8 @@ public class DistanceSensors implements Subsystem {
     public double angle; // angle of the robot relative to the wall, 0 being dead on, 90 being parallel turned counter clockwise
     private double averageDistance;
     public double distanceFromWall; // distance from the wall, 0 being touching the wall
+
+    public boolean sensing;
 
     public DistanceSensors(HardwareMap hardwareMap) {
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "right distance");
@@ -36,11 +38,14 @@ public class DistanceSensors implements Subsystem {
         double rawLeftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
 
         if(rawRightDistance < DISTANCE_SENSOR_MAX && rawLeftDistance < DISTANCE_SENSOR_MAX) {
+            sensing = true;
             rightDistance = rawRightDistance;
             leftDistance = rawLeftDistance;
             angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
             averageDistance = (rightDistance + leftDistance) / 2;
             distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
+        } else {
+            sensing = false;
         }
     }
 

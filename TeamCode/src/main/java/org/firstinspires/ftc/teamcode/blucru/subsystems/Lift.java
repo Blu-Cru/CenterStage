@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -15,10 +14,12 @@ import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 
 @Config
 public class Lift implements Subsystem{
-    public static double liftP = 0.012, liftI = 0, liftD = 0.0005, liftF = 0.05;
+    public static double liftP = 0.012, liftI = 0, liftD = 0.0004, liftF = 0.05;
     public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
-    public static int liftMinPos = -5, liftMaxPos = 2000;
-    public static double stallCurrent = 4.0; // amps
+    public static int liftMinPos = 0, liftMaxPos = 2000;
+    public static double stallCurrent = 8; // amps
+    public static double resetCurrent = 1; // amps
+    public final int resetTolerance = 20;
     public final int tolerance = 5; // ticks
 
     public static double TICKS_PER_REV = 384.5;
@@ -58,6 +59,7 @@ public class Lift implements Subsystem{
         liftState = LiftState.AUTO;
 
         targetPos = 0;
+        velocity = 0;
     }
 
     public void init() {
@@ -88,8 +90,7 @@ public class Lift implements Subsystem{
     public void read() {
         setTargetPos(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()));
         currentPos = getCurrentPos();
-        lastPos = currentPos;
-        velocity = (currentPos - lastPos) * 1000.0 / dt;
+        velocity = Range.clip((currentPos - lastPos) * 1000.0 / dt, -motionProfile.vMax, motionProfile.vMax);
 
         dt = System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
@@ -101,29 +102,39 @@ public class Lift implements Subsystem{
         switch(liftState) {
             case AUTO:
                 // if lift is down and stalling, reset encoder and set power to 0
-                if(currentPos < 5 && getCurrent() > stallCurrent) {
+                if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
                     power = 0;
                     resetEncoder();
                     setMotionProfile(new MotionProfile(0, 0));
                 } else if (getCurrent() > stallCurrent) {
-                    setMotionProfile(new MotionProfile(currentPos - inverseP(power), currentPos, 0, slowVelocity, slowAccel));
+                    setMotionProfile(new MotionProfile(currentPos - getPosDelta(power), currentPos, 0, slowVelocity, slowAccel));
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
-                    power = ff;
+                    power = 0;
                 } else {
                     power = PID;
                 }
                 break;
             case MANUAL:
                 // set manual power in opmode
-                setMotionProfileTargetPos(currentPos + inverseP(power));
+                setMotionProfileTargetPos(currentPos + getPosDelta(power));
                 break;
         }
+
+        lastPos = currentPos;
 
         setPower(power);
     }
 
+    public void setMotionProfileTargetHeight(double targetHeight) {
+        setMotionProfileTargetPos((int) (toTicks(targetHeight)));
+    }
+
     public void setMotionProfileTargetPos(int targetPos) {
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
+    }
+
+    public void setMotionProfileTargetPos(int targetPos, double vMax, double aMax) {
+        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, vMax, aMax));
     }
 
     public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
@@ -137,8 +148,8 @@ public class Lift implements Subsystem{
         liftPID.reset();
     }
 
-    public int inverseP(double power) {
-        return (int) (power  / liftP);
+    public int getPosDelta(double power) {
+        return (int) (power * 400);
     }
 
     public void setPower(double power) {

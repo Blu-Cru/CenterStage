@@ -145,7 +145,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        distanceSensors.read();
         Vector2d input;
 
-//        if(heading - distanceSensors.angle < angleTolerance) {
+//        if(Math.abs(targetHeading - heading - distanceSensors.angl) < angleTolerance && distanceSensors.sensing) {
 //            x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
 //        }
 

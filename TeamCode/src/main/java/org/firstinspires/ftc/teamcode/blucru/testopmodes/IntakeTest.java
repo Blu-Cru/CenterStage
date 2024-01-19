@@ -27,6 +27,9 @@ public class IntakeTest extends LinearOpMode {
         intake.init();
         drivetrain.init();
 
+        lastGamepad1 = new Gamepad();
+        lastGamepad2 = new Gamepad();
+
         robotState = RobotState.RETRACT;
 
         waitForStart();
@@ -55,32 +58,34 @@ public class IntakeTest extends LinearOpMode {
 
             switch(robotState) {
                 case RETRACT:
-                    intake.setIntakePower(0);
+                    intake.intakePower = 0;
                     intake.retractIntakeWrist();
 
                     // left trigger pressed, go to intake
                     if(gamepad1.left_trigger > 0.1 && !(lastGamepad1.left_trigger > 0.1)) {
                         robotState = RobotState.INTAKE;
-                        intake.setIntakePower(gamepad1.left_trigger);
+                        intake.intakePower = gamepad1.left_trigger;
                     }
                     // right trigger pressed, go to intake
                     if(gamepad1.right_trigger > 0.1 && !(lastGamepad1.right_trigger > 0.1)) {
                         robotState = RobotState.INTAKE;
-                        intake.setIntakePower(-gamepad1.right_trigger);
+                        intake.intakePower = -gamepad1.right_trigger;
                     }
                     break;
                 case INTAKE:
                     if(gamepad1.left_trigger > 0.1) {
-                        intake.setIntakePower(gamepad1.left_trigger);
+                        intake.intakePower = gamepad1.left_trigger;
                     } else if (gamepad1.right_trigger > 0.1){
-                        intake.setIntakePower(-gamepad1.right_trigger);
+                        intake.intakePower = -gamepad1.right_trigger;
                     } else {
                         robotState = RobotState.RETRACT;
-                        intake.setIntakePower(0);
+                        intake.intakePower = 0;
                     }
 
                     if(gamepad1.a) {
                         intake.downIntakeWrist();
+                    } else if(gamepad1.y) {
+                        intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
                     } else {
                         intake.retractIntakeWrist();
                     }
@@ -98,8 +103,8 @@ public class IntakeTest extends LinearOpMode {
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
 
-        telemetry.addData("left trigger", gamepad1.left_trigger);
-        telemetry.addData("intake rollers power", intake.getIntakeRollersPower());
+        telemetry.addData("robot state", robotState);
+        intake.telemetry(telemetry);
         telemetry.update();
     }
 }

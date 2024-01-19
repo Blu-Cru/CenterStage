@@ -141,14 +141,14 @@ public class Trajectories {
 //                            robot.intake.toggleWrist();
 //                        })
                         .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-//                            robot.lift.liftState = LiftState.AUTO;
-//                            robot.lift.setTargetPos(Constants.sliderLowPos);
-                            robot.intake.outtakeRollersPower = 0;
-                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakeAutoPower;
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+////                            robot.lift.liftState = LiftState.AUTO;
+////                            robot.lift.setTargetPos(Constants.sliderLowPos);
+//                            robot.intake.outtakeRollersPower = 0;
+//                        })
                         .UNSTABLE_addTemporalMarkerOffset(0.8,() -> {
 //                            robot.intake.toggleWrist();
                         })

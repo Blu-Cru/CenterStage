@@ -15,7 +15,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Intake implements Subsystem{
     public static double WRIST_RETRACT_DEG = 80;
-    public static double WRIST_INTAKE_DEG = -45;
+    public static double WRIST_INTAKE_DEG = -35;
+    public static double WRIST_STACK1_DEG = -30;
+    public static double WRIST_STACK3_DEG = -15;
+    public static double WRIST_STACK4_DEG = -7;
 
     public static double POWER = 0.75;
 
