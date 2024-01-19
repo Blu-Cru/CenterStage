@@ -225,7 +225,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // resets IMU (intake facing forwards)
     public void resetIMU() {
-        super.resetIMU();
+
     }
 
     public void telemetry(Telemetry telemetry) {
