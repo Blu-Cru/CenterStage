@@ -108,7 +108,7 @@ public class Lift implements Subsystem{
                     resetEncoder();
                     setMotionProfile(new MotionProfile(0, 0));
                 } else if (getCurrent() > stallCurrent) {
-                    setMotionProfile(new MotionProfile(currentPos - getPosDelta(power), currentPos, 0, slowVelocity, slowAccel));
+                    setMotionProfile(new MotionProfile(currentPos - getDecelDelta(), currentPos, 0, slowVelocity, slowAccel));
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
                     power = 0;
                 } else {
@@ -117,7 +117,7 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // set manual power in opmode
-                setMotionProfileTargetPos(currentPos + getPosDelta(power));
+                setMotionProfileTargetPos(currentPos + getDecelDelta());
                 break;
         }
 
@@ -149,8 +149,12 @@ public class Lift implements Subsystem{
         liftPID.reset();
     }
 
-    public int getPosDelta(double power) {
-        return (int) (power * 400);
+    public int getDecelDelta() {
+        if(velocity > 0) {
+            return (int) (velocity * velocity / (2 * motionProfile.aMax));
+        } else {
+            return (int) (velocity * velocity / (-2 * motionProfile.aMax));
+        }
     }
 
     public void setPower(double power) {

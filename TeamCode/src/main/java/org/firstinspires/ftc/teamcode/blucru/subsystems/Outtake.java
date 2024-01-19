@@ -95,7 +95,7 @@ public class Outtake implements Subsystem{
 
     public void setManualSlidePower(double power) {
         lift.power = power;
-        targetHeight = targetHeight + lift.toInches(lift.getPosDelta(power));
+        targetHeight = targetHeight + lift.toInches(lift.getDecelDelta());
     }
 
     public void setTargetHeight(double targetHeight) {
