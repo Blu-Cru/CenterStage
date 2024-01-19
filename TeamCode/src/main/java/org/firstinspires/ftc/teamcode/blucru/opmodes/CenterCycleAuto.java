@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.states.AutoState;
 import org.firstinspires.ftc.teamcode.blucru.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
+import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name ="Auto", group = "Auto")
@@ -17,6 +18,7 @@ public class CenterCycleAuto extends LinearOpMode {
     private Alliance alliance = Alliance.RED;
     private Side side = Side.CLOSE;
     private Trajectories trajectories;
+    private CVMaster cvMaster;
     private AutoState autoState = AutoState.INIT;
 
     Gamepad lastGamepad1;
@@ -40,6 +42,10 @@ public class CenterCycleAuto extends LinearOpMode {
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
         while(!isStopRequested() && opModeInInit()) {
+            telemetry.addData("state: ", autoState);
+            telemetry.addData("alliance: ", alliance);
+            telemetry.addData("side: ", side);
+
             switch (autoState) {
                 case INIT:
                     if(gamepad1.x && !lastGamepad1.x)
@@ -64,19 +70,18 @@ public class CenterCycleAuto extends LinearOpMode {
 //                        deposit = trajectories.deposit(robot);
                     }
 
-                    telemetry.addData("alliance: ", alliance);
-                    telemetry.addData("side: ", side);
+
                     telemetry.addData("Press x (square) to cycle alliance", "");
                     telemetry.addData("Press b (circle) to cycle side", "");
-                    telemetry.addData("Press a (x) to continue", "");
+                    telemetry.addData("Press a (x) to build trajectories", "");
                     break;
                 case BUILD:
-
+                    autoState = AutoState.DETECTION;
                     break;
+                case DETECTION:
             }
             lastGamepad1.copy(gamepad1);
             lastGamepad2.copy(gamepad2);
-            telemetry.addData("state: ", autoState);
             telemetry.update();
         }
 

@@ -37,9 +37,9 @@ public class Trajectories {
     public static Pose2d closeParkPose = new Pose2d(60, -60 * reflect, Math.toRadians(180));
     public static Pose2d farParkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
 
-    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(14, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
-    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(30, 2, DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(40, 2.5, DriveConstants.TRACK_WIDTH);
 
     Side side;
     Placements placements;
