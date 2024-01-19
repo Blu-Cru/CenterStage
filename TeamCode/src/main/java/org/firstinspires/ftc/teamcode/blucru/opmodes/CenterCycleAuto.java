@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.states.AutoState;
@@ -20,27 +21,28 @@ public class CenterCycleAuto extends LinearOpMode {
     private Trajectories trajectories;
     private CVMaster cvMaster;
     private AutoState autoState = AutoState.INIT;
+    double position = 1;
+
+    ElapsedTime runtime;
 
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
 
-    TrajectorySequence placementFar;
-    TrajectorySequence placementClose;
-    TrajectorySequence placementCenter;
+    TrajectorySequence farAuto;
+    TrajectorySequence closeAuto;
+    TrajectorySequence centerAuto;
 
-    TrajectorySequence depositFar;
-    TrajectorySequence depositClose;
-    TrajectorySequence depositCenter;
-
-    TrajectorySequence stackSetup;
-    TrajectorySequence stackGrab;
-    TrajectorySequence deposit;
+    TrajectorySequence auto;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(telemetry, hardwareMap);
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
+
+        robot.init();
+        robot.purplePixelHolder.retracted = false;
+
         while(!isStopRequested() && opModeInInit()) {
             telemetry.addData("state: ", autoState);
             telemetry.addData("alliance: ", alliance);
@@ -59,15 +61,10 @@ public class CenterCycleAuto extends LinearOpMode {
 
                         // build trajectories
                         trajectories = new Trajectories(alliance, side);
-                        placementFar = trajectories.placementFar(robot);
-                        placementClose = trajectories.placementClose(robot);
-                        placementCenter = trajectories.placementCenter(robot);
-                        depositFar = trajectories.depositFar(robot);
-                        depositClose = trajectories.depositClose(robot);
-                        depositCenter = trajectories.depositCenter(robot);
-//                        stackSetup = trajectories.stackSetup(robot);
-//                        stackGrab = trajectories.stackGrab(robot);
-//                        deposit = trajectories.deposit(robot);
+
+                        farAuto = trajectories.farCenterCycle(robot);
+                        closeAuto = trajectories.closeCenterCycle(robot);
+                        centerAuto = trajectories.centerCenterCycle(robot);
                     }
 
 
@@ -79,12 +76,79 @@ public class CenterCycleAuto extends LinearOpMode {
                     autoState = AutoState.DETECTION;
                     break;
                 case DETECTION:
+                    cvMaster = new CVMaster(hardwareMap, alliance);
+                    cvMaster.detectProp();
+
+                    position = cvMaster.propDetector.position;
+
+                    telemetry.addData("position", cvMaster.propDetector.position);
+                    telemetry.addData("average 0", cvMaster.propDetector.average0);
+                    telemetry.addData("average 1", cvMaster.propDetector.average1);
+                    telemetry.addData("average 2", cvMaster.propDetector.average2);
+                    break;
             }
             lastGamepad1.copy(gamepad1);
             lastGamepad2.copy(gamepad2);
             telemetry.update();
         }
 
+        switch(alliance) {
+            case RED:
+                if(position == 0) {
+                    auto = farAuto;
+                } else if(position == 1) {
+                    auto = centerAuto;
+                } else if(position == 2) {
+                    auto = closeAuto;
+                }
+                break;
+            case BLUE:
+                if(position == 0) {
+                    auto = closeAuto;
+                } else if(position == 1) {
+                    auto = centerAuto;
+                } else if(position == 2) {
+                    auto = farAuto;
+                }
+                break;
+        }
+
         waitForStart();
+
+        autoState = AutoState.RUNNING;
+        runtime = new ElapsedTime();
+        cvMaster.stop();
+
+        robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
+        robot.drivetrain.followTrajectorySequenceAsync(auto);
+
+        while(!isStopRequested() && opModeIsActive()) {
+            robot.read();
+
+            switch(autoState) {
+                case INIT:
+                    break;
+                case BUILD:
+                    break;
+                case DETECTION:
+                    break;
+                case RUNNING:
+                    if(!robot.drivetrain.isBusy()) {
+                        autoState = AutoState.STOP;
+                    }
+                    break;
+                case STOP:
+                    break;
+            }
+
+            robot.write();
+
+            telemetry.addData("runtime", runtime.seconds());
+            telemetry.addData("state: ", autoState);
+            telemetry.addData("alliance: ", alliance);
+            telemetry.addData("side: ", side);
+            telemetry.addData("position", position);
+            telemetry.update();
+        }
     }
 }

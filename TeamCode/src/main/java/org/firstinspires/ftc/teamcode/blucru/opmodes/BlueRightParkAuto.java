@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous(name = "Blue Right PARK Auto", group = "BluCru")
 public class BlueRightParkAuto extends LinearOpMode {
     Robot robot;
@@ -39,7 +41,7 @@ public class BlueRightParkAuto extends LinearOpMode {
         robot = new Robot(telemetry, hardwareMap);
         trajectories = new Trajectories(Alliance.BLUE, Side.FAR);
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
-        autoState = AutoState.PLACEMENT;
+//        autoState = AutoState.PLACEMENT;
         runtime = new ElapsedTime();
 
         robot.init();
@@ -58,12 +60,12 @@ public class BlueRightParkAuto extends LinearOpMode {
         cvMaster.detectProp();
 
         while(!isStopRequested() && opModeInInit()) {
-            position = cvMaster.pipeline.position;
+//            position = cvMaster.pipeline.position;
 
             telemetry.addData("build trajectories", "complete");
-            telemetry.addData("average0", cvMaster.pipeline.average0);
-            telemetry.addData("average1", cvMaster.pipeline.average1);
-            telemetry.addData("average2", cvMaster.pipeline.average2);
+//            telemetry.addData("average0", cvMaster.pipeline.average0);
+//            telemetry.addData("average1", cvMaster.pipeline.average1);
+//            telemetry.addData("average2", cvMaster.pipeline.average2);
             telemetry.addData("position", position);
             telemetry.update();
         }
@@ -88,25 +90,25 @@ public class BlueRightParkAuto extends LinearOpMode {
         sleep((long) Constants.farAutoDelay);
 
         robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
-        cvMaster.stopCamera();
+//        cvMaster.stopCamera();
         runtime.reset();
 
         robot.drivetrain.followTrajectorySequenceAsync(placement);
 
         while(!isStopRequested() && opModeIsActive()) {
-            switch(autoState) {
-                case PLACEMENT:
-                    if(!robot.drivetrain.isBusy()) {
-                        robot.drivetrain.followTrajectorySequenceAsync(park);
-                        autoState = AutoState.PARK;
-                    }
-                    break;
-                case PARK:
-                    if(!robot.drivetrain.isBusy()) {
-                        // auto is finished
-                    }
-                    break;
-            }
+//            switch(autoState) {
+//                case PLACEMENT:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        robot.drivetrain.followTrajectorySequenceAsync(park);
+//                        autoState = AutoState.PARK;
+//                    }
+//                    break;
+//                case PARK:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        // auto is finished
+//                    }
+//                    break;
+//            }
 
             robot.write();
             robot.drivetrain.updateTrajectory();

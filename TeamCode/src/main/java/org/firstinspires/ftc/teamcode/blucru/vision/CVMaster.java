@@ -67,13 +67,14 @@ public class CVMaster {
                 .build();
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
-        visionPortal.stopStreaming();
 
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);
         focusControl = visionPortal.getCameraControl(FocusControl.class);
         focusControl.setMode(FocusControl.Mode.Fixed);
         focusControl.setFocusLength(FOCUS);
+
+        visionPortal.stopStreaming();
     }
 
     public void init() {
@@ -85,6 +86,7 @@ public class CVMaster {
         visionPortal.setProcessorEnabled(propDetector, true);
         visionPortal.setProcessorEnabled(tagDetector, false);
         exposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
+        focusControl.setMode(FocusControl.Mode.ContinuousAuto);
     }
 
     public void detectTag() {

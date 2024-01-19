@@ -15,7 +15,7 @@ public class Robot {
     public Drivetrain drivetrain;
     public Hanger hanger;
 //    public Plane plane;
-    PurplePixelHolder purplePixelHolder;
+    public PurplePixelHolder purplePixelHolder;
 
     private ArrayList<Subsystem> subsystems;
 

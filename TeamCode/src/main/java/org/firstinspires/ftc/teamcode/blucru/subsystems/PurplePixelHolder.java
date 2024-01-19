@@ -11,7 +11,7 @@ public class PurplePixelHolder implements Subsystem{
 
     private Servo purplePixelHolder;
 
-    boolean retracted = true;
+    public boolean retracted = true;
     private double position;
 
     public PurplePixelHolder(HardwareMap hardwareMap) {

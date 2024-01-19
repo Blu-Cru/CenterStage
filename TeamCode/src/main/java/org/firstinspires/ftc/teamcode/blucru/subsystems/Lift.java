@@ -15,7 +15,8 @@ import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 @Config
 public class Lift implements Subsystem{
     public static double liftP = 0.012, liftI = 0, liftD = 0.0004, liftF = 0.05;
-    public static int liftRetractPos = 0, liftLowPos = 1200, liftMidPos = 1500, liftHighPos = 1800;
+    public static int YELLOW_POS = 1300;
+    public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int liftMinPos = 0, liftMaxPos = 1560;
     public static double stallCurrent = 8; // amps
     public static double resetCurrent = 1; // amps

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous(name = "Blue Left Auto", group = "BluCru")
 public class BlueLeftAuto extends LinearOpMode {
     Robot robot;
@@ -48,7 +50,7 @@ public class BlueLeftAuto extends LinearOpMode {
         robot = new Robot(telemetry, hardwareMap);
         trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE);
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
-        autoState = AutoState.PLACEMENT;
+//        autoState = AutoState.PLACEMENT;
         runtime = new ElapsedTime();
 
         robot.init();
@@ -71,12 +73,12 @@ public class BlueLeftAuto extends LinearOpMode {
         cvMaster.detectProp();
 
         while(!isStopRequested() && opModeInInit()) {
-            position = cvMaster.pipeline.position;
+//            position = cvMaster.pipeline.position;
 
             telemetry.addData("build trajectories", "complete");
-            telemetry.addData("average0", cvMaster.pipeline.average0);
-            telemetry.addData("average1", cvMaster.pipeline.average1);
-            telemetry.addData("average2", cvMaster.pipeline.average2);
+//            telemetry.addData("average0", cvMaster.pipeline.average0);
+//            telemetry.addData("average1", cvMaster.pipeline.average1);
+//            telemetry.addData("average2", cvMaster.pipeline.average2);
             telemetry.addData("position", position);
             telemetry.update();
         }
@@ -105,36 +107,36 @@ public class BlueLeftAuto extends LinearOpMode {
         waitForStart();
 
         robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
-        cvMaster.stopCamera();
+//        cvMaster.stopCamera();
         runtime.reset();
 
         robot.drivetrain.followTrajectorySequenceAsync(placement);
 
         while(!isStopRequested() && opModeIsActive()) {
             switch(autoState) {
-                case PLACEMENT:
-                    if(!robot.drivetrain.isBusy()) {
-                        robot.drivetrain.followTrajectorySequenceAsync(square);
-                        autoState = AutoState.SQUARE;
-                    }
-                    break;
-                case SQUARE:
-                    if(!robot.drivetrain.isBusy()) {
-                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
-                        autoState = AutoState.DEPOSIT;
-                    }
-                    break;
-                case DEPOSIT:
-                    if(!robot.drivetrain.isBusy()) {
-                        robot.drivetrain.followTrajectorySequenceAsync(park);
-                        autoState = AutoState.PARK;
-                    }
-                    break;
-                case PARK:
-                    if(!robot.drivetrain.isBusy()) {
-                        autoState = AutoState.STOP;
-                    }
-                    break;
+//                case PLACEMENT:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        robot.drivetrain.followTrajectorySequenceAsync(square);
+//                        autoState = AutoState.SQUARE;
+//                    }
+//                    break;
+//                case SQUARE:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        robot.drivetrain.followTrajectorySequenceAsync(deposit);
+//                        autoState = AutoState.DEPOSIT;
+//                    }
+//                    break;
+//                case DEPOSIT:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        robot.drivetrain.followTrajectorySequenceAsync(park);
+//                        autoState = AutoState.PARK;
+//                    }
+//                    break;
+//                case PARK:
+//                    if(!robot.drivetrain.isBusy()) {
+//                        autoState = AutoState.STOP;
+//                    }
+//                    break;
                 case STOP:
                     // auto finished
                     break;

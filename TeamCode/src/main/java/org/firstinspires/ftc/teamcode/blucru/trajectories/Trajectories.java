@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.blucru.Constants;
 import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.states.Side;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -16,26 +19,31 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class Trajectories {
     static double reflect = 1;
 
-    public static Pose2d closeStartingPose = new Pose2d(12, -62 * reflect, Math.toRadians(-90 * reflect));
-    public static Pose2d closePlacementFarPose = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
-    public static Pose2d closePlacementClosePose = new Pose2d(17.5, -40 * reflect, Math.toRadians(-135 * reflect));
-    public static Pose2d closePlacementCenterPose = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
+    public static double stackSetupX;
+    public static double stackX = -60;
+    public static double depositX = 52;
+    public static double depositSetupX = 45;
 
-    public static Pose2d farStartingPose = new Pose2d(-36, -62 * reflect, Math.toRadians(-90 * reflect));
-    public static Pose2d farPlacementFarPose = new Pose2d(-44, -39 * reflect, Math.toRadians(-45 * reflect));
-    public static Pose2d farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
-    public static Pose2d farPlacementCenterPose = new Pose2d(-33, -31 * reflect, Math.toRadians(-90 * reflect));
+    public static Pose2d closeStartingPose;
+    public static Pose2d closePlacementFarPose;
+    public static Pose2d closePlacementClosePose;
+    public static Pose2d closePlacementCenterPose;
+
+    public static Pose2d farStartingPose;
+    public static Pose2d farPlacementFarPose;
+    public static Pose2d farPlacementClosePose;
+    public static Pose2d farPlacementCenterPose;
 
 //    public static Pose2d farPlacementClosePose = new Pose2d(-30, -18*reflect, Math.toRadians(135*reflect));
 
-    public static Pose2d alignClosePose = new Pose2d(-60, -36*reflect, Math.toRadians(180));
+    public static Pose2d alignClosePose;
 
-    public static Pose2d depositFarPose = new Pose2d(52, -29 * reflect, Math.toRadians(180));
-    public static Pose2d depositCenterPose = new Pose2d(52, -36 * reflect, Math.toRadians(180));
-    public static Pose2d depositClosePose = new Pose2d(52, -43 * reflect, Math.toRadians(180));
+    public static Pose2d depositFarPose;
+    public static Pose2d depositCenterPose;
+    public static Pose2d depositClosePose;
 
-    public static Pose2d closeParkPose = new Pose2d(60, -60 * reflect, Math.toRadians(180));
-    public static Pose2d farParkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
+    public static Pose2d closeParkPose;
+    public static Pose2d farParkPose;
 
     private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(14, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
@@ -47,9 +55,465 @@ public class Trajectories {
 
     public Trajectories(Alliance alliance, Side side) {
         this.side = side;
-        this.poses = new Poses(alliance);
 
-        this.placements = new Placements(side);
+        if(alliance == Alliance.RED) {
+            reflect = 1;
+        } else {
+            reflect = -1;
+        }
+
+        closeStartingPose = new Pose2d(12, -62 * reflect, Math.toRadians(-90 * reflect));
+        closePlacementFarPose = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
+        closePlacementClosePose = new Pose2d(17.5, -40 * reflect, Math.toRadians(-135 * reflect));
+        closePlacementCenterPose = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
+
+        farStartingPose = new Pose2d(-36, -62 * reflect, Math.toRadians(-90 * reflect));
+        farPlacementFarPose = new Pose2d(-44, -39 * reflect, Math.toRadians(-45 * reflect));
+        farPlacementClosePose = new Pose2d(-31, -40 * reflect, Math.toRadians(-135 * reflect));
+
+        alignClosePose = new Pose2d(-60, -36*reflect, Math.toRadians(180));
+
+        depositFarPose = new Pose2d(depositX, -29 * reflect, Math.toRadians(180));
+        depositCenterPose = new Pose2d(depositX, -36 * reflect, Math.toRadians(180));
+        depositClosePose = new Pose2d(depositX, -43 * reflect, Math.toRadians(180));
+
+        closeParkPose = new Pose2d(60, -60 * reflect, Math.toRadians(180));
+        farParkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
+    }
+
+    public TrajectorySequence farCenterCycle(Robot robot) {
+        TrajectorySequence sequence = null;
+        switch(side) {
+            case CLOSE:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                    // set up placement
+                        .setTangent(Math.toRadians(90 * reflect))
+                        .splineTo(new Vector2d(12, -55 * reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(closePlacementFarPose, Math.toRadians(135 * reflect))
+                    // placement
+                        .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
+                            robot.purplePixelHolder.retracted = true;
+                        })
+                        .waitSeconds(0.5)
+                    // set up deposit
+                        .setTangent(-45*reflect)
+                        .splineToConstantHeading(new Vector2d(8, -42 * reflect), 0)
+                        .splineToConstantHeading(new Vector2d(10, -42*reflect), 0)
+                        .splineToSplineHeading(new Pose2d(30, -35*reflect, Math.toRadians(180)), Math.toRadians(45*reflect))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), 0)
+                    // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                    // deposit
+                        .waitSeconds(1.2)
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                    // retract
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                    // set up intake
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-53, -12*reflect), Math.toRadians(180))
+                    // intake
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_DEG);
+                            robot.intake.intakePower = 0.7;
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
+                        .waitSeconds(1.5)
+                    // intake finished, set up deposit
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                            robot.intake.intakePower = 0;
+                            robot.intake.retractIntakeWrist();
+                        })
+                        .setTangent(0)
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
+                    // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                    // deposit
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                        .waitSeconds(1.2)
+                    // set up intake
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-50, -12*reflect), Math.toRadians(180))
+                    // intake
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_DEG);
+                            robot.intake.intakePower = 0.7;
+                        })
+                    // intake finished, set up deposit
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                            robot.intake.intakePower = 0;
+                            robot.intake.retractIntakeWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
+                        .waitSeconds(1.5)
+                        .setTangent(0)
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
+                    // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                    // deposit
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                        .waitSeconds(1.2)
+                        .build();
+                break;
+            case FAR:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                        // placement
+                        .setTangent(Math.toRadians(90 * reflect))
+                        .splineTo(new Vector2d(-36, -55*reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(farPlacementFarPose, Math.toRadians(180))
+                        .waitSeconds(1)
+                        // set up intake
+                        .setTangent(Math.toRadians(180))
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(stackX, -36 * reflect), Math.toRadians(180))
+                        // intake
+                        .waitSeconds(1)
+                        // set up deposit
+                        .setTangent(Math.toRadians(45 * reflect))
+                        .setVelConstraint(normalVelocity)
+                        .splineToConstantHeading(new Vector2d(-50, -12 * reflect), 0)
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29 * reflect), Math.toRadians(0))
+                        // deposit
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                        .waitSeconds(1.2)
+                            // drive to intake
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-50, -12*reflect), Math.toRadians(180))
+                            // intake
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
+                            robot.intake.intakePower = 0.7;
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
+                        .waitSeconds(1.5)
+                            // lock and retract
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.retractIntakeWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                            robot.intake.intakePower = 0;
+                            robot.outtake.lock();
+                        })
+                        .setTangent(0)
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(45, -29*reflect), Math.toRadians(0))
+                            // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                            // release and retract
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                        .waitSeconds(1.2)
+                        .build();
+                break;
+        }
+        return sequence;
+    }
+
+    public TrajectorySequence centerCenterCycle(Robot robot) {
+        TrajectorySequence sequence = null;
+        switch (side) {
+            case CLOSE:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                            // drive to placement
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(90 * reflect))
+                        .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
+                        .splineToSplineHeading(closePlacementCenterPose, Math.toRadians(90 * reflect))
+                        .waitSeconds(0.5)
+                            // placement
+                        .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
+                            robot.purplePixelHolder.retracted = true;
+                        })
+                            // drive to deposit
+                        .setVelConstraint(normalVelocity)
+                        .setTangent(Math.toRadians(-90 * reflect))
+                        .splineToConstantHeading(new Vector2d(20, -36 * reflect), 0)
+                        .splineToSplineHeading(new Pose2d(depositSetupX, -36*reflect, Math.toRadians(180)), 0)
+                            // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositCenterPose.vec(), Math.toRadians(0))
+                            // release and retract
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                        .waitSeconds(1.2)
+                            // drive to intake
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-55, -12*reflect), Math.toRadians(180))
+                            // intake
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
+                            robot.intake.intakePower = 0.7;
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
+                        .waitSeconds(1.5)
+                            // lock and retract
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.intake.retractIntakeWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5,() -> {
+                            robot.intake.intakePower = 0;
+                            robot.outtake.lock();
+                        })
+                            // drive to deposit
+                        .setTangent(0)
+                        .setVelConstraint(fastVelocity)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
+                            // lift
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(depositFarPose.vec(), Math.toRadians(0))
+                            // deposit and retract
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            robot.outtake.unlock();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                            robot.outtake.toggleWrist();
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                        })
+                        .waitSeconds(1.2)
+                        .build();
+                break;
+            case FAR:
+                sequence = robot.drivetrain.trajectorySequenceBuilder(farStartingPose)
+                            // drive to placement center
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(-36, -59*reflect), Math.toRadians(90))
+                        .splineToSplineHeading(new Pose2d(-50, -24 * reflect, Math.toRadians(180)), Math.toRadians(90))
+                            // placement
+
+                        .waitSeconds(0.5)
+                            // drive to intake middle
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-55, -24 * reflect), Math.toRadians(180))
+                            // intake
+
+                        .splineToConstantHeading(new Vector2d(stackX, -24 * reflect), Math.toRadians(180))
+                        .waitSeconds(1.5)
+                            // lock and retract
+
+                            // drive to deposit far
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(0)
+                        .splineToConstantHeading(new Vector2d(-50, -12 * reflect), 0)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
+                            // lift
+
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(depositX, -29*reflect), Math.toRadians(0))
+                            // deposit and retract
+
+                        .waitSeconds(1.2)
+                            // drive to intake far
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(-55, -12*reflect), Math.toRadians(180))
+                            // intake
+
+                        .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
+
+                        .waitSeconds(1.5)
+                            // lock and retract
+
+                            // drive to deposit
+                        .setVelConstraint(fastVelocity)
+                        .setTangent(0)
+                        .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
+                            // lift
+
+                        .setVelConstraint(slowVelocity)
+                        .splineToConstantHeading(new Vector2d(depositX, -29*reflect), Math.toRadians(0))
+                            // deposit and retract
+
+                        .waitSeconds(1.2)
+                        .build();
+                break;
+        }
+        return sequence;
+    }
+
+    public TrajectorySequence closeCenterCycle(Robot robot) {
+        TrajectorySequence sequence = null;
+            switch(side) {
+                case CLOSE:
+                    sequence = robot.drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                            // drive to placement
+                            .setVelConstraint(fastVelocity)
+                            .setTangent(Math.toRadians(90 * reflect))
+                            .lineTo(new Vector2d(24, -40 * reflect))
+                            // placement
+
+                            .waitSeconds(0.5)
+                            .setTangent(Math.toRadians(270))
+                            .splineToConstantHeading(new Vector2d(30, -44 * reflect), 0)
+                            .splineToSplineHeading(new Pose2d(depositSetupX, -43 * reflect, Math.toRadians(180)), 0)
+                            // lift
+
+                            .splineToConstantHeading(new Vector2d(depositX, -43 * reflect), 0)
+                            // deposit and retract
+
+                            .waitSeconds(1.2)
+
+                            // drive to far stack
+                            .setVelConstraint(fastVelocity)
+                            .setTangent(Math.toRadians(180))
+                            .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                            .splineToConstantHeading(new Vector2d(stackSetupX, -12 * reflect), Math.toRadians(180))
+                            // start intaking
+
+                            .setVelConstraint(slowVelocity)
+                            .splineToConstantHeading(new Vector2d(stackX, -12 * reflect), Math.toRadians(180))
+                            .waitSeconds(1.5)
+                            // lock and retract
+
+                            // drive to deposit
+                            .setTangent(0)
+                            .setVelConstraint(fastVelocity)
+                            .splineToConstantHeading(new Vector2d(30, -12 * reflect), 0)
+                            .splineToConstantHeading(new Vector2d(depositSetupX, -29 * reflect), 0)
+                            // lift
+
+                            .splineToConstantHeading(new Vector2d(depositX, -29 * reflect), 0)
+                            // deposit and retract
+
+                            .waitSeconds(1.2)
+
+                            // drive to far stack
+                            .setVelConstraint(fastVelocity)
+                            .setTangent(Math.toRadians(180))
+                            .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                            .splineToConstantHeading(new Vector2d(stackSetupX, -12 * reflect), Math.toRadians(180))
+                            // start intaking
+
+                            .setVelConstraint(slowVelocity)
+                            .splineToConstantHeading(new Vector2d(stackX, -12 * reflect), Math.toRadians(180))
+                            .waitSeconds(1.5)
+                            // lock and retract
+
+                            // drive to deposit
+                            .setTangent(0)
+                            .setVelConstraint(fastVelocity)
+                            .splineToConstantHeading(new Vector2d(30, -12 * reflect), 0)
+                            .splineToConstantHeading(new Vector2d(depositSetupX, -29 * reflect), 0)
+                            // lift
+
+                            .splineToConstantHeading(new Vector2d(depositX, -29 * reflect), 0)
+                            // deposit and retract
+
+                            .waitSeconds(1.2)
+                            .build();
+                    break;
+                case FAR:
+                    break;
+            }
+        return sequence;
     }
 
     public TrajectorySequence placementFar(Robot robot) {

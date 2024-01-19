@@ -4,9 +4,6 @@ public enum AutoState {
     INIT,
     BUILD,
     DETECTION,
-    PLACEMENT,
-    SQUARE,
-    DEPOSIT,
-    PARK,
+    RUNNING,
     STOP
 }

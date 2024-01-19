@@ -39,6 +39,10 @@ public class Outtake implements Subsystem{
     public double targetHeight; // inches
     private double lastTargetHeight;
 
+    public boolean locked;
+    double backLockPos;
+    double frontLockPos;
+
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
         backLock = hardwareMap.get(Servo.class, "back lock");
@@ -48,6 +52,8 @@ public class Outtake implements Subsystem{
         turret = new Turret(hardwareMap);
 
         outtakeState = OuttakeState.RETRACT;
+
+        locked = true;
 
         wristRetracted = true;
         wristPos = WRIST_RETRACT;
@@ -72,6 +78,8 @@ public class Outtake implements Subsystem{
         }
 
         wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
+        backLockPos = locked ? BACK_LOCKED : BACK_UNLOCKED;
+        frontLockPos = locked ? FRONT_LOCKED : FRONT_UNLOCKED;
 
         lastTargetHeight = targetHeight;
         lastTurretDelta = turret.getTurretHeightDelta();
@@ -81,6 +89,8 @@ public class Outtake implements Subsystem{
         lift.write();
         turret.write();
         wrist.setPosition(wristPos);
+        backLock.setPosition(backLockPos);
+        frontLock.setPosition(frontLockPos);
     }
 
     public void setManualSlidePower(double power) {
@@ -111,6 +121,14 @@ public class Outtake implements Subsystem{
 
     public void toggleWrist() {
         wristRetracted = !wristRetracted;
+    }
+
+    public void lock() {
+        locked = true;
+    }
+
+    public void unlock() {
+        locked = false;
     }
 
     public void telemetry(Telemetry telemetry) {
