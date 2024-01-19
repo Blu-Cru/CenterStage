@@ -15,7 +15,6 @@ public class DistancePIDTest extends LinearOpMode {
     public static double distanceD = 0;
     public static double targetDistance = 10;
     Drivetrain drivetrain;
-    DistanceSensors distanceSensors;
 
     double vert, horz, rotate;
 
@@ -24,20 +23,21 @@ public class DistancePIDTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain(hardwareMap);
-        distanceSensors = new DistanceSensors(hardwareMap);
         drivetrain.init();
 
         waitForStart();
 
         while(opModeIsActive()) {
+            drivetrain.read();
+
             vert = -gamepad1.left_stick_y;
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
 
-//            drivetrain.distanceSensors.write();
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading();
+                gamepad1.rumble(100);
             }
 
             if(gamepad1.b) {
@@ -63,8 +63,11 @@ public class DistancePIDTest extends LinearOpMode {
 
             drivetrain.setDistancePID(distanceP, distanceI, distanceD);
 
-            distanceSensors.telemetry(telemetry);
-//            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
+            drivetrain.write();
+
+            drivetrain.distanceSensors.telemetry(telemetry);
+            drivetrain.distanceSensors.testTelemetry(telemetry);
+            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
             telemetry.update();
         }
     }

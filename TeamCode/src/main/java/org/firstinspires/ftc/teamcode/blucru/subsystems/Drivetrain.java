@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double maxAccelDriveVectorDelta = 5; // magnitude per second at power 1
     public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
-    public static double turnP = 2.6, turnI = 0, turnD = 0.15;
+    public static double turnP = 1.0, turnI = 0, turnD = 0.02;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
     public static double angleTolerance = 0.5; // radians
@@ -50,7 +50,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         super(hardwareMap);
         turnPID = new PIDController(turnP, turnI, turnD);
         distancePID = new PIDController(distanceP, distanceI, distanceD);
-//        distanceSensors = new DistanceSensors(hardwareMap);
+        distanceSensors = new DistanceSensors(hardwareMap);
     }
 
     public void init() {
@@ -145,14 +145,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        distanceSensors.update();
         Vector2d distanceVector = new Vector2d(x,y);
 
+        Vector2d driveVector = calculateDriveVector(distanceVector);
+
         double component;
         if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < angleTolerance && distanceSensors.sensing) {
             component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
-            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading) - Math.PI);
+            driveVector = setComponent(driveVector, component, -(heading - targetHeading));
         }
-
-        Vector2d driveVector = calculateDriveVector(distanceVector);
 
         x = driveVector.getX();
         y = driveVector.getY();
@@ -169,7 +169,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public double getDistanceSensorAngleError(double targetHeading) {
         distanceSensors.read();
-        return Math.abs(heading - targetHeading - distanceSensors.angle);
+        double error = heading - targetHeading - distanceSensors.angle;
+        if(error > Math.PI) {
+            error -= 2 * Math.PI;
+        } else if (error < -Math.PI) {
+            error += 2 * Math.PI;
+        }
+
+        return Math.abs(error);
     }
 
     public void setDrivePower(double power) {

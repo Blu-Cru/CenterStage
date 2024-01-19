@@ -32,6 +32,8 @@ public class TurnPIDTuner extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+            drivetrain.read();
+
             horz = gamepad1.left_stick_x;
             vert = -gamepad1.left_stick_y;
             rotate = -gamepad1.right_stick_x;

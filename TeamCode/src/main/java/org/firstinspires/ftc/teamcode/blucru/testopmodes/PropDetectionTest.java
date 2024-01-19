@@ -27,14 +27,14 @@ public class PropDetectionTest extends LinearOpMode {
                 } else {
                     alliance = Alliance.BLUE;
                 }
-                cvMaster.setAlliance(alliance);
+                cvMaster.propDetector.setAlliance(alliance);
             }
 
             telemetry.addData("Status", "Initialized");
             telemetry.addData("Alliance", alliance);
-            telemetry.addData("Average0", cvMaster.pipeline.average0);
-            telemetry.addData("Average1", cvMaster.pipeline.average1);
-            telemetry.addData("Average2", cvMaster.pipeline.average2);
+            telemetry.addData("Average0", cvMaster.propDetector.average0);
+            telemetry.addData("Average1", cvMaster.propDetector.average1);
+            telemetry.addData("Average2", cvMaster.propDetector.average2);
             telemetry.update();
 
             lastGamepad1.copy(gamepad1);

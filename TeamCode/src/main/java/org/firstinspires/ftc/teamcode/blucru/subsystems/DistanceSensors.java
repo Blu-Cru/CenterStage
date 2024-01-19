@@ -34,14 +34,12 @@ public class DistanceSensors implements Subsystem {
     }
 
     public void read() {
-        double rawRightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
-        double rawLeftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
+        rightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
+        leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
 
-        if(rawRightDistance < DISTANCE_SENSOR_MAX && rawLeftDistance < DISTANCE_SENSOR_MAX) {
+        if(rightDistance < DISTANCE_SENSOR_MAX && leftDistance < DISTANCE_SENSOR_MAX) {
             sensing = true;
-            rightDistance = rawRightDistance;
-            leftDistance = rawLeftDistance;
-            angle = Math.toDegrees(Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET));
+            angle = Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET);
             averageDistance = (rightDistance + leftDistance) / 2;
             distanceFromWall = averageDistance * Math.cos(Math.toRadians(angle));
         } else {
@@ -68,5 +66,6 @@ public class DistanceSensors implements Subsystem {
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("right distance", rightDistanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("left distance", leftDistanceSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("sensing", sensing);
     }
 }
