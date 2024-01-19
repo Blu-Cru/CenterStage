@@ -27,17 +27,15 @@ public class IntakeTest extends LinearOpMode {
         intake.init();
         drivetrain.init();
 
+        drivetrain.setDrivePower(0.8);
+
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
-
-        robotState = RobotState.RETRACT;
 
         waitForStart();
         while(opModeIsActive()) {
             intake.read();
             drivetrain.read();
-
-            drivetrain.setDrivePower(robotState, gamepad1);
 
             vert = Math.pow(-gamepad1.left_stick_y, 3);
             horz = Math.pow(gamepad1.left_stick_x, 3);
@@ -49,47 +47,25 @@ public class IntakeTest extends LinearOpMode {
             }
 
             if(gamepad1.b) {
-                drivetrain.driveToHeading(horz, vert, 0);
-            } else if (gamepad1.x) {
                 drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+            } else if (gamepad1.x) {
+                drivetrain.driveToHeading(horz, vert, 0);
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }
 
-            switch(robotState) {
-                case RETRACT:
-                    intake.intakePower = 0;
-                    intake.retractIntakeWrist();
+            if(gamepad2.left_trigger > 0.1) {
+                intake.intakePower = gamepad2.left_trigger;
+            } else if (gamepad2.right_trigger > 0.1){
+                intake.intakePower = -gamepad2.right_trigger;
+            } else {
+                intake.intakePower = 0;
+            }
 
-                    // left trigger pressed, go to intake
-                    if(gamepad1.left_trigger > 0.1 && !(lastGamepad1.left_trigger > 0.1)) {
-                        robotState = RobotState.INTAKE;
-                        intake.intakePower = gamepad1.left_trigger;
-                    }
-                    // right trigger pressed, go to intake
-                    if(gamepad1.right_trigger > 0.1 && !(lastGamepad1.right_trigger > 0.1)) {
-                        robotState = RobotState.INTAKE;
-                        intake.intakePower = -gamepad1.right_trigger;
-                    }
-                    break;
-                case INTAKE:
-                    if(gamepad1.left_trigger > 0.1) {
-                        intake.intakePower = gamepad1.left_trigger;
-                    } else if (gamepad1.right_trigger > 0.1){
-                        intake.intakePower = -gamepad1.right_trigger;
-                    } else {
-                        robotState = RobotState.RETRACT;
-                        intake.intakePower = 0;
-                    }
-
-                    if(gamepad1.a) {
-                        intake.downIntakeWrist();
-                    } else if(gamepad1.y) {
-                        intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
-                    } else {
-                        intake.retractIntakeWrist();
-                    }
-                    break;
+            if(gamepad2.a) {
+                intake.downIntakeWrist();
+            } else {
+                intake.retractIntakeWrist();
             }
 
             write();

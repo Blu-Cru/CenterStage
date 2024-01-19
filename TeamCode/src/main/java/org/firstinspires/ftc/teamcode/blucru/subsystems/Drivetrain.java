@@ -19,7 +19,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
     public static double turnP = 2.6, turnI = 0, turnD = 0.15;
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
-    public static double DRIVE_POWER_INTAKE = 0.4, DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
+    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
     public static double angleTolerance = 0.5; // radians
 
     public double drivePower = 0.5;
@@ -43,7 +43,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private PIDController turnPID;
     public double targetHeading = 0;
 
-//    public DistanceSensors distanceSensors;
+    public DistanceSensors distanceSensors;
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap) {
@@ -145,13 +145,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        distanceSensors.update();
         Vector2d driveVector = calculateDriveVector(new Vector2d(x,y));
 
-//        if(Math.abs(targetHeading - heading - distanceSensors.angl) < angleTolerance && distanceSensors.sensing) {
-//            x = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
-//        }
-
-//        double component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
-        // set component in direction opposite target heading
-//        driveVector = setComponent(driveVector, component, heading - targetHeading - Math.PI);
+        double component;
+        if(Math.abs(targetHeading - heading - distanceSensors.angle) < angleTolerance && distanceSensors.sensing) {
+            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -1, 1);
+            // set component in direction opposite target heading
+            driveVector = setComponent(driveVector, component, heading - targetHeading - Math.PI);
+        }
 
         x = driveVector.getX();
         y = driveVector.getY();
@@ -166,10 +165,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return vector.rotated(angle);
     }
 
-//    public double getDistanceSensorAngleError(double targetHeading) {
-//        distanceSensors.read();
-//        return heading - targetHeading - distanceSensors.angle;
-//    }
+    public double getDistanceSensorAngleError(double targetHeading) {
+        distanceSensors.read();
+        return Math.abs(heading - targetHeading - distanceSensors.angle);
+    }
 
     public void setDrivePower(double power) {
         drivePower = Range.clip(power, 0.0, 1.0);
@@ -216,9 +215,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         switch (robotState) {
             case RETRACT:
                 power = DRIVE_POWER_RETRACT * drivePowerMultiplier;
-                break;
-            case INTAKE:
-                power = DRIVE_POWER_INTAKE * drivePowerMultiplier;
                 break;
             case OUTTAKE:
                 power = DRIVE_POWER_OUTTAKE * drivePowerMultiplier;

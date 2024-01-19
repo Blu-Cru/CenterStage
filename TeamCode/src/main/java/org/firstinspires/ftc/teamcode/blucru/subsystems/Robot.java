@@ -14,7 +14,7 @@ public class Robot {
     public Intake intake;
     public Drivetrain drivetrain;
     public Hanger hanger;
-    public Plane plane;
+//    public Plane plane;
     PurplePixelHolder purplePixelHolder;
 
     private ArrayList<Subsystem> subsystems;
@@ -27,7 +27,7 @@ public class Robot {
         intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         hanger = new Hanger(hardwareMap, telemetry);
-        plane = new Plane(hardwareMap);
+//        plane = new Plane(hardwareMap);
         purplePixelHolder = new PurplePixelHolder(hardwareMap);
 
         subsystems = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Robot {
         subsystems.add(intake);
         subsystems.add(drivetrain);
         subsystems.add(hanger);
-        subsystems.add(plane);
+//        subsystems.add(plane);
         subsystems.add(purplePixelHolder);
     }
 

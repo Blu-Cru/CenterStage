@@ -34,6 +34,8 @@ right joystick : turn
 @Config
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
+    public static double OUTTAKE_DELAY_SECONDS = 1;
+
     Robot robot;
     private RobotState robotState;
 
@@ -54,20 +56,17 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        totalTimer = new ElapsedTime();
 
         while(opModeIsActive()) {
             lastTime = totalTimer.milliseconds();
             // updates states based on gamepad input
-            updateStates();
-            // updates robot based on states
-            updateRobot();
+            read();
 
             // loop time: current time - time at start of loop
             deltaTime = totalTimer.milliseconds() - lastTime;
 
             // data for feedback
-            telemetry();
+            write();
         }
     }
 
@@ -76,6 +75,10 @@ public class MainTeleOp extends LinearOpMode {
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
         robot = new Robot(telemetry, hardwareMap);
+
+        totalTimer = new ElapsedTime();
+        outtakeTimer = new ElapsedTime();
+
         robot.init();
     }
 
@@ -87,7 +90,6 @@ public class MainTeleOp extends LinearOpMode {
         double vert = Math.pow(-gamepad1.left_stick_y, 3);
         double rotate = Math.pow(-gamepad1.right_stick_x, 3);
 
-        // driving
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
             robot.drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
@@ -96,168 +98,125 @@ public class MainTeleOp extends LinearOpMode {
         if(gamepad1.b) {
             robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
         } else if(gamepad1.x) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(0));
+            robot.drivetrain.driveToHeading(horz, vert, 0);
         } else {
             // otherwise, drive normally
             robot.drivetrain.drive(horz, vert, rotate);
         }
+
+        if(gamepad2.left_trigger > 0.1) {
+            robot.intake.setIntakePower(gamepad2.left_trigger);
+        } else if(gamepad2.right_trigger > 0.1) {
+            robot.intake.setIntakePower(-gamepad2.right_trigger);
+        } else {
+            robot.intake.setIntakePower(0);
+        }
+
+        if(gamepad2.a) {
+            robot.intake.downIntakeWrist();
+        } else {
+            robot.intake.retractIntakeWrist();
+        }
+
         switch(robotState) {
             case RETRACT:
+                robot.outtake.outtakeState = OuttakeState.RETRACT;
+
+                if(gamepad2.a && robot.outtake.liftIntakeReady()) {
+                    robot.intake.downIntakeWrist();
+                } else {
+                    robot.intake.retractIntakeWrist();
+                }
+
                 if(gamepad2.b && !lastGamepad2.b) {
-                    robotState = RobotState.OUTTAKE;
+                    robotState = RobotState.LIFTING;
                     robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
                 }
-                break;
-            case INTAKE:
+                if(gamepad2.x && !lastGamepad2.x) {
+                    robotState = RobotState.LIFTING;
+                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                }
+                if(gamepad2.y && !lastGamepad2.y) {
+                    robotState = RobotState.LIFTING;
+                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                }
                 break;
             case LIFTING:
+                robot.outtake.outtakeState = OuttakeState.OUTTAKE;
                 if(robot.outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
-                    robotState = RobotState.OUTTAKE;
                     robot.outtake.wristRetracted = false;
+                    robotState = RobotState.OUTTAKE;
+                    outtakeTimer.reset();
+                }
+
+                if(gamepad2.b && !lastGamepad2.b) {
+                    robotState = RobotState.LIFTING;
+                    robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
+                }
+                if(gamepad2.x && !lastGamepad2.x) {
+                    robotState = RobotState.LIFTING;
+                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                }
+                if(gamepad2.y && !lastGamepad2.y) {
+                    robotState = RobotState.LIFTING;
+                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
                 }
 
                 if(gamepad2.a) {
                     robot.outtake.outtakeState = OuttakeState.RETRACT;
+                    robot.outtake.lift.setMotionProfileTargetPos(0);
                 }
                 break;
             case OUTTAKE:
-                if(Math.abs(gamepad2.right_stick_y) > 0.1) {
-                    robot.outtake.lift.liftState = LiftState.MANUAL;
-                    robot.outtake.setManualSlidePower(-gamepad2.right_stick_y);
+                robot.outtake.outtakeState = OuttakeState.OUTTAKE;
+
+                if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
+                    if(gamepad2.left_trigger > 0.1) {
+                        robot.outtake.setTurretAngle(-gamepad2.left_trigger * 90 + 270);
+                    } else if (gamepad2.right_trigger > 0.1) {
+                        robot.outtake.setTurretAngle(gamepad2.right_trigger * 90 + 270);
+                    }
                 } else {
-                    robot.outtake.lift.liftState = LiftState.AUTO;
+                    if(gamepad2.dpad_down) {
+                        robot.outtake.toggleWrist();
+                    }
+                    robot.outtake.setTurretAngle(270);
+                }
+
+                if(gamepad2.b && !lastGamepad2.b) {
+                    robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
+                }
+                if(gamepad2.x && !lastGamepad2.x) {
+                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                }
+                if(gamepad2.y && !lastGamepad2.y) {
+                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                }
+
+                if(gamepad2.a && !lastGamepad2.a && robot.outtake.wristRetracted) {
+                    robotState = RobotState.RETRACT;
+                    robot.outtake.lift.setMotionProfileTargetPos(0);
                 }
                 break;
+        }
+
+        if(Math.abs(gamepad2.right_stick_y) > 0.1) {
+            robot.outtake.lift.liftState = LiftState.MANUAL;
+            robot.outtake.setManualSlidePower(-gamepad2.right_stick_y);
+        } else {
+            if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
+                robot.outtake.updateTargetHeight();
+            }
+            robot.outtake.lift.liftState = LiftState.AUTO;
         }
     }
 
-    public void updateStates() {
-        switch (robotState) {
-            case RETRACT:
-                if(gamepad2.left_trigger > Constants.triggerSens && robot.outtake.lift.getCurrentPos() < Constants.sliderIntakeDelta) {
-                    robotState = RobotState.INTAKE;
-//                    robot.intake.wristState = WristState.INTAKE;
-                    robot.intake.intakeTimer.reset();
-                }
-                break;
-            case INTAKE:
-                if(!(gamepad2.left_trigger > Constants.triggerSens) && lastGamepad2.left_trigger > Constants.triggerSens) {
-//                    robot.intake.wristState = WristState.RETRACT;
-                    robotState = RobotState.RETRACT;
-                }
-                break;
-            case OUTTAKE:
-                if(gamepad2.dpad_down && !lastGamepad2.dpad_down) {
-//                    robot.intake.toggleWrist();
-                }
-                // manual lift control
-                if(Math.abs(gamepad2.right_stick_y) > 0.1) {
-                    robot.outtake.lift.liftState = LiftState.MANUAL;
-                    robot.outtake.lift.power = -gamepad2.right_stick_y;
-                } else {
-                    robot.outtake.lift.liftState = LiftState.AUTO;
-                }
-
-                // slider presets
-                if(gamepad2.b) {
-                    robot.outtake.lift.liftState = LiftState.AUTO;
-                    robot.outtake.lift.setTargetPos(Constants.sliderLowPos);
-                }
-                if(gamepad2.x) {
-                    robot.outtake.lift.liftState = LiftState.AUTO;
-                    robot.outtake.lift.setTargetPos(Constants.sliderMedPos);
-                }
-                if(gamepad2.y) {
-                    robot.outtake.lift.liftState = LiftState.AUTO;
-                    robot.outtake.lift.setTargetPos(Constants.sliderHighPos);
-                }
-
-                // retract
-//                if(gamepad2.a && robot.intake.wristState == WristState.RETRACT) {
-//                    robot.lift.setTargetPos(0);
-//                    robotState = RobotState.RETRACT;
-//                }
-                break;
-        }
-
-        // plane launcher
-        if(gamepad2.dpad_right && !lastGamepad2.dpad_right) {
-//            robot.intake.togglePlane();
-        }
-
+    public void write() {
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
-    }
-
-    public void updateRobot() {
-        switch (robotState) {
-            case RETRACT:
-                // driving
-                robot.drivetrain.setDrivePower(Constants.driveSpeedRetract);
-                break;
-            case INTAKE:
-                robot.outtake.lift.setTargetPos(Constants.sliderIntakePos);
-                robot.drivetrain.setDrivePower(Constants.driveSpeedIntake);
-                break;
-            case OUTTAKE:
-                robot.drivetrain.setDrivePower(Constants.driveSpeedOuttake);
-                break;
-        }
-
-
-//        if(gamepad2.left_bumper) {
-//            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
-//        } else if(gamepad2.right_bumper) {
-//            robot.intake.outtakeRollersPower = Constants.outtakeRollersOuttakePower;
-//        } else if (gamepad2.left_trigger > Constants.triggerSens){
-//            robot.intake.outtakeRollersPower = Constants.outtakeRollersIntakePower;
-//        } else {
-//            robot.intake.outtakeRollersPower = 0;
-//        }
-
-//        if(gamepad2.left_trigger > Constants.triggerSens) {
-//            robot.intake.intakeRollersPower = Constants.intakeRollersIntakePower * gamepad2.left_trigger;
-//        } else if (gamepad2.right_trigger > Constants.triggerSens){
-//            robot.intake.intakeRollersPower = Constants.intakeRollersOuttakePower * gamepad2.right_trigger;
-//        } else {
-//            robot.intake.intakeRollersPower = 0;
-//        }
-
-        if(Math.abs(gamepad2.left_stick_y) > 0.1) {
-            robot.hanger.setPower(-gamepad2.left_stick_y);
-        } else {
-            robot.hanger.setPower(0);
-        }
-
-        // DRIVING
-
-        double horz = Math.pow(gamepad1.left_stick_x, 3);
-        double vert = Math.pow(-gamepad1.left_stick_y, 3);
-        double rotate = Math.pow(-gamepad1.right_stick_x, 3);
-
-        if(gamepad2.right_stick_button) {
-            robot.outtake.lift.resetEncoder();
-        }
-
-        // driving
-        // resets heading offset (face forwards)
-        if(gamepad1.right_stick_button) {
-            robot.drivetrain.resetIMU();
-            gamepad1.rumble(100);
-        }
-        if(gamepad1.b) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(90));
-        } else if(gamepad1.x) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(-90));
-        } else {
-            // otherwise, drive normally
-            robot.drivetrain.drive(horz, vert, rotate);
-        }
 
         robot.write();
-    }
 
-    public void telemetry() {
         telemetry.addData("robot state", robotState);
         telemetry.addData("loop time", deltaTime);
         robot.telemetry(telemetry);

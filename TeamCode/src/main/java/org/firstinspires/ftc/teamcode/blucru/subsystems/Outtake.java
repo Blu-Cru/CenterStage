@@ -8,25 +8,28 @@ import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.37;
+    public static double WRIST_RETRACT = 0.53;
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
-    public static double BACK_LOCKED = 0.5;
-    public static double BACK_UNLOCKED = BACK_LOCKED + 0.2;
+    public static double BACK_UNLOCKED = 0.92;
+    public static double BACK_LOCKED = BACK_UNLOCKED - 0.28;
 
-    public static double FRONT_LOCKED = 0.62;
-    public static double FRONT_UNLOCKED = FRONT_LOCKED + 0.22;
+    public static double FRONT_UNLOCKED = 0.85;
+    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.28;
 
     public static double LOW_HEIGHT = 12.0; // inches
     public static double MED_HEIGHT = 15.0; // inches
     public static double HIGH_HEIGHT = 18.0;
 
     public static int LIFT_WRIST_CLEAR_POS = 600;
+    public static int LIFT_INTAKE_READY_POS = 100;
 
     Servo wrist, backLock, frontLock;
     public Lift lift;
+
     Turret turret;
+    private double lastTurretDelta;
 
     public OuttakeState outtakeState;
 
@@ -34,6 +37,7 @@ public class Outtake implements Subsystem{
     double wristPos;
 
     public double targetHeight; // inches
+    private double lastTargetHeight;
 
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -61,7 +65,16 @@ public class Outtake implements Subsystem{
         lift.read();
         turret.read();
 
+        if(outtakeState == OuttakeState.OUTTAKE) {
+            if(targetHeight != lastTargetHeight || turret.getTurretHeightDelta() != lastTurretDelta) {
+                setTargetHeight(targetHeight);
+            }
+        }
+
         wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
+
+        lastTargetHeight = targetHeight;
+        lastTurretDelta = turret.getTurretHeightDelta();
     }
 
     public void write() {
@@ -75,13 +88,25 @@ public class Outtake implements Subsystem{
         targetHeight = targetHeight + lift.toInches(lift.getPosDelta(power));
     }
 
-    public void retractLift() {
-        this.lift.setMotionProfileTargetPos(0);
-    }
-
     public void setTargetHeight(double targetHeight) {
         this.targetHeight = targetHeight;
         this.lift.setMotionProfileTargetHeight(targetHeight + turret.getTurretHeightDelta());
+    }
+
+    public void updateTargetHeight() {
+        this.targetHeight = lift.toInches(lift.targetPos) + turret.getTurretHeightDelta();
+    }
+
+    public boolean liftIntakeReady() {
+        return lift.getCurrentPos() < LIFT_INTAKE_READY_POS;
+    }
+
+    public void setTurretAngle(double angleDeg) {
+        turret.targetAngle = angleDeg;
+    }
+
+    public void toggleWrist() {
+        wristRetracted = !wristRetracted;
     }
 
     public void telemetry(Telemetry telemetry) {

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Plane implements Subsystem{
     public static double PLANE_RELEASED = 0.5;
+    public static double PLANE_RETRACT = 0.5;
 
     Servo plane;
     ServoControllerEx planeController;
@@ -18,12 +19,11 @@ public class Plane implements Subsystem{
 
     public Plane(HardwareMap hardwareMap) {
         plane = hardwareMap.get(Servo.class, "plane");
-        planeController = (ServoControllerEx) plane.getController();
     }
 
     @Override
     public void init() {
-        planeController.pwmDisable();
+        plane.setPosition(PLANE_RETRACT);
     }
 
     public void read() {
@@ -33,15 +33,14 @@ public class Plane implements Subsystem{
     @Override
     public void write() {
         if(released) {
-            planeController.pwmEnable();
             plane.setPosition(PLANE_RELEASED);
         } else {
-            planeController.pwmDisable();
+            plane.setPosition(PLANE_RETRACT);
         }
     }
 
-    public void releasePlane() {
-        released = true;
+    public void togglePlane() {
+        released = !released;
     }
 
     public void telemetry(Telemetry telemetry) {
