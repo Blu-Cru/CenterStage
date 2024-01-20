@@ -59,12 +59,12 @@ public class MainTeleOp extends LinearOpMode {
 
 
         while(opModeIsActive()) {
+            deltaTime = totalTimer.milliseconds() - lastTime;
             lastTime = totalTimer.milliseconds();
             // updates states based on gamepad input
             read();
 
             // loop time: current time - time at start of loop
-            deltaTime = totalTimer.milliseconds() - lastTime;
 
             // data for feedback
             write();
@@ -165,6 +165,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if(gamepad2.a) {
+                    robotState = RobotState.RETRACT;
                     robot.outtake.outtakeState = OuttakeState.RETRACT;
                     robot.outtake.lift.setTargetPos(0);
                 }
@@ -173,10 +174,16 @@ public class MainTeleOp extends LinearOpMode {
                 robot.outtake.outtakeState = OuttakeState.OUTTAKE;
 
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
-                    if(gamepad2.left_trigger > 0.1) {
-                        robot.outtake.setTurretAngle(-gamepad2.left_trigger * 90 + 270);
-                    } else if (gamepad2.right_trigger > 0.1) {
-                        robot.outtake.setTurretAngle(gamepad2.right_trigger * 90 + 270);
+                    if(!robot.outtake.wristRetracted) {
+                        if (gamepad2.left_trigger > 0.1) {
+                            robot.outtake.setTurretAngle(-gamepad2.left_trigger * 70 + 270);
+                        } else if (gamepad2.right_trigger > 0.1) {
+                            robot.outtake.setTurretAngle(gamepad2.right_trigger * 70 + 270);
+                        } else {
+                            robot.outtake.setTurretAngle(270);
+                        }
+                    } else {
+                        robot.outtake.setTurretAngle(270);
                     }
                 } else {
                     robot.outtake.setTurretAngle(270);
@@ -191,17 +198,18 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if(gamepad2.b && !lastGamepad2.b) {
-                    robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
-                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
-                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
                 if(gamepad2.a && !lastGamepad2.a && robot.outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
+                    robot.outtake.outtakeState = OuttakeState.RETRACT;
                     robot.outtake.lift.setTargetPos(0);
                 }
                 break;
@@ -216,6 +224,8 @@ public class MainTeleOp extends LinearOpMode {
             }
             robot.outtake.lift.liftState = LiftState.AUTO;
         }
+
+        robot.read();
     }
 
     public void write() {
