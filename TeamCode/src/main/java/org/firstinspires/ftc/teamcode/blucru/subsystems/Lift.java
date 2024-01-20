@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 
 @Config
 public class Lift implements Subsystem{
-    public static double liftP = 0.003, liftI = 0, liftD = 0.0001, liftF = 0.04;
+    public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
     public static int YELLOW_POS = 1300;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int liftMinPos = 0, liftMaxPos = 1560;
@@ -35,7 +35,7 @@ public class Lift implements Subsystem{
     private PIDController liftPID;
 
     private double PID;
-    private double ff = liftF;
+    private double ff = kF;
 
     public double power;
     public int targetPos;
@@ -65,7 +65,7 @@ public class Lift implements Subsystem{
 
     public void init() {
         setTargetPos(0);
-        liftPID = new PIDController(liftP, liftI, liftD);
+        liftPID = new PIDController(kP, kI, kD);
 
         //set all motors to zero power
         liftMotor.setPower(0);

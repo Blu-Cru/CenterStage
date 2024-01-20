@@ -17,13 +17,13 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.7, DRIVE_POWER_OUTTAKE = 0.4;
 
-    public static double maxAccelDriveVectorDelta = 5; // magnitude per second at power 1
-    public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
-    public static double turnP = 1.0, turnI = 0, turnD = 0.02;
+    public static double MAX_ACCEL_DRIVE_DELTA = 5; // magnitude per second at power 1
+    public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
+    public static double TURN_P = 1.0, TURN_I = 0, TURN_D = 0.02;
 
-    public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
-    public static double angleTolerance = 0.5; // radians
-    public static double OUTTAKE_DISTANCE;
+    public static double DISTANCE_P = -0.015, DISTANCE_I = -0.12, DISTANCE_D = -0.12;
+    public static double ANGLE_TOLERANCE = 0.5; // radians
+    public static double OUTTAKE_DISTANCE = 5;
 
     public double drivePower = 0.5;
     private double dt;
@@ -50,8 +50,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public Drivetrain(HardwareMap hardwareMap) {
         super(hardwareMap);
-        turnPID = new PIDController(turnP, turnI, turnD);
-        distancePID = new PIDController(distanceP, distanceI, distanceD);
+        turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
+        distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
         distanceSensors = new DistanceSensors(hardwareMap);
     }
 
@@ -76,6 +76,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastVelocity = velocity;
         lastTime = System.currentTimeMillis();
         heading = getRelativeHeading();
+
+        distanceSensors.read();
     }
 
     public void write() {
@@ -105,8 +107,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public Vector2d calculateDriveVector(Vector2d input) {
         // scale acceleration to match drive power
-        double scaledAccelDelta = maxAccelDriveVectorDelta / drivePower;
-        double scaledDecelDelta = maxDecelDriveVectorDelta / drivePower;
+        double scaledAccelDelta = MAX_ACCEL_DRIVE_DELTA / drivePower;
+        double scaledDecelDelta = MAX_DECEL_DRIVE_DELTA / drivePower;
 
         // scale down so magnitude isnt greater than 1
 //        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
@@ -150,7 +152,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         Vector2d driveVector = calculateDriveVector(distanceVector);
 
         double component;
-        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < angleTolerance && distanceSensors.sensing) {
+        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < ANGLE_TOLERANCE && distanceSensors.sensing) {
             component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
             driveVector = setComponent(driveVector, component, -(heading - targetHeading));
@@ -170,7 +172,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public double getDistanceSensorAngleError(double targetHeading) {
-        distanceSensors.read();
         double error = heading - targetHeading - distanceSensors.angle;
         if(error > Math.PI) {
             error -= 2 * Math.PI;
@@ -241,9 +242,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("drive power", drivePower);
-        telemetry.addData("heading", getExternalHeading());
-        telemetry.addData("x", getPoseEstimate().getX());
-        telemetry.addData("y", getPoseEstimate().getY());
+        telemetry.addData("heading", heading);
+        telemetry.addData("x", pose.getX());
+        telemetry.addData("y", pose.getY());
         telemetry.addData("field centric", fieldCentric);
     }
 

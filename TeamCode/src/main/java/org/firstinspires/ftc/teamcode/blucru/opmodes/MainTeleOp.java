@@ -2,20 +2,16 @@ package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.blucru.Constants;
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 
@@ -217,7 +213,7 @@ public class MainTeleOp extends LinearOpMode {
 
         if(Math.abs(gamepad2.right_stick_y) > 0.1) {
             robot.outtake.lift.liftState = LiftState.MANUAL;
-            robot.outtake.setManualSlidePower(-gamepad2.right_stick_y);
+            robot.outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
         } else {
             if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
                 robot.outtake.updateTargetHeight();

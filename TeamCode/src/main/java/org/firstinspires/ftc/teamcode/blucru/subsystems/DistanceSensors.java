@@ -58,7 +58,7 @@ public class DistanceSensors implements Subsystem {
 
     @Override
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("angle", angle);
+        telemetry.addData("distance sensor angle", angle);
         telemetry.addData("average distance", averageDistance);
         telemetry.addData("distance from wall", distanceFromWall);
     }
