@@ -40,7 +40,8 @@ public class Outtake implements Subsystem{
     public double targetHeight; // inches
     private double lastTargetHeight;
 
-    public boolean locked;
+    public boolean frontLocked;
+    public boolean backLocked;
     double backLockPos;
     double frontLockPos;
 
@@ -54,7 +55,8 @@ public class Outtake implements Subsystem{
 
         outtakeState = OuttakeState.RETRACT;
 
-        locked = true;
+        frontLocked = true;
+        backLocked = true;
 
         wristRetracted = true;
         wristPos = WRIST_RETRACT;
@@ -69,15 +71,19 @@ public class Outtake implements Subsystem{
     }
 
     public void read() {
-        lift.read();
-        turret.read();
-
         wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
-        backLockPos = locked ? BACK_LOCKED : BACK_UNLOCKED;
-        frontLockPos = locked ? FRONT_LOCKED : FRONT_UNLOCKED;
+        backLockPos = backLocked ? BACK_LOCKED : BACK_UNLOCKED;
+        frontLockPos = frontLocked ? FRONT_LOCKED : FRONT_UNLOCKED;
+
+        if(outtakeState == OuttakeState.OUTTAKE) {
+            lift.setTargetPos(lift.toTicks(targetHeight + turret.getTurretHeightDelta()));
+        }
 
         lastTargetHeight = targetHeight;
         lastTurretDelta = turret.getTurretHeightDelta();
+
+        lift.read();
+        turret.read();
     }
 
     public void write() {
@@ -119,11 +125,23 @@ public class Outtake implements Subsystem{
     }
 
     public void lock() {
-        locked = true;
+        frontLocked = true;
+        backLocked = true;
     }
 
     public void unlock() {
-        locked = false;
+        frontLocked = false;
+        backLocked = false;
+    }
+
+    public void lockFront() {
+        frontLocked = true;
+        backLocked = false;
+    }
+
+    public void lockBack() {
+        frontLocked = false;
+        backLocked = true;
     }
 
     public void telemetry(Telemetry telemetry) {

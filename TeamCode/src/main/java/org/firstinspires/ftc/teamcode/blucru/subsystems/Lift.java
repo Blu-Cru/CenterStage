@@ -194,8 +194,8 @@ public class Lift implements Subsystem{
         return (current1 + current2) / 2;
     }
 
-    public double toTicks(double inches) {
-        return inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV;
+    public int toTicks(double inches) {
+        return (int) (inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV);
     }
 
     public double toInches(double ticks) {

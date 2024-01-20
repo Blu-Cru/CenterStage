@@ -15,15 +15,17 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
+    public static double DRIVE_POWER_RETRACT = 0.7, DRIVE_POWER_OUTTAKE = 0.4;
+
     public static double maxAccelDriveVectorDelta = 5; // magnitude per second at power 1
     public static double maxDecelDriveVectorDelta = 30.0; // magnitude per second at power 1
     public static double turnP = 1.0, turnI = 0, turnD = 0.02;
+
     public static double distanceP = -0.015, distanceI = -0.12, distanceD = -0.12;
-    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
     public static double angleTolerance = 0.5; // radians
+    public static double OUTTAKE_DISTANCE;
 
     public double drivePower = 0.5;
-
     private double dt;
     private Pose2d pose;
     private double velocity;

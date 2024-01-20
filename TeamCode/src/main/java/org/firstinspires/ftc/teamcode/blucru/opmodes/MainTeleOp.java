@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.blucru.Constants;
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 
@@ -96,11 +97,18 @@ public class MainTeleOp extends LinearOpMode {
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
-            robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+            if(gamepad1.left_bumper) {
+                robot.drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, Math.toRadians(180));
+            } else {
+                robot.drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+            }
         } else if(gamepad1.x) {
-            robot.drivetrain.driveToHeading(horz, vert, 0);
+            if(gamepad1.left_bumper) {
+                robot.drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, 0);
+            } else {
+                robot.drivetrain.driveToHeading(horz, vert, 0);
+            }
         } else {
-            // otherwise, drive normally
             robot.drivetrain.drive(horz, vert, rotate);
         }
 
@@ -112,7 +120,7 @@ public class MainTeleOp extends LinearOpMode {
             robot.intake.setIntakePower(0);
         }
 
-        if(gamepad2.a) {
+        if(gamepad2.a && robot.outtake.liftIntakeReady()) {
             robot.intake.downIntakeWrist();
         } else {
             robot.intake.retractIntakeWrist();
@@ -122,23 +130,17 @@ public class MainTeleOp extends LinearOpMode {
             case RETRACT:
                 robot.outtake.outtakeState = OuttakeState.RETRACT;
 
-                if(gamepad2.a && robot.outtake.liftIntakeReady()) {
-                    robot.intake.downIntakeWrist();
-                } else {
-                    robot.intake.retractIntakeWrist();
-                }
-
                 if(gamepad2.b && !lastGamepad2.b) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
                 break;
             case LIFTING:
@@ -151,15 +153,15 @@ public class MainTeleOp extends LinearOpMode {
 
                 if(gamepad2.b && !lastGamepad2.b) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.MED_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
                     robotState = RobotState.LIFTING;
-                    robot.outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
                 if(gamepad2.a) {
