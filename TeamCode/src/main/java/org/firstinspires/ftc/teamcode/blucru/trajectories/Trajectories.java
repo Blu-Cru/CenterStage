@@ -103,7 +103,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), 0)
                     // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -120,7 +120,7 @@ public class Trajectories {
                         })
                     // retract
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                     // set up intake
                         .setVelConstraint(fastVelocity)
@@ -149,7 +149,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
                     // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -164,7 +164,7 @@ public class Trajectories {
                             robot.outtake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                         .waitSeconds(1.2)
                     // set up intake
@@ -194,7 +194,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
                     // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -209,7 +209,7 @@ public class Trajectories {
                             robot.outtake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                         .waitSeconds(1.2)
                         .build();
@@ -265,7 +265,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(45, -29*reflect), Math.toRadians(0))
                             // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -280,7 +280,7 @@ public class Trajectories {
                             robot.outtake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                         .waitSeconds(1.2)
                         .build();
@@ -311,7 +311,7 @@ public class Trajectories {
                         .splineToSplineHeading(new Pose2d(depositSetupX, -36*reflect, Math.toRadians(180)), 0)
                             // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -326,7 +326,7 @@ public class Trajectories {
                             robot.outtake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                         .waitSeconds(1.2)
                             // drive to intake
@@ -357,7 +357,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(depositSetupX, -29*reflect), Math.toRadians(0))
                             // lift
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                            robot.outtake.lift.setTargetPos(Lift.YELLOW_POS);
                         })
                         .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                             robot.outtake.toggleWrist();
@@ -372,7 +372,7 @@ public class Trajectories {
                             robot.outtake.toggleWrist();
                         })
                         .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            robot.outtake.lift.setMotionProfileTargetPos(0);
+                            robot.outtake.lift.setTargetPos(0);
                         })
                         .waitSeconds(1.2)
                         .build();

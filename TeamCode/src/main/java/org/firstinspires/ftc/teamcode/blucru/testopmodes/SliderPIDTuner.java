@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Lift;
@@ -35,6 +36,8 @@ public class SliderPIDTuner extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+            target = Range.clip(target, Lift.liftMinPos, Lift.liftMaxPos);
+
             controller.setPID(p, i, d);
             int sliderPos = lift.getCurrentPos();
             double power = controller.calculate(sliderPos, target) + f;

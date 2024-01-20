@@ -164,7 +164,7 @@ public class MainTeleOp extends LinearOpMode {
 
                 if(gamepad2.a) {
                     robot.outtake.outtakeState = OuttakeState.RETRACT;
-                    robot.outtake.lift.setMotionProfileTargetPos(0);
+                    robot.outtake.lift.setTargetPos(0);
                 }
                 break;
             case OUTTAKE:
@@ -200,7 +200,7 @@ public class MainTeleOp extends LinearOpMode {
 
                 if(gamepad2.a && !lastGamepad2.a && robot.outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
-                    robot.outtake.lift.setMotionProfileTargetPos(0);
+                    robot.outtake.lift.setTargetPos(0);
                 }
                 break;
         }

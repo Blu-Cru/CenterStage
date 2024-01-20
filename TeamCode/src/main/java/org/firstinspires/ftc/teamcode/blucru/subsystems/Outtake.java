@@ -4,11 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.53;
+    public static double WRIST_RETRACT = 0.58;
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
@@ -18,11 +19,11 @@ public class Outtake implements Subsystem{
     public static double FRONT_UNLOCKED = 0.85;
     public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.28;
 
-    public static double LOW_HEIGHT = 12.0; // inches
-    public static double MED_HEIGHT = 15.0; // inches
-    public static double HIGH_HEIGHT = 18.0;
+    public static double LOW_HEIGHT = 16.0; // inches
+    public static double MED_HEIGHT = 20.0; // inches
+    public static double HIGH_HEIGHT = 22.0;
 
-    public static int LIFT_WRIST_CLEAR_POS = 600;
+    public static int LIFT_WRIST_CLEAR_POS = 300;
     public static int LIFT_INTAKE_READY_POS = 100;
 
     Servo wrist, backLock, frontLock;
@@ -71,12 +72,6 @@ public class Outtake implements Subsystem{
         lift.read();
         turret.read();
 
-        if(outtakeState == OuttakeState.OUTTAKE) {
-            if(targetHeight != lastTargetHeight || turret.getTurretHeightDelta() != lastTurretDelta) {
-                setTargetHeight(targetHeight);
-            }
-        }
-
         wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
         backLockPos = locked ? BACK_LOCKED : BACK_UNLOCKED;
         frontLockPos = locked ? FRONT_LOCKED : FRONT_UNLOCKED;
@@ -100,7 +95,7 @@ public class Outtake implements Subsystem{
 
     public void setTargetHeight(double targetHeight) {
         this.targetHeight = targetHeight;
-        this.lift.setMotionProfileTargetHeight(targetHeight + turret.getTurretHeightDelta());
+        this.lift.setTargetPos((int) lift.toTicks(targetHeight + turret.getTurretHeightDelta()));
     }
 
     public void updateTargetHeight() {

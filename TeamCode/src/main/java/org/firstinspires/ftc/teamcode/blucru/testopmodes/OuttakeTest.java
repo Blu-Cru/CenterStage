@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.subsystems.Outtake;
 
+@TeleOp(name = "outtake test", group = "TeleOp")
 public class OuttakeTest extends LinearOpMode {
     Outtake outtake;
     Drivetrain drivetrain;
@@ -26,6 +28,7 @@ public class OuttakeTest extends LinearOpMode {
 
         while(opModeIsActive()) {
             read();
+            write();
         }
     }
 
@@ -44,6 +47,9 @@ public class OuttakeTest extends LinearOpMode {
     }
 
     public void read() {
+        outtake.read();
+        drivetrain.read();
+
         drivetrain.setDrivePower(robotState, gamepad1);
 
         double horz = Math.pow(gamepad1.left_stick_x, 3);
@@ -64,11 +70,17 @@ public class OuttakeTest extends LinearOpMode {
             drivetrain.drive(horz, vert, rotate);
         }
 
+        if(gamepad2.left_bumper) {
+            outtake.unlock();
+        } else {
+            outtake.lock();
+        }
+
         if(Math.abs(gamepad2.right_stick_y) > 0.1) {
             outtake.lift.liftState = LiftState.MANUAL;
             outtake.setManualSlidePower(-gamepad2.right_stick_y);
         } else {
-            if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
+            if(!(Math.abs(gamepad2.right_stick_y) > 0.1) && Math.abs(lastGamepad2.right_stick_y) > 0.1) {
                 outtake.updateTargetHeight();
             }
             outtake.lift.liftState = LiftState.AUTO;
@@ -80,15 +92,15 @@ public class OuttakeTest extends LinearOpMode {
 
                 if(gamepad2.b && !lastGamepad2.b) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.MED_HEIGHT;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
                 break;
             case LIFTING:
@@ -101,30 +113,36 @@ public class OuttakeTest extends LinearOpMode {
 
                 if(gamepad2.b && !lastGamepad2.b) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.MED_HEIGHT;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
                     robotState = RobotState.LIFTING;
-                    outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
                 if(gamepad2.a) {
                     outtake.outtakeState = OuttakeState.RETRACT;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.lift.setTargetPos(0);
                 }
                 break;
             case OUTTAKE:
                 outtake.outtakeState = OuttakeState.OUTTAKE;
 
-                if(outtakeTimer.seconds() > 1 && !outtake.wristRetracted) {
-                    if(gamepad2.left_trigger > 0.1) {
-                        outtake.setTurretAngle(-gamepad2.left_trigger * 90 + 270);
-                    } else if (gamepad2.right_trigger > 0.1) {
-                        outtake.setTurretAngle(gamepad2.right_trigger * 90 + 270);
+                if(outtakeTimer.seconds() > 1) {
+                    if(!outtake.wristRetracted) {
+                        if(gamepad2.left_trigger > 0.1) {
+                            outtake.setTurretAngle(-gamepad2.left_trigger * 90 + 270);
+                        } else if (gamepad2.right_trigger > 0.1) {
+                            outtake.setTurretAngle(gamepad2.right_trigger * 90 + 270);
+                        } else {
+                            outtake.setTurretAngle(270);
+                        }
+                    } else {
+                        outtake.setTurretAngle(270);
                     }
                 } else {
                     outtake.setTurretAngle(270);
@@ -137,21 +155,33 @@ public class OuttakeTest extends LinearOpMode {
                 }
 
                 if(gamepad2.b && !lastGamepad2.b) {
-                    outtake.targetHeight = Outtake.LOW_HEIGHT;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.x && !lastGamepad2.x) {
-                    outtake.targetHeight = Outtake.MED_HEIGHT;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.y && !lastGamepad2.y) {
-                    outtake.targetHeight = Outtake.HIGH_HEIGHT;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
                 if(gamepad2.a && !lastGamepad2.a && outtake.wristRetracted) {
                     outtake.outtakeState = OuttakeState.RETRACT;
                     robotState = RobotState.RETRACT;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.lift.setTargetPos(0);
                 }
                 break;
         }
+    }
+
+    public void write() {
+        outtake.write();
+        drivetrain.write();
+        lastGamepad1.copy(gamepad1);
+        lastGamepad2.copy(gamepad2);
+
+        telemetry.addData("robot state", robotState);
+        outtake.telemetry(telemetry);
+        drivetrain.telemetry(telemetry);
+        telemetry.update();
     }
 }

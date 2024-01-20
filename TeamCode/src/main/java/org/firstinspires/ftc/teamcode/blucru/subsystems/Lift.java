@@ -14,11 +14,11 @@ import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 
 @Config
 public class Lift implements Subsystem{
-    public static double liftP = 0.012, liftI = 0, liftD = 0.0004, liftF = 0.05;
+    public static double liftP = 0.003, liftI = 0, liftD = 0.0001, liftF = 0.04;
     public static int YELLOW_POS = 1300;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int liftMinPos = 0, liftMaxPos = 1560;
-    public static double stallCurrent = 8; // amps
+    public static double stallCurrent = 20; // amps
     public static double resetCurrent = 1; // amps
     public final int resetTolerance = 20;
     public final int tolerance = 5; // ticks
@@ -89,7 +89,6 @@ public class Lift implements Subsystem{
     }
 
     public void read() {
-        setTargetPos(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()));
         currentPos = getCurrentPos();
         velocity = Range.clip((currentPos - lastPos) * 1000.0 / dt, -motionProfile.vMax, motionProfile.vMax);
 
@@ -106,10 +105,16 @@ public class Lift implements Subsystem{
                 if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
                     power = 0;
                     resetEncoder();
-                    setMotionProfile(new MotionProfile(0, 0));
-                } else if (getCurrent() > stallCurrent) {
-                    setMotionProfile(new MotionProfile(currentPos - getDecelDelta(), currentPos, 0, slowVelocity, slowAccel));
+//                } else if (getCurrent() > stallCurrent) {
+//                    setTargetPos(currentPos - getDecelDelta());
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
+                    power = 0;
+                } else {
+                    power = PID;
+                }
+                break;
+            case PID:
+                if(Math.abs(targetPos - currentPos) < tolerance) {
                     power = 0;
                 } else {
                     power = PID;
@@ -117,7 +122,7 @@ public class Lift implements Subsystem{
                 break;
             case MANUAL:
                 // set manual power in opmode
-                setMotionProfileTargetPos(currentPos + getDecelDelta());
+                setTargetPos(currentPos + getDecelDelta());
                 break;
         }
 
@@ -126,17 +131,17 @@ public class Lift implements Subsystem{
         setPower(power);
     }
 
-    public void setMotionProfileTargetHeight(double targetHeight) {
-        setMotionProfileTargetPos((int) (toTicks(targetHeight)));
-    }
+//    public void setMotionProfileTargetHeight(double targetHeight) {
+//        setMotionProfileTargetPos((int) (toTicks(targetHeight)));
+//    }
 
-    public void setMotionProfileTargetPos(int targetPos) {
-        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
-    }
+//    public void setMotionProfileTargetPos(int targetPos) {
+//        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
+//    }
 
-    public void setMotionProfileTargetPos(int targetPos, double vMax, double aMax) {
-        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, vMax, aMax));
-    }
+//    public void setMotionProfileTargetPos(int targetPos, double vMax, double aMax) {
+//        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, vMax, aMax));
+//    }
 
     public void setMotionProfileConstraints(double maxVelocity, double maxAcceleration) {
         motionProfile.setConstraints(maxVelocity, maxAcceleration);
