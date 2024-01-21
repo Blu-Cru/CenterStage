@@ -20,7 +20,7 @@ public class Intake implements Subsystem{
     public static double WRIST_STACK3_DEG = -15;
     public static double WRIST_STACK4_DEG = -7;
 
-    public static double POWER = 0.75;
+    public static double POWER = 1;
 
     private DcMotorEx intakeMotor;
     private CRServo intakeRoller;

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.58;
+    public static double WRIST_RETRACT = 0.53;
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
@@ -19,9 +19,9 @@ public class Outtake implements Subsystem{
     public static double FRONT_UNLOCKED = 0.85;
     public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.28;
 
-    public static double LOW_HEIGHT = 16.0; // inches
-    public static double MED_HEIGHT = 20.0; // inches
-    public static double HIGH_HEIGHT = 22.0;
+    public static double LOW_HEIGHT = 4.0; // inches
+    public static double MED_HEIGHT = 8.0; // inches
+    public static double HIGH_HEIGHT = 12.0;
 
     public static int LIFT_WRIST_CLEAR_POS = 300;
     public static int LIFT_INTAKE_READY_POS = 100;
@@ -76,7 +76,7 @@ public class Outtake implements Subsystem{
         frontLockPos = frontLocked ? FRONT_LOCKED : FRONT_UNLOCKED;
 
         if(outtakeState == OuttakeState.OUTTAKE) {
-            lift.setTargetPos(lift.toTicks(targetHeight + turret.getTurretHeightDelta()));
+            lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
         }
 
         lastTargetHeight = targetHeight;
@@ -101,11 +101,11 @@ public class Outtake implements Subsystem{
 
     public void setTargetHeight(double targetHeight) {
         this.targetHeight = targetHeight;
-        this.lift.setTargetPos((int) lift.toTicks(targetHeight + turret.getTurretHeightDelta()));
+        this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
     public void updateTargetHeight() {
-        this.targetHeight = lift.toInches(lift.targetPos) + turret.getTurretHeightDelta();
+        this.targetHeight = lift.toInches(lift.targetPos) - turret.getTurretHeightDelta();
     }
 
     public boolean liftIntakeReady() {
@@ -122,6 +122,14 @@ public class Outtake implements Subsystem{
 
     public void toggleWrist() {
         wristRetracted = !wristRetracted;
+    }
+
+    public void retractWrist() {
+        wristRetracted = true;
+    }
+
+    public void extendWrist() {
+        wristRetracted = false;
     }
 
     public void lock() {

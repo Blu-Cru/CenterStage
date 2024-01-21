@@ -20,7 +20,7 @@ public class PropDetectionTest extends LinearOpMode {
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
         cvMaster.detectProp();
         // Init
-        while (opModeInInit()) {
+        while (opModeInInit() && !isStopRequested()) {
             if(gamepad1.left_bumper && !lastGamepad1.left_bumper) {
                 if(alliance == Alliance.BLUE) {
                     alliance = Alliance.RED;

@@ -108,14 +108,25 @@ public class MainTeleOp extends LinearOpMode {
             robot.drivetrain.drive(horz, vert, rotate);
         }
 
-        if(gamepad2.left_trigger > 0.1) {
-            robot.intake.setIntakePower(gamepad2.left_trigger);
-        } else if(gamepad2.right_trigger > 0.1) {
-            robot.intake.setIntakePower(-gamepad2.right_trigger);
+        // INTAKE
+        if(gamepad1.left_trigger > 0.1) {
+            robot.intake.setIntakePower(gamepad1.left_trigger);
+            robot.outtake.unlock();
+        } else if(gamepad1.right_trigger > 0.1) {
+            robot.intake.setIntakePower(-gamepad1.right_trigger);
+            robot.outtake.lock();
         } else {
             robot.intake.setIntakePower(0);
+            if(gamepad2.left_bumper) {
+                robot.outtake.lockBack();
+            } else if(gamepad2.right_bumper) {
+                robot.outtake.unlock();
+            } else {
+                robot.outtake.lock();
+            }
         }
 
+        // toggle intake wrist
         if(gamepad2.a && robot.outtake.liftIntakeReady()) {
             robot.intake.downIntakeWrist();
         } else {
@@ -126,15 +137,15 @@ public class MainTeleOp extends LinearOpMode {
             case RETRACT:
                 robot.outtake.outtakeState = OuttakeState.RETRACT;
 
-                if(gamepad2.b && !lastGamepad2.b) {
+                if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
-                if(gamepad2.x && !lastGamepad2.x) {
+                if(gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
-                if(gamepad2.y && !lastGamepad2.y) {
+                if(gamepad2.y) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -147,15 +158,15 @@ public class MainTeleOp extends LinearOpMode {
                     outtakeTimer.reset();
                 }
 
-                if(gamepad2.b && !lastGamepad2.b) {
+                if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
-                if(gamepad2.x && !lastGamepad2.x) {
+                if(gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
-                if(gamepad2.y && !lastGamepad2.y) {
+                if(gamepad2.y) {
                     robotState = RobotState.LIFTING;
                     robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -172,9 +183,9 @@ public class MainTeleOp extends LinearOpMode {
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
                     if(!robot.outtake.wristRetracted) {
                         if (gamepad2.left_trigger > 0.1) {
-                            robot.outtake.setTurretAngle(-gamepad2.left_trigger * 70 + 270);
+                            robot.outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
                         } else if (gamepad2.right_trigger > 0.1) {
-                            robot.outtake.setTurretAngle(gamepad2.right_trigger * 70 + 270);
+                            robot.outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
                         } else {
                             robot.outtake.setTurretAngle(270);
                         }
@@ -185,25 +196,28 @@ public class MainTeleOp extends LinearOpMode {
                     robot.outtake.setTurretAngle(270);
                 }
 
-                if(robot.outtake.getTurretAngle() == 270) {
-                    if(gamepad2.dpad_down && !lastGamepad2.dpad_down) {
-                        robot.outtake.toggleWrist();
+                if(Math.abs(robot.outtake.getTurretAngle() - 270) < 10) {
+                    if(gamepad2.dpad_up) {
+                        robot.outtake.extendWrist();
+                    }
+                    if(gamepad2.dpad_down) {
+                        robot.outtake.retractWrist();
                     }
                 } else {
-                    robot.outtake.wristRetracted = false;
+                    robot.outtake.extendWrist();
                 }
 
-                if(gamepad2.b && !lastGamepad2.b) {
+                if(gamepad2.b) {
                     robot.outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
-                if(gamepad2.x && !lastGamepad2.x) {
+                if(gamepad2.x) {
                     robot.outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
-                if(gamepad2.y && !lastGamepad2.y) {
+                if(gamepad2.y) {
                     robot.outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
-                if(gamepad2.a && !lastGamepad2.a && robot.outtake.wristRetracted) {
+                if(gamepad2.a && robot.outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
                     robot.outtake.outtakeState = OuttakeState.RETRACT;
                     robot.outtake.lift.setTargetPos(0);
@@ -211,14 +225,22 @@ public class MainTeleOp extends LinearOpMode {
                 break;
         }
 
-        if(Math.abs(gamepad2.right_stick_y) > 0.1) {
-            robot.outtake.lift.liftState = LiftState.MANUAL;
-            robot.outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
+        // MANUAL SLIDE
+//        if(Math.abs(gamepad2.right_stick_y) > 0.1) {
+//            robot.outtake.lift.liftState = LiftState.MANUAL;
+//            robot.outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
+//        } else {
+//            if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
+//                robot.outtake.updateTargetHeight();
+//            }
+//            robot.outtake.lift.liftState = LiftState.AUTO;
+//        }
+
+        // MANUAL HANG
+        if(Math.abs(gamepad2.left_stick_y) > 0.1) {
+            robot.hanger.setPower(-gamepad2.left_stick_y);
         } else {
-            if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
-                robot.outtake.updateTargetHeight();
-            }
-            robot.outtake.lift.liftState = LiftState.AUTO;
+            robot.hanger.setPower(0);
         }
 
         robot.read();

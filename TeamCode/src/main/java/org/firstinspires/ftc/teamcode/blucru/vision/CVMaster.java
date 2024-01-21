@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.vision;
 
+import static java.lang.Thread.sleep;
+
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -59,7 +61,7 @@ public class CVMaster {
                 .build();
 
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(propDetector)
@@ -67,6 +69,10 @@ public class CVMaster {
                 .build();
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
+
+        while ((visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+
+        }
 
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);

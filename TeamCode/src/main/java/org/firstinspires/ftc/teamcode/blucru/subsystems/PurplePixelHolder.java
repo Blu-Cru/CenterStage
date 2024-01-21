@@ -15,7 +15,7 @@ public class PurplePixelHolder implements Subsystem{
     private double position;
 
     public PurplePixelHolder(HardwareMap hardwareMap) {
-        purplePixelHolder = hardwareMap.get(Servo.class, "purplePixelHolder");
+        purplePixelHolder = hardwareMap.get(Servo.class, "purple pixel");
     }
 
     public void init() {
