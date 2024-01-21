@@ -69,10 +69,6 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     public void initialize() {
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
-
         robotState = RobotState.RETRACT;
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
@@ -80,6 +76,10 @@ public class MainTeleOp extends LinearOpMode {
 
         totalTimer = new ElapsedTime();
         outtakeTimer = new ElapsedTime();
+
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
 
         robot.init();
     }
