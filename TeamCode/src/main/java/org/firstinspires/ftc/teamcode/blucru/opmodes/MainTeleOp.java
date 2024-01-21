@@ -31,7 +31,7 @@ right joystick : turn
 
  */
 @Config
-@TeleOp(name = "Main TeleOp", group = "TeleOp")
+@TeleOp(name = "Main TeleOp", group = "1")
 public class MainTeleOp extends LinearOpMode {
     public static double OUTTAKE_DELAY_SECONDS = 1;
 

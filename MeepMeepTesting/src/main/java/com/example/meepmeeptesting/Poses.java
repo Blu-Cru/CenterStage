@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.blucru.trajectories;
+package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-
-import org.firstinspires.ftc.teamcode.blucru.states.Alliance;
 
 public class Poses {
     public static double BACKDROP_X = 52;
@@ -35,13 +33,7 @@ public class Poses {
 
     public static double reflect = 1;
 
-    public Poses(Alliance alliance) {
-        if (alliance == Alliance.BLUE) {
-            reflect = -1;
-        } else {
-            reflect = 1;
-        }
-
+    static {
         BACKDROP_STARTING_POSE = new Pose2d(12, START_Y * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_FAR_POSE = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
         BACKDROP_PLACEMENT_CLOSE_POSE = new Pose2d(23.5, -35 * reflect, Math.toRadians(-90 * reflect));

@@ -39,7 +39,7 @@ public class CenterCycleAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(telemetry, hardwareMap);
+        robot = new Robot(hardwareMap);
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
@@ -76,10 +76,10 @@ public class CenterCycleAuto extends LinearOpMode {
                     telemetry.addData("Press a (x) to build trajectories", "");
                     break;
                 case BUILD:
+                    cvMaster = new CVMaster(hardwareMap, alliance);
                     autoState = AutoState.DETECTION;
                     break;
                 case DETECTION:
-                    cvMaster = new CVMaster(hardwareMap, alliance);
                     cvMaster.detectProp();
 
                     position = cvMaster.propDetector.position;
