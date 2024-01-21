@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.blucru.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.states.RobotState;
@@ -72,22 +73,19 @@ public class MainTeleOp extends LinearOpMode {
         robotState = RobotState.RETRACT;
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
-        robot = new Robot(telemetry, hardwareMap);
+        robot = new Robot(hardwareMap);
 
         totalTimer = new ElapsedTime();
         outtakeTimer = new ElapsedTime();
 
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
-
         robot.init();
+
+        // set initial pose from auto
+        robot.drivetrain.setPoseEstimate(Initialization.POSE);
     }
 
     public void read() {
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.clearBulkCache();
-        }
+        robot.clearBulkCache();
 
         // DRIVING
         robot.drivetrain.setDrivePower(robotState, gamepad1);

@@ -38,7 +38,7 @@ public class RedLeftParkAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(telemetry, hardwareMap);
+        robot = new Robot(hardwareMap);
         trajectories = new Trajectories(Alliance.RED, Side.FAR);
         cvMaster = new CVMaster(hardwareMap, Alliance.RED);
 //        autoState = AutoState.PLACEMENT;

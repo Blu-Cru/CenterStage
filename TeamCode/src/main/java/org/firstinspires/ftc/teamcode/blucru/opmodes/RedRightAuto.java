@@ -47,7 +47,7 @@ public class RedRightAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(telemetry, hardwareMap);
+        robot = new Robot(hardwareMap);
         trajectories = new Trajectories(Alliance.RED, Side.CLOSE);
         cvMaster = new CVMaster(hardwareMap, Alliance.RED);
 //        autoState = AutoState.PLACEMENT;

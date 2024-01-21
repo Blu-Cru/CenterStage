@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.subsystems;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,8 +20,7 @@ public class Robot {
 
     private ArrayList<Subsystem> subsystems;
 
-    public Robot(Telemetry telemetry, HardwareMap hardwareMap){
-        this.telemetry = telemetry;
+    public Robot(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
 
         outtake = new Outtake(hardwareMap);
@@ -41,6 +41,10 @@ public class Robot {
 
     // initializes subsystems
     public void init() {
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
+
         for(Subsystem subsystem : subsystems) {
             subsystem.init();
         }
@@ -55,6 +59,12 @@ public class Robot {
     public void write() {
         for(Subsystem subsystem : subsystems) {
             subsystem.write();
+        }
+    }
+
+    public void clearBulkCache() {
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.clearBulkCache();
         }
     }
 
