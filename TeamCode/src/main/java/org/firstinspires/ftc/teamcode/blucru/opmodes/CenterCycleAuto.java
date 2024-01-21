@@ -13,8 +13,11 @@ import org.firstinspires.ftc.teamcode.blucru.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.vision.CVMaster;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import java.util.ArrayList;
+
 @Autonomous(name ="Auto", group = "Auto")
 public class CenterCycleAuto extends LinearOpMode {
+    ArrayList<TrajectorySequence> trajectoryList;
     private Robot robot;
     private Alliance alliance = Alliance.RED;
     private Side side = Side.CLOSE;

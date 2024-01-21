@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -68,6 +69,10 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     public void initialize() {
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
+
         robotState = RobotState.RETRACT;
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
@@ -80,6 +85,10 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     public void read() {
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.clearBulkCache();
+        }
+
         // DRIVING
         robot.drivetrain.setDrivePower(robotState, gamepad1);
 
