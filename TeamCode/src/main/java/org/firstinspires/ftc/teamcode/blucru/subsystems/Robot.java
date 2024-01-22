@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 public class Robot {
-    private Telemetry telemetry;
     private HardwareMap hardwareMap;
 
     public Outtake outtake;
@@ -19,14 +18,14 @@ public class Robot {
     public PurplePixelHolder purplePixelHolder;
 
     private ArrayList<Subsystem> subsystems;
-
+    
     public Robot(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
 
         outtake = new Outtake(hardwareMap);
         intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
-        hanger = new Hanger(hardwareMap, telemetry);
+        hanger = new Hanger(hardwareMap);
 //        plane = new Plane(hardwareMap);
         purplePixelHolder = new PurplePixelHolder(hardwareMap);
 

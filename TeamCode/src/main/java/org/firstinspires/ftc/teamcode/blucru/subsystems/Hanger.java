@@ -18,7 +18,7 @@ public class Hanger implements Subsystem {
     private int currentPos;
     public int targetPos;
 
-    public Hanger(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Hanger(HardwareMap hardwareMap) {
         hangerMotor = hardwareMap.get(DcMotorEx.class, "hanger");
 
         hangerMotor.setDirection(DcMotorEx.Direction.FORWARD);
