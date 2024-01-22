@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.blucru.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class Deposits {
+    public static double DEPOSIT_TIME = 1.2;
+    public static double INTAKE_TIME = 1.5;
+
     public static double reflect = 1;
 
     public Deposits(Alliance alliance) {
@@ -26,7 +29,7 @@ public class Deposits {
                 .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), 0)
                 // deposit and retract
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 
@@ -42,7 +45,7 @@ public class Deposits {
                 .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
                 // release and retract
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 
@@ -60,12 +63,12 @@ public class Deposits {
                 .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
                 // deposit
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 
-    public TrajectorySequence depositFromWingClose(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CLOSE_POSE)
+    public TrajectorySequence depositThroughCenterFromWingClose(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(180 * reflect))
                 .splineToConstantHeading(new Vector2d(-53, -24*reflect), Math.toRadians(180))
@@ -73,7 +76,7 @@ public class Deposits {
                 // drop down, start intake, unlock
 
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(1)
+                .waitSeconds(INTAKE_TIME)
                 // lock and stop intake
 
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
@@ -95,11 +98,11 @@ public class Deposits {
 
                 // release yellow pixel
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 
-    public TrajectorySequence depositFromWingCenter(Robot robot) {
+    public TrajectorySequence depositThroughCenterFromWingCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(180 * reflect))
@@ -108,7 +111,7 @@ public class Deposits {
                 // drop down, start intake, unlock
 
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(1)
+                .waitSeconds(INTAKE_TIME)
                 // lock and start outtaking
 
                 // stop outtake
@@ -132,20 +135,19 @@ public class Deposits {
 
                 // release yellow pixel
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 
-    public TrajectorySequence depositFromWingFar(Robot robot) {
+    public TrajectorySequence depositThroughCenterFromWingFar(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(180 * reflect))
-                .splineToConstantHeading(new Vector2d(-53, -24*reflect), Math.toRadians(180))
                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
                 // drop down, start intake, unlock
 
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(1)
+                .waitSeconds(INTAKE_TIME)
                 // lock and start outtaking
 
                 // stop outtake
@@ -169,7 +171,120 @@ public class Deposits {
 
                 // release yellow pixel
 
-                .waitSeconds(1.2)
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence depositThroughPerimeterFromWingClose(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(180 * reflect))
+                .splineToSplineHeading(new Pose2d(Poses.STACK_SETUP_X, -36*reflect, Math.toRadians(180)), Math.toRadians(180))
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                // drop down, start intake, unlock
+
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
+                .waitSeconds(INTAKE_TIME)
+                // lock and start outtaking
+
+                // stop outtake
+
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(-45 * reflect))
+                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -43 * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                // turn turret
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), Math.toRadians(0))
+                // release white pixel
+
+                // turn turret
+
+                // release yellow pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence depositThroughPerimeterFromWingCenter(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CENTER_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(225 * reflect))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -24 * reflect), Math.toRadians(180))
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                // drop down, start intake, unlock
+
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
+                .waitSeconds(INTAKE_TIME)
+                // lock and start outtaking
+
+                // stop outtake
+
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(-45 * reflect))
+                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -43 * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                // turn turret
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), Math.toRadians(0))
+                // release white pixel
+
+                // turn turret
+
+                // release yellow pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence depositThroughPerimeterFromWingFar(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(180 * reflect))
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                // drop down, start intake, unlock
+
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
+                .waitSeconds(INTAKE_TIME)
+                // lock and start outtaking
+
+                // stop outtake
+
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(-45 * reflect))
+                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                // turn turret
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
+                // release white pixel
+
+                // turn turret
+
+                // release yellow pixel
+
+                .waitSeconds(DEPOSIT_TIME)
                 .build();
     }
 }

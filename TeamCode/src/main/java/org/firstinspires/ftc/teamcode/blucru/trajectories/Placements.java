@@ -49,12 +49,24 @@ public class Placements {
                 .build();
     }
 
-    public TrajectorySequence placementWingClose(Robot robot) {
+    public TrajectorySequence placementWingCloseForCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(-36, -52 * reflect), Math.toRadians(90 * reflect))
-                .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_POSE, Math.toRadians(90 * reflect))
+                .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE, Math.toRadians(45 * reflect))
+                // release purple pixel
+
+                .waitSeconds(0.5)
+                .build();
+    }
+
+    public TrajectorySequence placementWingCloseForPerimeter(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-36, -50 * reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
 
                 .waitSeconds(0.5)
