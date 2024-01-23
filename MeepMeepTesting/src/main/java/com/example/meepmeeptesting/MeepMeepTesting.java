@@ -16,39 +16,38 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE)
+                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
-                                .setTangent(Math.toRadians(180 * reflect))
+                                .setTangent(Math.toRadians(135 * reflect))
+                                // retract turret
+
+                                // retract wrist
+
+                                // retract lift
+                                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
+                                // start and lower intake
+
                                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
-                                // drop down, start intake, unlock
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                                .waitSeconds(0.5)
+                                // lock and raise intake, start outtaking
 
-                                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
-                                .waitSeconds(1)
-                                // lock and start outtaking
+                                // stop outtaking
 
-                                // stop outtake
-
+                                .setTangent(0)
                                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
-                                .setTangent(Math.toRadians(-45 * reflect))
-                                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
-                                .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
-                                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
                                 // lift
 
                                 // wrist back
 
-                                // turn turret
-
                                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
-                                .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
-                                // release white pixel
+                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                                // release pixel
 
-                                // turn turret
-
-                                // release yellow pixel
-
-                                .waitSeconds(1.2)
+                                .waitSeconds(0.5)
                                 .build()
                 );
 

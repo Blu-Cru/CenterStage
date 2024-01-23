@@ -27,7 +27,7 @@ public class Lift implements Subsystem{
     public static double TICKS_PER_REV = 384.5;
     public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
 
-    public static double fastVelocity = 10000.0, fastAccel = 20000.0;
+    public static double fastVelocity = 7000.0, fastAccel = 10000.0;
     public static double slowVelocity = 2500.0, slowAccel = 5000.0;
 
     public LiftState liftState;
@@ -91,7 +91,7 @@ public class Lift implements Subsystem{
 
     public void read() {
         currentPos = getCurrentPos();
-        velocity = Range.clip((currentPos - lastPos) * 1000.0 / dt, -motionProfile.vMax, motionProfile.vMax);
+        velocity = liftMotor.getVelocity();
 
         dt = System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
@@ -101,6 +101,17 @@ public class Lift implements Subsystem{
         PID = liftPID.calculate(currentPos, targetPos);
 
         switch(liftState) {
+            case MoPro:
+                targetPos = motionProfile.calculateTargetPosition(motionProfileTimer.seconds());
+                if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
+                    power = 0;
+                    resetEncoder();
+                } else if (Math.abs(targetPos - currentPos) < tolerance) {
+                    power = 0;
+                } else {
+                    power = PID;
+                }
+                break;
             case AUTO:
                 // if lift is down and stalling, reset encoder and set power to 0
                 if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
@@ -129,9 +140,9 @@ public class Lift implements Subsystem{
 //        setMotionProfileTargetPos((int) (toTicks(targetHeight)));
 //    }
 
-//    public void setMotionProfileTargetPos(int targetPos) {
-//        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
-//    }
+    public void setMotionProfileTargetPos(int targetPos) {
+        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
+    }
 
 //    public void setMotionProfileTargetPos(int targetPos, double vMax, double aMax) {
 //        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, vMax, aMax));

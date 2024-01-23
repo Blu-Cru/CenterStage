@@ -5,6 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 public class Poses {
     public static double BACKDROP_X = 52;
     public static double BACKDROP_SETUP_X = 48;
+
+    public static double BACKDROP_FAR_Y = -29;
+    public static double BACKDROP_CLOSE_Y = -43;
+
     public static double STACK_X = -58;
     public static double STACK_SETUP_X = -54;
     public static double START_Y = -62;

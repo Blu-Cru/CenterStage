@@ -17,17 +17,128 @@ public class Deposits {
         reflect = alliance == Alliance.BLUE ? -1 : 1;
     }
 
+    public TrajectorySequence cycleCenterFromClose(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(135 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(0)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence cycleCenterFromCenter(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(135 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(0)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence cycleCenterFromFar(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(135 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(0)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
     public TrajectorySequence depositFromBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_PLACEMENT_CLOSE_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(270 * reflect))
                 .splineToConstantHeading(new Vector2d(30, -44 * reflect), 0)
-                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, -43 * reflect, Math.toRadians(180)), 0)
+                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect, Math.toRadians(180)), 0)
                 // lift
 
                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
                 .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), 0)
-                // deposit and retract
+                // deposit
 
                 .waitSeconds(DEPOSIT_TIME)
                 .build();
@@ -43,7 +154,7 @@ public class Deposits {
 
                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
                 .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
-                // release and retract
+                // release
 
                 .waitSeconds(DEPOSIT_TIME)
                 .build();
@@ -56,7 +167,7 @@ public class Deposits {
                 .splineToConstantHeading(new Vector2d(8, -42 * reflect), 0)
                 .splineToConstantHeading(new Vector2d(10, -42*reflect), 0)
                 .splineToSplineHeading(new Pose2d(30, -35 * reflect, Math.toRadians(180)), Math.toRadians(45*reflect))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -29*reflect), 0)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y*reflect), 0)
                 // lift
 
                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
@@ -156,7 +267,7 @@ public class Deposits {
                 .setTangent(Math.toRadians(45 * reflect))
                 .splineToConstantHeading(new Vector2d(-45, -12 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
@@ -164,7 +275,7 @@ public class Deposits {
                 // turn turret
 
                 .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
-                .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
+                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
                 // release white pixel
 
                 // turn turret
@@ -194,7 +305,7 @@ public class Deposits {
                 .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -43 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
@@ -232,7 +343,7 @@ public class Deposits {
                 .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VELOCITY, Constraints.NORMAL_ACCELERATION)
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -43 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
