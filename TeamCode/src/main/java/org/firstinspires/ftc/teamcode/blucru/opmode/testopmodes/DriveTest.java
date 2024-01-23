@@ -16,12 +16,9 @@ public class DriveTest extends LinearOpMode {
     double vert, horz, rotate;
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
-        robot.addDrivetrain();
-        robot.addIntake();
-
-        Drivetrain drivetrain = robot.drivetrain;
-        Intake intake = robot.intake;
+        Robot robot = new Robot(hardwareMap);
+        Drivetrain drivetrain = robot.addDrivetrain();
+        Intake intake = robot.addIntake();
 
         robot.init();
 
