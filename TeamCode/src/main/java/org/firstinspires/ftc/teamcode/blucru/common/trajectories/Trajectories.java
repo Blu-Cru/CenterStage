@@ -597,7 +597,6 @@ public class Trajectories {
                         .setVelConstraint(slowVelocity)
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                             robot.outtake.lift.liftState = LiftState.AUTO;
-                            robot.outtake.lift.setTargetPos(Constants.sliderAutoPos);
                         })
 //                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
 //                            robot.intake.toggleWrist();

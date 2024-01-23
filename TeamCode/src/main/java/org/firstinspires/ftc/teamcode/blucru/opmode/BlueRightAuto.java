@@ -106,8 +106,6 @@ public class BlueRightAuto extends LinearOpMode {
 
         waitForStart();
 
-        sleep((long) Constants.farAutoDelay);
-
         robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
 //        cvMaster.stopCamera();
         runtime.reset();

@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 
 @Config
 public class Lift implements Subsystem{
@@ -108,13 +109,6 @@ public class Lift implements Subsystem{
 //                } else if (getCurrent() > stallCurrent) {
 //                    setTargetPos(currentPos - getDecelDelta());
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
-                    power = 0;
-                } else {
-                    power = PID;
-                }
-                break;
-            case PID:
-                if(Math.abs(targetPos - currentPos) < tolerance) {
                     power = 0;
                 } else {
                     power = PID;

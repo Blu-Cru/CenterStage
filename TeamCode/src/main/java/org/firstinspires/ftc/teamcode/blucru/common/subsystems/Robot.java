@@ -50,6 +50,11 @@ public class Robot {
     }
 
     public void read() {
+        // clear bulk cache for bulk reading
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.clearBulkCache();
+        }
+
         for(Subsystem subsystem : subsystems) {
             subsystem.read();
         }
@@ -58,12 +63,6 @@ public class Robot {
     public void write() {
         for(Subsystem subsystem : subsystems) {
             subsystem.write();
-        }
-    }
-
-    public void clearBulkCache() {
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.clearBulkCache();
         }
     }
 
