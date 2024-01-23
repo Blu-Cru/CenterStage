@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
 @Disabled
@@ -19,18 +20,17 @@ public class HangerPIDTuner extends LinearOpMode {
     public static double p = 0, i = 0, d = 0;
     public static int target = 0;
 
-    Hanger hanger;
-    Intake intake;
 
     @Override
     public void runOpMode() throws InterruptedException {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        intake = new Intake(hardwareMap);
-        hanger = new Hanger(hardwareMap, telemetry);
-        hanger.init();
-        intake.init();
+        Robot robot = new Robot(hardwareMap);
+        Intake intake = robot.addIntake();
+        Hanger hanger = robot.addHanger();
+
+        robot.init();
 
         waitForStart();
 

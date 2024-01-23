@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
 @TeleOp(name = "lift test", group = "TeleOp")
@@ -32,19 +33,19 @@ public class LiftTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        outtake = new Outtake(hardwareMap);
+        Robot robot = new Robot(hardwareMap);
+        Outtake outtake = robot.addOuttake();
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        outtake.init();
+        robot.init();
         outtake.lift.liftState = LiftState.AUTO;
-//        intake.init();
 
         waitForStart();
         while(opModeIsActive()) {
-            outtake.read();
+            robot.read();
 
 //            if(run != lastRun) {
 //                CommandScheduler.getInstance().schedule(
@@ -97,21 +98,18 @@ public class LiftTest extends LinearOpMode {
                 outtake.lift.liftState = LiftState.AUTO;
             }
 
-            write();
+            write(robot);
         }
     }
 
-    public void read() {
-        outtake.read();
-    }
-
-    public void write() {
+    public void write(Robot robot) {
+        robot.write();
+        
         lastRun = run;
         CommandScheduler.getInstance().run();
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
-        outtake.write();
-        outtake.telemetry(telemetry);
+        robot.telemetry(telemetry);
         outtake.lift.motionProfileTelemetry(telemetry);
         telemetry.update();
     }
