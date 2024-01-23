@@ -14,6 +14,7 @@ public class Robot {
     public Intake intake;
     public Drivetrain drivetrain;
     public Hanger hanger;
+
 //    public Plane plane;
     public PurplePixelHolder purplePixelHolder;
 
@@ -66,28 +67,34 @@ public class Robot {
         }
     }
 
-    public void addOuttake() {
+    public Outtake addOuttake() {
         subsystems.add(outtake);
+        return outtake;
     }
 
-    public void addIntake() {
+    public Intake addIntake() {
         subsystems.add(intake);
+        return intake;
     }
 
-    public void addDrivetrain() {
+    public Drivetrain addDrivetrain() {
         subsystems.add(drivetrain);
+        return drivetrain;
     }
 
-    public void addHanger() {
+    public Hanger addHanger() {
         subsystems.add(hanger);
+        return hanger;
     }
 
-//    public void addPlane() {
+//    public Plane addPlane() {
 //        subsystems.add(plane);
+//        return plane;
 //    }
 
-    public void addPurplePixelHolder() {
+    public PurplePixelHolder addPurplePixelHolder() {
         subsystems.add(purplePixelHolder);
+        return purplePixelHolder;
     }
 
     public void telemetry(Telemetry telemetry) {

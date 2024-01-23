@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
 @TeleOp(name = "turn PID tuner", group = "TeleOp")
@@ -15,24 +16,24 @@ public class TurnPIDTuner extends LinearOpMode {
     public static double p = 1.2, i = 0, d = 0;
     public static double target = 0;
     double vert, horz, rotate;
-    Drivetrain drivetrain;
-    Intake intake;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        drivetrain = new Drivetrain(hardwareMap);
-        drivetrain.init();
-        drivetrain.drivePower = 1;
+        Robot robot = new Robot(hardwareMap);
+        Drivetrain drivetrain = robot.addDrivetrain();
+        Intake intake = robot.addIntake();
 
-        intake = new Intake(hardwareMap);
-        intake.init();
+        robot.init();
+
+        drivetrain.drivePower = 1;
 
         waitForStart();
 
         while(opModeIsActive()) {
-            drivetrain.read();
+            robot.read();
 
             horz = gamepad1.left_stick_x;
             vert = -gamepad1.left_stick_y;
@@ -59,8 +60,8 @@ public class TurnPIDTuner extends LinearOpMode {
                 drivetrain.drive(horz, vert, rotate);
             }
 
-            drivetrain.write();
-            drivetrain.telemetry(telemetry);
+            robot.write();
+            robot.telemetry(telemetry);
             telemetry.addData("target", target);
             telemetry.update();
         }
