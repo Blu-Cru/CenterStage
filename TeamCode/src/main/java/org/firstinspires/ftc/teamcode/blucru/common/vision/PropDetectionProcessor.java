@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.common.vision;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -64,8 +66,14 @@ public class PropDetectionProcessor implements VisionProcessor {
     public static double strictHighS = 255; // high saturation value for strict HSV filter
     public int position = 1;
 
+    public static Paint green = new Paint();
 
     public PropDetectionProcessor(Alliance alliance) {
+        green.setColor(Color.rgb(0, 255, 0));
+        green.setStyle(Paint.Style.STROKE);
+        green.setStrokeWidth(5);
+        green.setAntiAlias(true);
+
         this.alliance = alliance;
     }
 
@@ -184,7 +192,9 @@ public class PropDetectionProcessor implements VisionProcessor {
                             float bmpToCanvasPx,
                             float bmpDensity,
                             Object userContext) {
-
+        canvas.drawRect(rect0.x * bmpToCanvasPx, rect0.y * bmpToCanvasPx, (rect0.x + rect0.width) * bmpToCanvasPx, (rect0.y + rect0.height) * bmpToCanvasPx, green);
+        canvas.drawRect(rect1.x * bmpToCanvasPx, rect1.y * bmpToCanvasPx, (rect1.x + rect1.width) * bmpToCanvasPx, (rect1.y + rect1.height) * bmpToCanvasPx, green);
+        canvas.drawRect(rect2.x * bmpToCanvasPx, rect2.y * bmpToCanvasPx, (rect2.x + rect2.width) * bmpToCanvasPx, (rect2.y + rect2.height) * bmpToCanvasPx, green);
     }
 
     public void setAlliance(Alliance alliance) {
