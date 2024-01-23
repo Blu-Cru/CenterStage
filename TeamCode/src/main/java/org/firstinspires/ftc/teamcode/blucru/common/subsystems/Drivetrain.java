@@ -246,6 +246,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
         telemetry.addData("field centric", fieldCentric);
+        distanceSensors.telemetry(telemetry);
     }
 
     public void testTelemetry(Telemetry telemetry) {

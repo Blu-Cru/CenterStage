@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
 @TeleOp(name = "Distance test", group = "TeleOp")
@@ -13,7 +15,8 @@ public class DistancePIDTest extends LinearOpMode {
     public static double distanceI = 0;
     public static double distanceD = 0;
     public static double targetDistance = 10;
-    Drivetrain drivetrain;
+    
+    Robot robot;
 
     double vert, horz, rotate;
 
@@ -21,18 +24,20 @@ public class DistancePIDTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drivetrain = new Drivetrain(hardwareMap);
-        drivetrain.init();
+        Robot robot = new Robot(hardwareMap);
+        Drivetrain drivetrain = robot.addDrivetrain();
+        Intake intake = robot.addIntake();
+
+        robot.init();
 
         waitForStart();
 
         while(opModeIsActive()) {
-            drivetrain.read();
+            robot.read();
 
             vert = -gamepad1.left_stick_y;
             horz = gamepad1.left_stick_x;
             rotate = -gamepad1.right_stick_x;
-
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading();
@@ -62,9 +67,9 @@ public class DistancePIDTest extends LinearOpMode {
 
             drivetrain.setDistancePID(distanceP, distanceI, distanceD);
 
-            drivetrain.write();
+            robot.write();
 
-            drivetrain.distanceSensors.telemetry(telemetry);
+            robot.telemetry(telemetry);
             drivetrain.distanceSensors.testTelemetry(telemetry);
             telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
             telemetry.update();
