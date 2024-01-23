@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -49,12 +50,13 @@ public class TrajectoryTest extends LinearOpMode {
     TrajectorySequence closeCloseAuto;
     TrajectorySequence centerOfTile;
 
+    Robot robot;
     Drivetrain drivetrain;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drivetrain = new Drivetrain(hardwareMap);
-        drivetrain.init();
+        drivetrain = robot.addDrivetrain();
+        robot.init();
 
         centerOfTile = drivetrain.trajectorySequenceBuilder(closeStartingPose)
                 .lineTo(new Vector2d(12, -36))
@@ -134,8 +136,8 @@ public class TrajectoryTest extends LinearOpMode {
 
         drivetrain.followTrajectorySequence(closeCloseAuto);
         while(opModeIsActive()) {
-            drivetrain.read();
-            drivetrain.telemetry(telemetry);
+            robot.read();
+            robot.telemetry(telemetry);
             telemetry.update();
         }
     }

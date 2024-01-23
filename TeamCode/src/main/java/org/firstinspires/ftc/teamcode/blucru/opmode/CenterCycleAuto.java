@@ -18,13 +18,13 @@ import java.util.ArrayList;
 @Autonomous(name ="Auto", group = "Auto")
 public class CenterCycleAuto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;
-    private Robot robot;
+    Robot robot;
     private Alliance alliance = Alliance.RED;
     private Side side = Side.CLOSE;
     private Trajectories trajectories;
     private CVMaster cvMaster;
     private AutoState autoState = AutoState.INIT;
-    double position = 1;
+    int position = 1;
 
     ElapsedTime runtime;
 
