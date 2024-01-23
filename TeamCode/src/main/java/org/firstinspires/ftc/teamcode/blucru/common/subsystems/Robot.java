@@ -23,20 +23,8 @@ public class Robot {
     public Robot(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
 
-        outtake = new Outtake(hardwareMap);
-        intake = new Intake(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap);
-        hanger = new Hanger(hardwareMap);
-//        plane = new Plane(hardwareMap);
-        purplePixelHolder = new PurplePixelHolder(hardwareMap);
 
         subsystems = new ArrayList<>();
-//        subsystems.add(outtake);
-//        subsystems.add(intake);
-//        subsystems.add(drivetrain);
-//        subsystems.add(hanger);
-//        subsystems.add(plane);
-//        subsystems.add(purplePixelHolder);
     }
 
     // initializes subsystems
@@ -68,31 +56,37 @@ public class Robot {
     }
 
     public Outtake addOuttake() {
+        outtake = new Outtake(hardwareMap);
         subsystems.add(outtake);
         return outtake;
     }
 
     public Intake addIntake() {
+        intake = new Intake(hardwareMap);
         subsystems.add(intake);
         return intake;
     }
 
     public Drivetrain addDrivetrain() {
+        drivetrain = new Drivetrain(hardwareMap);
         subsystems.add(drivetrain);
         return drivetrain;
     }
 
     public Hanger addHanger() {
+        hanger = new Hanger(hardwareMap);
         subsystems.add(hanger);
         return hanger;
     }
 
 //    public Plane addPlane() {
+//        plane = new Plane(hardwareMap);
 //        subsystems.add(plane);
 //        return plane;
 //    }
 
     public PurplePixelHolder addPurplePixelHolder() {
+        purplePixelHolder = new PurplePixelHolder(hardwareMap);
         subsystems.add(purplePixelHolder);
         return purplePixelHolder;
     }
