@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @TeleOp(name = "intake test", group = "TeleOp")
 public class IntakeTest extends LinearOpMode {
@@ -21,20 +22,20 @@ public class IntakeTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap);
-        intake.init();
-        drivetrain.init();
+        Robot robot = new Robot(hardwareMap);
+        Drivetrain drivetrain = robot.addDrivetrain();
+        Intake intake = robot.addIntake();
 
         drivetrain.setDrivePower(0.8);
 
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
+        robot.init();
+
         waitForStart();
         while(opModeIsActive()) {
-            intake.read();
-            drivetrain.read();
+            robot.read();
 
             vert = Math.pow(-gamepad1.left_stick_y, 3);
             horz = Math.pow(gamepad1.left_stick_x, 3);
@@ -67,19 +68,18 @@ public class IntakeTest extends LinearOpMode {
                 intake.retractIntakeWrist();
             }
 
-            write();
+            write(robot);
         }
     }
 
-    public void write() {
-        intake.write();
-        drivetrain.write();
+    public void write(Robot robot) {
+        robot.write();
 
         lastGamepad1.copy(gamepad1);
         lastGamepad2.copy(gamepad2);
 
         telemetry.addData("robot state", robotState);
-        intake.telemetry(telemetry);
+        robot.telemetry(telemetry);
         telemetry.update();
     }
 }
