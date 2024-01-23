@@ -7,7 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
@@ -18,7 +23,14 @@ import java.util.ArrayList;
 @Autonomous(name ="Auto", group = "Auto")
 public class CenterCycleAuto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;
+    int trajIndex;
+
     Robot robot;
+    Drivetrain drivetrain;
+    Intake intake;
+    Outtake outtake;
+    PurplePixelHolder purplePixelHolder;
+
     private Alliance alliance = Alliance.RED;
     private Side side = Side.CLOSE;
     private Trajectories trajectories;
@@ -31,20 +43,18 @@ public class CenterCycleAuto extends LinearOpMode {
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
 
-    TrajectorySequence farAuto;
-    TrajectorySequence closeAuto;
-    TrajectorySequence centerAuto;
-
-    TrajectorySequence auto;
-
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        drivetrain = robot.addDrivetrain();
+        intake = robot.addIntake();
+        outtake = robot.addOuttake();
+        purplePixelHolder = robot.addPurplePixelHolder();
+
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();
 
         robot.init();
-        robot.purplePixelHolder.retracted = false;
 
         while(!isStopRequested() && opModeInInit()) {
             telemetry.addData("state: ", autoState);
@@ -65,9 +75,6 @@ public class CenterCycleAuto extends LinearOpMode {
                         // build trajectories
                         trajectories = new Trajectories(alliance, side);
 
-                        farAuto = trajectories.farCenterCycle(robot);
-                        closeAuto = trajectories.closeCenterCycle(robot);
-                        centerAuto = trajectories.centerCenterCycle(robot);
                     }
 
 
@@ -98,32 +105,32 @@ public class CenterCycleAuto extends LinearOpMode {
         switch(alliance) {
             case RED:
                 if(position == 0) {
-                    auto = farAuto;
+
                 } else if(position == 1) {
-                    auto = centerAuto;
+
                 } else if(position == 2) {
-                    auto = closeAuto;
+
                 }
                 break;
             case BLUE:
                 if(position == 0) {
-                    auto = closeAuto;
+
                 } else if(position == 1) {
-                    auto = centerAuto;
+
                 } else if(position == 2) {
-                    auto = farAuto;
+
                 }
                 break;
         }
 
         waitForStart();
-
-        autoState = AutoState.RUNNING;
-        runtime = new ElapsedTime();
         cvMaster.stop();
 
-        robot.drivetrain.setPoseEstimate(trajectories.getStartPose());
-        robot.drivetrain.followTrajectorySequenceAsync(auto);
+        autoState = AutoState.RUNNING;
+        trajIndex = 0;
+        runtime = new ElapsedTime();
+
+        drivetrain.setPoseEstimate(trajectories.getStartPose());
 
         while(!isStopRequested() && opModeIsActive()) {
             robot.read();
@@ -136,11 +143,18 @@ public class CenterCycleAuto extends LinearOpMode {
                 case DETECTION:
                     break;
                 case RUNNING:
-                    if(!robot.drivetrain.isBusy()) {
-                        autoState = AutoState.STOP;
+                    if(!drivetrain.isBusy()) {
+                        if(trajIndex == trajectoryList.size()) {
+                            autoState = AutoState.STOP;
+                            break;
+                        } else {
+                            drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
+                            trajIndex++;
+                        }
                     }
                     break;
                 case STOP:
+                    Initialization.POSE = drivetrain.getPoseEstimate();
                     break;
             }
 

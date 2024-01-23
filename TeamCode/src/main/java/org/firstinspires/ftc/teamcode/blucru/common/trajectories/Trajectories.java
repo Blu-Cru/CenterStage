@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import java.util.ArrayList;
+
 public class Trajectories {
     static double reflect = 1;
 
@@ -49,6 +51,7 @@ public class Trajectories {
 
     Side side;
     Placements placements;
+    Deposits deposits;
     Poses poses;
 
     public Trajectories(Alliance alliance, Side side) {
@@ -77,6 +80,10 @@ public class Trajectories {
 
         closeParkPose = new Pose2d(60, -60 * reflect, Math.toRadians(180));
         farParkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
+    }
+
+    public void build(Robot robot, Alliance alliance, Side side) {
+
     }
 
     public TrajectorySequence farCenterCycle(Robot robot) {
