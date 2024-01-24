@@ -31,7 +31,7 @@ public class Outtake implements Subsystem{
     Turret turret;
     private double lastTurretDelta;
 
-    public OuttakeState outtakeState;
+    public boolean outtaking;
 
     public boolean wristRetracted;
     double wristPos;
@@ -52,7 +52,7 @@ public class Outtake implements Subsystem{
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
 
-        outtakeState = OuttakeState.RETRACT;
+        outtaking = false;
 
         frontLocked = true;
         backLocked = true;
@@ -74,7 +74,7 @@ public class Outtake implements Subsystem{
         backLockPos = backLocked ? BACK_LOCKED : BACK_UNLOCKED;
         frontLockPos = frontLocked ? FRONT_LOCKED : FRONT_UNLOCKED;
 
-        if(outtakeState == OuttakeState.OUTTAKE) {
+        if(outtaking) {
             lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
         }
 

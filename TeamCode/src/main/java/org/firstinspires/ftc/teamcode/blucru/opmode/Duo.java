@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
-import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
@@ -151,7 +150,7 @@ public class Duo extends LinearOpMode {
 
         switch(robotState) {
             case RETRACT:
-                outtake.outtakeState = OuttakeState.RETRACT;
+                outtake.outtaking = false;
 
                 if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
@@ -167,7 +166,7 @@ public class Duo extends LinearOpMode {
                 }
                 break;
             case LIFTING:
-                outtake.outtakeState = OuttakeState.OUTTAKE;
+                outtake.outtaking = true;
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE;
@@ -189,12 +188,12 @@ public class Duo extends LinearOpMode {
 
                 if(gamepad2.a) {
                     robotState = RobotState.RETRACT;
-                    outtake.outtakeState = OuttakeState.RETRACT;
+                    outtake.outtaking = false;
                     outtake.lift.setTargetPos(0);
                 }
                 break;
             case OUTTAKE:
-                outtake.outtakeState = OuttakeState.OUTTAKE;
+                outtake.outtaking = true;
 
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
                     if(!outtake.wristRetracted) {
@@ -235,7 +234,7 @@ public class Duo extends LinearOpMode {
 
                 if(gamepad2.a && outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
-                    outtake.outtakeState = OuttakeState.RETRACT;
+                    outtake.outtaking = false;
                     outtake.lift.setTargetPos(0);
                 }
                 break;

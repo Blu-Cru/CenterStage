@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
@@ -77,7 +76,7 @@ public class OuttakeTest extends LinearOpMode {
 
             switch (robotState) {
                 case RETRACT:
-                    outtake.outtakeState = OuttakeState.RETRACT;
+                    outtake.outtaking = false;
 
                     if(gamepad2.b) {
                         robotState = RobotState.LIFTING;
@@ -93,7 +92,7 @@ public class OuttakeTest extends LinearOpMode {
                     }
                     break;
                 case LIFTING:
-                    outtake.outtakeState = OuttakeState.OUTTAKE;
+                    outtake.outtaking = true;
                     if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                         outtake.wristRetracted = false;
                         robotState = RobotState.OUTTAKE;
@@ -114,12 +113,12 @@ public class OuttakeTest extends LinearOpMode {
                     }
 
                     if(gamepad2.a) {
-                        outtake.outtakeState = OuttakeState.RETRACT;
+                        outtake.outtaking = false;
                         outtake.lift.setTargetPos(0);
                     }
                     break;
                 case OUTTAKE:
-                    outtake.outtakeState = OuttakeState.OUTTAKE;
+                    outtake.outtaking = true;
 
                     if(outtakeTimer.seconds() > 1) {
                         if(!outtake.wristRetracted) {
@@ -159,7 +158,7 @@ public class OuttakeTest extends LinearOpMode {
                     }
 
                     if(gamepad2.a && outtake.wristRetracted) {
-                        outtake.outtakeState = OuttakeState.RETRACT;
+                        outtake.outtaking = false;
                         robotState = RobotState.RETRACT;
                         outtake.lift.setTargetPos(0);
                     }
