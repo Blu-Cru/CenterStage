@@ -41,6 +41,9 @@ public class PropDetectionTest extends LinearOpMode {
             lastGamepad2.copy(gamepad2);
         }
         waitForStart();
+
+        cvMaster.stop();
+
         // Run
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");

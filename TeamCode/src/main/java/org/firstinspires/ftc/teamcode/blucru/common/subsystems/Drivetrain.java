@@ -69,7 +69,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void read() {
         updatePoseEstimate();
         dt = System.currentTimeMillis() - lastTime;
-        pose = getPoseEstimate();
+        pose = this.getPoseEstimate();
         velocity = pose.vec().distTo(lastPose.vec()) / dt;
         acceleration = (velocity - lastVelocity) / dt;
         lastPose = pose;
@@ -77,7 +77,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastTime = System.currentTimeMillis();
         heading = getRelativeHeading();
 
-        distanceSensors.read();
+//        distanceSensors.read();
     }
 
     public void write() {
@@ -146,7 +146,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-//        distanceSensors.update();
+        distanceSensors.read();
         Vector2d distanceVector = new Vector2d(x,y);
 
         Vector2d driveVector = calculateDriveVector(distanceVector);

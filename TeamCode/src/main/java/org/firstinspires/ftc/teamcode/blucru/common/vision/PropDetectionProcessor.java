@@ -33,12 +33,12 @@ public class PropDetectionProcessor implements VisionProcessor {
          0                                       1
                              x
      rectangle positions */
-    public static double rect0x = 0.15;
-    public static double rect0y = 0.7;
-    public static double rect1x = 0.55;
+    public static double rect0x = 0.03;
+    public static double rect0y = 0.75;
+    public static double rect1x = 0.38;
     public static double rect1y = 0.7;
-    public static double rect2x = 0.95;
-    public static double rect2y = 0.7;
+    public static double rect2x = 0.7;
+    public static double rect2y = 0.75;
 
     // hues for blue
     public static double blueLowH = 80;

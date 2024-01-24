@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,6 +21,10 @@ public class DriveTest extends LinearOpMode {
         Drivetrain drivetrain = robot.addDrivetrain();
         Intake intake = robot.addIntake();
 
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
+
         robot.init();
 
         drivetrain.fieldCentric = true;
@@ -30,6 +35,9 @@ public class DriveTest extends LinearOpMode {
         drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
 
         while(opModeIsActive()) {
+            for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+                module.clearBulkCache();
+            }
             robot.read();
 
             vert = Math.pow(-gamepad1.left_stick_y, 3);

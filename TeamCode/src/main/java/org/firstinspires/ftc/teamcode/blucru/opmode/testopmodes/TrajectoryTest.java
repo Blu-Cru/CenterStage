@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TrajectoryTest extends LinearOpMode {
     public static double reflect = 1;
 
-    private static double stackSetupX = -55;
-    private static double stackX = -61;
+    private static double stackSetupX = -50;
+    private static double stackX = -58;
     private static double depositX = 52;
     private static double depositSetupX = 45;
 
@@ -44,8 +44,8 @@ public class TrajectoryTest extends LinearOpMode {
     private static Pose2d parkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
 
     private static TrajectoryVelocityConstraint slowVelocity = SampleMecanumDrive.getVelocityConstraint(10, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
-    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(360), DriveConstants.TRACK_WIDTH);
-    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(540), DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint normalVelocity = SampleMecanumDrive.getVelocityConstraint(28, Math.toRadians(180), DriveConstants.TRACK_WIDTH);
+    private static TrajectoryVelocityConstraint fastVelocity = SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH);
 
     TrajectorySequence closeCloseAuto;
     TrajectorySequence centerOfTile;
@@ -55,6 +55,7 @@ public class TrajectoryTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot = new Robot(hardwareMap);
         drivetrain = robot.addDrivetrain();
         robot.init();
 
@@ -134,10 +135,22 @@ public class TrajectoryTest extends LinearOpMode {
 
         drivetrain.setPoseEstimate(closeStartingPose);
 
-        drivetrain.followTrajectorySequence(closeCloseAuto);
+        drivetrain.followTrajectorySequenceAsync(closeCloseAuto);
         while(opModeIsActive()) {
+            int state = 0;
+
+            if(state == 0 && !drivetrain.isBusy()) {
+                state = 1;
+            }
+
+            double time = System.currentTimeMillis();
             robot.read();
+
+            robot.write();
+            drivetrain.updateTrajectory();
+            double newTime = System.currentTimeMillis();
             robot.telemetry(telemetry);
+            telemetry.addData("loop time", newTime-time);
             telemetry.update();
         }
     }
