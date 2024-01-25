@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 public class Deposits {
     public static double DEPOSIT_TIME = 1.2;
@@ -15,6 +16,84 @@ public class Deposits {
 
     public Deposits(Alliance alliance) {
         reflect = alliance == Alliance.BLUE ? -1 : 1;
+    }
+
+    public TrajectorySequence cyclePerimeterFromCenter(Robot robot, int stackHeight) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(225 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(Math.toRadians(-45 * reflect))
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence cyclePerimeterFromClose(Robot robot, int stackHeight) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(225 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(Math.toRadians(-45 * reflect))
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
     }
 
     public TrajectorySequence cycleCenterFromClose(Robot robot, int stackHeight) {

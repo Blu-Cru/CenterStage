@@ -4,8 +4,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
@@ -17,6 +20,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.ArrayList;
 
 public class Trajectories {
+    ArrayList<TrajectorySequence> sequences;
+
     static double reflect = 1;
 
     public static double stackSetupX;
@@ -53,8 +58,12 @@ public class Trajectories {
     Placements placements;
     Deposits deposits;
     Poses poses;
+    Parks parks;
 
-    public Trajectories(Alliance alliance, Side side) {
+    AutoType autoType;
+    ParkType parkType;
+
+    public Trajectories(Alliance alliance, Side side, AutoType autoType, ParkType parkType) {
         this.side = side;
 
         if(alliance == Alliance.RED) {
@@ -62,6 +71,11 @@ public class Trajectories {
         } else {
             reflect = -1;
         }
+
+        placements = new Placements(alliance);
+        deposits = new Deposits(alliance);
+        poses = new Poses(alliance);
+        parks = new Parks(alliance);
 
         closeStartingPose = new Pose2d(12, -62 * reflect, Math.toRadians(-90 * reflect));
         closePlacementFarPose = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
@@ -82,8 +96,32 @@ public class Trajectories {
         farParkPose = new Pose2d(60, -12 * reflect, Math.toRadians(180));
     }
 
-    public void build(Robot robot, Alliance alliance, Side side) {
+    public void build(Robot robot) {
+        sequences = new ArrayList<TrajectorySequence>();
 
+        if(side == Side.CLOSE) {
+            switch(autoType) {
+                case PARK:
+                    break;
+                case CENTER_CYCLE:
+                    break;
+                case PERIMETER_CYCLE:
+                    break;
+                case PRELOAD:
+                    break;
+            }
+        } else {
+            switch(autoType) {
+                case PARK:
+                    break;
+                case CENTER_CYCLE:
+                    break;
+                case PERIMETER_CYCLE:
+                    break;
+                case PRELOAD:
+                    break;
+            }
+        }
     }
 
     public TrajectorySequence farCenterCycle(Robot robot) {
@@ -134,7 +172,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(-53, -12*reflect), Math.toRadians(180))
                     // intake
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_DEG);
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_HEIGHT);
                             robot.intake.intakePower = 0.7;
                         })
                         .setVelConstraint(slowVelocity)
@@ -179,7 +217,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(-50, -12*reflect), Math.toRadians(180))
                     // intake
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_DEG);
+                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK1_HEIGHT);
                             robot.intake.intakePower = 0.7;
                         })
                     // intake finished, set up deposit
@@ -249,10 +287,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
                         .splineToConstantHeading(new Vector2d(-50, -12*reflect), Math.toRadians(180))
                             // intake
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
-                            robot.intake.intakePower = 0.7;
-                        })
+
                         .setVelConstraint(slowVelocity)
                         .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
                         .waitSeconds(1.5)
@@ -340,10 +375,7 @@ public class Trajectories {
                         .splineToConstantHeading(new Vector2d(30, -12*reflect), Math.toRadians(180))
                         .splineToConstantHeading(new Vector2d(-55, -12*reflect), Math.toRadians(180))
                             // intake
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            robot.intake.setIntakeWristTargetAngle(Intake.WRIST_STACK3_DEG);
-                            robot.intake.intakePower = 0.7;
-                        })
+
                         .setVelConstraint(slowVelocity)
                         .splineToConstantHeading(new Vector2d(stackX, -12*reflect), Math.toRadians(180))
                         .waitSeconds(1.5)

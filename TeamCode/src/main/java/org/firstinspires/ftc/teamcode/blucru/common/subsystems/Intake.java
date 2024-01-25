@@ -11,11 +11,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Intake implements Subsystem{
-    public static double WRIST_RETRACT_DEG = 80;
-    public static double WRIST_INTAKE_DEG = -40;
-    public static double WRIST_STACK1_DEG = -30;
-    public static double WRIST_STACK3_DEG = -15;
-    public static double WRIST_STACK4_DEG = -7;
+    public static double WRIST_RETRACT_HEIGHT = 4.7; // inches
+    public static double WRIST_INTAKE_HEIGHT = -3.1; // inches
+    public static double WRIST_STACK1_HEIGHT = -2.3622; // inches
 
     public static double POWER = 1;
 
@@ -54,15 +52,24 @@ public class Intake implements Subsystem{
     }
 
     public void retractIntakeWrist() {
-        setIntakeWristTargetAngle(WRIST_RETRACT_DEG);
+        setIntakeWristTargetHeight(WRIST_RETRACT_HEIGHT);
     }
 
     public void downIntakeWrist() {
-        setIntakeWristTargetAngle(WRIST_INTAKE_DEG);
+        setIntakeWristTargetHeight(WRIST_INTAKE_HEIGHT);
+    }
+
+    public void intakeWrist(int stackHeight) {
+        stackHeight = Math.max(1, Math.min(4, stackHeight));
+        setIntakeWristTargetHeight(WRIST_STACK1_HEIGHT + (stackHeight - 1) * 0.5);
     }
 
     public void setIntakeWristTargetAngle(double targetAngleDeg) {
         intakeWrist.targetAngleDeg = targetAngleDeg;
+    }
+
+    public void setIntakeWristTargetHeight(double targetHeight) {
+        intakeWrist.targetAngleDeg = intakeWrist.toDeg(targetHeight);
     }
 
     public void setIntakePower(double power) {

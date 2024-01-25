@@ -39,6 +39,10 @@ public class IntakeWrist implements Subsystem{
         return Range.clip(rawTicks, 0.0, 1.0);
     }
 
+    public double toDeg(double height) {
+        return Math.toDegrees(Math.asin(height / RADIUS));
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake wrist pos", position);
     }
