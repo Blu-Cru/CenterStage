@@ -39,7 +39,7 @@ public class Lift implements Subsystem{
     private double ff = kF;
 
     public double power;
-    public int targetPos;
+    private int targetPos;
     private int currentPos;
     private int lastPos;
 
@@ -141,6 +141,7 @@ public class Lift implements Subsystem{
 //    }
 
     public void setMotionProfileTargetPos(int targetPos) {
+        liftState = LiftState.MoPro;
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
     }
 
@@ -174,6 +175,7 @@ public class Lift implements Subsystem{
     }
 
     public void setTargetPos(int pos) {
+        liftState = LiftState.AUTO;
         targetPos = Range.clip(pos, liftMinPos, liftMaxPos);
     }
 

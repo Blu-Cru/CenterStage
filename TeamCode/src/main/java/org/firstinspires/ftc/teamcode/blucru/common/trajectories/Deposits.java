@@ -17,7 +17,7 @@ public class Deposits {
         reflect = alliance == Alliance.BLUE ? -1 : 1;
     }
 
-    public TrajectorySequence cycleCenterFromClose(Robot robot) {
+    public TrajectorySequence cycleCenterFromClose(Robot robot, int stackHeight) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -54,7 +54,7 @@ public class Deposits {
                 .build();
     }
 
-    public TrajectorySequence cycleCenterFromCenter(Robot robot) {
+    public TrajectorySequence cycleCenterFromCenter(Robot robot, int stackHeight) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -91,7 +91,7 @@ public class Deposits {
                 .build();
     }
 
-    public TrajectorySequence cycleCenterFromFar(Robot robot) {
+    public TrajectorySequence cycleCenterFromFar(Robot robot, int stackHeight) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))

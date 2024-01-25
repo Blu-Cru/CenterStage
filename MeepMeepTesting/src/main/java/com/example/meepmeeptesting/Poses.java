@@ -56,7 +56,7 @@ public class Poses {
         DEPOSIT_CENTER_POSE = new Pose2d(BACKDROP_X, -36 * reflect, Math.toRadians(180));
         DEPOSIT_CLOSE_POSE = new Pose2d(BACKDROP_X, -43 * reflect, Math.toRadians(180));
 
-        PARK_CLOSE_POSE = new Pose2d(60, -60 * reflect, Math.toRadians(180));
-        PARK_FAR_POSE = new Pose2d(60, -12 * reflect, Math.toRadians(180));
+        PARK_CLOSE_POSE = new Pose2d(48, -60 * reflect, Math.toRadians(180));
+        PARK_FAR_POSE = new Pose2d(48, -12 * reflect, Math.toRadians(180));
     }
 }

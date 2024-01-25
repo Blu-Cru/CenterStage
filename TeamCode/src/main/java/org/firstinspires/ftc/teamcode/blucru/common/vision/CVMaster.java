@@ -74,8 +74,6 @@ public class CVMaster {
         focusControl = visionPortal.getCameraControl(FocusControl.class);
         focusControl.setMode(FocusControl.Mode.Fixed);
         focusControl.setFocusLength(FOCUS);
-
-        visionPortal.stopStreaming();
     }
 
     public void init() {

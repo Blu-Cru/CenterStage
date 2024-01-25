@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 
 @Config
@@ -104,11 +105,21 @@ public class Outtake implements Subsystem{
     }
 
     public void updateTargetHeight() {
-        this.targetHeight = lift.toInches(lift.targetPos) - turret.getTurretHeightDelta();
+        this.targetHeight = lift.toInches(lift.getTargetPos()) - turret.getTurretHeightDelta();
+    }
+
+    public void retractLift() {
+        outtaking = false;
+        lift.liftState = LiftState.MoPro;
+        lift.setMotionProfileTargetPos(0);
     }
 
     public boolean liftIntakeReady() {
         return lift.getCurrentPos() < LIFT_INTAKE_READY_POS;
+    }
+
+    public void centerTurret() {
+        setTurretAngle(270);
     }
 
     public void setTurretAngle(double angleDeg) {

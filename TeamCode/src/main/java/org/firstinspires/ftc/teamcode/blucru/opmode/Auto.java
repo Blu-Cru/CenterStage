@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
@@ -21,7 +23,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.ArrayList;
 
 @Autonomous(name ="Auto", group = "Auto")
-public class CenterCycleAuto extends LinearOpMode {
+public class Auto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;
     int trajIndex;
 
@@ -33,6 +35,8 @@ public class CenterCycleAuto extends LinearOpMode {
 
     private Alliance alliance = Alliance.RED;
     private Side side = Side.CLOSE;
+    private AutoType autoType = AutoType.CENTER_CYCLE;
+    private ParkType parkType = ParkType.CENTER;
     private Trajectories trajectories;
     private CVMaster cvMaster;
     private AutoState autoState = AutoState.INIT;
@@ -58,6 +62,8 @@ public class CenterCycleAuto extends LinearOpMode {
 
         while(!isStopRequested() && opModeInInit()) {
             telemetry.addData("state: ", autoState);
+            telemetry.addData("auto type: ", autoType);
+            telemetry.addData("park: ", parkType);
             telemetry.addData("alliance: ", alliance);
             telemetry.addData("side: ", side);
 
@@ -69,7 +75,27 @@ public class CenterCycleAuto extends LinearOpMode {
                     if(gamepad1.b && !lastGamepad1.b)
                         side = side == Side.CLOSE ? Side.FAR : Side.CLOSE;
 
+                    if(gamepad1.y && !lastGamepad1.y) {
+                        if(parkType == ParkType.CENTER)
+                            parkType = ParkType.PERIMETER;
+                        else if(parkType == ParkType.PERIMETER)
+                            parkType = ParkType.NONE;
+                        else if(parkType == ParkType.NONE)
+                            parkType = ParkType.CENTER;
+                    }
+
                     if(gamepad1.a && !lastGamepad1.a) {
+                        if(autoType == AutoType.CENTER_CYCLE)
+                            autoType = AutoType.PERIMETER_CYCLE;
+                        else if(autoType == AutoType.PERIMETER_CYCLE)
+                            autoType = AutoType.PRELOAD;
+                        else if(autoType == AutoType.PRELOAD)
+                            autoType = AutoType.PARK;
+                        else if(autoType == AutoType.PARK)
+                            autoType = AutoType.CENTER_CYCLE;
+                    }
+
+                    if(gamepad1.right_stick_button) {
                         autoState = AutoState.BUILD;
 
                         // build trajectories
@@ -77,10 +103,11 @@ public class CenterCycleAuto extends LinearOpMode {
 
                     }
 
-
+                    telemetry.addData("Press y (triangle) to cycle park position", "");
+                    telemetry.addData("Press a (cross) to cycle auto type", "");
                     telemetry.addData("Press x (square) to cycle alliance", "");
                     telemetry.addData("Press b (circle) to cycle side", "");
-                    telemetry.addData("Press a (x) to build trajectories", "");
+                    telemetry.addData("Press right stick button to build trajectories", "");
                     break;
                 case BUILD:
                     cvMaster = new CVMaster(hardwareMap, alliance);
@@ -158,6 +185,7 @@ public class CenterCycleAuto extends LinearOpMode {
                     break;
             }
 
+            drivetrain.updateTrajectory();
             robot.write();
 
             telemetry.addData("runtime", runtime.seconds());

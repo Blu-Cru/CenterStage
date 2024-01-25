@@ -60,9 +60,9 @@ public class Poses {
         WING_PLACEMENT_CLOSE_FOR_PERIM_POSE = new Pose2d(-30, -40 * reflect, Math.toRadians(225 * reflect));
         WING_PLACEMENT_CENTER_POSE = new Pose2d(-50, -24.5 * reflect, Math.toRadians(180));
 
-        DEPOSIT_FAR_POSE = new Pose2d(BACKDROP_X, BACKDROP_FAR_Y * reflect, Math.toRadians(180));
+        DEPOSIT_FAR_POSE = new Pose2d(BACKDROP_X, -29 * reflect, Math.toRadians(180));
         DEPOSIT_CENTER_POSE = new Pose2d(BACKDROP_X, -36 * reflect, Math.toRadians(180));
-        DEPOSIT_CLOSE_POSE = new Pose2d(BACKDROP_X, BACKDROP_CLOSE_Y * reflect, Math.toRadians(180));
+        DEPOSIT_CLOSE_POSE = new Pose2d(BACKDROP_X, -43 * reflect, Math.toRadians(180));
 
         PARK_CLOSE_POSE = new Pose2d(48, -60 * reflect, Math.toRadians(180));
         PARK_FAR_POSE = new Pose2d(48, -12 * reflect, Math.toRadians(180));

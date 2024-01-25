@@ -7,10 +7,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
-@Autonomous(name="prop detection test", group="Linear Opmode")
-public class PropDetectionTest extends LinearOpMode {
+@Autonomous(name="vision test", group="Linear Opmode")
+public class VisionTest extends LinearOpMode {
     CVMaster cvMaster;
     Alliance alliance = Alliance.BLUE;
+
+    String status;
 
     Gamepad lastGamepad1 = new Gamepad();
     Gamepad lastGamepad2 = new Gamepad();
@@ -18,6 +20,12 @@ public class PropDetectionTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
+
+        telemetry.addLine("camera starting");
+        telemetry.update();
+
+        sleep(1000);
+
         cvMaster.detectProp();
         // Init
         while (opModeInInit() && !isStopRequested()) {
@@ -30,6 +38,7 @@ public class PropDetectionTest extends LinearOpMode {
                 cvMaster.propDetector.setAlliance(alliance);
             }
 
+            telemetry.addLine("left bumper to change alliance");
             telemetry.addData("Status", "Initialized");
             telemetry.addData("Alliance", alliance);
             telemetry.addData("Average0", cvMaster.propDetector.average0);
@@ -46,7 +55,21 @@ public class PropDetectionTest extends LinearOpMode {
 
         // Run
         while (opModeIsActive()) {
-            telemetry.addData("Status", "Running");
+
+            if(gamepad1.b) {
+                status = "detecting prop";
+                cvMaster.detectProp();
+            }
+            if(gamepad1.x) {
+                status = "detecting tag";
+                cvMaster.detectTag();
+            }
+            if(gamepad1.a) {
+                status = "stopped";
+                cvMaster.stop();
+            }
+
+            telemetry.addData("Status", status);
             telemetry.update();
         }
     }
