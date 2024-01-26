@@ -14,8 +14,8 @@ public class Deposits {
 
     public static double reflect = 1;
 
-    public Deposits(Alliance alliance) {
-        reflect = alliance == Alliance.BLUE ? -1 : 1;
+    public Deposits(double reflect) {
+        this.reflect = reflect;
     }
 
     public TrajectorySequence cyclePerimeterFromCenter(Robot robot, int stackHeight) {

@@ -48,7 +48,7 @@ public class BlueLeftAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE);
+//        trajectories = new Trajectories(Alliance.BLUE, Side.CLOSE);
         cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
 //        autoState = AutoState.PLACEMENT;
         runtime = new ElapsedTime();
@@ -57,18 +57,18 @@ public class BlueLeftAuto extends LinearOpMode {
 
         telemetry.addData("robot init", "complete");
         telemetry.update();
+//
+//        placementFar = trajectories.placementFar(robot);
+//        placementClose = trajectories.placementClose(robot);
+//        placementCenter = trajectories.placementCenter(robot);
+//
+//        depositFar = trajectories.depositFar(robot);
+//        depositCenter = trajectories.depositCenter(robot);
+//        depositClose = trajectories.depositClose(robot);
 
-        placementFar = trajectories.placementFar(robot);
-        placementClose = trajectories.placementClose(robot);
-        placementCenter = trajectories.placementCenter(robot);
-
-        depositFar = trajectories.depositFar(robot);
-        depositCenter = trajectories.depositCenter(robot);
-        depositClose = trajectories.depositClose(robot);
-
-        parkFar = trajectories.parkFar(robot);
-        parkCenter = trajectories.parkCenter(robot);
-        parkClose = trajectories.parkClose(robot);
+//        parkFar = trajectories.parkFar(robot);
+//        parkCenter = trajectories.parkCenter(robot);
+//        parkClose = trajectories.parkClose(robot);
 
         cvMaster.detectProp();
 

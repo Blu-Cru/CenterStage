@@ -55,9 +55,9 @@ public class DriveConstants {
      * empirically tuned.
      */
 
-    public static double kV = 0.0099;
-    public static double kA = 0.0047;
-    public static double kStatic = 0.01;
+    public static double kV = 0.011;
+    public static double kA = 0.002;
+    public static double kStatic = 0.015;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -69,7 +69,7 @@ public class DriveConstants {
     public static double MAX_VEL = 30;
     public static double MAX_ACCEL = 35;
     public static double MAX_ANG_VEL = Math.toRadians(200);
-    public static double MAX_ANG_ACCEL = Math.toRadians(230);
+    public static double MAX_ANG_ACCEL = Math.toRadians(180);
 
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.

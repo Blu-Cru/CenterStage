@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -20,7 +21,7 @@ public class Hanger implements Subsystem {
     public Hanger(HardwareMap hardwareMap) {
         hangerMotor = hardwareMap.get(DcMotorEx.class, "hanger");
 
-        hangerMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        hangerMotor.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     public void init() {

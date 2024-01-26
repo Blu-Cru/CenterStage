@@ -41,12 +41,8 @@ public class Poses {
 
     public static double reflect = 1;
 
-    public Poses(Alliance alliance) {
-        if (alliance == Alliance.BLUE) {
-            reflect = -1;
-        } else {
-            reflect = 1;
-        }
+    public Poses(double reflect) {
+        this.reflect = reflect;
 
         BACKDROP_STARTING_POSE = new Pose2d(12, START_Y * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_FAR_POSE = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));

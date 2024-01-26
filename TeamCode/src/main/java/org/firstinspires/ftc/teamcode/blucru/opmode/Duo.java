@@ -125,13 +125,13 @@ public class Duo extends LinearOpMode {
 
         // INTAKE
         if(gamepad1.left_trigger > 0.1) {
-            intake.setIntakePower(gamepad1.left_trigger);
+            intake.intakePower = (gamepad1.left_trigger);
             outtake.unlock();
         } else if(gamepad1.right_trigger > 0.1) {
-            intake.setIntakePower(-gamepad1.right_trigger);
+            intake.intakePower = (-gamepad1.right_trigger);
             outtake.lock();
         } else {
-            intake.setIntakePower(0);
+            intake.intakePower = 0;
             if(gamepad2.left_bumper) {
                 outtake.lockBack();
             } else if(gamepad2.right_bumper) {

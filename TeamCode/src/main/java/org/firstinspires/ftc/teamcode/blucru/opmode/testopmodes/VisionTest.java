@@ -14,8 +14,7 @@ public class VisionTest extends LinearOpMode {
 
     String status;
 
-    Gamepad lastGamepad1 = new Gamepad();
-    Gamepad lastGamepad2 = new Gamepad();
+    boolean lastLB1 = false;
 
     @Override
     public void runOpMode() {
@@ -24,12 +23,11 @@ public class VisionTest extends LinearOpMode {
         telemetry.addLine("camera starting");
         telemetry.update();
 
-        sleep(1000);
 
         cvMaster.detectProp();
         // Init
         while (opModeInInit() && !isStopRequested()) {
-            if(gamepad1.left_bumper && !lastGamepad1.left_bumper) {
+            if(gamepad1.left_bumper && !lastLB1) {
                 if(alliance == Alliance.BLUE) {
                     alliance = Alliance.RED;
                 } else {
@@ -37,6 +35,7 @@ public class VisionTest extends LinearOpMode {
                 }
                 cvMaster.propDetector.setAlliance(alliance);
             }
+            lastLB1 = gamepad1.left_bumper;
 
             telemetry.addLine("left bumper to change alliance");
             telemetry.addData("Status", "Initialized");
@@ -44,10 +43,8 @@ public class VisionTest extends LinearOpMode {
             telemetry.addData("Average0", cvMaster.propDetector.average0);
             telemetry.addData("Average1", cvMaster.propDetector.average1);
             telemetry.addData("Average2", cvMaster.propDetector.average2);
+            telemetry.addData("position", cvMaster.propDetector.position);
             telemetry.update();
-
-            lastGamepad1.copy(gamepad1);
-            lastGamepad2.copy(gamepad2);
         }
         waitForStart();
 

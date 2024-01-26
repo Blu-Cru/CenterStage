@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
-import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 
 @Config
 public class Outtake implements Subsystem{

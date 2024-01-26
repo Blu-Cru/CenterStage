@@ -44,8 +44,8 @@ public class Auto extends LinearOpMode {
 
     ElapsedTime runtime;
 
+    Gamepad currentGamepad1;
     Gamepad lastGamepad1;
-    Gamepad lastGamepad2;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -55,12 +55,13 @@ public class Auto extends LinearOpMode {
         outtake = robot.addOuttake();
         purplePixelHolder = robot.addPurplePixelHolder();
 
+        currentGamepad1 = new Gamepad();
         lastGamepad1 = new Gamepad();
-        lastGamepad2 = new Gamepad();
 
         robot.init();
 
         while(!isStopRequested() && opModeInInit()) {
+            currentGamepad1.copy(gamepad1);
             telemetry.addData("state: ", autoState);
             telemetry.addData("auto type: ", autoType);
             telemetry.addData("park: ", parkType);
@@ -69,13 +70,13 @@ public class Auto extends LinearOpMode {
 
             switch (autoState) {
                 case INIT:
-                    if(gamepad1.x && !lastGamepad1.x)
+                    if(currentGamepad1.x && !lastGamepad1.x)
                         alliance = alliance == Alliance.RED ? Alliance.BLUE : Alliance.RED;
 
-                    if(gamepad1.b && !lastGamepad1.b)
+                    if(currentGamepad1.b && !lastGamepad1.b)
                         side = side == Side.CLOSE ? Side.FAR : Side.CLOSE;
 
-                    if(gamepad1.y && !lastGamepad1.y) {
+                    if(currentGamepad1.y && !lastGamepad1.y) {
                         if(parkType == ParkType.CENTER)
                             parkType = ParkType.PERIMETER;
                         else if(parkType == ParkType.PERIMETER)
@@ -84,7 +85,7 @@ public class Auto extends LinearOpMode {
                             parkType = ParkType.CENTER;
                     }
 
-                    if(gamepad1.a && !lastGamepad1.a) {
+                    if(currentGamepad1.a && !lastGamepad1.a) {
                         if(autoType == AutoType.CENTER_CYCLE)
                             autoType = AutoType.PERIMETER_CYCLE;
                         else if(autoType == AutoType.PERIMETER_CYCLE)
@@ -99,7 +100,7 @@ public class Auto extends LinearOpMode {
                         autoState = AutoState.BUILD;
 
                         // build trajectories
-                        trajectories = new Trajectories(alliance, side);
+                        trajectories = new Trajectories(alliance, side, autoType, parkType);
 
                     }
 
@@ -124,8 +125,8 @@ public class Auto extends LinearOpMode {
                     telemetry.addData("average 2", cvMaster.propDetector.average2);
                     break;
             }
+
             lastGamepad1.copy(gamepad1);
-            lastGamepad2.copy(gamepad2);
             telemetry.update();
         }
 

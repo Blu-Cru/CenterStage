@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class Placements {
     public static double reflect = 1;
 
-    public Placements(Alliance alliance) {
-        reflect = alliance == Alliance.BLUE ? -1 : 1;
+    public Placements(double reflect) {
+        this.reflect = reflect;
     }
 
     public TrajectorySequence placementBackdropClose(Robot robot) {

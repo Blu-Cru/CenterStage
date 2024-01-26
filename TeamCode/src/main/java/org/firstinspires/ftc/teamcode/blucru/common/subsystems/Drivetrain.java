@@ -21,9 +21,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
     public static double TURN_P = 1.0, TURN_I = 0, TURN_D = 0.02;
 
-    public static double DISTANCE_P = -0.015, DISTANCE_I = -0.12, DISTANCE_D = -0.12;
+    public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.03;
     public static double ANGLE_TOLERANCE = 0.5; // radians
-    public static double OUTTAKE_DISTANCE = 5;
+    public static double OUTTAKE_DISTANCE = 3.5;
 
     public double drivePower = 0.5;
     private double dt;

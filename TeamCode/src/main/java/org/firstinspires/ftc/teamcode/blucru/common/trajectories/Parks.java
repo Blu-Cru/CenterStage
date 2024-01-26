@@ -11,8 +11,8 @@ public class Parks {
     public static double WRIST_RETRACT_DELAY = 0.6;
     public static double LIFT_RETRACT_DELAY = 0.8;
 
-    public Parks(Alliance alliance) {
-        reflect = alliance == Alliance.BLUE ? -1 : 1;
+    public Parks(double reflect) {
+        this.reflect = reflect;
     }
 
     public TrajectorySequence parkCloseBackdropClose(Robot robot) {
