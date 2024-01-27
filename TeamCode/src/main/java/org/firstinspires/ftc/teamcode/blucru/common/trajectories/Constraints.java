@@ -14,4 +14,7 @@ public class Constraints {
     public static TrajectoryAccelerationConstraint FAST_ACCELERATION = SampleMecanumDrive.getAccelerationConstraint(35);
     public static TrajectoryAccelerationConstraint NORMAL_ACCELERATION = SampleMecanumDrive.getAccelerationConstraint(30);
     public static TrajectoryAccelerationConstraint SLOW_ACCELERATION = SampleMecanumDrive.getAccelerationConstraint(20);
+
+    public static TrajectoryVelocityConstraint[] velos = {SLOW_VELOCITY, NORMAL_VELOCITY, FAST_VELOCITY};
+    public static TrajectoryAccelerationConstraint[] accels = {SLOW_ACCELERATION, NORMAL_ACCELERATION, FAST_ACCELERATION};
 }

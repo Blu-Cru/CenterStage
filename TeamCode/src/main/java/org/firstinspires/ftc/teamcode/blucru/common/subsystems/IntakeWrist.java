@@ -39,7 +39,7 @@ public class IntakeWrist implements Subsystem{
         return Range.clip(rawTicks, 0.0, 1.0);
     }
 
-    public double toDeg(double height) {
+    public static double toDeg(double height) {
         return Math.toDegrees(Math.asin(height / RADIUS));
     }
 

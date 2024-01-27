@@ -25,4 +25,7 @@ public class Constraints {
     public static TrajectoryAccelerationConstraint FAST_ACCELERATION =  new ProfileAccelerationConstraint(30);
     public static TrajectoryAccelerationConstraint NORMAL_ACCELERATION =  new ProfileAccelerationConstraint(30);
     public static TrajectoryAccelerationConstraint SLOW_ACCELERATION =  new ProfileAccelerationConstraint(20);
+
+    public static TrajectoryVelocityConstraint[] velos = {SLOW_VELOCITY, NORMAL_VELOCITY, FAST_VELOCITY};
+    public static TrajectoryAccelerationConstraint[] accels = {SLOW_ACCELERATION, NORMAL_ACCELERATION, FAST_ACCELERATION};
 }
