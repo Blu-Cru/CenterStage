@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -57,23 +58,23 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void init() {
         fieldCentric = true;
-        resetHeading();
+        initializePose();
         lastDriveVector = new Vector2d(0,0);
         lastRotate = 0;
         lastPose = new Pose2d(0,0,0);
         lastTime = System.currentTimeMillis();
-        lastVelocity = 0;
+//        lastVelocity = 0;
         heading = getRelativeHeading();
     }
 
     public void read() {
         updatePoseEstimate();
         dt = System.currentTimeMillis() - lastTime;
-        pose = this.getPoseEstimate();
-        velocity = pose.vec().distTo(lastPose.vec()) / dt;
-        acceleration = (velocity - lastVelocity) / dt;
-        lastPose = pose;
-        lastVelocity = velocity;
+//        pose = this.getPoseEstimate();
+//        velocity = pose.vec().distTo(lastPose.vec()) / dt;
+//        acceleration = (velocity - lastVelocity) / dt;
+//        lastPose = pose;
+//        lastVelocity = velocity;
         lastTime = System.currentTimeMillis();
         heading = getRelativeHeading();
 
@@ -238,6 +239,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     // resets IMU (intake facing forwards)
     public void resetHeading() {
         setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
+    }
+
+    public void initializePose() {
+        setPoseEstimate(Initialization.POSE);
     }
 
     public void telemetry(Telemetry telemetry) {

@@ -18,6 +18,45 @@ public class Deposits {
         this.reflect = reflect;
     }
 
+    public TrajectorySequence cyclePerimeterFromFar(Robot robot, int stackHeight) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .setTangent(Math.toRadians(225 * reflect))
+                // retract turret
+
+                // retract wrist
+
+                // retract lift
+
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
+                // start and lower intake
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
+                .waitSeconds(0.5)
+                // lock and raise intake, start outtaking
+
+                // stop outtaking
+
+                .setTangent(Math.toRadians(-45 * reflect))
+                .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // lift
+
+                // wrist back
+
+                .setConstraints(Constraints.SLOW_VELOCITY, Constraints.SLOW_ACCELERATION)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                // release pixel
+
+                .waitSeconds(DEPOSIT_TIME)
+                .build();
+    }
+
     public TrajectorySequence cyclePerimeterFromCenter(Robot robot, int stackHeight) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)

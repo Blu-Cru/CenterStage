@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "trajectory test", group = "test")
 public class TrajectoryTest extends LinearOpMode {
-    public static double reflect = 1;
+    public static double reflect = -1;
 
     private static double stackSetupX = -50;
     private static double stackX = -58;
@@ -52,6 +52,7 @@ public class TrajectoryTest extends LinearOpMode {
 
     Robot robot;
     Drivetrain drivetrain;
+    double lastTime;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,19 +85,19 @@ public class TrajectoryTest extends LinearOpMode {
                 // drive to far stack
                 .setVelConstraint(fastVelocity)
                 .setTangent(Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(stackSetupX, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(25, -10 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(stackSetupX, -10 * reflect), Math.toRadians(180))
                 // start intaking
 
                 .setVelConstraint(slowVelocity)
-                .splineToConstantHeading(new Vector2d(stackX, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(stackX, -10 * reflect), Math.toRadians(180))
                 .waitSeconds(1.5)
                 // lock and retract
 
                 // drive to deposit
                 .setTangent(0)
                 .setVelConstraint(fastVelocity)
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), 0)
+                .splineToConstantHeading(new Vector2d(20, -10 * reflect), 0)
                 .splineToConstantHeading(new Vector2d(depositSetupX, -29 * reflect), 0)
                 // lift
 
@@ -108,19 +109,19 @@ public class TrajectoryTest extends LinearOpMode {
                 // drive to far stack
                 .setVelConstraint(fastVelocity)
                 .setTangent(Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(stackSetupX, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(25, -10 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(stackSetupX, -10 * reflect), Math.toRadians(180))
                 // start intaking
 
                 .setVelConstraint(slowVelocity)
-                .splineToConstantHeading(new Vector2d(stackX, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(stackX, -10 * reflect), Math.toRadians(180))
                 .waitSeconds(1.5)
                 // lock and retract
 
                 // drive to deposit
                 .setTangent(0)
                 .setVelConstraint(fastVelocity)
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), 0)
+                .splineToConstantHeading(new Vector2d(20, -10 * reflect), 0)
                 .splineToConstantHeading(new Vector2d(depositSetupX, -29 * reflect), 0)
                 // lift
 
@@ -143,14 +144,15 @@ public class TrajectoryTest extends LinearOpMode {
                 state = 1;
             }
 
-            double time = System.currentTimeMillis();
             robot.read();
 
             robot.write();
             drivetrain.updateTrajectory();
-            double newTime = System.currentTimeMillis();
+            
+            double dt = System.currentTimeMillis() - lastTime;
+            lastTime = System.currentTimeMillis();
             robot.telemetry(telemetry);
-            telemetry.addData("loop time", newTime-time);
+            telemetry.addData("loop time", dt);
             telemetry.update();
         }
     }

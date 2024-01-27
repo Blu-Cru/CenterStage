@@ -16,9 +16,9 @@ public class Trajectories {
 
     ArrayList<TrajectorySequence>[] trajectories = new ArrayList[3];
 
-    ArrayList<TrajectorySequence> trajectories0;
-    ArrayList<TrajectorySequence> trajectories1;
-    ArrayList<TrajectorySequence> trajectories2;
+    ArrayList<TrajectorySequence> trajectoriesFar;
+    ArrayList<TrajectorySequence> trajectoriesCenter;
+    ArrayList<TrajectorySequence> trajectoriesClose;
 
     Side side;
     Placements placements;
@@ -30,9 +30,9 @@ public class Trajectories {
     ParkType parkType;
 
     public Trajectories(Alliance alliance, Side side, AutoType autoType, ParkType parkType) {
-        trajectories0 = new ArrayList<TrajectorySequence>();
-        trajectories1 = new ArrayList<TrajectorySequence>();
-        trajectories2 = new ArrayList<TrajectorySequence>();
+        trajectoriesFar = new ArrayList<TrajectorySequence>();
+        trajectoriesCenter = new ArrayList<TrajectorySequence>();
+        trajectoriesClose = new ArrayList<TrajectorySequence>();
 
         this.side = side;
         this.autoType = autoType;
@@ -52,6 +52,49 @@ public class Trajectories {
         parks = new Parks(reflect);
 
         if(side == Side.CLOSE) {
+            trajectoriesFar.add(placements.placementBackdropFar(robot));
+            trajectoriesFar.add(deposits.depositFromBackdropFar(robot));
+
+            trajectoriesCenter.add(placements.placementBackdropCenter(robot));
+            trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
+
+            trajectoriesClose.add(placements.placementBackdropClose(robot));
+            trajectoriesClose.add(deposits.depositFromBackdropClose(robot));
+
+            switch(autoType) {
+                case CENTER_CYCLE:
+                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 3));
+                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 1));
+
+                    trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 3));
+                    trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 1));
+
+                    trajectoriesClose.add(deposits.cycleCenterFromClose(robot, 3));
+                    trajectoriesClose.add(deposits.cycleCenterFromFar(robot, 1));
+                    break;
+                case PERIMETER_CYCLE:
+                    trajectoriesFar.add(deposits.cyclePerimeterFromFar(robot, 3));
+                    trajectoriesFar.add(deposits.cyclePerimeterFromClose(robot, 1));
+
+                    trajectoriesCenter.add(deposits.cyclePerimeterFromCenter(robot, 3));
+                    trajectoriesCenter.add(deposits.cyclePerimeterFromClose(robot, 1));
+
+                    trajectoriesClose.add(deposits.cyclePerimeterFromClose(robot, 3));
+                    trajectoriesClose.add(deposits.cyclePerimeterFromClose(robot, 1));
+                    break;
+                case PRELOAD:
+                    break;
+            }
+
+            switch(parkType) {
+                case NONE:
+                    break;
+                case CENTER:
+//                    trajectoriesFar.add(parks.parkCenterFromFar(robot));
+//                    trajectoriesCenter.add(parks.parkCenterFromCenter(robot));
+//                    trajectoriesClose.add(parks.parkCenterFromClose(robot));
+                    break;
+            }
 
         } else {
 
