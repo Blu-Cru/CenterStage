@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
-import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -57,7 +56,7 @@ public class Parks {
                 .build();
     }
 
-    public TrajectorySequence parkFarBackdropFar(Robot robot) {
+    public TrajectorySequence parkCenterBackdropFar(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -71,7 +70,7 @@ public class Parks {
                 .build();
     }
 
-    public TrajectorySequence parkFarBackdropCenter(Robot robot) {
+    public TrajectorySequence parkCenterBackdropCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -85,7 +84,7 @@ public class Parks {
                 .build();
     }
 
-    public TrajectorySequence parkFarBackdropClose(Robot robot) {
+    public TrajectorySequence parkCenterBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                 .setConstraints(Constraints.FAST_VELOCITY, Constraints.FAST_ACCELERATION)
                 .setTangent(Math.toRadians(135 * reflect))

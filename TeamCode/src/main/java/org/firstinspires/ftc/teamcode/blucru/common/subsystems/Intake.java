@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Intake implements Subsystem{
     public static double WRIST_RETRACT_HEIGHT = 4.7; // inches
-    public static double WRIST_INTAKE_HEIGHT = -3.1; // inches
+    public static double WRIST_INTAKE_HEIGHT = -3; // inches
     public static double WRIST_STACK1_HEIGHT = -2.3622; // inches
 
     public static double POWER = 1;
@@ -60,7 +60,7 @@ public class Intake implements Subsystem{
     }
 
     public void intakeWrist(int stackHeight) {
-        stackHeight = Math.max(1, Math.min(4, stackHeight));
+        stackHeight = Math.max(0, Math.min(4, stackHeight));
         setIntakeWristTargetHeight(WRIST_STACK1_HEIGHT + (stackHeight - 1) * 0.5);
     }
 

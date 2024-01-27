@@ -70,38 +70,16 @@ public class Auto extends LinearOpMode {
 
             switch (autoState) {
                 case INIT:
-                    if(currentGamepad1.x && !lastGamepad1.x)
-                        alliance = alliance == Alliance.RED ? Alliance.BLUE : Alliance.RED;
-
-                    if(currentGamepad1.b && !lastGamepad1.b)
-                        side = side == Side.CLOSE ? Side.FAR : Side.CLOSE;
-
-                    if(currentGamepad1.y && !lastGamepad1.y) {
-                        if(parkType == ParkType.CENTER)
-                            parkType = ParkType.PERIMETER;
-                        else if(parkType == ParkType.PERIMETER)
-                            parkType = ParkType.NONE;
-                        else if(parkType == ParkType.NONE)
-                            parkType = ParkType.CENTER;
-                    }
-
-                    if(currentGamepad1.a && !lastGamepad1.a) {
-                        if(autoType == AutoType.CENTER_CYCLE)
-                            autoType = AutoType.PERIMETER_CYCLE;
-                        else if(autoType == AutoType.PERIMETER_CYCLE)
-                            autoType = AutoType.PRELOAD;
-                        else if(autoType == AutoType.PRELOAD)
-                            autoType = AutoType.PARK;
-                        else if(autoType == AutoType.PARK)
-                            autoType = AutoType.CENTER_CYCLE;
-                    }
+                    if(currentGamepad1.x && !lastGamepad1.x) alliance = alliance.flip();
+                    if(currentGamepad1.b && !lastGamepad1.b) side = side.flip();
+                    if(currentGamepad1.y && !lastGamepad1.y) parkType = parkType.cycle();
+                    if(currentGamepad1.a && !lastGamepad1.a) autoType = autoType.cycle();
 
                     if(gamepad1.right_stick_button) {
                         autoState = AutoState.BUILD;
 
                         // build trajectories
                         trajectories = new Trajectories(alliance, side, autoType, parkType);
-
                     }
 
                     telemetry.addData("Press y (triangle) to cycle park position", "");

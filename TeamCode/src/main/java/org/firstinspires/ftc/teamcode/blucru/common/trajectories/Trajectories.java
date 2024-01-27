@@ -43,14 +43,102 @@ public class Trajectories {
         } else {
             reflect = -1;
         }
-    }
 
-    public ArrayList<TrajectorySequence>[] build(Robot robot) {
         placements = new Placements(reflect);
         deposits = new Deposits(reflect);
         poses = new Poses(reflect);
         parks = new Parks(reflect);
+    }
 
+    public ArrayList<TrajectorySequence> buildTrajectoriesFar(Robot robot) {
+        trajectoriesFar.clear();
+
+        if(side == Side.CLOSE) {
+            trajectoriesFar.add(placements.placementBackdropFar(robot));
+            trajectoriesFar.add(deposits.depositFromBackdropFar(robot));
+
+            switch(autoType) {
+                case CENTER_CYCLE:
+                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 3));
+                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 1));
+                    switch (parkType) {
+                        case CENTER:
+                            trajectoriesFar.add(parks.parkCenterBackdropFar(robot));
+                            break;
+                        case PERIMETER:
+                            trajectoriesFar.add(parks.parkCloseBackdropFar(robot));
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case PERIMETER_CYCLE:
+                    trajectoriesFar.add(deposits.cyclePerimeterFromFar(robot, 3));
+                    trajectoriesFar.add(deposits.cyclePerimeterFromClose(robot, 1));
+
+                    switch (parkType) {
+                        case CENTER:
+                            trajectoriesFar.add(parks.parkCenterBackdropClose(robot));
+                            break;
+                        case PERIMETER:
+                            trajectoriesFar.add(parks.parkCloseBackdropClose(robot));
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case PRELOAD:
+                    switch (parkType) {
+                        case CENTER:
+                            trajectoriesFar.add(parks.parkCenterBackdropFar(robot));
+                            break;
+                        case PERIMETER:
+                            trajectoriesFar.add(parks.parkCloseBackdropFar(robot));
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+            }
+        } else {
+            switch(autoType) {
+                case CENTER_CYCLE:
+                    trajectoriesFar.add(placements.placementWingFarForCenter(robot));
+                    trajectoriesFar.add(deposits.depositThroughCenterFromWingFar(robot));
+                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 3));
+
+                    if(parkType == ParkType.CENTER) {
+                        trajectoriesFar.add(parks.parkCenterBackdropFar(robot));
+                    } else if (parkType == ParkType.PERIMETER) {
+                        trajectoriesFar.add(parks.parkCloseBackdropFar(robot));
+                    }
+                    break;
+                case PERIMETER_CYCLE:
+                    trajectoriesFar.add(placements.placementWingFarForPerimeter(robot));
+                    trajectoriesFar.add(deposits.depositThroughPerimeterFromWingFar(robot));
+                    trajectoriesFar.add(deposits.cyclePerimeterFromCenter(robot, 2));
+
+                    switch (parkType) {
+                        case CENTER:
+                            trajectoriesFar.add(parks.parkCenterBackdropClose(robot));
+                            break;
+                        case PERIMETER:
+                            trajectoriesFar.add(parks.parkCloseBackdropClose(robot));
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    trajectoriesFar.add(placements.placementWingFarForCenter(robot));
+                    trajectoriesFar.add(deposits.depositThroughCenterFromWingFar(robot));
+                    break;
+            }
+        }
+        return trajectoriesFar;
+    }
+
+    public ArrayList<TrajectorySequence>[] build(Robot robot) {
         if(side == Side.CLOSE) {
             trajectoriesFar.add(placements.placementBackdropFar(robot));
             trajectoriesFar.add(deposits.depositFromBackdropFar(robot));
@@ -95,7 +183,6 @@ public class Trajectories {
 //                    trajectoriesClose.add(parks.parkCenterFromClose(robot));
                     break;
             }
-
         } else {
 
         }
