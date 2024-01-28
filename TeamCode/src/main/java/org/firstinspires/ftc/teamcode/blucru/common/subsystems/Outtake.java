@@ -88,9 +88,9 @@ public class Outtake implements Subsystem{
     public void write() {
         lift.write();
         turret.write();
-        wrist.setPosition(wristPos);
-        backLock.setPosition(backLockPos);
-        frontLock.setPosition(frontLockPos);
+        if(wrist.getPosition() != wristPos) wrist.setPosition(wristPos);
+        if(backLock.getPosition() != backLockPos) backLock.setPosition(backLockPos);
+        if(frontLock.getPosition() != frontLockPos) frontLock.setPosition(frontLockPos);
     }
 
     public void setManualSlidePower(double power) {

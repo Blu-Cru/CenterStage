@@ -17,6 +17,8 @@ public class Plane implements Subsystem{
 
     boolean released = false;
 
+    double position;
+
     public Plane(HardwareMap hardwareMap) {
         plane = hardwareMap.get(Servo.class, "plane");
     }
@@ -27,15 +29,13 @@ public class Plane implements Subsystem{
     }
 
     public void read() {
-
+        position = released ? PLANE_RELEASED : PLANE_RETRACT;
     }
 
     @Override
     public void write() {
-        if(released) {
-            plane.setPosition(PLANE_RELEASED);
-        } else {
-            plane.setPosition(PLANE_RETRACT);
+        if(plane.getPosition() != position) {
+            plane.setPosition(position);
         }
     }
 

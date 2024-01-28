@@ -27,7 +27,7 @@ public class PurplePixelHolder implements Subsystem{
     }
 
     public void write() {
-        purplePixelHolder.setPosition(position);
+        if(purplePixelHolder.getPosition() != position) purplePixelHolder.setPosition(position);
     }
 
     public void retract() {

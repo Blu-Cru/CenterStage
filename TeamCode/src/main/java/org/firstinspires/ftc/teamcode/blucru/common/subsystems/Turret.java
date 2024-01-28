@@ -33,7 +33,9 @@ public class Turret implements Subsystem{
     }
 
     public void write() {
-        turret.setPosition(position);
+        if(turret.getPosition() != position) {
+            turret.setPosition(position);
+        }
     }
 
     public double toTicks(double targetAngle) {
