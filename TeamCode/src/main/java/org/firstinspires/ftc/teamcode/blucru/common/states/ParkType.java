@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.blucru.common.states;
 
 public enum ParkType {
-    NONE(0),
-    PERIMETER(1),
-    CENTER(2);
-
-    int value;
-    ParkType(int value) {
-        this.value = value;
-    }
+    NONE,
+    PERIMETER,
+    CENTER;
 
     public ParkType cycle() {
-        value = (value + 1) % 3;
-        return this;
+        if(this == NONE) {
+            return PERIMETER;
+        } else if(this == PERIMETER) {
+            return CENTER;
+        } else {
+            return NONE;
+        }
     }
 }

@@ -25,6 +25,10 @@ import java.util.ArrayList;
 @Autonomous(name ="Auto", group = "Auto")
 public class Auto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;
+    ArrayList<TrajectorySequence> trajectoriesFar;
+    ArrayList<TrajectorySequence> trajectoriesClose;
+    ArrayList<TrajectorySequence> trajectoriesCenter;
+
     int trajIndex;
 
     Robot robot;
@@ -44,8 +48,13 @@ public class Auto extends LinearOpMode {
 
     ElapsedTime runtime;
 
-    Gamepad currentGamepad1;
-    Gamepad lastGamepad1;
+    boolean lastA = false;
+    boolean lastB = false;
+    boolean lastX = false;
+    boolean lastY = false;
+
+    double dt;
+    double lastTime = System.currentTimeMillis();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -55,13 +64,9 @@ public class Auto extends LinearOpMode {
         outtake = robot.addOuttake();
         purplePixelHolder = robot.addPurplePixelHolder();
 
-        currentGamepad1 = new Gamepad();
-        lastGamepad1 = new Gamepad();
-
         robot.init();
 
         while(!isStopRequested() && opModeInInit()) {
-            currentGamepad1.copy(gamepad1);
             telemetry.addData("state: ", autoState);
             telemetry.addData("auto type: ", autoType);
             telemetry.addData("park: ", parkType);
@@ -70,16 +75,23 @@ public class Auto extends LinearOpMode {
 
             switch (autoState) {
                 case INIT:
-                    if(currentGamepad1.x && !lastGamepad1.x) alliance = alliance.flip();
-                    if(currentGamepad1.b && !lastGamepad1.b) side = side.flip();
-                    if(currentGamepad1.y && !lastGamepad1.y) parkType = parkType.cycle();
-                    if(currentGamepad1.a && !lastGamepad1.a) autoType = autoType.cycle();
+                    if(gamepad1.x && !lastX) alliance = alliance.flip();
+                    lastX = gamepad1.x;
+                    if(gamepad1.b && !lastB) side = side.flip();
+                    lastB = gamepad1.b;
+                    if(gamepad1.y && !lastY) parkType = parkType.cycle();
+                    lastY = gamepad1.y;
+                    if(gamepad1.a && !lastA) autoType = autoType.cycle();
+                    lastA = gamepad1.a;
 
                     if(gamepad1.right_stick_button) {
                         autoState = AutoState.BUILD;
 
                         // build trajectories
                         trajectories = new Trajectories(alliance, side, autoType, parkType);
+                        trajectoriesCenter = trajectories.buildTrajectoriesCenter(robot);
+                        trajectoriesClose = trajectories.buildTrajectoriesClose(robot);
+                        trajectoriesFar = trajectories.buildTrajectoriesFar(robot);
                     }
 
                     telemetry.addData("Press y (triangle) to cycle park position", "");
@@ -103,28 +115,26 @@ public class Auto extends LinearOpMode {
                     telemetry.addData("average 2", cvMaster.propDetector.average2);
                     break;
             }
-
-            lastGamepad1.copy(gamepad1);
             telemetry.update();
         }
 
         switch(alliance) {
             case RED:
                 if(position == 0) {
-
+                    trajectoryList = trajectoriesFar;
                 } else if(position == 1) {
-
-                } else if(position == 2) {
-
+                    trajectoryList = trajectoriesCenter;
+                } else {
+                    trajectoryList = trajectoriesClose;
                 }
                 break;
             case BLUE:
                 if(position == 0) {
-
+                    trajectoryList = trajectoriesClose;
                 } else if(position == 1) {
-
-                } else if(position == 2) {
-
+                    trajectoryList = trajectoriesCenter;
+                } else {
+                    trajectoryList = trajectoriesFar;
                 }
                 break;
         }
@@ -167,11 +177,16 @@ public class Auto extends LinearOpMode {
             drivetrain.updateTrajectory();
             robot.write();
 
+            dt = System.currentTimeMillis() - lastTime;
+            lastTime = System.currentTimeMillis();
+
+            telemetry.addData("index", trajIndex);
             telemetry.addData("runtime", runtime.seconds());
             telemetry.addData("state: ", autoState);
             telemetry.addData("alliance: ", alliance);
             telemetry.addData("side: ", side);
             telemetry.addData("position", position);
+            telemetry.addData("dt", dt);
             telemetry.update();
         }
     }

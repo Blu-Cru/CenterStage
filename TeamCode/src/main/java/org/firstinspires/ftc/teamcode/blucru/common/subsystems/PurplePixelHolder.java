@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PurplePixelHolder implements Subsystem{
-    public static double EXTENDED = 0.5;
+    public static double EXTENDED = 0.49;
     public static double RETRACTED = EXTENDED - 0.333;
 
     private Servo purplePixelHolder;
 
-    public boolean retracted = true;
+    public boolean retracted = false;
     private double position;
 
     public PurplePixelHolder(HardwareMap hardwareMap) {
@@ -19,7 +19,7 @@ public class PurplePixelHolder implements Subsystem{
     }
 
     public void init() {
-        purplePixelHolder.setPosition(RETRACTED);
+        purplePixelHolder.setPosition(EXTENDED);
     }
 
     public void read() {
@@ -28,6 +28,10 @@ public class PurplePixelHolder implements Subsystem{
 
     public void write() {
         purplePixelHolder.setPosition(position);
+    }
+
+    public void retract() {
+        retracted = true;
     }
 
     public void telemetry(Telemetry telemetry) {

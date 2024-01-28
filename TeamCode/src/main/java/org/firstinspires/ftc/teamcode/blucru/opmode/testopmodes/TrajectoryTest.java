@@ -148,7 +148,7 @@ public class TrajectoryTest extends LinearOpMode {
 
             robot.write();
             drivetrain.updateTrajectory();
-            
+
             double dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
             robot.telemetry(telemetry);

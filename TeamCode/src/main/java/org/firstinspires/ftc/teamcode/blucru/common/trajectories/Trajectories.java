@@ -161,13 +161,13 @@ public class Trajectories {
 
         switch (parkType) {
             case CENTER:
-                trajectoriesFar.add(parks.parkCenter(robot, cycleEndPose));
+                trajectoriesCenter.add(parks.parkCenter(robot, cycleEndPose));
                 break;
             case PERIMETER:
-                trajectoriesFar.add(parks.parkClose(robot, cycleEndPose));
+                trajectoriesCenter.add(parks.parkClose(robot, cycleEndPose));
                 break;
             default:
-                trajectoriesFar.add(parks.retract(robot));
+                trajectoriesCenter.add(parks.retract(robot));
                 break;
         }
 
@@ -221,71 +221,18 @@ public class Trajectories {
 
         switch (parkType) {
             case CENTER:
-                trajectoriesFar.add(parks.parkCenter(robot, cycleEndPose));
+                trajectoriesClose.add(parks.parkCenter(robot, cycleEndPose));
                 break;
             case PERIMETER:
-                trajectoriesFar.add(parks.parkClose(robot, cycleEndPose));
+                trajectoriesClose.add(parks.parkClose(robot, cycleEndPose));
                 break;
             default:
-                trajectoriesFar.add(parks.retract(robot));
+                trajectoriesClose.add(parks.retract(robot));
                 break;
         }
 
         return trajectoriesClose;
     }
-
-    public ArrayList<TrajectorySequence>[] build(Robot robot) {
-        if(side == Side.CLOSE) {
-            trajectoriesFar.add(placements.placementBackdropFar(robot));
-            trajectoriesFar.add(deposits.depositFromBackdropFar(robot));
-
-            trajectoriesCenter.add(placements.placementBackdropCenter(robot));
-            trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
-
-            trajectoriesClose.add(placements.placementBackdropClose(robot));
-            trajectoriesClose.add(deposits.depositFromBackdropClose(robot));
-
-            switch(autoType) {
-                case CENTER_CYCLE:
-                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 3));
-                    trajectoriesFar.add(deposits.cycleCenterFromFar(robot, 1));
-
-                    trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 3));
-                    trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 1));
-
-                    trajectoriesClose.add(deposits.cycleCenterFromClose(robot, 3));
-                    trajectoriesClose.add(deposits.cycleCenterFromFar(robot, 1));
-                    break;
-                case PERIMETER_CYCLE:
-                    trajectoriesFar.add(deposits.cyclePerimeterFromFar(robot, 3));
-                    trajectoriesFar.add(deposits.cyclePerimeterFromClose(robot, 1));
-
-                    trajectoriesCenter.add(deposits.cyclePerimeterFromCenter(robot, 3));
-                    trajectoriesCenter.add(deposits.cyclePerimeterFromClose(robot, 1));
-
-                    trajectoriesClose.add(deposits.cyclePerimeterFromClose(robot, 3));
-                    trajectoriesClose.add(deposits.cyclePerimeterFromClose(robot, 1));
-                    break;
-                case PRELOAD:
-                    break;
-            }
-
-            switch(parkType) {
-                case NONE:
-                    break;
-                case CENTER:
-//                    trajectoriesFar.add(parks.parkCenterFromFar(robot));
-//                    trajectoriesCenter.add(parks.parkCenterFromCenter(robot));
-//                    trajectoriesClose.add(parks.parkCenterFromClose(robot));
-                    break;
-            }
-        } else {
-
-        }
-
-        return trajectories;
-    }
-
 
     public Pose2d getStartPose() {
         switch (side) {

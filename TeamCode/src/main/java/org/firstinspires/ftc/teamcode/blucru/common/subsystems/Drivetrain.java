@@ -70,7 +70,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void read() {
         updatePoseEstimate();
         dt = System.currentTimeMillis() - lastTime;
-//        pose = this.getPoseEstimate();
+        pose = this.getPoseEstimate();
 //        velocity = pose.vec().distTo(lastPose.vec()) / dt;
 //        acceleration = (velocity - lastVelocity) / dt;
 //        lastPose = pose;
