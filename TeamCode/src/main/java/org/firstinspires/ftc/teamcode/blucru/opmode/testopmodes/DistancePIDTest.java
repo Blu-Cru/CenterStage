@@ -44,6 +44,13 @@ public class DistancePIDTest extends LinearOpMode {
                 gamepad1.rumble(100);
             }
 
+            if(gamepad1.dpad_up) {
+                drivetrain.startReadingDistance();
+            }
+            if(gamepad1.dpad_down) {
+                drivetrain.stopReadingDistance();
+            }
+
             if(gamepad1.b) {
                 targetHeading = Math.toRadians(180);
                 if(gamepad1.left_bumper) {

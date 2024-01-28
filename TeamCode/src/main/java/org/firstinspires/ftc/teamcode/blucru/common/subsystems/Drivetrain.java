@@ -35,6 +35,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private double lastVelocity;
     private double lastTime;
 
+    boolean readingDistance; // only used in auto
+
     public double heading;
 
     private Vector2d lastDriveVector;
@@ -54,6 +56,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
         distanceSensors = new DistanceSensors(hardwareMap);
+
+        readingDistance = false;
     }
 
     public void init() {
@@ -68,6 +72,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void read() {
+
         updatePoseEstimate();
         dt = System.currentTimeMillis() - lastTime;
         pose = this.getPoseEstimate();
@@ -78,7 +83,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastTime = System.currentTimeMillis();
         heading = getRelativeHeading();
 
-//        distanceSensors.read();
+        if(readingDistance) {
+            distanceSensors.read();
+        }
     }
 
     public void write() {
@@ -245,12 +252,22 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setPoseEstimate(Initialization.POSE);
     }
 
+    public void startReadingDistance() {
+        readingDistance = true;
+        distanceSensors.resetKalmanFilter();
+    }
+
+    public void stopReadingDistance() {
+        readingDistance = false;
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("drive power", drivePower);
         telemetry.addData("heading", heading);
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
         telemetry.addData("field centric", fieldCentric);
+        telemetry.addData("reading distance", readingDistance);
         distanceSensors.telemetry(telemetry);
     }
 

@@ -6,11 +6,17 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+
+import java.util.ArrayList;
 
 @Autonomous(name = "trajectory test", group = "test")
 public class TrajectoryTest extends LinearOpMode {
@@ -52,20 +58,108 @@ public class TrajectoryTest extends LinearOpMode {
 
     Robot robot;
     Drivetrain drivetrain;
+    Outtake outtake;
     double lastTime;
+
+    ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
+    int trajIndex = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
         drivetrain = robot.addDrivetrain();
+        outtake = robot.addOuttake();
+
         robot.init();
 
         centerOfTile = drivetrain.trajectorySequenceBuilder(closeStartingPose)
                 .lineTo(new Vector2d(12, -36))
                 .build();
 
-        closeCloseAuto = drivetrain.trajectorySequenceBuilder(closeStartingPose)
-                        // drive to placement
+        closeCloseAuto = getCloseCloseAuto();
+
+        TrajectorySequence release = drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                // lift
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                })
+                // wrist back
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.outtake.extendWrist();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.outtake.setTurretAngle(210);
+                })
+                .waitSeconds(1.5)
+
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.outtake.unlock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+                    robot.outtake.setTurretAngle(270);
+                })
+                .waitSeconds(1.5)
+                .build();
+
+        TrajectorySequence retract = drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                // retract wrist
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.outtake.retractWrist();
+                })
+                // retract wrist
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(0);
+                })
+                .waitSeconds(1.5)
+                .build();
+
+        trajectoryList.add(release);
+        trajectoryList.add(retract);
+
+        waitForStart();
+
+        int state = 0;
+
+        drivetrain.setPoseEstimate(closeStartingPose);
+
+        drivetrain.followTrajectorySequenceAsync(closeCloseAuto);
+        while(opModeIsActive()) {
+            robot.read();
+
+            switch(state) {
+                case 0:
+                    if(!drivetrain.isBusy()) {
+                        if(trajIndex >= trajectoryList.size()) {
+                            state = 1;
+                            break;
+                        } else {
+                            drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
+                            trajIndex++;
+                        }
+                    }
+                    break;
+                case 1:
+                    break;
+            }
+
+            robot.write();
+            drivetrain.updateTrajectory();
+
+            double dt = System.currentTimeMillis() - lastTime;
+            lastTime = System.currentTimeMillis();
+            robot.telemetry(telemetry);
+            telemetry.addData("# of trajectories: ", trajectoryList.size());
+            telemetry.addData("index", trajIndex);
+            telemetry.addData("loop time", dt);
+            telemetry.update();
+        }
+    }
+
+    public TrajectorySequence getCloseCloseAuto() {
+        return drivetrain.trajectorySequenceBuilder(closeStartingPose)
+                // drive to placement
                 .setVelConstraint(fastVelocity)
                 .setTangent(Math.toRadians(90 * reflect))
                 .lineTo(new Vector2d(24, -40 * reflect))
@@ -130,30 +224,5 @@ public class TrajectoryTest extends LinearOpMode {
 
                 .waitSeconds(1.2)
                 .build();
-
-
-        waitForStart();
-
-        drivetrain.setPoseEstimate(closeStartingPose);
-
-        drivetrain.followTrajectorySequenceAsync(closeCloseAuto);
-        while(opModeIsActive()) {
-            int state = 0;
-
-            if(state == 0 && !drivetrain.isBusy()) {
-                state = 1;
-            }
-
-            robot.read();
-
-            robot.write();
-            drivetrain.updateTrajectory();
-
-            double dt = System.currentTimeMillis() - lastTime;
-            lastTime = System.currentTimeMillis();
-            robot.telemetry(telemetry);
-            telemetry.addData("loop time", dt);
-            telemetry.update();
-        }
     }
 }
