@@ -41,11 +41,11 @@ public class Duo extends LinearOpMode {
 
     private RobotState robotState;
 
-    private Gamepad lastGamepad1;
-    private Gamepad lastGamepad2;
     ElapsedTime totalTimer;
     ElapsedTime outtakeTimer;
     double lastTime, deltaTime;
+
+    boolean lastDown2 = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -74,8 +74,6 @@ public class Duo extends LinearOpMode {
 
     public void initialize() {
         robotState = RobotState.RETRACT;
-        lastGamepad1 = new Gamepad();
-        lastGamepad2 = new Gamepad();
         robot = new Robot(hardwareMap);
 
         drivetrain = robot.addDrivetrain();
@@ -98,9 +96,9 @@ public class Duo extends LinearOpMode {
         // DRIVING
         drivetrain.setDrivePower(robotState, gamepad1);
 
-        double horz = Math.pow(gamepad1.left_stick_x, 3);
-        double vert = Math.pow(-gamepad1.left_stick_y, 3);
-        double rotate = Math.pow(-gamepad1.right_stick_x, 3);
+        double horz = gamepad1.left_stick_x;
+        double vert = -gamepad1.left_stick_y;
+        double rotate = -gamepad1.right_stick_x;
 
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
@@ -132,21 +130,19 @@ public class Duo extends LinearOpMode {
             outtake.lock();
         } else {
             intake.intakePower = 0;
-            if(gamepad2.left_bumper) {
+            if (gamepad2.left_bumper)
                 outtake.lockBack();
-            } else if(gamepad2.right_bumper) {
+            else if(gamepad2.right_bumper)
                 outtake.unlock();
-            } else {
+            else
                 outtake.lock();
-            }
         }
 
         // toggle intake wrist
-        if(gamepad2.a && outtake.liftIntakeReady()) {
+        if(gamepad2.a && outtake.liftIntakeReady())
             intake.downIntakeWrist();
-        } else {
+        else
             intake.retractIntakeWrist();
-        }
 
         switch(robotState) {
             case RETRACT:
@@ -197,13 +193,12 @@ public class Duo extends LinearOpMode {
 
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
                     if(!outtake.wristRetracted) {
-                        if (gamepad2.left_trigger > 0.1) {
+                        if (gamepad2.left_trigger > 0.1)
                             outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
-                        } else if (gamepad2.right_trigger > 0.1) {
+                        else if (gamepad2.right_trigger > 0.1)
                             outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
-                        } else {
+                        else
                             outtake.setTurretAngle(270);
-                        }
                     } else {
                         outtake.setTurretAngle(270);
                     }
@@ -212,25 +207,21 @@ public class Duo extends LinearOpMode {
                 }
 
                 if(Math.abs(outtake.getTurretAngle() - 270) < 10) {
-                    if(gamepad2.dpad_up) {
-                        outtake.extendWrist();
-                    }
-                    if(gamepad2.dpad_down) {
-                        outtake.retractWrist();
+                    if(gamepad2.dpad_down && !lastDown2) {
+                        outtake.toggleWrist();
                     }
                 } else {
                     outtake.extendWrist();
                 }
+                lastDown2 = gamepad2.dpad_down;
 
-                if(gamepad2.b) {
+                // Change height
+                if(gamepad2.b)
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                }
-                if(gamepad2.x) {
+                if(gamepad2.x)
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                }
-                if(gamepad2.y) {
+                if(gamepad2.y)
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
-                }
 
                 if(gamepad2.a && outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
@@ -252,17 +243,14 @@ public class Duo extends LinearOpMode {
 //        }
 
         // MANUAL HANG
-        if(Math.abs(gamepad2.left_stick_y) > 0.1) {
+        if(Math.abs(gamepad2.left_stick_y) > 0.1)
             hanger.setPower(-gamepad2.left_stick_y);
-        } else {
+        else
             hanger.setPower(0);
-        }
+
     }
 
     public void write() {
-        lastGamepad1.copy(gamepad1);
-        lastGamepad2.copy(gamepad2);
-
         robot.write();
 
         telemetry.addData("robot state", robotState);

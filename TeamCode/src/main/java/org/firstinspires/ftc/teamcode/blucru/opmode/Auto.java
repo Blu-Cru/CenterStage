@@ -88,16 +88,19 @@ public class Auto extends LinearOpMode {
                         autoState = AutoState.BUILD;
 
                         // build trajectories
+                        telemetry.addData("Building trajectories . . . ", "");
+                        telemetry.update();
+
                         trajectories = new Trajectories(alliance, side, autoType, parkType);
                         trajectoriesCenter = trajectories.buildTrajectoriesCenter(robot);
                         trajectoriesClose = trajectories.buildTrajectoriesClose(robot);
                         trajectoriesFar = trajectories.buildTrajectoriesFar(robot);
                     }
 
-                    telemetry.addData("Press y (triangle) to cycle park position", "");
-                    telemetry.addData("Press a (cross) to cycle auto type", "");
-                    telemetry.addData("Press x (square) to cycle alliance", "");
-                    telemetry.addData("Press b (circle) to cycle side", "");
+                    telemetry.addData("Press y (triangle) to cycle PARK: ", parkType);
+                    telemetry.addData("Press a (cross) to cycle AUTO TYPE: ", autoType);
+                    telemetry.addData("Press x (square) to cycle ALLIANCE: ", alliance);
+                    telemetry.addData("Press b (circle) to cycle side. SIDE: ", side);
                     telemetry.addData("Press right stick button to build trajectories", "");
                     break;
                 case BUILD:
@@ -152,12 +155,6 @@ public class Auto extends LinearOpMode {
             robot.read();
 
             switch(autoState) {
-                case INIT:
-                    break;
-                case BUILD:
-                    break;
-                case DETECTION:
-                    break;
                 case RUNNING:
                     if(!drivetrain.isBusy()) {
                         if(trajIndex == trajectoryList.size()) {
@@ -180,6 +177,7 @@ public class Auto extends LinearOpMode {
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
+            telemetry.addData("# of trajectories: ", trajectoryList.size());
             telemetry.addData("index", trajIndex);
             telemetry.addData("runtime", runtime.seconds());
             telemetry.addData("state: ", autoState);
