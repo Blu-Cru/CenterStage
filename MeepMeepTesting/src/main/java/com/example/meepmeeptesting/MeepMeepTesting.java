@@ -21,34 +21,42 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.BACKDROP_PLACEMENT_CLOSE_POSE)
+                        drive.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .setTangent(Math.toRadians(270 * reflect))
-                                .splineToConstantHeading(new Vector2d(30, -44 * reflect), 0)
-                                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect, Math.toRadians(180)), 0)
+                                .setTangent(Math.toRadians(120 * reflect))
+//                                // drop down, start intake, unlock
+//                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+//                                    robot.intake.dropToStack(4);
+//                                })
 
-//                                // lift
-//                                .UNSTABLE_addTemporalMarkerOffset(LIFT_YELLOW_TIME, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
-//                                })
-//                                // wrist back
-//                                .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-//                                    robot.outtake.extendWrist();
-//                                })
+                                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
+                                .waitSeconds(INTAKE_TIME)
+                                // lock and start outtaking
+
+                                // stop outtake
+
+                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                                .setTangent(Math.toRadians(0 * reflect))
+                                .splineToConstantHeading(new Vector2d(-45, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                                // lift
+
+                                // wrist back
+
+                                // turn turret
 
                                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                                .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), 0)
+                                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
+                                // release white pixel
 
-//                                // release
-//                                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
-//                                    robot.outtake.unlock();
-//                                })
-//                                // lift clear
-//                                .UNSTABLE_addTemporalMarkerOffset(LIFT_CLEAR_TIME, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-//                                })
+                                // turn turret
 
-                                .waitSeconds(1.2)
+                                // release yellow pixel
+
+                                .waitSeconds(1.3)
                                 .build()
                 );
 

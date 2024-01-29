@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -11,6 +12,8 @@ public class Placements {
 
     public static double RELEASE_TIME = 0;
     public static double WAIT_TIME = 0.1;
+
+    public static double DROP_TIME = 1;
 
     public Placements(double reflect) {
         this.reflect = reflect;
@@ -55,6 +58,8 @@ public class Placements {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(90 * reflect))
+                // drop down ready
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineToConstantHeading(new Vector2d(-36, -52 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
@@ -67,6 +72,8 @@ public class Placements {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(90 * reflect))
+                // drop down ready
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineToConstantHeading(new Vector2d(-36, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
@@ -79,6 +86,8 @@ public class Placements {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(90))
+                // drop down ready
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineToConstantHeading(new Vector2d(-36, -59*reflect), Math.toRadians(90))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(90))
                 // release purple pixel
@@ -92,6 +101,8 @@ public class Placements {
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 // placement
                 .setTangent(Math.toRadians(90 * reflect))
+                // drop down ready
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineTo(new Vector2d(-36, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE, Math.toRadians(180))
                 // release purple pixel
@@ -107,6 +118,8 @@ public class Placements {
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 // placement
                 .setTangent(Math.toRadians(130 * reflect))
+                // drop down ready
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineToConstantHeading(new Vector2d(-46, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(new Pose2d(-46, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(-46, -5 * reflect), Math.toRadians(90 * reflect))

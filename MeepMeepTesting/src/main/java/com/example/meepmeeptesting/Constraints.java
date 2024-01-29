@@ -11,8 +11,8 @@ import java.util.Arrays;
 
 public class Constraints {
     public static TrajectoryVelocityConstraint FAST_VEL = new MinVelocityConstraint(Arrays.asList(
-            new AngularVelocityConstraint(Math.toRadians(200)),
-                new MecanumVelocityConstraint(35, 12.6)));
+            new AngularVelocityConstraint(Math.toRadians(250)),
+                new MecanumVelocityConstraint(38, 12.6)));
 
     public static TrajectoryVelocityConstraint NORMAL_VEL = new MinVelocityConstraint(Arrays.asList(
             new AngularVelocityConstraint(Math.toRadians(180)),
@@ -20,7 +20,7 @@ public class Constraints {
 
     public static TrajectoryVelocityConstraint SLOW_VEL = new MinVelocityConstraint(Arrays.asList(
             new AngularVelocityConstraint(Math.toRadians(150)),
-            new MecanumVelocityConstraint(15, 12.6)));
+            new MecanumVelocityConstraint(18, 12.6)));
 
     public static TrajectoryAccelerationConstraint FAST_ACCEL =  new ProfileAccelerationConstraint(35);
     public static TrajectoryAccelerationConstraint NORMAL_ACCEL =  new ProfileAccelerationConstraint(30);

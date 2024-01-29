@@ -12,10 +12,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Intake implements Subsystem{
     public static double WRIST_RETRACT_HEIGHT = 4.7; // inches
-    public static double WRIST_INTAKE_HEIGHT = -3; // inches
+    public static double WRIST_INTAKE_HEIGHT = -2.6; // inches
     public static double WRIST_STACK1_HEIGHT = -1.5; // inches
+    public static double WRIST_AUTO_READY_HEIGHT = 1; // inches
 
-    public static double POWER = 1;
+    public static double POWER = 0.8;
 
     private DcMotorEx intakeMotor;
     private CRServo intakeRoller;

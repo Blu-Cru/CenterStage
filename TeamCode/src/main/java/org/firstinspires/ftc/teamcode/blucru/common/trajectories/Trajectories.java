@@ -118,22 +118,27 @@ public class Trajectories {
 
         if(side == Side.CLOSE) {
             // placement and deposit preload
-            trajectoriesCenter.add(placements.placementBackdropCenter(robot));
-            trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
+
 
             switch(autoType) {
                 case CENTER_CYCLE:
+                    trajectoriesCenter.add(placements.placementBackdropCenter(robot));
+                    trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
                     trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 3));
                     trajectoriesCenter.add(deposits.cycleCenterFromFar(robot, 1));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
 
                     break;
                 case PERIMETER_CYCLE:
+                    trajectoriesCenter.add(placements.placementBackdropCenter(robot));
+                    trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
                     trajectoriesCenter.add(deposits.cyclePerimeterFromCenter(robot, 3));
                     trajectoriesCenter.add(deposits.cyclePerimeterFromCenter(robot, 1));
                     cycleEndPose = Poses.DEPOSIT_CLOSE_POSE;
                     break;
                 default:
+                    trajectoriesCenter.add(placements.placementBackdropCenter(robot));
+                    trajectoriesCenter.add(deposits.depositFromBackdropCenter(robot));
                     cycleEndPose = Poses.DEPOSIT_CENTER_POSE;
                     break;
             }
@@ -142,7 +147,7 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesCenter.add(placements.placementWingCenter(robot));
                     trajectoriesCenter.add(deposits.depositThroughCenterFromWingCenter(robot));
-                    trajectoriesCenter.add(deposits.cycleCenterFromCenter(robot, 3));
+                    trajectoriesCenter.add(deposits.cycleCenterFromFar(robot, 3));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
