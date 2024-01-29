@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 @Config
 public class Lift implements Subsystem{
     public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
-    public static int YELLOW_POS = 1300, CLEAR_POS = 1500;
+    public static int YELLOW_POS = 800, CLEAR_POS = 1000;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int liftMinPos = 0, liftMaxPos = 1560;
     public static double stallCurrent = 20; // amps
@@ -45,8 +45,6 @@ public class Lift implements Subsystem{
     private MotionProfile motionProfile;
     private ElapsedTime motionProfileTimer;
 
-    private double dt;
-    private double lastTime;
     private double velocity;
 
     public Lift(HardwareMap hardwareMap) {
@@ -84,16 +82,11 @@ public class Lift implements Subsystem{
 
         motionProfileTimer = new ElapsedTime();
         motionProfile = new MotionProfile(0, 0, fastVelocity, fastAccel);
-
-        lastTime = System.currentTimeMillis();
     }
 
     public void read() {
         currentPos = getCurrentPos();
         velocity = liftMotor.getVelocity();
-
-        dt = System.currentTimeMillis() - lastTime;
-        lastTime = System.currentTimeMillis();
     }
 
     public void write() {
@@ -108,6 +101,7 @@ public class Lift implements Subsystem{
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
                     power = 0;
                 } else {
+                    PID = liftPID.calculate(currentPos, targetPos);
                     power = PID;
                 }
                 break;
@@ -138,7 +132,6 @@ public class Lift implements Subsystem{
 //    }
 
     public void setMotionProfileTargetPos(int targetPos) {
-        liftState = LiftState.MoPro;
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
     }
 
@@ -151,7 +144,7 @@ public class Lift implements Subsystem{
     }
 
     public void setMotionProfile(MotionProfile profile) {
-        liftState = LiftState.AUTO;
+        liftState = LiftState.MoPro;
         motionProfile = profile;
         motionProfileTimer.reset();
         liftPID.reset();

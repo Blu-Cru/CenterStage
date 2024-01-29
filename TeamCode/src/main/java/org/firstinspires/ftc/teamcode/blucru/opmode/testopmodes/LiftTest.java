@@ -31,6 +31,11 @@ public class LiftTest extends LinearOpMode {
     Gamepad lastGamepad1;
     Gamepad lastGamepad2;
 
+    boolean lastB = false;
+    boolean lastA = false;
+    boolean lastX = false;
+    boolean lastY = false;
+
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
@@ -58,21 +63,23 @@ public class LiftTest extends LinearOpMode {
 
 //            intake.setOuttakeWristPosition(Constants.outtakeWristRetractPos);
 
-            if(gamepad1.a && !lastGamepad1.a) {
+            if(gamepad1.a && !lastA) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> outtake.lift.setTargetPos(0))
+                                new InstantCommand(() -> outtake.lift.setMotionProfileTargetPos(0))
                         )
                 );
             }
+            lastA = gamepad1.a;
 
-            if(gamepad1.b && !lastGamepad1.b) {
+            if(gamepad1.b && !lastB) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> outtake.lift.setTargetPos(500))
+                                new InstantCommand(() -> outtake.lift.setMotionProfileTargetPos(500))
                         )
                 );
             }
+            lastB = gamepad1.b;
 
             if(gamepad1.x && !lastGamepad1.x) {
                 CommandScheduler.getInstance().schedule(
@@ -98,19 +105,15 @@ public class LiftTest extends LinearOpMode {
                 outtake.lift.liftState = LiftState.AUTO;
             }
 
-            write(robot);
-        }
-    }
+            robot.write();
 
-    public void write(Robot robot) {
-        robot.write();
-        
-        lastRun = run;
-        CommandScheduler.getInstance().run();
-        lastGamepad1.copy(gamepad1);
-        lastGamepad2.copy(gamepad2);
-        robot.telemetry(telemetry);
-        outtake.lift.motionProfileTelemetry(telemetry);
-        telemetry.update();
+            lastRun = run;
+            CommandScheduler.getInstance().run();
+            lastGamepad1.copy(gamepad1);
+            lastGamepad2.copy(gamepad2);
+            robot.telemetry(telemetry);
+            outtake.lift.motionProfileTelemetry(telemetry);
+            telemetry.update();
+        }
     }
 }

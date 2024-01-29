@@ -5,8 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 
 public class Poses {
-    public static double BACKDROP_X = 52;
-    public static double BACKDROP_SETUP_X = 48;
+    public static double BACKDROP_X = 51;
+    public static double BACKDROP_SETUP_X = 46;
 
     public static double BACKDROP_FAR_Y = -31;
     public static double BACKDROP_CLOSE_Y = -41;

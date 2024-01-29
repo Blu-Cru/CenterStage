@@ -18,7 +18,7 @@ public class IntakeWrist implements Subsystem{
     private double position;
     public IntakeWrist (HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "intake wrist");
-        targetAngleDeg = 80;
+        targetAngleDeg = 90;
         position = toTicks(targetAngleDeg);
     }
 

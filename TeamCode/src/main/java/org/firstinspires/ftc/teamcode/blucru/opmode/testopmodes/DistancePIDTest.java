@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +13,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 @Config
 @TeleOp(name = "Distance test", group = "TeleOp")
 public class DistancePIDTest extends LinearOpMode {
+    public static double Q = 0.3;
+    public static double R = 0.3;
+    public static int N = 3;
     public static double distanceP = 0.12;
     public static double distanceI = 0;
     public static double distanceD = 0;
@@ -28,7 +33,12 @@ public class DistancePIDTest extends LinearOpMode {
         Drivetrain drivetrain = robot.addDrivetrain();
         Intake intake = robot.addIntake();
 
+        drivetrain.distanceSensors.setQ(Q);
+        drivetrain.distanceSensors.setR(R);
+        drivetrain.distanceSensors.setN(N);
+
         robot.init();
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
 

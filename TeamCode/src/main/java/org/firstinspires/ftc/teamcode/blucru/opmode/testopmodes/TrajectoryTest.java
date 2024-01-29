@@ -84,23 +84,23 @@ public class TrajectoryTest extends LinearOpMode {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.outtake.extendWrist();
                 })
                 // turn turret
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {
                     robot.outtake.setTurretAngle(210);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.8)
 
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.unlock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                     robot.outtake.setTurretAngle(270);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.8)
                 .build();
 
         TrajectorySequence retract = drivetrain.trajectorySequenceBuilder(closeStartingPose)
@@ -109,7 +109,7 @@ public class TrajectoryTest extends LinearOpMode {
                     robot.outtake.retractWrist();
                 })
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(0);
                 })
                 .waitSeconds(1.5)
@@ -124,7 +124,6 @@ public class TrajectoryTest extends LinearOpMode {
 
         drivetrain.setPoseEstimate(closeStartingPose);
 
-        drivetrain.followTrajectorySequenceAsync(closeCloseAuto);
         while(opModeIsActive()) {
             robot.read();
 
@@ -149,10 +148,10 @@ public class TrajectoryTest extends LinearOpMode {
 
             double dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
-            robot.telemetry(telemetry);
             telemetry.addData("# of trajectories: ", trajectoryList.size());
             telemetry.addData("index", trajIndex);
             telemetry.addData("loop time", dt);
+            robot.telemetry(telemetry);
             telemetry.update();
         }
     }

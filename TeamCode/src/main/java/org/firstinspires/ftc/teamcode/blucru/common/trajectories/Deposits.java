@@ -9,13 +9,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class Deposits {
     public static double LIFT_YELLOW_TIME = 0;
-    public static double WRIST_EXTEND_TIME = 0.4;
-    public static double TURRET_TIME = 0.7;
+    public static double WRIST_EXTEND_TIME = 0.2;
+    public static double TURRET_TIME = 0.4;
     public static double RELEASE_TIME = 0.1;
-    public static double LIFT_CLEAR_TIME = 0.3;
+    public static double LIFT_CLEAR_TIME = 0.4;
     public static double WRIST_RETRACT_TIME = 0.4;
 
-    public static double TOTAL_DEPOSIT_TIME = 1.2;
+    public static double TOTAL_DEPOSIT_TIME = 1;
     public static double INTAKE_TIME = 1.5;
 
     public static double reflect = 1;
@@ -354,30 +354,54 @@ public class Deposits {
                 .splineToConstantHeading(new Vector2d(-53, -24*reflect), Math.toRadians(180))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 // drop down, start intake, unlock
-
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.dropToStack(4);
+                    robot.intake.intakePower = 1;
+                    robot.outtake.unlock();
+                })
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
-                // lock and stop intake
-
+                // lock and start outtake
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.outtake.lock();
+                    robot.intake.intakePower = -1;
+                    robot.intake.retractIntakeWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.intakePower = 0;
+                })
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(0)
-                .splineToConstantHeading(new Vector2d(-40, -12 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-40, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
                 // lift
-
+                .UNSTABLE_addTemporalMarkerOffset(LIFT_YELLOW_TIME, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                })
                 // wrist back
-
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
+                    robot.outtake.extendWrist();
+                })
                 // turn turret
-
+                .UNSTABLE_addTemporalMarkerOffset(TURRET_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 - 60 * reflect);
+                })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
                 // release white pixel
-
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
+                    robot.outtake.unlock();
+                })
                 // turn turret
-
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    robot.outtake.setTurretAngle(270 + 60 * reflect);
+                })
                 // release yellow pixel
-
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
+                    robot.outtake.unlock();
+                })
                 .waitSeconds(TOTAL_DEPOSIT_TIME)
                 .build();
     }
@@ -420,11 +444,14 @@ public class Deposits {
     }
 
     public TrajectorySequence depositThroughCenterFromWingFar(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .setTangent(Math.toRadians(120 * reflect))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 // drop down, start intake, unlock
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.intake.dropToStack(4);
+                })
 
                 .splineToSplineHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)

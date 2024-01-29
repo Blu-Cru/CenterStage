@@ -10,7 +10,7 @@ public class Parks {
 
     public static double TURRET_RETRACT_DELAY = 0.1;
     public static double WRIST_RETRACT_DELAY = 0.5;
-    public static double LIFT_RETRACT_DELAY = 1;
+    public static double LIFT_RETRACT_DELAY = 0.8;
 
     public Parks(double reflect) {
         this.reflect = reflect;
@@ -19,7 +19,7 @@ public class Parks {
     public TrajectorySequence parkClose(Robot robot, Pose2d initialPose) {
         return robot.drivetrain.trajectorySequenceBuilder(initialPose)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .setTangent(Math.toRadians(225 * reflect))
+                .setTangent(Math.toRadians(210 * reflect))
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
                 // retract wrist
@@ -33,7 +33,7 @@ public class Parks {
     public TrajectorySequence parkCenter(Robot robot, Pose2d initialPose) {
         return robot.drivetrain.trajectorySequenceBuilder(initialPose)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .setTangent(Math.toRadians(135 * reflect))
+                .setTangent(Math.toRadians(150 * reflect))
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
                 // retract wrist

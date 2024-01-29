@@ -20,7 +20,7 @@ public class DistanceSensors implements Subsystem {
 
     public static double Q = 0.4;
     public static double R = 0.4;
-    public static int N = 5;
+    public static int N = 3;
 
     KalmanFilter kalmanFilter;
     double filteredDistance;
@@ -88,6 +88,10 @@ public class DistanceSensors implements Subsystem {
         kalmanFilter = new KalmanFilter(Q, R, N);
         kalmanFilter.setX(getDistanceFromWall());
     }
+
+    public void setQ(double Q) {this.Q = Q;}
+    public void setR(double R) {this.R = R;}
+    public void setN(int N) {this.N = N;}
 
     @Override
     public void telemetry(Telemetry telemetry) {
