@@ -7,18 +7,20 @@ import android.util.Size;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.FocusControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Subsystem;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.concurrent.TimeUnit;
 
 @Config
-public class CVMaster {
+public class CVMaster implements Subsystem {
     public static double fx = 1059.73;
     public static double fy = 1059.73;
     public static double cx = 625.979;
@@ -77,6 +79,18 @@ public class CVMaster {
     }
 
     public void init() {
+
+    }
+
+    public void read() {
+
+    }
+
+    public void write() {
+
+    }
+
+    public void telemetry(Telemetry telemetry) {
 
     }
 

@@ -104,7 +104,7 @@ public class Auto extends LinearOpMode {
                     telemetry.addData("Press right stick button to build trajectories", "");
                     break;
                 case BUILD:
-                    cvMaster = new CVMaster(hardwareMap, alliance);
+                    cvMaster = robot.addCVMaster(alliance);
                     autoState = AutoState.DETECTION;
                     break;
                 case DETECTION:

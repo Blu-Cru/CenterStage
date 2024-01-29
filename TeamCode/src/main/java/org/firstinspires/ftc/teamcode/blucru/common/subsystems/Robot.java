@@ -4,6 +4,8 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,7 @@ public class Robot {
 
 //    public Plane plane;
     public PurplePixelHolder purplePixelHolder;
+    public CVMaster cvMaster;
 
     private ArrayList<Subsystem> subsystems;
 
@@ -89,6 +92,12 @@ public class Robot {
         purplePixelHolder = new PurplePixelHolder(hardwareMap);
         subsystems.add(purplePixelHolder);
         return purplePixelHolder;
+    }
+
+    public CVMaster addCVMaster(Alliance alliance) {
+        cvMaster = new CVMaster(hardwareMap, alliance);
+        subsystems.add(cvMaster);
+        return cvMaster;
     }
 
     public void telemetry(Telemetry telemetry) {
