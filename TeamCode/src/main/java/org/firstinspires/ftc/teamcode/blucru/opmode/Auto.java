@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -167,8 +168,18 @@ public class Auto extends LinearOpMode {
                     }
                     break;
                 case STOP:
-                    Initialization.POSE = drivetrain.getPoseEstimate();
                     break;
+            }
+
+            // set initial pose for teleop
+            if(runtime.seconds() > 29.75) {
+                Pose2d pose;
+                if(alliance == Alliance.RED) {
+                    pose = drivetrain.getPoseEstimate();
+                } else {
+                    pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
+                }
+                Initialization.POSE = pose;
             }
 
             drivetrain.updateTrajectory();

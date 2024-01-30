@@ -13,32 +13,35 @@ driver 1:
         - left trigger: slow mode
         - right trigger: fast mode
 
-    alignment controls (hold left bumper to override distance sensor): 
-        - b (circle): turn to face robot front to the left, distance sensor alignment to right backboard
-        - x (square): turn to face robot front to the right, distance sensor alignment to left backboard
+    alignment controls (hold left bumper to activate distance sensor): 
+        - b (circle): turn to face robot front to the left
+        - x (square): turn to face robot front to the right
 
     dpad up: launch airplane
 
 driver 2:
 
     intake controls:
-        - left trigger: intake rollers
-        - right trigger: outtake rollers
-        
+        - a (cross): drop down intake
+        - left bumper: intake rollers
+        - right bumper: outtake rollers
 
     outtake presets:
         - a (cross): retract robot
-        - b (circle): outtake low preset
-        - x (square): outtake med preset
-        - y (triangle): outtake high preset
+        - b (circle): outtake high preset
+        - x (square): outtake low preset
+        - y (triangle): outtake mid preset
 
         - left trigger (hold): turn turret left
         - right trigger (hold): turn turret right
 
-        - right bumper: outtake bucket
+        - dpad left: release bottom pixel
+        - dpad right: release both pixels
+        - dpad down: toggle wrist
 
-    hang presets:
-        - dpad up: hang up preset
-        - dpad down: hang down preset
+    hang:
+        - left stick: manual hang control
 
-    - left joystick: manual slider control (outtake only)
+    manual slide controls:
+        - left joystick: increment by one pixel height
+        - left joystick press: manual slide control
