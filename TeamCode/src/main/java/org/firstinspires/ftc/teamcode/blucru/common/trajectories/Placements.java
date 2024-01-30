@@ -122,7 +122,7 @@ public class Placements {
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
                 .splineToConstantHeading(new Vector2d(-46, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(new Pose2d(-46, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
-                .splineToConstantHeading(new Vector2d(-46, -5 * reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-46, -10 * reflect), Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .lineToLinearHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                 // release purple pixel

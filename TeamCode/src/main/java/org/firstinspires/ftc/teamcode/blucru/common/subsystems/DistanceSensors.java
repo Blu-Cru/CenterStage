@@ -22,8 +22,6 @@ public class DistanceSensors implements Subsystem {
     public static double R = 0.4;
     public static int N = 3;
 
-    KalmanFilter kalmanFilter;
-    double filteredDistance;
 
     double rightDistance;
     double leftDistance;
@@ -32,7 +30,6 @@ public class DistanceSensors implements Subsystem {
     public double distanceFromWall; // distance from the wall, 0 being touching the wall
 
     public boolean sensing;
-    private ArrayList<Boolean> sensingHistory = new ArrayList<>();
 
     public DistanceSensors(HardwareMap hardwareMap) {
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "right distance");
@@ -45,8 +42,6 @@ public class DistanceSensors implements Subsystem {
         angle = 0;
         averageDistance = 0;
         distanceFromWall = 0;
-
-        kalmanFilter = new KalmanFilter(Q, R, N);
     }
 
     public void read() {
@@ -58,14 +53,9 @@ public class DistanceSensors implements Subsystem {
             angle = Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET);
             averageDistance = (rightDistance + leftDistance) / 2;
             distanceFromWall = getDistanceFromWall();
-            filteredDistance = kalmanFilter.estimate(distanceFromWall);
         } else {
             sensing = false;
         }
-
-        sensingHistory.add(sensing);
-        if(sensingHistory.size() > 5)
-            sensingHistory.remove(0);
     }
 
     @Override
@@ -84,10 +74,10 @@ public class DistanceSensors implements Subsystem {
             return distanceFromWall;
     }
 
-    public void resetKalmanFilter() {
-        kalmanFilter = new KalmanFilter(Q, R, N);
-        kalmanFilter.setX(getDistanceFromWall());
-    }
+//    public void resetKalmanFilter() {
+//        kalmanFilter = new KalmanFilter(Q, R, N);
+//        kalmanFilter.setX(getDistanceFromWall());
+//    }
 
     public void setQ(double Q) {this.Q = Q;}
     public void setR(double R) {this.R = R;}
@@ -101,7 +91,7 @@ public class DistanceSensors implements Subsystem {
     }
 
     public void testTelemetry(Telemetry telemetry) {
-        telemetry.addData("filtered distance", filteredDistance);
+//        telemetry.addData("filtered distance", filteredDistance);
         telemetry.addData("right distance", rightDistanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("left distance", leftDistanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("sensing", sensing);

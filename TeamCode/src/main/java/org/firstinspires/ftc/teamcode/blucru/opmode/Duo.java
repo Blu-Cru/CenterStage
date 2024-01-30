@@ -122,20 +122,17 @@ public class Duo extends LinearOpMode {
         }
 
         // INTAKE
-        if(gamepad1.left_trigger > 0.1) {
-            intake.intakePower = (gamepad1.left_trigger);
+        if(gamepad2.left_bumper) {
+            intake.intakePower = 1;
             outtake.unlock();
-        } else if(gamepad1.right_trigger > 0.1) {
-            intake.intakePower = (-gamepad1.right_trigger);
+        } else if(gamepad2.right_bumper) {
+            intake.intakePower = 1;
             outtake.lock();
         } else {
             intake.intakePower = 0;
-            if (gamepad2.left_bumper)
-                outtake.lockBack();
-            else if(gamepad2.right_bumper)
-                outtake.unlock();
-            else
-                outtake.lock();
+            if (gamepad2.dpad_left) outtake.lockBack();
+            else if(gamepad2.dpad_right) outtake.unlock();
+            else outtake.lock();
         }
 
         // toggle intake wrist
@@ -148,15 +145,15 @@ public class Duo extends LinearOpMode {
             case RETRACT:
                 outtake.outtaking = false;
 
-                if(gamepad2.b) {
+                if(gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
-                if(gamepad2.x) {
+                if(gamepad2.y) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
-                if(gamepad2.y) {
+                if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -169,15 +166,15 @@ public class Duo extends LinearOpMode {
                     outtakeTimer.reset();
                 }
 
-                if(gamepad2.b) {
+                if(gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
-                if(gamepad2.x) {
+                if(gamepad2.y) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
-                if(gamepad2.y) {
+                if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -216,11 +213,11 @@ public class Duo extends LinearOpMode {
                 lastDown2 = gamepad2.dpad_down;
 
                 // Change height
-                if(gamepad2.b)
-                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 if(gamepad2.x)
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 if(gamepad2.y)
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.x)
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 if(gamepad2.a && outtake.wristRetracted) {

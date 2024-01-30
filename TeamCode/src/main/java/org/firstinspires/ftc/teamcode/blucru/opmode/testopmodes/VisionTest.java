@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -29,35 +30,11 @@ public class VisionTest extends LinearOpMode {
         telemetry.addLine("camera starting");
         telemetry.update();
 
+        status = "stopped";
 
         cvMaster.detectProp();
         // Init
         while (opModeInInit() && !isStopRequested()) {
-            if(gamepad1.left_bumper && !lastLB1) {
-                if(alliance == Alliance.BLUE) {
-                    alliance = Alliance.RED;
-                } else {
-                    alliance = Alliance.BLUE;
-                }
-                cvMaster.propDetector.setAlliance(alliance);
-            }
-            lastLB1 = gamepad1.left_bumper;
-
-            telemetry.addLine("left bumper to change alliance");
-            telemetry.addData("Status", "Initialized");
-            telemetry.addData("Alliance", alliance);
-            telemetry.addData("Average0", cvMaster.propDetector.average0);
-            telemetry.addData("Average1", cvMaster.propDetector.average1);
-            telemetry.addData("Average2", cvMaster.propDetector.average2);
-            telemetry.addData("position", cvMaster.propDetector.position);
-            telemetry.update();
-        }
-        waitForStart();
-
-        cvMaster.stop();
-
-        // Run
-        while (opModeIsActive()) {
 
             if(gamepad1.b) {
                 status = "detecting prop";
@@ -74,6 +51,7 @@ public class VisionTest extends LinearOpMode {
 
             switch (status) {
                 case "detecting prop":
+                    telemetry.addData("alliance", alliance);
                     telemetry.addData("Average0", cvMaster.propDetector.average0);
                     telemetry.addData("Average1", cvMaster.propDetector.average1);
                     telemetry.addData("Average2", cvMaster.propDetector.average2);
@@ -89,8 +67,17 @@ public class VisionTest extends LinearOpMode {
                         }
 
                         if(detection.id == 4) {
-                            Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.yaw);
-                            telemetry.addLine(String.format("found tag 4, pose estimate (x, y, heading): ", pose4.getX(), pose4.getY(), pose4.getHeading()));
+                            Vector2d btt4 = AprilTagLocalizer.getRobotToTagVector(detection.ftcPose.x, detection.ftcPose.y);
+                            Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
+                            telemetry.addLine(String.format("found tag 4"));
+                            telemetry.addLine("robot to tag: ");
+                            telemetry.addData("x:", btt4.getX());
+                            telemetry.addData("y:", btt4.getY());
+
+                            telemetry.addLine("pose estimate:");
+                            telemetry.addData("x:", pose4.getX());
+                            telemetry.addData("y:", pose4.getY());
+                            telemetry.addData("headnig", Math.toDegrees(pose4.getHeading()));
                         }
 
                         if (detection.metadata != null) {
@@ -108,6 +95,14 @@ public class VisionTest extends LinearOpMode {
 
             telemetry.addData("Status", status);
             telemetry.update();
+        }
+        waitForStart();
+
+        cvMaster.stop();
+
+        // Run
+        while (opModeIsActive()) {
+
         }
     }
 }

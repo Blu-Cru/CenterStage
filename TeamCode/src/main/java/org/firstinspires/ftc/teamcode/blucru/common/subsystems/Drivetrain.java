@@ -252,10 +252,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setPoseEstimate(Initialization.POSE);
     }
 
-    public void startReadingDistance() {
-        readingDistance = true;
-        distanceSensors.resetKalmanFilter();
-    }
+//    public void startReadingDistance() {
+//        readingDistance = true;
+//        distanceSensors.resetKalmanFilter();
+//    }
 
     public void stopReadingDistance() {
         readingDistance = false;

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Plane implements Subsystem{
-    public static double PLANE_RELEASED = 0.5;
-    public static double PLANE_RETRACT = 0.5;
+    public static double PLANE_RELEASED = 0.6;
+    public static double PLANE_RETRACT = 0.42;
 
     Servo plane;
     ServoControllerEx planeController;

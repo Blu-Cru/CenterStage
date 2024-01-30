@@ -35,7 +35,6 @@ public class DistancePIDTest extends LinearOpMode {
 
         drivetrain.distanceSensors.setQ(Q);
         drivetrain.distanceSensors.setR(R);
-        drivetrain.distanceSensors.setN(N);
 
         robot.init();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -54,12 +53,12 @@ public class DistancePIDTest extends LinearOpMode {
                 gamepad1.rumble(100);
             }
 
-            if(gamepad1.dpad_up) {
-                drivetrain.startReadingDistance();
-            }
-            if(gamepad1.dpad_down) {
-                drivetrain.stopReadingDistance();
-            }
+//            if(gamepad1.dpad_up) {
+//                drivetrain.startReadingDistance();
+//            }
+//            if(gamepad1.dpad_down) {
+//                drivetrain.stopReadingDistance();
+//            }
 
             if(gamepad1.b) {
                 targetHeading = Math.toRadians(180);

@@ -54,10 +54,10 @@ public class Poses {
 
         WING_STARTING_POSE = new Pose2d(-36, START_Y * reflect, Math.toRadians(-90 * reflect));
         WING_PLACEMENT_FAR_FOR_PERIM_POSE = new Pose2d(-55, -36 * reflect, Math.toRadians(180));
-        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-49.5, -19 * reflect, Math.toRadians(120));
+        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-50, -21 * reflect, Math.toRadians(120));
         WING_PLACEMENT_CLOSE_FOR_CENTER_POSE = new Pose2d(-31, -34 * reflect, Math.toRadians(180));
         WING_PLACEMENT_CLOSE_FOR_PERIM_POSE = new Pose2d(-30, -40 * reflect, Math.toRadians(225 * reflect));
-        WING_PLACEMENT_CENTER_POSE = new Pose2d(-50, -24.5 * reflect, Math.toRadians(180));
+        WING_PLACEMENT_CENTER_POSE = new Pose2d(-48, -24.5 * reflect, Math.toRadians(180));
 
         DEPOSIT_FAR_POSE = new Pose2d(BACKDROP_X, BACKDROP_FAR_Y * reflect, Math.toRadians(180));
         DEPOSIT_CENTER_POSE = new Pose2d(BACKDROP_X, -36 * reflect, Math.toRadians(180));
