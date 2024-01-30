@@ -44,6 +44,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // heading while facing intake
     public boolean fieldCentric;
+    boolean isTeleOp;
 
     private PIDController turnPID;
     public double targetHeading = 0;
@@ -51,8 +52,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public DistanceSensors distanceSensors;
     private PIDController distancePID;
 
-    public Drivetrain(HardwareMap hardwareMap) {
+    public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
+        this.isTeleOp = isTeleOp;
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
         distanceSensors = new DistanceSensors(hardwareMap);
@@ -62,7 +64,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void init() {
         fieldCentric = true;
-        initializePose();
+        if(isTeleOp) initializePose();
         lastDriveVector = new Vector2d(0,0);
         lastRotate = 0;
         lastPose = new Pose2d(0,0,0);
@@ -72,16 +74,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void read() {
-
-        updatePoseEstimate();
-        dt = System.currentTimeMillis() - lastTime;
-        pose = this.getPoseEstimate();
+        if(isTeleOp) {
+            updatePoseEstimate();
+            dt = System.currentTimeMillis() - lastTime;
+            pose = this.getPoseEstimate();
 //        velocity = pose.vec().distTo(lastPose.vec()) / dt;
 //        acceleration = (velocity - lastVelocity) / dt;
 //        lastPose = pose;
 //        lastVelocity = velocity;
-        lastTime = System.currentTimeMillis();
-        heading = getRelativeHeading();
+            lastTime = System.currentTimeMillis();
+            heading = getRelativeHeading();
+        }
 
         if(readingDistance) {
             distanceSensors.read();
@@ -268,11 +271,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("y", pose.getY());
         telemetry.addData("field centric", fieldCentric);
         telemetry.addData("reading distance", readingDistance);
-        distanceSensors.telemetry(telemetry);
     }
 
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("dt", dt);
         telemetry.addData("last drive vector", lastDriveVector);
+        distanceSensors.telemetry(telemetry);
     }
 }

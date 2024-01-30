@@ -13,7 +13,6 @@ public class Plane implements Subsystem{
     public static double PLANE_RETRACT = 0.42;
 
     Servo plane;
-    ServoControllerEx planeController;
 
     boolean released = false;
 

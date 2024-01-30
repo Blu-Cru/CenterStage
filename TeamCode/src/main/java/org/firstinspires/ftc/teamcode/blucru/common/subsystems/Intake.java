@@ -24,7 +24,7 @@ public class Intake implements Subsystem{
 
     public ElapsedTime intakeTimer;
 
-    public double intakePower;
+    double intakePower;
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
@@ -50,7 +50,7 @@ public class Intake implements Subsystem{
         intakeWrist.write();
 
         if(intakeMotor.getPower() != intakePower) {
-            setIntakePower(intakePower);
+            setPower(intakePower);
         }
     }
 
@@ -75,9 +75,13 @@ public class Intake implements Subsystem{
         intakeWrist.targetAngleDeg = intakeWrist.toDeg(targetHeight);
     }
 
-    private void setIntakePower(double power) {
-        intakeRoller.setPower(power * POWER);
-        intakeMotor.setPower(power * POWER);
+    public void setIntakePower(double power) {
+        intakePower = power * POWER;
+    }
+
+    public void setPower(double power) {
+        intakeRoller.setPower(intakePower);
+        intakeMotor.setPower(intakePower);
     }
 
     public double getIntakeRollersPower() {
@@ -85,6 +89,6 @@ public class Intake implements Subsystem{
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("intake power", intakeMotor.getPower());
+        telemetry.addData("intake power", intakePower);
     }
 }

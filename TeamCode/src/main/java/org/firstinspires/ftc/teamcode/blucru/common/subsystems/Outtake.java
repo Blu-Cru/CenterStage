@@ -18,9 +18,10 @@ public class Outtake implements Subsystem{
     public static double FRONT_UNLOCKED = 0.85;
     public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.28;
 
+    public static double PIXEL_HEIGHT = 2.6; // inches
     public static double LOW_HEIGHT = 4.0; // inches
-    public static double MED_HEIGHT = 8.0; // inches
-    public static double HIGH_HEIGHT = 12.0;
+    public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 1; // inches
+    public static double HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 3;
 
     public static int LIFT_WRIST_CLEAR_POS = 300;
     public static int LIFT_INTAKE_READY_POS = 100;
@@ -29,7 +30,6 @@ public class Outtake implements Subsystem{
     public Lift lift;
 
     Turret turret;
-    private double lastTurretDelta;
 
     public boolean outtaking;
 
@@ -37,7 +37,6 @@ public class Outtake implements Subsystem{
     double wristPos;
 
     public double targetHeight; // inches
-    private double lastTargetHeight;
 
     public boolean frontLocked;
     public boolean backLocked;
@@ -78,9 +77,6 @@ public class Outtake implements Subsystem{
             lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
         }
 
-        lastTargetHeight = targetHeight;
-        lastTurretDelta = turret.getTurretHeightDelta();
-
         lift.read();
         turret.read();
     }
@@ -100,6 +96,11 @@ public class Outtake implements Subsystem{
 
     public void setTargetHeight(double targetHeight) {
         this.targetHeight = targetHeight;
+        this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
+    }
+
+    public void incrementTargetHeight(int pixels) {
+        this.targetHeight = targetHeight + pixels * PIXEL_HEIGHT;
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 

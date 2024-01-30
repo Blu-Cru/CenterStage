@@ -59,7 +59,7 @@ public class Auto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        drivetrain = robot.addDrivetrain();
+        drivetrain = robot.addDrivetrain(false);
         intake = robot.addIntake();
         outtake = robot.addOuttake();
         purplePixelHolder = robot.addPurplePixelHolder();

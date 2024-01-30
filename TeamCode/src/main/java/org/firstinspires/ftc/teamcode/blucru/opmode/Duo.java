@@ -4,15 +4,17 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 
@@ -31,13 +33,14 @@ right joystick : turn
 @Config
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends LinearOpMode {
-    public static double OUTTAKE_DELAY_SECONDS = 1;
+    public static double OUTTAKE_DELAY_SECONDS = 0.5;
 
     Robot robot;
     Drivetrain drivetrain;
     Outtake outtake;
     Intake intake;
     Hanger hanger;
+    Plane plane;
 
     private RobotState robotState;
 
@@ -46,6 +49,10 @@ public class Duo extends LinearOpMode {
     double lastTime, deltaTime;
 
     boolean lastDown2 = false;
+    boolean lastA2 = false;
+    boolean lastRSUp2 = false;
+    boolean lastRSDown2 = false;
+    boolean lastUp1 = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -76,10 +83,11 @@ public class Duo extends LinearOpMode {
         robotState = RobotState.RETRACT;
         robot = new Robot(hardwareMap);
 
-        drivetrain = robot.addDrivetrain();
+        drivetrain = robot.addDrivetrain(true);
         outtake = robot.addOuttake();
         intake = robot.addIntake();
         hanger = robot.addHanger();
+        plane = robot.addPlane();
 
         totalTimer = new ElapsedTime();
         outtakeTimer = new ElapsedTime();
@@ -106,20 +114,17 @@ public class Duo extends LinearOpMode {
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
-            if(gamepad1.left_bumper) {
+            if(gamepad1.left_bumper)
                 drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, Math.toRadians(180));
-            } else {
+            else
                 drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
-            }
         } else if(gamepad1.x) {
-            if(gamepad1.left_bumper) {
+            if(gamepad1.left_bumper)
                 drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, 0);
-            } else {
+            else
                 drivetrain.driveToHeading(horz, vert, 0);
-            }
-        } else {
+        } else
             drivetrain.drive(horz, vert, rotate);
-        }
 
         // INTAKE
         if(gamepad2.left_bumper) {
@@ -179,65 +184,58 @@ public class Duo extends LinearOpMode {
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
 
-                if(gamepad2.a) {
+                if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
                     outtake.outtaking = false;
-                    outtake.lift.setTargetPos(0);
+                    outtake.lift.setMotionProfileTargetPos(0);
                 }
+                lastA2 = gamepad2.a;
                 break;
             case OUTTAKE:
                 outtake.outtaking = true;
 
+                // TURRET CONTROL
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
                     if(!outtake.wristRetracted) {
-                        if (gamepad2.left_trigger > 0.1)
-                            outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
-                        else if (gamepad2.right_trigger > 0.1)
-                            outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
-                        else
-                            outtake.setTurretAngle(270);
-                    } else {
-                        outtake.setTurretAngle(270);
-                    }
-                } else {
-                    outtake.setTurretAngle(270);
-                }
+                        if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
+                        else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
+                        else outtake.setTurretAngle(270);
+                    } else outtake.setTurretAngle(270);
+                } else outtake.setTurretAngle(270);
 
-                if(Math.abs(outtake.getTurretAngle() - 270) < 10) {
-                    if(gamepad2.dpad_down && !lastDown2) {
-                        outtake.toggleWrist();
-                    }
-                } else {
+                // WRIST CONTROL
+                if(gamepad2.dpad_down && !lastDown2 && Math.abs(outtake.getTurretAngle() - 270) < 5) {
+                    outtake.toggleWrist();
+                } else
                     outtake.extendWrist();
-                }
                 lastDown2 = gamepad2.dpad_down;
 
                 // Change height
-                if(gamepad2.x)
-                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y)
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                if(gamepad2.x)
-                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.x) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
-                if(gamepad2.a && outtake.wristRetracted) {
+                // increment height by one pixel
+                if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(1);
+                lastRSUp2 = gamepad2.right_stick_y < -0.3;
+                if(gamepad2.right_stick_y > 0.3 && !lastRSDown2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(-1);
+                lastRSDown2 = gamepad2.right_stick_y > 0.3;
+
+                // retract
+                if(gamepad2.a && !lastA2 && outtake.wristRetracted) {
                     robotState = RobotState.RETRACT;
                     outtake.outtaking = false;
-                    outtake.lift.setTargetPos(0);
+                    outtake.lift.setMotionProfileTargetPos(0);
                 }
+                lastA2 = gamepad2.a;
                 break;
         }
 
         // MANUAL SLIDE
-//        if(Math.abs(gamepad2.right_stick_y) > 0.1) {
-//            outtake.lift.liftState = LiftState.MANUAL;
-//            outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
-//        } else {
-//            if(!(Math.abs(lastGamepad2.right_stick_y) > 0.1)) {
-//                outtake.updateTargetHeight();
-//            }
-//            outtake.lift.liftState = LiftState.AUTO;
-//        }
+        if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
+            outtake.lift.liftState = LiftState.MANUAL;
+            outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
+        }
 
         // MANUAL HANG
         if(Math.abs(gamepad2.left_stick_y) > 0.1)
@@ -245,6 +243,10 @@ public class Duo extends LinearOpMode {
         else
             hanger.setPower(0);
 
+        // PLANE
+        if(gamepad1.dpad_up && !lastUp1)
+            plane.togglePlane();
+        lastUp1 = gamepad1.dpad_up;
     }
 
     public void write() {

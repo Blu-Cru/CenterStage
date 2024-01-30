@@ -85,7 +85,7 @@ public class Lift implements Subsystem{
     }
 
     public void read() {
-        currentPos = getCurrentPos();
+        currentPos = liftMotor.getCurrentPosition();
         velocity = liftMotor.getVelocity();
     }
 
@@ -94,7 +94,7 @@ public class Lift implements Subsystem{
 
         switch(liftState) {
             case MoPro:
-                targetPos = motionProfile.calculateTargetPosition(motionProfileTimer.seconds());
+                targetPos = Range.clip(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()), liftMinPos, liftMaxPos);
                 if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
                     power = 0;
                     resetEncoder();
@@ -132,6 +132,7 @@ public class Lift implements Subsystem{
 //    }
 
     public void setMotionProfileTargetPos(int targetPos) {
+        targetPos = Range.clip(targetPos, liftMinPos, liftMaxPos);
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
     }
 
@@ -182,7 +183,7 @@ public class Lift implements Subsystem{
     }
 
     public int getCurrentPos() {
-        return liftMotor.getCurrentPosition();
+        return currentPos;
     }
 
     public double getCurrent() {
@@ -202,11 +203,14 @@ public class Lift implements Subsystem{
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("liftState", liftState);
         telemetry.addData("targetPos", targetPos);
-        telemetry.addData("currentPos", getCurrentPos());
-        telemetry.addData("power", liftMotor.getPower());
+        telemetry.addData("currentPos", currentPos);
+        telemetry.addData("power", power);
+        telemetry.addData("motionProfileTimer", motionProfileTimer.seconds());
+    }
+
+    public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("velocity", velocity);
         telemetry.addData("current", getCurrent());
-        telemetry.addData("motionProfileTimer", motionProfileTimer.seconds());
     }
 
     public void motionProfileTelemetry(Telemetry telemetry) {

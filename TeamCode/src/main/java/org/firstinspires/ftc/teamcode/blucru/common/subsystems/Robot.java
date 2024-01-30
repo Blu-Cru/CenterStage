@@ -16,8 +16,7 @@ public class Robot {
     public Intake intake;
     public Drivetrain drivetrain;
     public Hanger hanger;
-
-//    public Plane plane;
+    public Plane plane;
     public PurplePixelHolder purplePixelHolder;
     public CVMaster cvMaster;
 
@@ -70,8 +69,8 @@ public class Robot {
         return intake;
     }
 
-    public Drivetrain addDrivetrain() {
-        drivetrain = new Drivetrain(hardwareMap);
+    public Drivetrain addDrivetrain(boolean isTeleOp) {
+        drivetrain = new Drivetrain(hardwareMap, isTeleOp);
         subsystems.add(drivetrain);
         return drivetrain;
     }
@@ -82,11 +81,11 @@ public class Robot {
         return hanger;
     }
 
-//    public Plane addPlane() {
-//        plane = new Plane(hardwareMap);
-//        subsystems.add(plane);
-//        return plane;
-//    }
+    public Plane addPlane() {
+        plane = new Plane(hardwareMap);
+        subsystems.add(plane);
+        return plane;
+    }
 
     public PurplePixelHolder addPurplePixelHolder() {
         purplePixelHolder = new PurplePixelHolder(hardwareMap);

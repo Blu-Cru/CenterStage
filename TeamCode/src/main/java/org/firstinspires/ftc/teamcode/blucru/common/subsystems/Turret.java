@@ -48,7 +48,6 @@ public class Turret implements Subsystem{
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("turret height delta", getTurretHeightDelta());
         telemetry.addData("turret position", position);
         telemetry.addData("turret angle", targetAngle);
     }
