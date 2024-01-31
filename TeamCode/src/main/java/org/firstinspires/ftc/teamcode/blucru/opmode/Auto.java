@@ -56,6 +56,7 @@ public class Auto extends LinearOpMode {
 
     double dt;
     double lastTime = System.currentTimeMillis();
+    int loop = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -188,15 +189,20 @@ public class Auto extends LinearOpMode {
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
-            telemetry.addData("# of trajectories: ", trajectoryList.size());
-            telemetry.addData("index", trajIndex);
-            telemetry.addData("runtime", runtime.seconds());
-            telemetry.addData("state: ", autoState);
-            telemetry.addData("alliance: ", alliance);
-            telemetry.addData("side: ", side);
-            telemetry.addData("position", position);
-            telemetry.addData("dt", dt);
-            telemetry.update();
+            // do telemetry every 30 loops
+            loop++;
+            if(loop > 30) {
+                telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
+                telemetry.addData("runtime", runtime.seconds());
+                telemetry.addData("state: ", autoState);
+                telemetry.addData("alliance: ", alliance);
+                telemetry.addData("side: ", side);
+                telemetry.addData("position", position);
+                telemetry.addData("dt", dt);
+                robot.telemetry(telemetry);
+                telemetry.update();
+                loop = 0;
+            }
         }
     }
 }

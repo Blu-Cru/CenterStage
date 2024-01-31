@@ -23,7 +23,7 @@ public class IntakeTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
-        Drivetrain drivetrain = robot.addDrivetrain();
+        Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 
         drivetrain.setDrivePower(0.8);
@@ -55,11 +55,11 @@ public class IntakeTest extends LinearOpMode {
             }
 
             if(gamepad2.left_trigger > 0.1) {
-                intake.intakePower = gamepad2.left_trigger;
+                intake.setIntakePower(gamepad2.left_trigger);
             } else if (gamepad2.right_trigger > 0.1){
-                intake.intakePower = -gamepad2.right_trigger;
+                intake.setIntakePower(-gamepad2.right_trigger);
             } else {
-                intake.intakePower = 0;
+                intake.setIntakePower(0);
             }
 
             if(gamepad2.a) {

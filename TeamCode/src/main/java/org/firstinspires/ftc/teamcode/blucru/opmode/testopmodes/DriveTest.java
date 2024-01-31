@@ -18,7 +18,7 @@ public class DriveTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
-        Drivetrain drivetrain = robot.addDrivetrain();
+        Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {

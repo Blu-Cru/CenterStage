@@ -79,9 +79,9 @@ public class Intake implements Subsystem{
         intakePower = power * POWER;
     }
 
-    public void setPower(double power) {
-        intakeRoller.setPower(intakePower);
-        intakeMotor.setPower(intakePower);
+    private void setPower(double power) {
+        intakeRoller.setPower(power);
+        intakeMotor.setPower(power);
     }
 
     public double getIntakeRollersPower() {

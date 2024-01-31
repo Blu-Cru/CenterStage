@@ -60,7 +60,7 @@ public class Placements {
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-36, -52 * reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -52 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
@@ -74,7 +74,7 @@ public class Placements {
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-36, -50 * reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
@@ -88,7 +88,7 @@ public class Placements {
                 .setTangent(Math.toRadians(90))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-36, -59*reflect), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -59*reflect), Math.toRadians(90))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(90))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
@@ -103,7 +103,7 @@ public class Placements {
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineTo(new Vector2d(-36, -55*reflect), Math.toRadians(90 * reflect))
+                .splineTo(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE, Math.toRadians(180))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
@@ -120,9 +120,9 @@ public class Placements {
                 .setTangent(Math.toRadians(130 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-46, -55*reflect), Math.toRadians(90 * reflect))
-                .splineToSplineHeading(new Pose2d(-46, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
-                .splineToConstantHeading(new Vector2d(-46, -10 * reflect), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -55*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-46 + Poses.FIELD_OFFSET_X, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -10 * reflect), Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .lineToLinearHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                 // release purple pixel

@@ -47,6 +47,7 @@ public class Duo extends LinearOpMode {
     ElapsedTime totalTimer;
     ElapsedTime outtakeTimer;
     double lastTime, deltaTime;
+    int loop;
 
     boolean lastDown2 = false;
     boolean lastA2 = false;
@@ -128,13 +129,13 @@ public class Duo extends LinearOpMode {
 
         // INTAKE
         if(gamepad2.left_bumper) {
-            intake.intakePower = 1;
+            intake.setIntakePower(1);
             outtake.unlock();
         } else if(gamepad2.right_bumper) {
-            intake.intakePower = 1;
+            intake.setIntakePower(-1);
             outtake.lock();
         } else {
-            intake.intakePower = 0;
+            intake.setIntakePower(0);
             if (gamepad2.dpad_left) outtake.lockBack();
             else if(gamepad2.dpad_right) outtake.unlock();
             else outtake.lock();
@@ -204,16 +205,15 @@ public class Duo extends LinearOpMode {
                 } else outtake.setTurretAngle(270);
 
                 // WRIST CONTROL
-                if(gamepad2.dpad_down && !lastDown2 && Math.abs(outtake.getTurretAngle() - 270) < 5) {
-                    outtake.toggleWrist();
-                } else
-                    outtake.extendWrist();
+                if(Math.abs(outtake.getTurretAngle() - 270) < 5) {
+                    if(gamepad2.dpad_down && !lastDown2) outtake.toggleWrist();
+                } else outtake.extendWrist();
                 lastDown2 = gamepad2.dpad_down;
 
                 // Change height
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                if(gamepad2.x) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
                 if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(1);
@@ -252,9 +252,12 @@ public class Duo extends LinearOpMode {
     public void write() {
         robot.write();
 
-        telemetry.addData("robot state", robotState);
-        telemetry.addData("loop time", deltaTime);
-        robot.telemetry(telemetry);
-        telemetry.update();
+        loop++;
+        if(loop > 10) {
+            telemetry.addData("robot state", robotState);
+            telemetry.addData("loop time", deltaTime);
+            robot.telemetry(telemetry);
+            telemetry.update();
+        }
     }
 }

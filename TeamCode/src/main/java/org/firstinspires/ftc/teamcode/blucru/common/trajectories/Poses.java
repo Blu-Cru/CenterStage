@@ -2,20 +2,24 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-
 public class Poses {
-    public static double BACKDROP_X = 51;
+    public static double FIELD_OFFSET_X = 3.5;
+    /*
+    offset of distance from backdrop to other side
+    APPLY ONLY TO WING SIDE COORDINATES
+    */
+
+    public static double DEPOSIT_X = 51;
     public static double BACKDROP_SETUP_X = 46;
 
     public static double BACKDROP_Y_DELTA = 5;
-    public static double BACKDROP_FAR_Y = -36 + BACKDROP_Y_DELTA;
-    public static double BACKDROP_CLOSE_Y = -36 - BACKDROP_Y_DELTA;
+    public static double DEPOSIT_FAR_Y = -36 + BACKDROP_Y_DELTA;
+    public static double DEPOSIT_CLOSE_Y = -36 - BACKDROP_Y_DELTA;
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -58;
-    public static double STACK_SETUP_X = -54;
+    public static double STACK_X = -58 + FIELD_OFFSET_X;
+    public static double STACK_SETUP_X = -54 + FIELD_OFFSET_X;
     public static double START_Y = -62;
 
     public static Pose2d BACKDROP_STARTING_POSE;
@@ -52,16 +56,16 @@ public class Poses {
         BACKDROP_PLACEMENT_CLOSE_POSE = new Pose2d(23.5, -35 * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_CENTER_POSE = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
 
-        WING_STARTING_POSE = new Pose2d(-36, START_Y * reflect, Math.toRadians(-90 * reflect));
-        WING_PLACEMENT_FAR_FOR_PERIM_POSE = new Pose2d(-55, -36 * reflect, Math.toRadians(180));
-        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-50, -21 * reflect, Math.toRadians(120));
-        WING_PLACEMENT_CLOSE_FOR_CENTER_POSE = new Pose2d(-31, -34 * reflect, Math.toRadians(180));
-        WING_PLACEMENT_CLOSE_FOR_PERIM_POSE = new Pose2d(-30, -40 * reflect, Math.toRadians(225 * reflect));
-        WING_PLACEMENT_CENTER_POSE = new Pose2d(-48, -24.5 * reflect, Math.toRadians(180));
+        WING_STARTING_POSE = new Pose2d(-36 + FIELD_OFFSET_X, START_Y * reflect, Math.toRadians(-90 * reflect));
+        WING_PLACEMENT_FAR_FOR_PERIM_POSE = new Pose2d(-55 + FIELD_OFFSET_X, -36 * reflect, Math.toRadians(180));
+        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-52 + FIELD_OFFSET_X, -21 * reflect, Math.toRadians(120));
+        WING_PLACEMENT_CLOSE_FOR_CENTER_POSE = new Pose2d(-31 + FIELD_OFFSET_X, -34 * reflect, Math.toRadians(180));
+        WING_PLACEMENT_CLOSE_FOR_PERIM_POSE = new Pose2d(-30 + FIELD_OFFSET_X, -40 * reflect, Math.toRadians(225 * reflect));
+        WING_PLACEMENT_CENTER_POSE = new Pose2d(-48 + FIELD_OFFSET_X, -24.5 * reflect, Math.toRadians(180));
 
-        DEPOSIT_FAR_POSE = new Pose2d(BACKDROP_X, BACKDROP_FAR_Y * reflect, Math.toRadians(180));
-        DEPOSIT_CENTER_POSE = new Pose2d(BACKDROP_X, -36 * reflect, Math.toRadians(180));
-        DEPOSIT_CLOSE_POSE = new Pose2d(BACKDROP_X, BACKDROP_CLOSE_Y * reflect, Math.toRadians(180));
+        DEPOSIT_FAR_POSE = new Pose2d(DEPOSIT_X, DEPOSIT_FAR_Y * reflect, Math.toRadians(180));
+        DEPOSIT_CENTER_POSE = new Pose2d(DEPOSIT_X, -36 * reflect, Math.toRadians(180));
+        DEPOSIT_CLOSE_POSE = new Pose2d(DEPOSIT_X, DEPOSIT_CLOSE_Y * reflect, Math.toRadians(180));
 
         PARK_CLOSE_POSE = new Pose2d(46, -60 * reflect, Math.toRadians(180));
         PARK_FAR_POSE = new Pose2d(46, -12 * reflect, Math.toRadians(180));

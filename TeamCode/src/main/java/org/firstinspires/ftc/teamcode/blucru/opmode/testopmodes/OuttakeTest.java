@@ -25,7 +25,7 @@ public class OuttakeTest extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        drivetrain = robot.addDrivetrain();
+        drivetrain = robot.addDrivetrain(true);
         outtake = robot.addOuttake();
 
         initialize();

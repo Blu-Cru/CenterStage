@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
-    public static double DRIVE_POWER_RETRACT = 0.7, DRIVE_POWER_OUTTAKE = 0.4;
+    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
 
     public static double MAX_ACCEL_DRIVE_DELTA = 5; // magnitude per second at power 1
     public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
@@ -24,7 +24,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.03;
     public static double ANGLE_TOLERANCE = 0.5; // radians
-    public static double OUTTAKE_DISTANCE = 3.5;
+    public static double OUTTAKE_DISTANCE = 3.7;
 
     public double drivePower = 0.5;
     private double dt;
@@ -77,7 +77,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(isTeleOp) {
             updatePoseEstimate();
             dt = System.currentTimeMillis() - lastTime;
-            pose = this.getPoseEstimate();
 //        velocity = pose.vec().distTo(lastPose.vec()) / dt;
 //        acceleration = (velocity - lastVelocity) / dt;
 //        lastPose = pose;
@@ -86,6 +85,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             heading = getRelativeHeading();
         }
 
+        pose = this.getPoseEstimate();
         if(readingDistance) {
             distanceSensors.read();
         }
@@ -265,12 +265,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("drive power", drivePower);
+        if(isTeleOp) {
+            telemetry.addData("drive power", drivePower);
+            telemetry.addData("field centric", fieldCentric);
+        } else {
+            telemetry.addData("reading distance", readingDistance);
+        }
         telemetry.addData("heading", heading);
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
-        telemetry.addData("field centric", fieldCentric);
-        telemetry.addData("reading distance", readingDistance);
     }
 
     public void testTelemetry(Telemetry telemetry) {

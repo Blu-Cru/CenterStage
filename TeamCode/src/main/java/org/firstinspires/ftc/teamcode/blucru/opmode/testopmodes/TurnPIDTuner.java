@@ -23,7 +23,7 @@ public class TurnPIDTuner extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Robot robot = new Robot(hardwareMap);
-        Drivetrain drivetrain = robot.addDrivetrain();
+        Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 
         robot.init();

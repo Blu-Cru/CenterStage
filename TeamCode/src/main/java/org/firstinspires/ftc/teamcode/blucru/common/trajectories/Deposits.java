@@ -34,7 +34,7 @@ public class Deposits {
                 // retract lift
 
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
                 // start and lower intake
 
@@ -47,15 +47,15 @@ public class Deposits {
 
                 .setTangent(Math.toRadians(-45 * reflect))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 // lift up
@@ -75,7 +75,7 @@ public class Deposits {
                 // retract lift
 
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
                 // start and lower intake
 
@@ -88,15 +88,15 @@ public class Deposits {
 
                 .setTangent(Math.toRadians(-45 * reflect))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
@@ -114,7 +114,7 @@ public class Deposits {
                 // retract lift
 
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -36 * reflect), Math.toRadians(180))
                 // start and lower intake
 
@@ -127,15 +127,15 @@ public class Deposits {
 
                 .setTangent(Math.toRadians(-45 * reflect))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
@@ -166,13 +166,13 @@ public class Deposits {
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
@@ -203,13 +203,13 @@ public class Deposits {
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
@@ -220,12 +220,13 @@ public class Deposits {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(135 * reflect))
+
                 // retract turret
-
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> robot.outtake.centerTurret())
                 // retract wrist
-
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> robot.outtake.retractWrist())
                 // retract lift
-
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 // start and lower intake
@@ -240,13 +241,13 @@ public class Deposits {
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 // release pixel
 
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
@@ -273,7 +274,7 @@ public class Deposits {
                 })
 
                 .splineToConstantHeading(new Vector2d(30, -44 * reflect), 0)
-                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect, Math.toRadians(180)), 0)
+                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect, Math.toRadians(180)), 0)
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), 0)
@@ -343,7 +344,7 @@ public class Deposits {
                 .splineToConstantHeading(new Vector2d(8, -42 * reflect), 0)
                 .splineToConstantHeading(new Vector2d(10, -42*reflect), 0)
                 .splineToSplineHeading(new Pose2d(30, -35 * reflect, Math.toRadians(180)), Math.toRadians(45*reflect))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y*reflect), 0)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y *reflect), 0)
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
@@ -368,25 +369,25 @@ public class Deposits {
                 // drop down, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.9, () -> {
                     robot.intake.dropToStack(4);
-                    robot.intake.intakePower = 1;
+                    robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
-                .splineToConstantHeading(new Vector2d(-53, -24*reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-53 + Poses.FIELD_OFFSET_X, -24*reflect), Math.toRadians(180))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
                 // lock and start outtake
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.intakePower = -1;
+                    robot.intake.setIntakePower(-1);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    robot.intake.intakePower = 0;
+                    robot.intake.setIntakePower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .setTangent(0)
-                .splineToConstantHeading(new Vector2d(-40, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-40 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
@@ -432,60 +433,60 @@ public class Deposits {
                 // drop to intake, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     robot.intake.dropToStack(4);
-                    robot.intake.intakePower = 1;
+                    robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
-                .splineToConstantHeading(new Vector2d(-53, -24*reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-53 + Poses.FIELD_OFFSET_X, -24*reflect), Math.toRadians(180))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.intakePower = -1;
+                    robot.intake.setIntakePower(-1);
                 })
                 // stop outtake
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    robot.intake.intakePower = 0;
+                    robot.intake.setIntakePower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .setTangent(Math.toRadians(45 * reflect))
-                .splineToConstantHeading(new Vector2d(-45, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
-//                // lift
-//                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
-//                })
-//                // wrist back
-//                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME, () -> {
-//                    robot.outtake.extendWrist();
-//                })
-//                // turn turret
-//                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME + TURRET_TURN_AFTER_WRIST_TIME, () -> {
-//                    robot.outtake.setTurretAngle(270 - 20 * reflect);
-//                })
+                // lift
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                })
+                // wrist back
+                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME, () -> {
+                    robot.outtake.extendWrist();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME + TURRET_TURN_AFTER_WRIST_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 - 20 * reflect);
+                })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
-//                // release white pixel
-//                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
-//                    robot.outtake.lockBack();
-//                })
-//                // turn turret
-//                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-//                    robot.outtake.setTurretAngle(270 + 20 * reflect);
-//                })
-//                // release yellow pixel
-//                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
-//                    robot.outtake.unlock();
-//                })
-//                .UNSTABLE_addTemporalMarkerOffset(0.9, () -> {
-//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-//                    robot.outtake.centerTurret();
-//                })
+                // release white pixel
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
+                    robot.outtake.lockBack();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    robot.outtake.setTurretAngle(270 + 20 * reflect);
+                })
+                // release yellow pixel
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
+                    robot.outtake.unlock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.9, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+                    robot.outtake.centerTurret();
+                })
                 .waitSeconds(1.3)
                 .build();
     }
@@ -497,7 +498,7 @@ public class Deposits {
                 // drop down, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     robot.intake.dropToStack(4);
-                    robot.intake.intakePower = 1;
+                    robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
                 .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
@@ -505,50 +506,50 @@ public class Deposits {
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.intakePower = -1;
+                    robot.intake.setIntakePower(-1);
                 })
                 // stop outtake
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    robot.intake.intakePower = 0;
+                    robot.intake.setIntakePower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .setTangent(Math.toRadians(0 * reflect))
-                .splineToConstantHeading(new Vector2d(-45, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
-//                // lift
-//                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
-//                })
-//                // wrist back
-//                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME, () -> {
-//                    robot.outtake.extendWrist();
-//                })
-//                // turn turret
-//                .UNSTABLE_addTemporalMarkerOffset(1 + WRIST_EXTEND_AFTER_LIFT_TIME + TURRET_TURN_AFTER_WRIST_TIME, () -> {
-//                    robot.outtake.setTurretAngle(270 - 20 * reflect);
-//                })
+                // lift
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                })
+                // wrist back
+                .UNSTABLE_addTemporalMarkerOffset(0.5 + WRIST_EXTEND_AFTER_LIFT_TIME, () -> {
+                    robot.outtake.extendWrist();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(0.5 + WRIST_EXTEND_AFTER_LIFT_TIME + TURRET_TURN_AFTER_WRIST_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 + 50 * reflect);
+                })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
-//                // release white pixel
-//                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
-//                    robot.outtake.lockBack();
-//                })
-//                // turn turret
-//                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-//                    robot.outtake.setTurretAngle(270 + 20 * reflect);
-//                })
-//                // release yellow pixel
-//                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
-//                    robot.outtake.unlock();
-//                })
-//                .UNSTABLE_addTemporalMarkerOffset(0.9, () -> {
-//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-//                    robot.outtake.centerTurret();
-//                })
+                // release white pixel
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
+                    robot.outtake.lockBack();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    robot.outtake.setTurretAngle(270 - 20 * reflect);
+                })
+                // release yellow pixel
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> {
+                    robot.outtake.unlock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+                    robot.outtake.centerTurret();
+                })
                 .waitSeconds(1.3)
                 .build();
     }
@@ -569,10 +570,10 @@ public class Deposits {
 
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(-45 * reflect))
-                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
@@ -607,10 +608,10 @@ public class Deposits {
 
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(-45 * reflect))
-                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_CLOSE_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
 
                 // wrist back
@@ -644,7 +645,7 @@ public class Deposits {
 
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(-45 * reflect))
-                .splineToConstantHeading(new Vector2d(-45, -60 * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
