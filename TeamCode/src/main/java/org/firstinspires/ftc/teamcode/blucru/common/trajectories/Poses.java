@@ -8,11 +8,11 @@ public class Poses {
     offset of distance from backdrop to other side
     APPLY ONLY TO WING SIDE COORDINATES
     */
-
+    public static double START_Y = -62;
     public static double DEPOSIT_X = 51;
     public static double BACKDROP_SETUP_X = 46;
-
     public static double BACKDROP_Y_DELTA = 5;
+
     public static double DEPOSIT_FAR_Y = -36 + BACKDROP_Y_DELTA;
     public static double DEPOSIT_CLOSE_Y = -36 - BACKDROP_Y_DELTA;
 
@@ -20,7 +20,6 @@ public class Poses {
 
     public static double STACK_X = -58 + FIELD_OFFSET_X;
     public static double STACK_SETUP_X = -54 + FIELD_OFFSET_X;
-    public static double START_Y = -62;
 
     public static Pose2d BACKDROP_STARTING_POSE;
     public static Pose2d WING_STARTING_POSE;
@@ -36,8 +35,6 @@ public class Poses {
     public static Pose2d WING_PLACEMENT_CENTER_POSE;
 
     public static Pose2d STACK_CLOSE_POSE;
-    public static Pose2d STACK_CENTER_POSE;
-    public static Pose2d STACK_FAR_POSE;
 
     public static Pose2d DEPOSIT_FAR_POSE;
     public static Pose2d DEPOSIT_CENTER_POSE;
@@ -69,5 +66,7 @@ public class Poses {
 
         PARK_CLOSE_POSE = new Pose2d(46, -60 * reflect, Math.toRadians(180));
         PARK_FAR_POSE = new Pose2d(46, -12 * reflect, Math.toRadians(180));
+
+        STACK_CLOSE_POSE = new Pose2d(STACK_X + FIELD_OFFSET_X + 1, -42 * reflect, Math.toRadians(150 * reflect));
     }
 }

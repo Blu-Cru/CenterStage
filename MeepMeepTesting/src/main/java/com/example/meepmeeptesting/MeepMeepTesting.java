@@ -21,42 +21,16 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
-                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .setTangent(Math.toRadians(120 * reflect))
-//                                // drop down, start intake, unlock
-//                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-//                                    robot.intake.dropToStack(4);
-//                                })
-
-                                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
-                                .waitSeconds(INTAKE_TIME)
-                                // lock and start outtaking
-
-                                // stop outtake
-
-                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .setTangent(Math.toRadians(0 * reflect))
-                                .splineToConstantHeading(new Vector2d(-45, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                                .setTangent(Math.toRadians(225 * reflect))
+                                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-52, -42 * reflect), Math.toRadians(150))
+                                // start and lower intake
+
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.BACKDROP_FAR_Y * reflect), Math.toRadians(0))
-                                // lift
-
-                                // wrist back
-
-                                // turn turret
-
-                                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
-                                // release white pixel
-
-                                // turn turret
-
-                                // release yellow pixel
-
-                                .waitSeconds(1.3)
+                                .splineToSplineHeading(new Pose2d(-57, -40, Math.toRadians(160)), Math.toRadians(160))
                                 .build()
                 );
 

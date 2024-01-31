@@ -16,19 +16,17 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 @Config
 public class Lift implements Subsystem{
     public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
-    public static int YELLOW_POS = 850, CLEAR_POS = 1000;
+    public static int YELLOW_POS = 850, CLEAR_POS = 1000, CYCLE_POS = 1200;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int liftMinPos = 0, liftMaxPos = 1560;
     public static double stallCurrent = 20; // amps
     public static double resetCurrent = 1; // amps
-    public final int resetTolerance = 20;
     public final int tolerance = 5; // ticks
 
     public static double TICKS_PER_REV = 384.5;
     public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
 
     public static double fastVelocity = 7000.0, fastAccel = 10000.0;
-    public static double slowVelocity = 2500.0, slowAccel = 5000.0;
 
     public LiftState liftState;
     private DcMotorEx liftMotor;
@@ -44,6 +42,7 @@ public class Lift implements Subsystem{
 
     private MotionProfile motionProfile;
     private ElapsedTime motionProfileTimer;
+    ElapsedTime retractTimer;
 
     private double velocity;
 
@@ -80,6 +79,8 @@ public class Lift implements Subsystem{
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        retractTimer = new ElapsedTime();
+
         motionProfileTimer = new ElapsedTime();
         motionProfile = new MotionProfile(0, 0, fastVelocity, fastAccel);
     }
@@ -95,7 +96,7 @@ public class Lift implements Subsystem{
         switch(liftState) {
             case MoPro:
                 targetPos = Range.clip(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()), liftMinPos, liftMaxPos);
-                if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
+                if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
                     power = 0;
                     resetEncoder();
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
@@ -134,6 +135,10 @@ public class Lift implements Subsystem{
     public void setMotionProfileTargetPos(int targetPos) {
         targetPos = Range.clip(targetPos, liftMinPos, liftMaxPos);
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
+
+        if(targetPos == 0) {
+            retractTimer.reset();
+        }
     }
 
 //    public void setMotionProfileTargetPos(int targetPos, double vMax, double aMax) {
