@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 
 import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
@@ -45,6 +46,10 @@ public class DistanceSensors implements Subsystem {
     }
 
     public void read() {
+
+    }
+
+    public void read(double heading) {
         rightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
         leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
 
@@ -52,7 +57,7 @@ public class DistanceSensors implements Subsystem {
             sensing = true;
             angle = Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET);
             averageDistance = (rightDistance + leftDistance) / 2;
-            distanceFromWall = getDistanceFromWall();
+            distanceFromWall = getDistanceFromWall(heading);
         } else {
             sensing = false;
         }
@@ -67,9 +72,9 @@ public class DistanceSensors implements Subsystem {
         return angle - this.angle;
     }
 
-    public double getDistanceFromWall() {
+    public double getDistanceFromWall(double angle) {
         if(sensing)
-            return averageDistance * Math.cos(Math.toRadians(angle));
+            return averageDistance * Math.abs(Math.cos(Math.toRadians(angle)));
         else
             return distanceFromWall;
     }

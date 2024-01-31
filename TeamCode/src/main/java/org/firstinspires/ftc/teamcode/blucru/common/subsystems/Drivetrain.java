@@ -95,7 +95,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         pose = this.getPoseEstimate();
         if(readingDistance) {
-            distanceSensors.read();
+            distanceSensors.read(heading);
         }
     }
 
@@ -121,7 +121,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
 
         setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate));
-
     }
 
     public Vector2d calculateDriveVector(Vector2d input) {
