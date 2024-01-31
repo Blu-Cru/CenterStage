@@ -69,11 +69,7 @@ public class Auto extends LinearOpMode {
         robot.init();
 
         while(!isStopRequested() && opModeInInit()) {
-            telemetry.addData("state: ", autoState);
-            telemetry.addData("auto type: ", autoType);
-            telemetry.addData("park: ", parkType);
-            telemetry.addData("alliance: ", alliance);
-            telemetry.addData("side: ", side);
+
 
             switch (autoState) {
                 case INIT:
@@ -108,13 +104,23 @@ public class Auto extends LinearOpMode {
                 case BUILD:
                     cvMaster = robot.addCVMaster(alliance);
                     autoState = AutoState.DETECTION;
+                    telemetry.addData("state: ", autoState);
+                    telemetry.addData("auto type: ", autoType);
+                    telemetry.addData("park: ", parkType);
+                    telemetry.addData("alliance: ", alliance);
+                    telemetry.addData("side: ", side);
                     break;
                 case DETECTION:
                     cvMaster.detectProp();
 
                     position = cvMaster.propDetector.position;
 
-                    telemetry.addData("position", cvMaster.propDetector.position);
+                    telemetry.addData("state: ", autoState);
+                    telemetry.addData("AUTO: ", autoType);
+                    telemetry.addData("Park: ", parkType);
+                    telemetry.addData("Alliance: ", alliance);
+                    telemetry.addData("Side: ", side);
+                    telemetry.addData("POSITION: ", cvMaster.propDetector.position);
                     telemetry.addData("average 0", cvMaster.propDetector.average0);
                     telemetry.addData("average 1", cvMaster.propDetector.average1);
                     telemetry.addData("average 2", cvMaster.propDetector.average2);
@@ -186,12 +192,12 @@ public class Auto extends LinearOpMode {
             drivetrain.updateTrajectory();
             robot.write();
 
-            dt = System.currentTimeMillis() - lastTime;
-            lastTime = System.currentTimeMillis();
+            dt = runtime.milliseconds() - lastTime;
+            lastTime = runtime.milliseconds();
 
-            // do telemetry every 30 loops
+            // do telemetry every 50 loops
             loop++;
-            if(loop > 30) {
+            if(loop > 50) {
                 telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
                 telemetry.addData("runtime", runtime.seconds());
                 telemetry.addData("state: ", autoState);

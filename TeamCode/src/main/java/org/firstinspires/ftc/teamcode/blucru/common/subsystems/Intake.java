@@ -49,9 +49,7 @@ public class Intake implements Subsystem{
     public void write() {
         intakeWrist.write();
 
-        if(intakeMotor.getPower() != intakePower) {
-            setPower(intakePower);
-        }
+        setPower(intakePower);
     }
 
     public void retractIntakeWrist() {

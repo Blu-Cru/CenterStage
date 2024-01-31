@@ -17,7 +17,7 @@ public class Deposits {
     public static double TOTAL_CLOSE_DEPOSIT_TIME = 1;
     public static double INTAKE_TIME = 1.5;
 
-    public static double reflect = 1;
+    double reflect = 1;
 
     public Deposits(double reflect) {
         this.reflect = reflect;

@@ -39,14 +39,11 @@ public class Outtake implements Subsystem{
     public boolean outtaking;
 
     public boolean wristRetracted;
-    double wristPos;
 
     public double targetHeight; // inches
 
     public boolean frontLocked;
     public boolean backLocked;
-    double backLockPos;
-    double frontLockPos;
 
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -62,22 +59,17 @@ public class Outtake implements Subsystem{
         backLocked = true;
 
         wristRetracted = true;
-        wristPos = WRIST_RETRACT;
     }
 
     public void init() {
         lift.init();
         turret.init();
-        wrist.setPosition(wristPos);
+        wrist.setPosition(WRIST_RETRACT);
         backLock.setPosition(BACK_LOCKED);
         frontLock.setPosition(FRONT_LOCKED);
     }
 
     public void read() {
-        wristPos = wristRetracted ? WRIST_RETRACT : WRIST_OUTTAKE;
-        backLockPos = backLocked ? BACK_LOCKED : BACK_UNLOCKED;
-        frontLockPos = frontLocked ? FRONT_LOCKED : FRONT_UNLOCKED;
-
         if(outtaking) {
             lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
         }
@@ -89,9 +81,15 @@ public class Outtake implements Subsystem{
     public void write() {
         lift.write();
         turret.write();
-        if(wrist.getPosition() != wristPos) wrist.setPosition(wristPos);
-        if(backLock.getPosition() != backLockPos) backLock.setPosition(backLockPos);
-        if(frontLock.getPosition() != frontLockPos) frontLock.setPosition(frontLockPos);
+
+        if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
+        else if(!wristRetracted && wrist.getPosition() != WRIST_OUTTAKE) wrist.setPosition(WRIST_OUTTAKE);
+
+        if(backLocked && backLock.getPosition() != BACK_LOCKED) backLock.setPosition(BACK_LOCKED);
+        else if(!backLocked && backLock.getPosition() != BACK_UNLOCKED) backLock.setPosition(BACK_UNLOCKED);
+
+        if(frontLocked && frontLock.getPosition() != FRONT_LOCKED) frontLock.setPosition(FRONT_LOCKED);
+        else if(!frontLocked && frontLock.getPosition() != FRONT_UNLOCKED) frontLock.setPosition(FRONT_UNLOCKED);
     }
 
     public void setManualSlidePower(double power) {
@@ -175,6 +173,6 @@ public class Outtake implements Subsystem{
 
     public void testTelemetry(Telemetry telemetry) {
         lift.testTelemetry(telemetry);
-        telemetry.addData("wrist pos", wristPos);
+        telemetry.addData("wrist pos", wrist.getPosition());
     }
 }

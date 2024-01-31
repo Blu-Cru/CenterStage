@@ -237,6 +237,11 @@ public class Duo extends LinearOpMode {
             outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
         }
 
+        // RESET SLIDES
+        if(gamepad2.share) {
+            outtake.lift.resetEncoder();
+        }
+
         // MANUAL HANG
         if(Math.abs(gamepad2.left_stick_y) > 0.1)
             hanger.setPower(-gamepad2.left_stick_y);
