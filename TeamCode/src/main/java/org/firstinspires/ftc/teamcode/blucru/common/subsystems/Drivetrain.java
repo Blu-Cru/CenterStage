@@ -23,7 +23,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double TURN_P = 1.0, TURN_I = 0, TURN_D = 0.02;
 
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.03;
-    public static double ANGLE_TOLERANCE = 0.5; // radians
+    public static double DISTANCE_ANGLE_TOLERANCE = 0.5; // radians
+    public static double HEADING_ANGLE_TOLERANCE = 0.25; // radians
+
     public static double OUTTAKE_DISTANCE = 3.7;
 
     public double drivePower = 0.5;
@@ -38,6 +40,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     boolean readingDistance; // only used in auto
 
     public double heading;
+    double imuHeading;
+    double odoHeading;
 
     private Vector2d lastDriveVector;
     private double lastRotate;
@@ -53,7 +57,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
-        super(hardwareMap);
+        super(hardwareMap, isTeleOp);
         this.isTeleOp = isTeleOp;
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
@@ -64,25 +68,29 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void init() {
         fieldCentric = true;
-        if(isTeleOp) initializePose();
-        lastDriveVector = new Vector2d(0,0);
-        lastRotate = 0;
-        lastPose = new Pose2d(0,0,0);
-        lastTime = System.currentTimeMillis();
-//        lastVelocity = 0;
-        heading = getRelativeHeading();
+        if(isTeleOp) {
+            initializePose();
+            lastDriveVector = new Vector2d(0,0);
+            lastRotate = 0;
+            lastPose = new Pose2d(0,0,0);
+            lastTime = System.currentTimeMillis();
+            heading = getRelativeHeading();
+        }
     }
 
     public void read() {
         if(isTeleOp) {
             updatePoseEstimate();
             dt = System.currentTimeMillis() - lastTime;
-//        velocity = pose.vec().distTo(lastPose.vec()) / dt;
-//        acceleration = (velocity - lastVelocity) / dt;
-//        lastPose = pose;
-//        lastVelocity = velocity;
             lastTime = System.currentTimeMillis();
-            heading = getRelativeHeading();
+            odoHeading = getRelativeHeading();
+            imuHeading = getIMUHeading();
+
+            if(Math.abs(odoHeading - imuHeading) > HEADING_ANGLE_TOLERANCE) {
+                heading = odoHeading;
+            } else {
+                heading = imuHeading;
+            }
         }
 
         pose = this.getPoseEstimate();
@@ -163,7 +171,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         Vector2d driveVector = calculateDriveVector(distanceVector);
 
         double component;
-        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < ANGLE_TOLERANCE && distanceSensors.sensing) {
+        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_ANGLE_TOLERANCE && distanceSensors.sensing) {
             component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
             driveVector = setComponent(driveVector, component, -(heading - targetHeading));
@@ -224,6 +232,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return heading;
     }
 
+    public double getIMUHeading() {
+        double heading = getExternalHeading();
+        if(heading > Math.PI) {
+            heading -= 2*Math.PI;
+        } else if(heading < -Math.PI) {
+            heading += 2*Math.PI;
+        }
+        return heading;
+    }
+
     public void setDrivePower(RobotState robotState, Gamepad gamepad1) {
         double drivePowerMultiplier;
         if(gamepad1.left_trigger > 0.1) {
@@ -248,11 +266,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // resets IMU (intake facing forwards)
     public void resetHeading() {
+        resetIMU();
         setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
     }
 
     public void initializePose() {
         setPoseEstimate(Initialization.POSE);
+        setExternalHeading(Initialization.POSE.getHeading());
     }
 
 //    public void startReadingDistance() {
