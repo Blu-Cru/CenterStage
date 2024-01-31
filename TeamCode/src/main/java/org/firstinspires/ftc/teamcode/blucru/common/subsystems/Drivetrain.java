@@ -22,7 +22,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
     public static double TURN_P = 1.0, TURN_I = 0, TURN_D = 0.02;
 
-    public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.03;
+    public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04;
     public static double DISTANCE_ANGLE_TOLERANCE = 0.5; // radians
     public static double HEADING_ANGLE_TOLERANCE = 0.25; // radians
 
