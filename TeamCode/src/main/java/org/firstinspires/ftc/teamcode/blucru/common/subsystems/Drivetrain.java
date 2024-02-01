@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
-    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
+    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4;
 
     public static double MAX_ACCEL_DRIVE_DELTA = 5; // magnitude per second at power 1
     public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
@@ -77,7 +77,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastRotate = 0;
             lastPose = new Pose2d(0,0,0);
             lastTime = System.currentTimeMillis();
-            heading = getRelativeHeading();
+            heading = getOdoHeading();
         }
     }
 
@@ -86,7 +86,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             updatePoseEstimate();
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
-            odoHeading = getRelativeHeading();
+            odoHeading = getOdoHeading();
             imuHeading = getIMUHeading();
 
             if(imuAccurate()) {
@@ -173,13 +173,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public double correctHeading(double heading) {
-        if(heading > Math.PI) {
-            heading -= 2 * Math.PI;
-        } else if (heading < -Math.PI) {
-            heading += 2 * Math.PI;
-        }
+        double correctedHeading = heading;
 
-        return heading;
+        if(correctedHeading > Math.PI)
+            correctedHeading -= 2 * Math.PI;
+        else if (correctedHeading < -Math.PI)
+            correctedHeading += 2 * Math.PI;
+
+        return correctedHeading;
     }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
@@ -240,7 +241,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return Range.clip(turnPID.calculate(heading, target), -1, 1);
     }
 
-    public double getRelativeHeading() {
+    public double getOdoHeading() {
         double heading = getPoseEstimate().getHeading();
         if(heading > Math.PI) {
             heading -= 2*Math.PI;
@@ -262,30 +263,35 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void setDrivePower(RobotState robotState, Gamepad gamepad1) {
         double drivePowerMultiplier;
-        if(gamepad1.left_trigger > 0.1) {
-            drivePowerMultiplier = 1.0 - (0.5 * gamepad1.left_trigger);
-        } else if (gamepad1.right_trigger > 0.1) {
+        if(gamepad1.left_trigger > 0.1)
+            drivePowerMultiplier = 1.0 - (0.6 * gamepad1.left_trigger);
+        else if (gamepad1.right_trigger > 0.1)
             drivePowerMultiplier = 1.0 + (0.3 * gamepad1.right_trigger);
-        } else {
+        else
             drivePowerMultiplier = 1.0;
-        }
 
         double power = 0.0;
         switch (robotState) {
             case RETRACT:
                 power = DRIVE_POWER_RETRACT * drivePowerMultiplier;
                 break;
+            case LIFTING:
+                power = DRIVE_POWER_LIFTING * drivePowerMultiplier;
+                break;
             case OUTTAKE:
                 power = DRIVE_POWER_OUTTAKE * drivePowerMultiplier;
+                break;
+            default:
+                power = 0.5 * drivePowerMultiplier;
                 break;
         }
         setDrivePower(power);
     }
 
     // resets IMU (intake facing forwards)
-    public void resetHeading() {
-        resetIMU();
-        setPoseEstimate(new Pose2d(0,0,Math.toRadians(90)));
+    public void resetHeading(double heading) {
+        resetIMU(heading);
+        setPoseEstimate(new Pose2d(0,0,heading));
     }
 
     public void initializePose() {

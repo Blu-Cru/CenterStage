@@ -124,11 +124,9 @@ public class Placements {
                 .splineToSplineHeading(new Pose2d(-46 + Poses.FIELD_OFFSET_X, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -10 * reflect), Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .lineToLinearHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
+                .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(-90 * reflect))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
-                // drop down and start intake
-
                 .waitSeconds(WAIT_TIME)
                 .build();
     }

@@ -51,6 +51,7 @@ public class Duo extends LinearOpMode {
     ElapsedTime outtakeTimer;
     double lastTime, deltaTime;
     int loop;
+    double boardHeading;
 
     boolean lastDown2 = false;
     boolean lastA2 = false;
@@ -102,6 +103,7 @@ public class Duo extends LinearOpMode {
         drivetrain.setPoseEstimate(Initialization.POSE);
         drivetrain.setExternalHeading(Initialization.POSE.getHeading());
         alliance = Initialization.alliance;
+        boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
     }
 
     public void read() {
@@ -116,26 +118,24 @@ public class Duo extends LinearOpMode {
 
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
-            double newAngle = alliance == Alliance.RED ? Math.toRadians(180) : 0;
-            drivetrain.setPoseEstimate(new Pose2d(0, 0, newAngle));
-            drivetrain.setExternalHeading(newAngle);
+            drivetrain.resetHeading(boardHeading);
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
             if(gamepad1.left_bumper)
-                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, Math.toRadians(180));
+                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, boardHeading);
             else
-                drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+                drivetrain.driveToHeading(horz, vert, boardHeading);
         } else if(gamepad1.x) {
             if(gamepad1.left_bumper)
-                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, 0);
+                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, boardHeading - Math.PI);
             else
-                drivetrain.driveToHeading(horz, vert, 0);
+                drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI);
         } else
             drivetrain.drive(horz, vert, rotate);
 
         // INTAKE
-        if(gamepad2.left_bumper) {
+        if(gamepad2.left_bumper && outtake.liftIntakeReady()) {
             intake.setIntakePower(1);
             outtake.unlock();
         } else if(gamepad2.right_bumper) {
@@ -267,8 +267,9 @@ public class Duo extends LinearOpMode {
         loop++;
         if(loop > 10) {
             telemetry.addData("robot state", robotState);
-            telemetry.addData("loop time", deltaTime);
             robot.telemetry(telemetry);
+            telemetry.addData("loop time", deltaTime);
+            telemetry.addData("alliance", alliance);
             telemetry.update();
         }
     }

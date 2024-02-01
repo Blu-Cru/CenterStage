@@ -262,12 +262,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         waitForIdle();
     }
 
-    public void resetIMU() {
+    public void resetIMU(double heading) {
         imu.resetDeviceConfigurationForOpMode();
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
-        this.setExternalHeading(Math.toRadians(90));
+        this.setExternalHeading(heading);
     }
 
     public void followTrajectoryAsync(Trajectory trajectory) {

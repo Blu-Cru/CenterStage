@@ -21,16 +21,15 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
-                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .setTangent(Math.toRadians(225 * reflect))
-                                .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(-30, -60 * reflect), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(-52, -42 * reflect), Math.toRadians(150))
-                                // start and lower intake
-
+                        drive.trajectorySequenceBuilder(Poses.BACKDROP_PLACEMENT_CENTER_POSE)
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToSplineHeading(new Pose2d(-57, -40, Math.toRadians(160)), Math.toRadians(160))
+                                .setTangent(Math.toRadians(-90 * reflect))
+                                .splineToConstantHeading(new Vector2d(23, -40 * reflect), 0)
+                                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, -36*reflect, Math.toRadians(180)), 0)
+
+
+                                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                                .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
                                 .build()
                 );
 

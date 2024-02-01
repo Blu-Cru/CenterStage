@@ -122,7 +122,6 @@ public class PreloadDeposits {
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
                 .build();
@@ -181,7 +180,6 @@ public class PreloadDeposits {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -247,7 +245,6 @@ public class PreloadDeposits {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -313,7 +310,6 @@ public class PreloadDeposits {
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -380,9 +376,8 @@ public class PreloadDeposits {
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
     }
 
@@ -446,7 +441,6 @@ public class PreloadDeposits {
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -510,7 +504,6 @@ public class PreloadDeposits {
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-                    robot.outtake.centerTurret();
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();

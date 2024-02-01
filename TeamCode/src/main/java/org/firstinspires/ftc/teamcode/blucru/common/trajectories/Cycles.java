@@ -63,7 +63,7 @@ public class Cycles {
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(0);
-                    robot.outtake.retractWrist();
+                    robot.intake.retractIntakeWrist();
                 })
 
                 .setTangent(Math.toRadians(-45 * reflect))
@@ -128,7 +128,7 @@ public class Cycles {
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(0);
-                    robot.outtake.retractWrist();
+                    robot.intake.retractIntakeWrist();
                 })
 
                 .setTangent(Math.toRadians(-45 * reflect))
@@ -170,6 +170,7 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
                 .splineToConstantHeading(new Vector2d(30, -60 * reflect), Math.toRadians(180))
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -60 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(-52 + Poses.FIELD_OFFSET_X, -42 * reflect), Math.toRadians(150))
 
@@ -194,7 +195,7 @@ public class Cycles {
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(0);
-                    robot.outtake.retractWrist();
+                    robot.intake.retractIntakeWrist();
                 })
 
                 .setTangent(Math.toRadians(-45 * reflect))
@@ -242,7 +243,7 @@ public class Cycles {
                     robot.intake.dropToStack(stackHeight);
                     robot.intake.setIntakePower(1);
                 })
-                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
 
@@ -255,7 +256,7 @@ public class Cycles {
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(0);
-                    robot.outtake.retractWrist();
+                    robot.intake.retractIntakeWrist();
                 })
 
                 .setTangent(0)
@@ -307,7 +308,7 @@ public class Cycles {
                     robot.intake.setIntakePower(1);
                 })
 
-                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
 
@@ -320,7 +321,7 @@ public class Cycles {
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(0);
-                    robot.outtake.retractWrist();
+                    robot.intake.retractIntakeWrist();
                 })
 
                 .setTangent(0)
@@ -372,7 +373,7 @@ public class Cycles {
                     robot.intake.setIntakePower(1);
                 })
 
-                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_TIME)
 

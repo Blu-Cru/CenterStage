@@ -190,6 +190,7 @@ public class Auto extends LinearOpMode {
             }
             if(runtime.seconds() > 29.5) {
                 robot.outtake.lift.setTargetPos(0);
+                robot.outtake.lock();
             }
 
             drivetrain.updateTrajectory();
