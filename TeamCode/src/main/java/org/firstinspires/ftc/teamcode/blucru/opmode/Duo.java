@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
@@ -34,6 +35,8 @@ right joystick : turn
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends LinearOpMode {
     public static double OUTTAKE_DELAY_SECONDS = 0.5;
+
+    Alliance alliance;
 
     Robot robot;
     Drivetrain drivetrain;
@@ -97,6 +100,8 @@ public class Duo extends LinearOpMode {
 
         // set initial pose from auto
         drivetrain.setPoseEstimate(Initialization.POSE);
+        drivetrain.setExternalHeading(Initialization.POSE.getHeading());
+        alliance = Initialization.alliance;
     }
 
     public void read() {
@@ -111,7 +116,9 @@ public class Duo extends LinearOpMode {
 
         // resets heading offset (face forwards)
         if(gamepad1.right_stick_button) {
-            drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
+            double newAngle = alliance == Alliance.RED ? Math.toRadians(180) : 0;
+            drivetrain.setPoseEstimate(new Pose2d(0, 0, newAngle));
+            drivetrain.setExternalHeading(newAngle);
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
@@ -243,7 +250,7 @@ public class Duo extends LinearOpMode {
         }
 
         // MANUAL HANG
-        if(Math.abs(gamepad2.left_stick_y) > 0.1)
+        if(Math.abs(gamepad2.left_stick_y) > 0.2 && gamepad2.left_stick_button)
             hanger.setPower(-gamepad2.left_stick_y);
         else
             hanger.setPower(0);

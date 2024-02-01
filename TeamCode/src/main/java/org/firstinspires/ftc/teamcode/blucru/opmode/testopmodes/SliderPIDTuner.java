@@ -34,7 +34,7 @@ public class SliderPIDTuner extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
-            target = Range.clip(target, Lift.liftMinPos, Lift.liftMaxPos);
+            target = Range.clip(target, Lift.MIN_POS, Lift.MAX_POS);
 
             controller.setPID(p, i, d);
             int sliderPos = lift.getCurrentPos();

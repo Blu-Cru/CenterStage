@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.4;
+    public static double WRIST_RETRACT = 0.435;
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
@@ -22,11 +22,11 @@ public class Outtake implements Subsystem{
 
     public static double PIXEL_HEIGHT = 2.6; // inches
     public static double LOW_HEIGHT = 3.8; // inches
-    public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 1; // inches
-    public static double HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 3;
+    public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2; // inches
+    public static double HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4;
 
     public static double MIN_HEIGHT = LOW_HEIGHT;
-    public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4;
+    public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
 
     public static int LIFT_WRIST_CLEAR_POS = 300;
     public static int LIFT_INTAKE_READY_POS = 100;

@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+import java.util.ArrayList;
+
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_OUTTAKE = 0.4;
@@ -26,7 +28,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DISTANCE_ANGLE_TOLERANCE = 0.5; // radians
     public static double HEADING_ANGLE_TOLERANCE = 0.25; // radians
 
-    public static double OUTTAKE_DISTANCE = 3.7;
+    public static double OUTTAKE_DISTANCE = 3.6;
 
     public double drivePower = 0.5;
     private double dt;
@@ -38,6 +40,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private double lastTime;
 
     boolean readingDistance; // only used in auto
+    ArrayList<Double> errors;
 
     public double heading;
     double imuHeading;
@@ -86,10 +89,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             odoHeading = getRelativeHeading();
             imuHeading = getIMUHeading();
 
-            if(Math.abs(odoHeading - imuHeading) > HEADING_ANGLE_TOLERANCE) {
-                heading = odoHeading;
-            } else {
+            if(imuAccurate()) {
                 heading = imuHeading;
+            } else {
+                heading = odoHeading;
             }
         }
 
@@ -163,8 +166,24 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return input;
     }
 
+    public boolean imuAccurate() {
+        double correctedOdoHeading = correctHeading(odoHeading);
+        double correctedImuHeading = correctHeading(imuHeading);
+        return Math.abs(correctedOdoHeading - correctedImuHeading) < HEADING_ANGLE_TOLERANCE;
+    }
+
+    public double correctHeading(double heading) {
+        if(heading > Math.PI) {
+            heading -= 2 * Math.PI;
+        } else if (heading < -Math.PI) {
+            heading += 2 * Math.PI;
+        }
+
+        return heading;
+    }
+
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-        distanceSensors.read();
+        distanceSensors.read(heading);
         Vector2d distanceVector = new Vector2d(x,y);
 
         Vector2d driveVector = calculateDriveVector(distanceVector);
@@ -274,10 +293,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setExternalHeading(Initialization.POSE.getHeading());
     }
 
-//    public void startReadingDistance() {
-//        readingDistance = true;
-//        distanceSensors.resetKalmanFilter();
-//    }
+    public void startReadingDistance() {
+        readingDistance = true;
+        errors.clear();
+    }
 
     public void stopReadingDistance() {
         readingDistance = false;
@@ -291,6 +310,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             telemetry.addData("reading distance", readingDistance);
         }
         telemetry.addData("heading", heading);
+        telemetry.addData("odo heading", odoHeading);
+        telemetry.addData("imu heading", imuHeading);
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
     }

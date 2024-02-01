@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 @Config
 public class Lift implements Subsystem{
     public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
-    public static int YELLOW_POS = 850, CLEAR_POS = 1000, CYCLE_POS = 1200;
+    public static int YELLOW_POS = 750, CLEAR_POS = 1000, CYCLE_POS = 1200;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
-    public static int liftMinPos = 0, liftMaxPos = 1560;
+    public static int MIN_POS = 0, MAX_POS = 2000;
     public static double stallCurrent = 20; // amps
     public static double resetCurrent = 1; // amps
     public final int tolerance = 5; // ticks
@@ -95,7 +95,7 @@ public class Lift implements Subsystem{
 
         switch(liftState) {
             case MoPro:
-                targetPos = Range.clip(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()), liftMinPos, liftMaxPos);
+                targetPos = Range.clip(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
                 if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
                     power = 0;
                     resetEncoder();
@@ -133,7 +133,7 @@ public class Lift implements Subsystem{
 //    }
 
     public void setMotionProfileTargetPos(int targetPos) {
-        targetPos = Range.clip(targetPos, liftMinPos, liftMaxPos);
+        targetPos = Range.clip(targetPos, MIN_POS, MAX_POS);
         setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
 
         if(targetPos == 0) {
@@ -172,7 +172,7 @@ public class Lift implements Subsystem{
 
     public void setTargetPos(int pos) {
         liftState = LiftState.AUTO;
-        targetPos = Range.clip(pos, liftMinPos, liftMaxPos);
+        targetPos = Range.clip(pos, MIN_POS, MAX_POS);
     }
 
     public void resetEncoder() {

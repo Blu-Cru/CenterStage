@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Intake implements Subsystem{
     public static double WRIST_RETRACT_HEIGHT = 4.7; // inches
     public static double WRIST_INTAKE_HEIGHT = -2; // inches
-    public static double WRIST_STACK1_HEIGHT = -1.5; // inches
+    public static double WRIST_STACK1_HEIGHT = -1.4; // inches
     public static double WRIST_AUTO_READY_HEIGHT = 1; // inches
 
     public static double POWER = 1;

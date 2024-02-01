@@ -25,7 +25,6 @@ public class Robot {
     public Robot(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
 
-
         subsystems = new ArrayList<>();
     }
 

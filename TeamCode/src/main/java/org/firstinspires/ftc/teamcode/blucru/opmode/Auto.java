@@ -69,8 +69,6 @@ public class Auto extends LinearOpMode {
         robot.init();
 
         while(!isStopRequested() && opModeInInit()) {
-
-
             switch (autoState) {
                 case INIT:
                     if(gamepad1.x && !lastX) alliance = alliance.flip();

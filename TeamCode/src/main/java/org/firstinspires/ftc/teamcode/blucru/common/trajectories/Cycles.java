@@ -14,10 +14,10 @@ public class Cycles {
     public static double LIFT_TIME = -1;
     public static double WRIST_EXTEND_TIME = -0.75;
 
-    public static double DROP_INTAKE_TIME = -1.5;
-    public static double START_INTAKE_TIME = -0.5;
+    public static double DROP_INTAKE_TIME = -0.5;
+    public static double START_INTAKE_TIME = -0.3;
 
-    public static double TOTAL_DEPOSIT_TIME = 0.1;
+    public static double TOTAL_DEPOSIT_TIME = 0.3;
     public static double INTAKE_TIME = 1.5;
 
     double reflect = 1;
@@ -47,6 +47,7 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
@@ -111,11 +112,12 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToSplineHeading(Poses.STACK_CLOSE_POSE, Math.toRadians(150))
-                .waitSeconds(0.5)
+                .waitSeconds(INTAKE_TIME)
 
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -176,11 +178,12 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToSplineHeading(Poses.STACK_CLOSE_POSE, Math.toRadians(150))
-                .waitSeconds(0.5)
+                .waitSeconds(INTAKE_TIME)
 
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -237,10 +240,11 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
-                .waitSeconds(0.5)
+                .waitSeconds(INTAKE_TIME)
 
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -300,11 +304,12 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
-                .waitSeconds(0.5)
+                .waitSeconds(INTAKE_TIME)
 
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -364,11 +369,12 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
+                    robot.intake.setIntakePower(1);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
-                .waitSeconds(0.5)
+                .waitSeconds(INTAKE_TIME)
 
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {

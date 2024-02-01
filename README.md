@@ -2,14 +2,14 @@
 
 Check out the [docs](https://rr.brott.dev/docs/v1-0/tuning/).
 
-qual 2 controls: 
+states controls:
 
 driver 1:
 
     driving: 
-        - left stick: field centric mecanum drive (forward, sideways)
+        - left stick: field centric mecanum drive (forward, strafe)
         - right stick: mecanum drive (rotation)
-        - right stick press: reset gyro
+        - right stick press: reset heading
         - left trigger: slow mode
         - right trigger: fast mode
 

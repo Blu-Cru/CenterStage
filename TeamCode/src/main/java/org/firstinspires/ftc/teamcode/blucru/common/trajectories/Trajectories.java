@@ -47,6 +47,7 @@ public class Trajectories {
             reflect = -1;
         }
 
+        preloadDeposits = new PreloadDeposits(reflect);
         placements = new Placements(reflect);
         cycles = new Cycles(reflect);
         poses = new Poses(reflect);
@@ -208,13 +209,13 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesClose.add(placements.placementWingCloseForCenter(robot));
                     trajectoriesClose.add(preloadDeposits.depositThroughCenterFromWingClose(robot));
-                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 3));
+                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 2));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
                     trajectoriesClose.add(placements.placementWingCloseForPerimeter(robot));
                     trajectoriesClose.add(preloadDeposits.depositThroughPerimeterFromWingClose(robot));
-                    trajectoriesClose.add(cycles.cyclePerimeterFromClose(robot, 3));
+                    trajectoriesClose.add(cycles.cyclePerimeterFromClose(robot, 2));
                     cycleEndPose = Poses.DEPOSIT_CLOSE_POSE;
                     break;
                 default:
