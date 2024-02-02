@@ -166,6 +166,9 @@ public class PreloadDeposits {
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
                     robot.outtake.extendWrist();
                 })
+                .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 - 30 * reflect);
+                })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), Math.toRadians(0))
                 // release white pixel
@@ -177,7 +180,7 @@ public class PreloadDeposits {
                     robot.outtake.setTurretAngle(270 + 30 * reflect);
                 })
                 // release yellow pixel
-                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
                     robot.outtake.unlock();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
@@ -220,7 +223,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                    robot.outtake.lift.setMotionProfileTargetPos(900);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -228,7 +231,7 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270);
+                    robot.outtake.setTurretAngle(270 - 20 * reflect);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -240,6 +243,7 @@ public class PreloadDeposits {
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
                     robot.outtake.setTurretAngle(270 + 50 * reflect);
+                    robot.outtake.lift.setMotionProfileTargetPos(700);
                 })
                 // release yellow pixel
                 .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {

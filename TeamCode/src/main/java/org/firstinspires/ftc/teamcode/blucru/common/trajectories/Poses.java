@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 public class Poses {
-    public static double FIELD_OFFSET_X = 3.5;
+    public static double FIELD_OFFSET_X = 2;
     /*
     offset of distance from backdrop to other side
     APPLY ONLY TO WING SIDE COORDINATES
@@ -18,7 +18,7 @@ public class Poses {
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -59 + FIELD_OFFSET_X;
+    public static double STACK_X = -57.5 + FIELD_OFFSET_X;
     public static double STACK_SETUP_X = -54 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;

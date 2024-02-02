@@ -46,7 +46,7 @@ public class OuttakeTest extends LinearOpMode {
 
             // resets heading offset (face forwards)
             if(gamepad1.right_stick_button) {
-                drivetrain.resetHeading();
+                drivetrain.resetHeading(Math.toRadians(90));
                 gamepad1.rumble(100);
             }
             if(gamepad1.b) {

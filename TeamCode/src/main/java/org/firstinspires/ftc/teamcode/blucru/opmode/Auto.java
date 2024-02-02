@@ -200,19 +200,19 @@ public class Auto extends LinearOpMode {
             lastTime = runtime.milliseconds();
 
             // do telemetry every 50 loops
-            loop++;
-            if(loop > 50) {
-                telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
-                telemetry.addData("runtime", runtime.seconds());
-                telemetry.addData("state: ", autoState);
-                telemetry.addData("alliance: ", alliance);
-                telemetry.addData("side: ", side);
-                telemetry.addData("position", position);
-                telemetry.addData("dt", dt);
-                robot.telemetry(telemetry);
-                telemetry.update();
-                loop = 0;
-            }
+//            loop++;
+//            if(loop > 50) {
+            telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
+            telemetry.addData("runtime", runtime.seconds());
+            telemetry.addData("state: ", autoState);
+            telemetry.addData("alliance: ", alliance);
+            telemetry.addData("side: ", side);
+            telemetry.addData("position", position);
+            telemetry.addData("dt", dt);
+            robot.telemetry(telemetry);
+            telemetry.update();
+            loop = 0;
+//            }
         }
     }
 }

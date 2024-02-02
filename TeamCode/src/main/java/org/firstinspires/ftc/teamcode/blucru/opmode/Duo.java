@@ -250,7 +250,7 @@ public class Duo extends LinearOpMode {
         }
 
         // MANUAL HANG
-        if(Math.abs(gamepad2.left_stick_y) > 0.2 && gamepad2.left_stick_button)
+        if(Math.abs(gamepad2.left_stick_y) > 0.2)
             hanger.setPower(-gamepad2.left_stick_y);
         else
             hanger.setPower(0);

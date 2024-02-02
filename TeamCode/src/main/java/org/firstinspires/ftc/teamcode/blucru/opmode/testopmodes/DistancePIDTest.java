@@ -49,7 +49,7 @@ public class DistancePIDTest extends LinearOpMode {
             rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.right_stick_button) {
-                drivetrain.resetHeading();
+                drivetrain.resetHeading(Math.toRadians(90));
                 gamepad1.rumble(100);
             }
 

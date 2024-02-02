@@ -85,11 +85,11 @@ public class Placements {
     public TrajectorySequence placementWingCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .setTangent(Math.toRadians(90))
+                .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -59*reflect), Math.toRadians(90))
-                .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -40*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(135 * reflect))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
                 .waitSeconds(WAIT_TIME)
@@ -115,13 +115,13 @@ public class Placements {
 
     public TrajectorySequence placementWingFarForCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 // placement
                 .setTangent(Math.toRadians(130 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -55*reflect), Math.toRadians(90 * reflect))
-                .splineToSplineHeading(new Pose2d(-46 + Poses.FIELD_OFFSET_X, -40 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
+                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -50*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-46 + Poses.FIELD_OFFSET_X, -40 * reflect, Math.toRadians(-90 * reflect)), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -10 * reflect), Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(-90 * reflect))
