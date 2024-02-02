@@ -33,10 +33,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public double drivePower = 0.5;
     private double dt;
     private Pose2d pose;
-    private double velocity;
-    private double acceleration;
-    private Pose2d lastPose;
-    private double lastVelocity;
     private double lastTime;
 
     boolean readingDistance; // only used in auto
@@ -70,12 +66,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void init() {
-        fieldCentric = true;
         if(isTeleOp) {
+            fieldCentric = true;
             initializePose();
             lastDriveVector = new Vector2d(0,0);
             lastRotate = 0;
-            lastPose = new Pose2d(0,0,0);
             lastTime = System.currentTimeMillis();
             heading = getOdoHeading();
         }

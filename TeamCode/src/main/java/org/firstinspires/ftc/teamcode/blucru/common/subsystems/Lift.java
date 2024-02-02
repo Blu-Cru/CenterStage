@@ -108,7 +108,7 @@ public class Lift implements Subsystem{
                 break;
             case AUTO:
                 // if lift is down and stalling, reset encoder and set power to 0
-                if(currentPos < 2 && getCurrent() > resetCurrent && targetPos == 0) {
+                if(currentPos < -10 && targetPos == 0) {
                     power = 0;
                     resetEncoder();
 //                } else if (getCurrent() > stallCurrent) {
@@ -191,12 +191,6 @@ public class Lift implements Subsystem{
         return currentPos;
     }
 
-    public double getCurrent() {
-        double current1 = liftMotor.getCurrent(CurrentUnit.AMPS);
-        double current2 = liftMotor2.getCurrent(CurrentUnit.AMPS);
-        return (current1 + current2) / 2;
-    }
-
     public int toTicks(double inches) {
         return (int) (inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV);
     }
@@ -214,7 +208,6 @@ public class Lift implements Subsystem{
 
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("velocity", velocity);
-        telemetry.addData("current", getCurrent());
     }
 
     public void motionProfileTelemetry(Telemetry telemetry) {

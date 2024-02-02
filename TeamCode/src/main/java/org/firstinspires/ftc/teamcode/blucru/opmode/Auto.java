@@ -178,6 +178,9 @@ public class Auto extends LinearOpMode {
 
             // set initial pose for teleop
             if(runtime.seconds() > 29.2) {
+                robot.outtake.retractWrist();
+            }
+            if(runtime.seconds() > 29.5) {
                 Pose2d pose;
                 if(alliance == Alliance.RED) {
                     pose = drivetrain.getPoseEstimate();
@@ -186,9 +189,6 @@ public class Auto extends LinearOpMode {
                 }
                 Initialization.POSE = pose;
 
-                robot.outtake.retractWrist();
-            }
-            if(runtime.seconds() > 29.5) {
                 robot.outtake.lift.setTargetPos(0);
                 robot.outtake.lock();
             }
