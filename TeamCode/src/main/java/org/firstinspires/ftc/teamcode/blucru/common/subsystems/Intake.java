@@ -70,7 +70,7 @@ public class Intake implements Subsystem{
     }
 
     public void setIntakeWristTargetHeight(double targetHeight) {
-        intakeWrist.targetAngleDeg = intakeWrist.toDeg(targetHeight);
+        setIntakeWristTargetAngle(intakeWrist.toDeg(targetHeight));
     }
 
     public void setIntakePower(double power) {
