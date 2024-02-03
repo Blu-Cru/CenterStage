@@ -122,15 +122,9 @@ public class Duo extends LinearOpMode {
             gamepad1.rumble(100);
         }
         if(gamepad1.b) {
-            if(gamepad1.left_bumper)
-                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, boardHeading);
-            else
-                drivetrain.driveToHeading(horz, vert, boardHeading);
+            drivetrain.driveToHeading(horz, vert, boardHeading);
         } else if(gamepad1.x) {
-            if(gamepad1.left_bumper)
-                drivetrain.driveToDistanceToHeading(horz, vert, Drivetrain.OUTTAKE_DISTANCE, boardHeading - Math.PI);
-            else
-                drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI);
+            drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI);
         } else
             drivetrain.drive(horz, vert, rotate);
 

@@ -45,6 +45,10 @@ public class IntakeWrist implements Subsystem{
         return Math.toDegrees(Math.asin(height / RADIUS));
     }
 
+    public static double toX(double height) {
+        return RADIUS * Math.cos(Math.asin(height / RADIUS));
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake wrist pos", position);
     }

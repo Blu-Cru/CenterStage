@@ -61,8 +61,16 @@ public class Intake implements Subsystem{
     }
 
     public void dropToStack(int stackHeight) {
-        stackHeight = Math.max(0, Math.min(4, stackHeight));
-        setIntakeWristTargetHeight(WRIST_STACK1_HEIGHT + (stackHeight - 1) * 0.5);
+        setIntakeWristTargetHeight(getTargetHeight(stackHeight));
+    }
+
+    public double getTargetHeight(int stackHeight) {
+        if(stackHeight == 0) {
+            return Intake.WRIST_INTAKE_HEIGHT;
+        } else {
+            stackHeight = Math.max(0, Math.min(4, stackHeight));
+            return WRIST_STACK1_HEIGHT + (stackHeight - 1) * 0.5;
+        }
     }
 
     public void setIntakeWristTargetAngle(double targetAngleDeg) {

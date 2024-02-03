@@ -181,7 +181,7 @@ public class Auto extends LinearOpMode {
             }
 
             // set initial pose for teleop
-            if(runtime.seconds() > 29.2) {
+            if(runtime.seconds() > 29.3) {
                 robot.outtake.retractWrist();
             }
             if(runtime.seconds() > 29.5) {

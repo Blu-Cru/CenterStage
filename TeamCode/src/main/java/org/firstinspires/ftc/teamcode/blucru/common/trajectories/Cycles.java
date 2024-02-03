@@ -16,15 +16,15 @@ public class Cycles {
 
     public static double INTAKE_READY_TIME = -3.5;
     public static double START_INTAKE_TIME = -1.5;
-    public static double DROP_INTAKE_1_TIME = -0.7;
+    public static double DROP_INTAKE_1_TIME = -0.5;
     public static double DROP_INTAKE_2_TIME = 0;
 
     public static double TOTAL_DEPOSIT_TIME = 0.3;
-    public static double INTAKE_1_TIME = 0.75;
+    public static double INTAKE_1_TIME = 0.2;
     public static double INTAKE_2_TIME = 0.1;
 
-    public static double LOCK_TIME = 0;
-    public static double STOP_OUTTAKE_TIME = 1;
+    public static double LOCK_TIME = 0.8;
+    public static double STOP_OUTTAKE_TIME = 1.7;
 
     double reflect = 1;
 

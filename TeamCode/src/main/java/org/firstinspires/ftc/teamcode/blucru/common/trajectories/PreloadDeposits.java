@@ -14,7 +14,7 @@ public class PreloadDeposits {
     public static double TURRET_TURN_TIME = -0.45;
     public static double INTAKE_1_TIME = 0.7;
     public static double INTAKE_2_TIME = 0.5;
-    public static double RELEASE_TIME = 0.2;
+    public static double RELEASE_TIME = 0;
     public static double LIFT_CLEAR_AFTER_RELEASE_TIME = 0.3;
     public static double TOTAL_CLOSE_DEPOSIT_TIME = 0.8;
 

@@ -21,7 +21,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setVelConstraint(Constraints.NORMAL_VEL)
+                .setVelConstraint(Constraints.FAST_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .lineTo(Poses.BACKDROP_PLACEMENT_CLOSE_POSE.vec())
                 // release purple pixel
@@ -32,7 +32,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setVelConstraint(Constraints.NORMAL_VEL)
+                .setVelConstraint(Constraints.FAST_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(Poses.BACKDROP_PLACEMENT_CENTER_POSE.vec(), Math.toRadians(90 * reflect))
@@ -44,7 +44,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropFar(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setVelConstraint(Constraints.NORMAL_VEL)
+                .setVelConstraint(Constraints.FAST_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .splineTo(new Vector2d(12, -55 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.BACKDROP_PLACEMENT_FAR_POSE, Math.toRadians(135 * reflect))
