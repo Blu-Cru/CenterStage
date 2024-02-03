@@ -83,7 +83,7 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesFar.add(placements.placementWingFarForCenter(robot));
                     trajectoriesFar.add(preloadDeposits.depositThroughCenterFromWingFar(robot));
-                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 3));
+                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 2));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:

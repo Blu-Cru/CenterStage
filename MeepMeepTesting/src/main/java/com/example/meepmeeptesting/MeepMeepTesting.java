@@ -21,20 +21,16 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                                .setVelConstraint(Constraints.NORMAL_VEL)
-                                // placement
-                                .setTangent(Math.toRadians(130 * reflect))
-                                // drop down ready
-//                                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                                .splineToConstantHeading(new Vector2d(-46 , -50*reflect), Math.toRadians(90 * reflect))
-                                .splineToSplineHeading(new Pose2d(-46, -40 * reflect, Math.toRadians(-90 * reflect)), Math.toRadians(90 * reflect))
-                                .splineToConstantHeading(new Vector2d(-46, -10 * reflect), Math.toRadians(90 * reflect))
+                        drive.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(-90 * reflect))
-                                // release purple pixel
-//                                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
-                                .waitSeconds(WAIT_TIME)
+                                .setTangent(Math.toRadians(150 * reflect))
+//                                // drop down, start intake, unlock
+//                                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+//                                    robot.intake.dropToStack(3);
+//                                    robot.intake.setIntakePower(1);
+//                                    robot.outtake.unlock();
+//                                })
+                                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(100))
                                 .build()
                 );
 

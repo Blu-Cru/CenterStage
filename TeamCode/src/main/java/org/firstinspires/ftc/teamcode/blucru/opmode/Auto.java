@@ -66,12 +66,16 @@ public class Auto extends LinearOpMode {
         outtake = robot.addOuttake();
         purplePixelHolder = robot.addPurplePixelHolder();
 
+
         robot.init();
 
         while(!isStopRequested() && opModeInInit()) {
             switch (autoState) {
                 case INIT:
-                    if(gamepad1.x && !lastX) alliance = alliance.flip();
+                    if(gamepad1.x && !lastX) {
+                        alliance = alliance.flip();
+                        Initialization.alliance = alliance;
+                    }
                     lastX = gamepad1.x;
                     if(gamepad1.b && !lastB) side = side.flip();
                     lastB = gamepad1.b;
@@ -200,19 +204,19 @@ public class Auto extends LinearOpMode {
             lastTime = runtime.milliseconds();
 
             // do telemetry every 50 loops
-//            loop++;
-//            if(loop > 50) {
-            telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
-            telemetry.addData("runtime", runtime.seconds());
-            telemetry.addData("state: ", autoState);
-            telemetry.addData("alliance: ", alliance);
-            telemetry.addData("side: ", side);
-            telemetry.addData("position", position);
-            telemetry.addData("dt", dt);
-            robot.telemetry(telemetry);
-            telemetry.update();
-            loop = 0;
-//            }
+            loop++;
+            if(loop > 50) {
+                telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
+                telemetry.addData("runtime", runtime.seconds());
+                telemetry.addData("state: ", autoState);
+                telemetry.addData("alliance: ", alliance);
+                telemetry.addData("side: ", side);
+                telemetry.addData("position", position);
+                telemetry.addData("dt", dt);
+                robot.telemetry(telemetry);
+                telemetry.update();
+                loop = 0;
+            }
         }
     }
 }

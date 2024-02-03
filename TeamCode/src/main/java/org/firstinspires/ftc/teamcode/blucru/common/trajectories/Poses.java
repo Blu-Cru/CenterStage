@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 public class Poses {
-    public static double FIELD_OFFSET_X = 2;
+    public static double FIELD_OFFSET_X = 1;
     /*
     offset of distance from backdrop to other side
     APPLY ONLY TO WING SIDE COORDINATES
@@ -18,7 +18,7 @@ public class Poses {
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -57.5 + FIELD_OFFSET_X;
+    public static double STACK_X = -58 + FIELD_OFFSET_X;
     public static double STACK_SETUP_X = -54 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;
@@ -55,7 +55,7 @@ public class Poses {
 
         WING_STARTING_POSE = new Pose2d(-36 + FIELD_OFFSET_X, START_Y * reflect, Math.toRadians(-90 * reflect));
         WING_PLACEMENT_FAR_FOR_PERIM_POSE = new Pose2d(-55 + FIELD_OFFSET_X, -36 * reflect, Math.toRadians(180));
-        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-52 + FIELD_OFFSET_X, -21 * reflect, Math.toRadians(120));
+        WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-52 + FIELD_OFFSET_X, -23 * reflect, Math.toRadians(140 * reflect));
         WING_PLACEMENT_CLOSE_FOR_CENTER_POSE = new Pose2d(-31 + FIELD_OFFSET_X, -34 * reflect, Math.toRadians(180));
         WING_PLACEMENT_CLOSE_FOR_PERIM_POSE = new Pose2d(-30 + FIELD_OFFSET_X, -40 * reflect, Math.toRadians(225 * reflect));
         WING_PLACEMENT_CENTER_POSE = new Pose2d(-48 + FIELD_OFFSET_X, -24.5 * reflect, Math.toRadians(180));

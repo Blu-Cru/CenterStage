@@ -12,7 +12,8 @@ public class PreloadDeposits {
     public static double LIFT_TIME = -1;
     public static double WRIST_EXTEND_TIME = -0.75;
     public static double TURRET_TURN_TIME = -0.45;
-    public static double INTAKE_TIME = 1;
+    public static double INTAKE_1_TIME = 0.7;
+    public static double INTAKE_2_TIME = 0.5;
     public static double RELEASE_TIME = 0.2;
     public static double LIFT_CLEAR_AFTER_RELEASE_TIME = 0.3;
     public static double TOTAL_CLOSE_DEPOSIT_TIME = 0.8;
@@ -65,7 +66,7 @@ public class PreloadDeposits {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_PLACEMENT_CENTER_POSE)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .setTangent(Math.toRadians(-90 * reflect))
-                .splineToConstantHeading(new Vector2d(20, -36 * reflect), 0)
+                .splineToConstantHeading(new Vector2d(20, -40 * reflect), 0)
                 .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, -36*reflect, Math.toRadians(180)), 0)
 
                 // lift
@@ -134,13 +135,14 @@ public class PreloadDeposits {
                 .setTangent(Math.toRadians(180 * reflect))
                 // drop down, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.9, () -> {
-                    robot.intake.dropToStack(4);
+                    robot.intake.dropToStack(3);
                     robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
                 .splineToConstantHeading(new Vector2d(-53 + Poses.FIELD_OFFSET_X, -24*reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .waitSeconds(INTAKE_1_TIME)
+                .waitSeconds(INTAKE_2_TIME)
                 // lock and start outtake
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
@@ -160,14 +162,14 @@ public class PreloadDeposits {
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                    robot.outtake.lift.setMotionProfileTargetPos(850);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
                     robot.outtake.extendWrist();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 - 30 * reflect);
+                    robot.outtake.setTurretAngle(270 - 50 * reflect);
                 })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), Math.toRadians(0))
@@ -178,6 +180,7 @@ public class PreloadDeposits {
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.outtake.setTurretAngle(270 + 30 * reflect);
+                    robot.outtake.lift.setMotionProfileTargetPos(700);
                 })
                 // release yellow pixel
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
@@ -196,13 +199,18 @@ public class PreloadDeposits {
                 .setTangent(Math.toRadians(180 * reflect))
                 // drop to intake, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    robot.intake.dropToStack(4);
+                    robot.intake.dropToStack(3);
                     robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
                 .splineToConstantHeading(new Vector2d(-53 + Poses.FIELD_OFFSET_X, -24*reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .waitSeconds(INTAKE_1_TIME)
+//                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                    robot.intake.dropToStack(0);
+//                })
+//                .lineTo(new Vector2d(Poses.STACK_SETUP_X, -24 * reflect))
+                .waitSeconds(INTAKE_2_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
@@ -243,7 +251,7 @@ public class PreloadDeposits {
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
                     robot.outtake.setTurretAngle(270 + 50 * reflect);
-                    robot.outtake.lift.setMotionProfileTargetPos(700);
+                    robot.outtake.lift.setMotionProfileTargetPos(670);
                 })
                 // release yellow pixel
                 .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {
@@ -259,19 +267,25 @@ public class PreloadDeposits {
     public TrajectorySequence depositThroughCenterFromWingFar(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .setTangent(Math.toRadians(120 * reflect))
+                .setTangent(Math.toRadians(150 * reflect))
                 // drop down, start intake, unlock
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    robot.intake.dropToStack(4);
+                    robot.intake.dropToStack(3);
                     robot.intake.setIntakePower(1);
                     robot.outtake.unlock();
                 })
-                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(100 * reflect))
+                .waitSeconds(INTAKE_1_TIME)
+//                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                    robot.intake.dropToStack(0);
+//                })
+//                .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
+                .waitSeconds(INTAKE_2_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
+                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
                 })
                 // stop outtake
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
@@ -296,7 +310,7 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 + 40 * reflect);
+                    robot.outtake.setTurretAngle(270 + 60 * reflect);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -334,7 +348,7 @@ public class PreloadDeposits {
                     robot.outtake.unlock();
                 })
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .waitSeconds(INTAKE_1_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
@@ -400,7 +414,7 @@ public class PreloadDeposits {
                     robot.outtake.unlock();
                 })
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .waitSeconds(INTAKE_1_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
@@ -464,7 +478,7 @@ public class PreloadDeposits {
                     robot.outtake.unlock();
                 })
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -36 * reflect), Math.toRadians(180))
-                .waitSeconds(INTAKE_TIME)
+                .waitSeconds(INTAKE_1_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();

@@ -21,7 +21,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .lineTo(Poses.BACKDROP_PLACEMENT_CLOSE_POSE.vec())
                 // release purple pixel
@@ -32,7 +32,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(Poses.BACKDROP_PLACEMENT_CENTER_POSE.vec(), Math.toRadians(90 * reflect))
@@ -44,7 +44,7 @@ public class Placements {
 
     public TrajectorySequence placementBackdropFar(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 .splineTo(new Vector2d(12, -55 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.BACKDROP_PLACEMENT_FAR_POSE, Math.toRadians(135 * reflect))
@@ -56,7 +56,7 @@ public class Placements {
 
     public TrajectorySequence placementWingCloseForCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
@@ -70,7 +70,7 @@ public class Placements {
 
     public TrajectorySequence placementWingCloseForPerimeter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
@@ -84,7 +84,7 @@ public class Placements {
 
     public TrajectorySequence placementWingCenter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
@@ -98,7 +98,7 @@ public class Placements {
 
     public TrajectorySequence placementWingFarForPerimeter(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setVelConstraint(Constraints.NORMAL_VEL)
                 // placement
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
@@ -120,11 +120,9 @@ public class Placements {
                 .setTangent(Math.toRadians(130 * reflect))
                 // drop down ready
                 .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
-                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -50*reflect), Math.toRadians(90 * reflect))
-                .splineToSplineHeading(new Pose2d(-46 + Poses.FIELD_OFFSET_X, -40 * reflect, Math.toRadians(-90 * reflect)), Math.toRadians(90 * reflect))
-                .splineToConstantHeading(new Vector2d(-46 + Poses.FIELD_OFFSET_X, -10 * reflect), Math.toRadians(90 * reflect))
-                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(-90 * reflect))
+                .splineToConstantHeading(new Vector2d(-50 + Poses.FIELD_OFFSET_X, -50*reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-54.5 + Poses.FIELD_OFFSET_X, -35 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(70 * reflect))
                 // release purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
                 .waitSeconds(WAIT_TIME)

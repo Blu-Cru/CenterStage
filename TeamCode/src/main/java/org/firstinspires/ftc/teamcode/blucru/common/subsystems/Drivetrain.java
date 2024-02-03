@@ -56,7 +56,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     private PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
-        super(hardwareMap, isTeleOp);
+        super(hardwareMap);
         this.isTeleOp = isTeleOp;
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
@@ -81,14 +81,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             updatePoseEstimate();
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
-            odoHeading = getOdoHeading();
-            imuHeading = getIMUHeading();
 
-            if(imuAccurate()) {
-                heading = imuHeading;
-            } else {
-                heading = odoHeading;
-            }
+            heading = getOdoHeading();
         }
 
         pose = this.getPoseEstimate();
@@ -168,14 +162,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public double correctHeading(double heading) {
-        double correctedHeading = heading;
+        double correctedHeading = heading - Math.PI/2;
 
         if(correctedHeading > Math.PI)
             correctedHeading -= 2 * Math.PI;
         else if (correctedHeading < -Math.PI)
             correctedHeading += 2 * Math.PI;
 
-        return correctedHeading;
+        return correctedHeading + Math.PI/2;
     }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
