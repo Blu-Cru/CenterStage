@@ -15,7 +15,7 @@ public class PreloadDeposits {
     public static double INTAKE_1_TIME = 0.7;
     public static double INTAKE_2_TIME = 0.5;
     public static double RELEASE_TIME = 0;
-    public static double LIFT_CLEAR_AFTER_RELEASE_TIME = 0.3;
+    public static double LIFT_CLEAR_AFTER_RELEASE_TIME = 0.8;
     public static double TOTAL_CLOSE_DEPOSIT_TIME = 0.8;
 
     public static double TOTAL_FAR_DEPOSIT_TIME = 1.5;
@@ -42,7 +42,7 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 + 15 * reflect);
+                    robot.outtake.setTurretAngle(270 + 45 * reflect);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -111,7 +111,7 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 - 15 * reflect);
+                    robot.outtake.setTurretAngle(270 - 45 * reflect);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)

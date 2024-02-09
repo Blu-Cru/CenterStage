@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -23,7 +24,7 @@ public class Cycles {
     public static double INTAKE_1_TIME = 0.2;
     public static double INTAKE_2_TIME = 0.1;
 
-    public static double LOCK_TIME = 0.8;
+    public static double LOCK_TIME = 0.1;
     public static double STOP_OUTTAKE_TIME = 1.7;
 
     double reflect = 1;
@@ -243,7 +244,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
@@ -313,7 +314,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
@@ -383,7 +384,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -12 * reflect), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
