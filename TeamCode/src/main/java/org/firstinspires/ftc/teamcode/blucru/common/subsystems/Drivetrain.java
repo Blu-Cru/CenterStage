@@ -19,16 +19,13 @@ import java.util.ArrayList;
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4;
-
-    public static double MAX_ACCEL_DRIVE_DELTA = 5; // magnitude per second at power 1
-    public static double MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
-    public static double TURN_P = 1.0, TURN_I = 0, TURN_D = 0.02;
-
+    public static double MAX_ACCEL_DRIVE_DELTA = 5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
+    public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02;
+    public static double HEADING_PID_TOLERANCE = 0.05; // radians
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04;
-    public static double DISTANCE_ANGLE_TOLERANCE = 0.5; // radians
-    public static double HEADING_ANGLE_TOLERANCE = 0.25; // radians
-
+    public static double DISTANCE_PID_ANGLE_TOLERANCE = 0.5; // radians
     public static double OUTTAKE_DISTANCE = 3.6;
+    public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 5.0; // inches
 
     public double drivePower = 0.5;
     private double dt;
@@ -49,7 +46,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public boolean fieldCentric;
     boolean isTeleOp;
 
-    private PIDController turnPID;
+    private PIDController headingPID;
     public double targetHeading = 0;
 
     public DistanceSensors distanceSensors;
@@ -58,7 +55,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
         this.isTeleOp = isTeleOp;
-        turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
+        headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
         distanceSensors = new DistanceSensors(hardwareMap);
 
@@ -155,22 +152,22 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return input;
     }
 
-    public boolean imuAccurate() {
-        double correctedOdoHeading = correctHeading(odoHeading);
-        double correctedImuHeading = correctHeading(imuHeading);
-        return Math.abs(correctedOdoHeading - correctedImuHeading) < HEADING_ANGLE_TOLERANCE;
-    }
+//    public boolean imuAccurate() {
+//        double correctedOdoHeading = correctHeading(odoHeading);
+//        double correctedImuHeading = correctHeading(imuHeading);
+//        return Math.abs(correctedOdoHeading - correctedImuHeading) < HEADING_ANGLE_TOLERANCE;
+//    }
 
-    public double correctHeading(double heading) {
-        double correctedHeading = heading - Math.PI/2;
-
-        if(correctedHeading > Math.PI)
-            correctedHeading -= 2 * Math.PI;
-        else if (correctedHeading < -Math.PI)
-            correctedHeading += 2 * Math.PI;
-
-        return correctedHeading + Math.PI/2;
-    }
+//    public double correctHeading(double heading) {
+//        double correctedHeading = heading - Math.PI/2;
+//
+//        if(correctedHeading > Math.PI)
+//            correctedHeading -= 2 * Math.PI;
+//        else if (correctedHeading < -Math.PI)
+//            correctedHeading += 2 * Math.PI;
+//
+//        return correctedHeading + Math.PI/2;
+//    }
 
     public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
         distanceSensors.read(heading);
@@ -179,7 +176,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         Vector2d driveVector = calculateDriveVector(distanceVector);
 
         double component;
-        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_ANGLE_TOLERANCE && distanceSensors.sensing) {
+        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
             component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
             driveVector = setComponent(driveVector, component, -(heading - targetHeading));
@@ -209,8 +206,19 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return Math.abs(error);
     }
 
+    public boolean followerIsWithinTolerance() {
+        return getMaxTrajectoryFollowerError() < TRAJECTORY_FOLLOWER_ERROR_TOLERANCE;
+    }
+
+    public double getMaxTrajectoryFollowerError() {
+        Pose2d lastError = getLastError();
+        double xError = Math.abs(pose.getX() - lastError.getX());
+        double yError = Math.abs(pose.getY() - lastError.getY());
+        return Math.max(xError, yError);
+    }
+
     public void setDrivePower(double power) {
-        drivePower = Range.clip(power, 0.0, 1.0);
+        drivePower = Range.clip(power, 0.2, 1.0);
     }
 
     public void setDistancePID(double p, double i, double d) {
@@ -218,16 +226,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void setTurnPID(double p, double i, double d) {
-        turnPID.setPID(p, i, d);
+        headingPID.setPID(p, i, d);
     }
 
     public double getPIDRotate(double heading, double target) {
-        if(heading - target < -Math.PI) {
-            heading += 2*Math.PI;
-        } else if(heading - target > Math.PI) {
-            heading -= 2 * Math.PI;
-        }
-        return Range.clip(turnPID.calculate(heading, target), -1, 1);
+        if(heading - target < -Math.PI) heading += 2*Math.PI;
+        else if(heading - target > Math.PI) heading -= 2 * Math.PI;
+
+        if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
+        else return Range.clip(headingPID.calculate(heading, target), -1, 1);
     }
 
     public double getOdoHeading() {
@@ -240,15 +247,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return heading;
     }
 
-    public double getIMUHeading() {
-        double heading = getExternalHeading();
-        if(heading > Math.PI) {
-            heading -= 2*Math.PI;
-        } else if(heading < -Math.PI) {
-            heading += 2*Math.PI;
-        }
-        return heading;
-    }
+//    public double getIMUHeading() {
+//        double heading = getExternalHeading();
+//        if(heading > Math.PI) {
+//            heading -= 2*Math.PI;
+//        } else if(heading < -Math.PI) {
+//            heading += 2*Math.PI;
+//        }
+//        return heading;
+//    }
 
     public void setDrivePower(RobotState robotState, Gamepad gamepad1) {
         double drivePowerMultiplier;

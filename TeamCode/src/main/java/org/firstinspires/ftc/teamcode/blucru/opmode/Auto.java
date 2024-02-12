@@ -166,6 +166,8 @@ public class Auto extends LinearOpMode {
 
             switch(autoState) {
                 case RUNNING:
+                    if (!drivetrain.followerIsWithinTolerance()) autoState = AutoState.STOP;
+
                     if(!drivetrain.isBusy()) {
                         if(trajIndex == trajectoryList.size()) {
                             autoState = AutoState.STOP;
@@ -175,29 +177,30 @@ public class Auto extends LinearOpMode {
                             trajIndex++;
                         }
                     }
+
+                    drivetrain.updateTrajectory();
                     break;
                 case STOP:
+                    Pose2d pose;
+                    if(alliance == Alliance.RED) {
+                        pose = drivetrain.getPoseEstimate();
+                    } else {
+                        pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
+                    }
+                    Initialization.POSE = pose;
                     break;
             }
 
-            // set initial pose for teleop
+            // stop
             if(runtime.seconds() > 29.3) {
+                autoState = AutoState.STOP;
                 robot.outtake.retractWrist();
             }
             if(runtime.seconds() > 29.5) {
-                Pose2d pose;
-                if(alliance == Alliance.RED) {
-                    pose = drivetrain.getPoseEstimate();
-                } else {
-                    pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
-                }
-                Initialization.POSE = pose;
-
                 robot.outtake.lift.setTargetPos(0);
                 robot.outtake.lock();
             }
 
-            drivetrain.updateTrajectory();
             robot.write();
 
             dt = runtime.milliseconds() - lastTime;
