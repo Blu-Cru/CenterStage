@@ -12,8 +12,9 @@ public class Cycles {
     public static double CENTER_TURRET_TIME = 0;
     public static double WRIST_RETRACT_TIME = 0.3;
     public static double LIFT_RETRACT_TIME = 0.4;
-    public static double LIFT_TIME = -1;
-    public static double WRIST_EXTEND_TIME = -0.75;
+    public static double LIFT_TIME = -1.1;
+    public static double WRIST_EXTEND_TIME = -0.85;
+    public static double TURN_TURRET_TIME = -0.4;
 
     public static double INTAKE_READY_TIME = -3.5;
     public static double START_INTAKE_TIME = -1.5;
@@ -21,8 +22,8 @@ public class Cycles {
     public static double DROP_INTAKE_2_TIME = 0;
 
     public static double TOTAL_DEPOSIT_TIME = 0.3;
-    public static double INTAKE_1_TIME = 0.2;
-    public static double INTAKE_2_TIME = 0.1;
+    public static double INTAKE_1_TIME = 0.5;
+    public static double INTAKE_2_TIME = 0.7;
 
     public static double LOCK_TIME = 0.1;
     public static double STOP_OUTTAKE_TIME = 1.7;
@@ -424,6 +425,9 @@ public class Cycles {
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
                     robot.outtake.extendWrist();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(TURN_TURRET_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 + 40 * reflect);
                 })
 
 

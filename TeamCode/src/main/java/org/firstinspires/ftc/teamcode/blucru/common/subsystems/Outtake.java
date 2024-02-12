@@ -14,11 +14,11 @@ public class Outtake implements Subsystem{
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.26;
 
-    public static double BACK_UNLOCKED = 0.92;
+    public static double BACK_UNLOCKED = 0.7;
     public static double BACK_LOCKED = BACK_UNLOCKED - 0.2;
 
-    public static double FRONT_UNLOCKED = 0.85;
-    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.25;
+    public static double FRONT_UNLOCKED = 0.7;
+    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.15;
 
     public static double PIXEL_HEIGHT = 2.6; // inches
     public static double LOW_HEIGHT = 3.8; // inches
@@ -28,8 +28,8 @@ public class Outtake implements Subsystem{
     public static double MIN_HEIGHT = LOW_HEIGHT;
     public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
 
-    public static int LIFT_WRIST_CLEAR_POS = 300;
-    public static int LIFT_INTAKE_READY_POS = 100;
+    public static int LIFT_WRIST_CLEAR_POS = 500;
+    public static int LIFT_INTAKE_READY_POS = 50;
 
     Servo wrist, backLock, frontLock;
     public Lift lift;
@@ -159,7 +159,7 @@ public class Outtake implements Subsystem{
         backLocked = false;
     }
 
-    public void lockBack() {
+    public void unlockFrontLockBack() {
         frontLocked = false;
         backLocked = true;
     }

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -137,7 +136,7 @@ public class Duo extends LinearOpMode {
             outtake.lock();
         } else {
             intake.setIntakePower(0);
-            if (gamepad2.dpad_left) outtake.lockBack();
+            if (gamepad2.dpad_left) outtake.unlockFrontLockBack();
             else if(gamepad2.dpad_right) outtake.unlock();
             else outtake.lock();
         }

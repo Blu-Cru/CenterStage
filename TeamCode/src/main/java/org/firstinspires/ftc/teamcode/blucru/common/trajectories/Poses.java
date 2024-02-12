@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 public class Poses {
-    public static double FIELD_OFFSET_X = 1.5;
+    public static double FIELD_OFFSET_X = 0;
     /*
     offset of distance from backdrop to other side
     APPLY ONLY TO WING SIDE COORDINATES
+    HIGHER = CLOSER
     */
     public static double START_Y = -62;
     public static double DEPOSIT_X = 51.5;
-    public static double BACKDROP_SETUP_X = 46;
+    public static double BACKDROP_SETUP_X = 47;
     public static double BACKDROP_Y_DELTA = 5;
 
     public static double DEPOSIT_FAR_Y = -36 + BACKDROP_Y_DELTA;
@@ -18,8 +19,8 @@ public class Poses {
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -59.5 + FIELD_OFFSET_X;
-    public static double STACK_SETUP_X = -55 + FIELD_OFFSET_X;
+    public static double STACK_X = -58.5 + FIELD_OFFSET_X;
+    public static double STACK_SETUP_X = -56 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;
     public static Pose2d WING_STARTING_POSE;
@@ -64,8 +65,8 @@ public class Poses {
         DEPOSIT_CENTER_POSE = new Pose2d(DEPOSIT_X, -36 * reflect, Math.toRadians(180));
         DEPOSIT_CLOSE_POSE = new Pose2d(DEPOSIT_X, DEPOSIT_CLOSE_Y * reflect, Math.toRadians(180));
 
-        PARK_CLOSE_POSE = new Pose2d(46, -60 * reflect, Math.toRadians(180));
-        PARK_FAR_POSE = new Pose2d(46, -12 * reflect, Math.toRadians(180));
+        PARK_CLOSE_POSE = new Pose2d(44, -63 * reflect, Math.toRadians(180));
+        PARK_FAR_POSE = new Pose2d(44, -7 * reflect, Math.toRadians(180));
 
         STACK_CLOSE_POSE = new Pose2d(STACK_X + FIELD_OFFSET_X + 1, -42 * reflect, Math.toRadians(150 * reflect));
     }

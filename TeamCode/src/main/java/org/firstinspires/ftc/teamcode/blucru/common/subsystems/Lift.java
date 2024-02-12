@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 @Config
 public class Lift implements Subsystem{
     public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
-    public static int YELLOW_POS = 950, CLEAR_POS = 1000, CYCLE_POS = 1200;
+    public static int YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1200;
     public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
     public static int MIN_POS = 0, MAX_POS = 2000;
     public static double stallCurrent = 20; // amps
@@ -26,7 +26,7 @@ public class Lift implements Subsystem{
     public static double TICKS_PER_REV = 384.5;
     public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
 
-    public static double fastVelocity = 7000.0, fastAccel = 10000.0;
+    public static double fastVelocity = 8000.0, fastAccel = 12000.0;
 
     public LiftState liftState;
     private DcMotorEx liftMotor;
