@@ -27,6 +27,7 @@ public class Lift implements Subsystem{
     public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
 
     public static double fastVelocity = 8000.0, fastAccel = 12000.0;
+    public static double MAX_UP_POWER = 0.85, MAX_DOWN_POWER = -0.8;
 
     public LiftState liftState;
     private DcMotorEx liftMotor;
@@ -91,7 +92,7 @@ public class Lift implements Subsystem{
     }
 
     public void write() {
-        PID = liftPID.calculate(currentPos, targetPos);
+        PID = getLiftPID(currentPos, targetPos);
 
         switch(liftState) {
             case MoPro:
@@ -102,7 +103,7 @@ public class Lift implements Subsystem{
                 } else if (Math.abs(targetPos - currentPos) < tolerance) {
                     power = 0;
                 } else {
-                    PID = liftPID.calculate(currentPos, targetPos);
+                    PID = getLiftPID(currentPos, targetPos);
                     power = PID;
                 }
                 break;
@@ -126,6 +127,10 @@ public class Lift implements Subsystem{
         }
 
         setPower(power);
+    }
+
+    public double getLiftPID(double currentPos, double targetPos) {
+        return Range.clip(liftPID.calculate(currentPos, targetPos), -MAX_DOWN_POWER, MAX_UP_POWER);
     }
 
 //    public void setMotionProfileTargetHeight(double targetHeight) {
