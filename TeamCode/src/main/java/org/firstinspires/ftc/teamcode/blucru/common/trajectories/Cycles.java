@@ -328,7 +328,7 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.dropToStack(stackHeight))
 
                 .waitSeconds(INTAKE_1_TIME)
-
+                // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
                     robot.intake.dropToStack(0);
                 })
@@ -399,6 +399,7 @@ public class Cycles {
 
                 .waitSeconds(INTAKE_1_TIME)
 
+                // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
                     robot.intake.dropToStack(0);
                 })
