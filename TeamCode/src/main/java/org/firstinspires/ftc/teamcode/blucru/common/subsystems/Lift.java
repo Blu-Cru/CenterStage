@@ -130,7 +130,7 @@ public class Lift implements Subsystem{
     }
 
     public double getLiftPID(double currentPos, double targetPos) {
-        return Range.clip(liftPID.calculate(currentPos, targetPos), -MAX_DOWN_POWER, MAX_UP_POWER);
+        return Range.clip(liftPID.calculate(currentPos, targetPos), MAX_DOWN_POWER, MAX_UP_POWER);
     }
 
 //    public void setMotionProfileTargetHeight(double targetHeight) {

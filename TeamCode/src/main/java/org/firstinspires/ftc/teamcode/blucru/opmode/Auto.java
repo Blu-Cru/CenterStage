@@ -166,7 +166,7 @@ public class Auto extends LinearOpMode {
 
             switch(autoState) {
                 case RUNNING:
-                    if (!drivetrain.followerIsWithinTolerance()) autoState = AutoState.STOP;
+
 
                     if(!drivetrain.isBusy()) {
                         if(trajIndex == trajectoryList.size()) {
@@ -181,6 +181,7 @@ public class Auto extends LinearOpMode {
                     drivetrain.updateTrajectory();
                     break;
                 case STOP:
+                    drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
                     Pose2d pose;
                     if(alliance == Alliance.RED) {
                         pose = drivetrain.getPoseEstimate();
@@ -209,6 +210,7 @@ public class Auto extends LinearOpMode {
             // do telemetry every 50 loops
             loop++;
             if(loop > 50) {
+                if (!drivetrain.followerIsWithinTolerance()) autoState = AutoState.STOP;
                 telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
                 telemetry.addData("runtime", runtime.seconds());
                 telemetry.addData("state: ", autoState);

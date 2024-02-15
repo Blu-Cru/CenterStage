@@ -25,7 +25,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04;
     public static double DISTANCE_PID_ANGLE_TOLERANCE = 0.5; // radians
     public static double OUTTAKE_DISTANCE = 3.6;
-    public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 10.0; // inches
+    public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 15.0; // inches
 
     public double drivePower = 0.5;
     private double dt;
@@ -212,8 +212,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public double getTrajectoryFollowerError() {
         Pose2d lastError = getLastError();
-        double xError = pose.getX() - lastError.getX();
-        double yError = pose.getY() - lastError.getY();
+        double xError = lastError.getX();
+        double yError = lastError.getY();
         return Math.sqrt(xError * xError + yError * yError);
     }
 
