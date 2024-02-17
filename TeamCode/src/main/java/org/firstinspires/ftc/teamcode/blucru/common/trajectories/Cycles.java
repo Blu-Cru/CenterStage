@@ -22,11 +22,11 @@ public class Cycles {
     public static double DROP_INTAKE_2_TIME = 0;
 
     public static double TOTAL_DEPOSIT_TIME = 0.3;
-    public static double INTAKE_1_TIME = 0.7;
-    public static double INTAKE_2_TIME = 2;
+    public static double INTAKE_1_TIME = 1;
+    public static double INTAKE_2_TIME = 1.5;
 
-    public static double LOCK_TIME = 1.2;
-    public static double STOP_OUTTAKE_TIME = 1.7;
+    public static double LOCK_TIME = 1.4;
+    public static double STOP_OUTTAKE_TIME = 3;
 
     double reflect = 1;
 
@@ -260,7 +260,7 @@ public class Cycles {
                 .waitSeconds(INTAKE_1_TIME)
 
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(0);
+                    robot.intake.dropToStack(stackHeight - 2);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
@@ -330,7 +330,7 @@ public class Cycles {
                 .waitSeconds(INTAKE_1_TIME)
                 // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(0);
+                    robot.intake.dropToStack(stackHeight - 2);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
@@ -401,7 +401,7 @@ public class Cycles {
 
                 // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(0);
+                    robot.intake.dropToStack(stackHeight - 2);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
@@ -428,7 +428,7 @@ public class Cycles {
                     robot.outtake.extendWrist();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(TURN_TURRET_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 + 40 * reflect);
+                    robot.outtake.setTurretAngle(270 + 20 * reflect);
                 })
 
 

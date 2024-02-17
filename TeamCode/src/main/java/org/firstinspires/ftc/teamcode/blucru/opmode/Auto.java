@@ -166,14 +166,18 @@ public class Auto extends LinearOpMode {
 
             switch(autoState) {
                 case RUNNING:
-
-
                     if(!drivetrain.isBusy()) {
                         if(trajIndex == trajectoryList.size()) {
                             autoState = AutoState.STOP;
                             break;
                         } else {
-                            drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
+                            // follow trajectory
+                            try {
+                                drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
+                            } catch (Exception e) {
+                                // if the trajectory is interrupted, stop the op mode
+                                throw new InterruptedException();
+                            }
                             trajIndex++;
                         }
                     }

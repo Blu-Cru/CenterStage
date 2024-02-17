@@ -44,7 +44,7 @@ public class Parks {
                 .build();
     }
 
-    public TrajectorySequence retract(Robot robot) {
+    public TrajectorySequence parkNone(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
@@ -52,6 +52,7 @@ public class Parks {
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.retractWrist())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
+
                 .waitSeconds(1.5)
                 .build();
     }

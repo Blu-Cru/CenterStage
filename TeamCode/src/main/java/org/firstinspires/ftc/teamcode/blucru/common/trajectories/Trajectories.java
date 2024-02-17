@@ -108,7 +108,7 @@ public class Trajectories {
                 trajectoriesFar.add(parks.parkClose(robot, cycleEndPose));
                 break;
             default:
-                trajectoriesFar.add(parks.retract(robot));
+                trajectoriesFar.add(parks.parkNone(robot));
                 break;
         }
 
@@ -175,7 +175,7 @@ public class Trajectories {
                 trajectoriesCenter.add(parks.parkClose(robot, cycleEndPose));
                 break;
             default:
-                trajectoriesCenter.add(parks.retract(robot));
+                trajectoriesCenter.add(parks.parkNone(robot));
                 break;
         }
 
@@ -235,7 +235,7 @@ public class Trajectories {
                 trajectoriesClose.add(parks.parkClose(robot, cycleEndPose));
                 break;
             default:
-                trajectoriesClose.add(parks.retract(robot));
+                trajectoriesClose.add(parks.parkNone(robot));
                 break;
         }
 
