@@ -186,13 +186,7 @@ public class Auto extends LinearOpMode {
                     break;
                 case STOP:
                     drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
-                    Pose2d pose;
-                    if(alliance == Alliance.RED) {
-                        pose = drivetrain.getPoseEstimate();
-                    } else {
-                        pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
-                    }
-                    Initialization.POSE = pose;
+
                     break;
             }
 
@@ -227,5 +221,13 @@ public class Auto extends LinearOpMode {
                 loop = 0;
             }
         }
+
+        Pose2d pose;
+        if(alliance == Alliance.RED) {
+            pose = drivetrain.getPoseEstimate();
+        } else {
+            pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
+        }
+        Initialization.POSE = pose;
     }
 }

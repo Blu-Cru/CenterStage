@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -15,6 +16,8 @@ public class Hanger implements Subsystem {
 
     private double PID;
     public double power;
+    double lastPower;
+
     private int currentPos;
     public int targetPos;
 
@@ -46,7 +49,12 @@ public class Hanger implements Subsystem {
     }
 
     public void setPower(double power) {
-        hangerMotor.setPower(power);
+        power = Range.clip(power, -1, 1);
+        // only update if power has changed
+        if(Math.abs(power - lastPower) > 0.02) {
+            hangerMotor.setPower(power);
+            lastPower = power;
+        }
     }
 
     public int getCurrentPos() {

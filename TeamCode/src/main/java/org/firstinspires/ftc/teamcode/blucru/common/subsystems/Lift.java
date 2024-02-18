@@ -38,6 +38,7 @@ public class Lift implements Subsystem{
     private double ff = kF;
 
     public double power;
+    double lastPower;
     private int targetPos;
     private int currentPos;
 
@@ -68,6 +69,7 @@ public class Lift implements Subsystem{
         //set all motors to zero power
         liftMotor.setPower(0);
         liftMotor2.setPower(0);
+        lastPower = 0;
 
         //set brake behavior
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -171,8 +173,12 @@ public class Lift implements Subsystem{
 
     public void setPower(double power) {
         power = Range.clip(power, -1, 1);
-        liftMotor.setPower(power);
-        liftMotor2.setPower(power);
+        // if power is significantly different from last power, set power
+        if(Math.abs(power - lastPower) > 0.02) {
+            liftMotor.setPower(power);
+            liftMotor2.setPower(power);
+            lastPower = power;
+        }
     }
 
     public void setTargetPos(int pos) {

@@ -71,14 +71,9 @@ public class Duo extends LinearOpMode {
 
 
         while(opModeIsActive()) {
-            deltaTime = totalTimer.milliseconds() - lastTime;
-            lastTime = totalTimer.milliseconds();
             // updates states based on gamepad input
             read();
-
-            // loop time: current time - time at start of loop
-
-            // data for feedback
+            // writes to hardware
             write();
         }
     }
@@ -98,9 +93,6 @@ public class Duo extends LinearOpMode {
 
         robot.init();
 
-        // set initial pose from auto
-        drivetrain.setPoseEstimate(Initialization.POSE);
-        drivetrain.setExternalHeading(Initialization.POSE.getHeading());
         alliance = Initialization.alliance;
         boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
     }
@@ -256,6 +248,9 @@ public class Duo extends LinearOpMode {
     public void write() {
         robot.write();
 
+        deltaTime = totalTimer.milliseconds() - lastTime;
+        lastTime = totalTimer.milliseconds();
+
         loop++;
         if(loop > 10) {
             telemetry.addData("robot state", robotState);
@@ -263,6 +258,7 @@ public class Duo extends LinearOpMode {
             telemetry.addData("loop time", deltaTime);
             telemetry.addData("alliance", alliance);
             telemetry.update();
+            loop = 0;
         }
     }
 }

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -16,13 +17,12 @@ public class Intake implements Subsystem{
     public static double WRIST_STACK1_HEIGHT = -1; // inches
     public static double WRIST_AUTO_READY_HEIGHT = 2.5; // inches
 
-    public static double POWER = 1;
+    public static double MAX_POWER = 1;
+    double lastPower;
 
     private DcMotorEx intakeMotor;
     private CRServo intakeRoller;
     private IntakeWrist intakeWrist;
-
-    public ElapsedTime intakeTimer;
 
     double intakePower;
 
@@ -40,6 +40,7 @@ public class Intake implements Subsystem{
         intakeWrist.init();
         //set all motors to zero power
         intakeRoller.setPower(0);
+        lastPower = 0;
     }
 
     public void read() {
@@ -82,12 +83,17 @@ public class Intake implements Subsystem{
     }
 
     public void setIntakePower(double power) {
-        intakePower = power * POWER;
+        intakePower = power * MAX_POWER;
     }
 
     private void setPower(double power) {
-        intakeRoller.setPower(power);
-        intakeMotor.setPower(power);
+        power = Range.clip(power, -1, 1);
+        // only update if power has changed
+        if(Math.abs(power - lastPower) > 0.02) {
+            intakeRoller.setPower(power);
+            intakeMotor.setPower(power);
+            lastPower = power;
+        }
     }
 
     public double getIntakeRollersPower() {

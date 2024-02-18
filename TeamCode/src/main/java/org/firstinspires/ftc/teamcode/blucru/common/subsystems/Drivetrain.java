@@ -290,6 +290,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setPoseEstimate(new Pose2d(0,0,heading));
     }
 
+    // set initial pose from auto
     public void initializePose() {
         setPoseEstimate(Initialization.POSE);
         setExternalHeading(Initialization.POSE.getHeading());
