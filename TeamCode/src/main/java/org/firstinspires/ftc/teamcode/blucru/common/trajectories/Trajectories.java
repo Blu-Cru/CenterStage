@@ -64,8 +64,8 @@ public class Trajectories {
 
             switch(autoType) {
                 case CENTER_CYCLE:
-                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 3));
-                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 1));
+                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 3, 0));
+                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 1, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
@@ -83,7 +83,7 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesFar.add(placements.placementWingFarForCenter(robot));
                     trajectoriesFar.add(preloadDeposits.depositThroughCenterFromWingFar(robot));
-                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 2));
+                    trajectoriesFar.add(cycles.cycleCenterFromFar(robot, 2, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
@@ -126,8 +126,8 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesCenter.add(placements.placementBackdropCenter(robot));
                     trajectoriesCenter.add(preloadDeposits.depositFromBackdropCenter(robot));
-                    trajectoriesCenter.add(cycles.cycleCenterFromCenter(robot, 3));
-                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 1));
+                    trajectoriesCenter.add(cycles.cycleCenterFromCenter(robot, 3, 0));
+                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 1, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
 
                     break;
@@ -149,8 +149,8 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesCenter.add(placements.placementWingCenter(robot));
                     trajectoriesCenter.add(preloadDeposits.depositThroughCenterFromWingCenter(robot));
-                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 3));
-                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 1));
+                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 3, 0));
+                    trajectoriesCenter.add(cycles.cycleCenterFromFar(robot, 1, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
@@ -192,8 +192,8 @@ public class Trajectories {
 
             switch(autoType) {
                 case CENTER_CYCLE:
-                    trajectoriesClose.add(cycles.cycleCenterFromClose(robot, 3));
-                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 1));
+                    trajectoriesClose.add(cycles.cycleCenterFromClose(robot, 3, 0));
+                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 1, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:
@@ -210,7 +210,7 @@ public class Trajectories {
                 case CENTER_CYCLE:
                     trajectoriesClose.add(placements.placementWingCloseForCenter(robot));
                     trajectoriesClose.add(preloadDeposits.depositThroughCenterFromWingClose(robot));
-                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 2));
+                    trajectoriesClose.add(cycles.cycleCenterFromFar(robot, 2, 0));
                     cycleEndPose = Poses.DEPOSIT_FAR_POSE;
                     break;
                 case PERIMETER_CYCLE:

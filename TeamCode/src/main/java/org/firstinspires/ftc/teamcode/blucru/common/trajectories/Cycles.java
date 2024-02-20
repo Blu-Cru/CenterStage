@@ -23,7 +23,7 @@ public class Cycles {
 
     public static double TOTAL_DEPOSIT_TIME = 0.3;
     public static double INTAKE_1_TIME = 1;
-    public static double INTAKE_2_TIME = 1.5;
+    public static double INTAKE_2_TIME = 2;
 
     public static double LOCK_TIME = 1.4;
     public static double STOP_OUTTAKE_TIME = 3;
@@ -232,7 +232,7 @@ public class Cycles {
                 .build();
     }
 
-    public TrajectorySequence cycleCenterFromClose(Robot robot, int stackHeight) {
+    public TrajectorySequence cycleCenterFromClose(Robot robot, int stackHeight, double turretAngle) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -300,7 +300,7 @@ public class Cycles {
                 .build();
     }
 
-    public TrajectorySequence cycleCenterFromCenter(Robot robot, int stackHeight) {
+    public TrajectorySequence cycleCenterFromCenter(Robot robot, int stackHeight, double turretAngle) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CENTER_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -370,7 +370,7 @@ public class Cycles {
                 .build();
     }
 
-    public TrajectorySequence cycleCenterFromFar(Robot robot, int stackHeight) {
+    public TrajectorySequence cycleCenterFromFar(Robot robot, int stackHeight, double turretAngle) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(135 * reflect))
@@ -428,7 +428,7 @@ public class Cycles {
                     robot.outtake.extendWrist();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(TURN_TURRET_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 + 20 * reflect);
+                    robot.outtake.setTurretAngle(270 + turretAngle * reflect);
                 })
 
 
