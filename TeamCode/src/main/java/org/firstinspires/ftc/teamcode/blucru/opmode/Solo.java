@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
+@TeleOp(name = "Solo", group = "2")
 public class Solo extends LinearOpMode {
     Robot robot;
     Drivetrain drivetrain;
@@ -41,40 +43,51 @@ public class Solo extends LinearOpMode {
     }
 
     public void read() {
+        switch (robotState) {
+            case RETRACT:
+                outtake.outtaking = false;
+                // drop down
+                if(gamepad1.a && gamepad1.left_bumper) intake.dropToStack(3);
+                else if(gamepad1.a) intake.downIntakeWrist();
+                else intake.retractIntakeWrist();
 
-// INTAKE
-        if(outtake.liftIntakeReady()) {
-            // drop down
-            if(gamepad1.a && gamepad1.left_bumper) intake.dropToStack(3);
-            else if(gamepad1.a) intake.downIntakeWrist();
-            else intake.retractIntakeWrist();
+                // intake/outtake
+                if(gamepad1.left_trigger > 0.3) {
+                    intake.setIntakePower(gamepad1.left_trigger);
+                    outtake.unlock();
+                } else if(gamepad1.right_trigger > 0.3) {
+                    intake.setIntakePower(-gamepad1.right_trigger);
+                    outtake.lock();
+                } else if(timeSince(stopIntakeTimeSeconds) < 0.5) {
+                    intake.setIntakePower(-1);
+                    outtake.lock();
+                } else {
+                    intake.setIntakePower(0);
+                    outtake.lock();
+                }
 
-            // intake/outtake
-            if(gamepad1.left_trigger > 0.3) {
-                intake.setIntakePower(gamepad1.left_trigger);
-                outtake.unlock();
-            } else if(gamepad1.right_trigger > 0.3) {
-                intake.setIntakePower(-gamepad1.right_trigger);
-                outtake.lock();
-            } else if(timeSince(stopIntakeTimeSeconds) < 0.5) {
-                intake.setIntakePower(-1);
-                outtake.lock();
-            } else {
-                intake.setIntakePower(0);
-                outtake.lock();
-            }
+                // if LT was released, start timer
+                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTimeSeconds = totalTimer.seconds();
+                lastLT = gamepad1.left_trigger;
 
-            // if LT was released, start timer
-            if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTimeSeconds = totalTimer.seconds();
-            lastLT = gamepad1.left_trigger;
-        } else /* if lift is up */{
-            // outtake
-            if(gamepad1.right_trigger > 0.3) intake.setIntakePower(-gamepad1.right_trigger);
+                break;
+            case LIFTING:
+                outtake.outtaking = true;
 
-            // lock/unlock for depositing
-            if(gamepad1.left_bumper) outtake.unlockFrontLockBack();
-            else if(gamepad1.right_bumper) outtake.unlock();
-            else outtake.lock();
+// reverse intake
+                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+
+                break;
+            case OUTTAKE:
+                outtake.outtaking = true;
+// reverse intake
+                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+// lock/unlock for depositing
+                if(gamepad1.left_bumper) outtake.unlockFrontLockBack();
+                else if(gamepad1.right_bumper) outtake.unlock();
+                else outtake.lock();
+
+                break;
         }
 
 // DRIVING
