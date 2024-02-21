@@ -22,8 +22,8 @@ public class Cycles {
     public static double DROP_INTAKE_2_TIME = 0;
 
     public static double TOTAL_DEPOSIT_TIME = 0.3;
-    public static double INTAKE_1_TIME = 1;
-    public static double INTAKE_2_TIME = 2;
+    public static double INTAKE_1_TIME = 0.5;
+    public static double INTAKE_2_TIME = 1.8;
 
     public static double LOCK_TIME = 1.4;
     public static double STOP_OUTTAKE_TIME = 3;

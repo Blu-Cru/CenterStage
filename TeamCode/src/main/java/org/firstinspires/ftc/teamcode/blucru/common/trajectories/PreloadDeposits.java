@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class PreloadDeposits {
     public static double LIFT_TIME = -1;
-    public static double WRIST_EXTEND_TIME = -0.75;
-    public static double TURRET_TURN_TIME = -0.45;
+    public static double WRIST_EXTEND_TIME = -0.65;
+    public static double TURRET_TURN_TIME = -0.35;
     public static double INTAKE_1_TIME = 0.7;
-    public static double INTAKE_2_TIME = 0.5;
+//    public static double INTAKE_2_TIME = 0.5;
     public static double RELEASE_TIME = 0;
     public static double LIFT_CLEAR_AFTER_RELEASE_TIME = 0.8;
     public static double TOTAL_CLOSE_DEPOSIT_TIME = 0.8;
@@ -142,7 +142,6 @@ public class PreloadDeposits {
                 .splineToConstantHeading(new Vector2d(-53 + Poses.FIELD_OFFSET_X, -24*reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X, -24 * reflect), Math.toRadians(180))
                 .waitSeconds(INTAKE_1_TIME)
-                .waitSeconds(INTAKE_2_TIME)
                 // lock and start outtake
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
@@ -288,7 +287,7 @@ public class PreloadDeposits {
 //                    robot.intake.dropToStack(0);
 //                })
 //                .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
-                .waitSeconds(INTAKE_2_TIME)
+//                .waitSeconds(INTAKE_2_TIME)
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();

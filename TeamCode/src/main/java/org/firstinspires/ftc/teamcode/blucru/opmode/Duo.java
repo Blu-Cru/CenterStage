@@ -31,9 +31,9 @@ right joystick : turn
 
  */
 @Config
-@TeleOp(name = "Duo", group = "1")
+@TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends LinearOpMode {
-    public static double OUTTAKE_DELAY_SECONDS = 0.5;
+    public static double OUTTAKE_DELAY_SECONDS = 0.3;
 
     Alliance alliance;
 

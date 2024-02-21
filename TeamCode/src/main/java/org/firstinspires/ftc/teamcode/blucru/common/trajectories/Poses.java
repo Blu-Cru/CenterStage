@@ -10,17 +10,17 @@ public class Poses {
     HIGHER = CLOSER
     */
     public static double START_Y = -62;
-    public static double DEPOSIT_X = 52;
+    public static double DEPOSIT_X = 52.5;
     public static double BACKDROP_SETUP_X = 45;
-    public static double BACKDROP_Y_DELTA = 4.5;
+    public static double BACKDROP_Y_DELTA = 3.5;
 
     public static double DEPOSIT_FAR_Y = -36 + BACKDROP_Y_DELTA;
     public static double DEPOSIT_CLOSE_Y = -36 - BACKDROP_Y_DELTA;
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -56 + FIELD_OFFSET_X;
-    public static double STACK_SETUP_X = -55 + FIELD_OFFSET_X;
+    public static double STACK_X = -56.5 + FIELD_OFFSET_X;
+    public static double STACK_SETUP_X = -55.5 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;
     public static Pose2d WING_STARTING_POSE;

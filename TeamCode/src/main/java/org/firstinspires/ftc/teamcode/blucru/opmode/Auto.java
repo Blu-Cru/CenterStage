@@ -171,21 +171,28 @@ public class Auto extends LinearOpMode {
                             autoState = AutoState.STOP;
                             break;
                         } else {
-                            // follow trajectory
-                            try {
-                                drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
-                            } catch (Exception e) {
-                                // if the trajectory is interrupted, stop the op mode
-                                throw new InterruptedException();
-                            }
+                            drivetrain.followTrajectorySequenceAsync(trajectoryList.get(trajIndex));
+
                             trajIndex++;
                         }
                     }
 
-                    drivetrain.updateTrajectory();
+                    // follow trajectory
+                    try {
+                        drivetrain.updateTrajectory();
+                    } catch (Exception e) {
+                        // if the trajectory is interrupted, stop the op mode
+                        requestOpModeStop();
+                    }
+
                     break;
                 case STOP:
                     drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
+
+                    if(runtime.seconds() > 29.5) {
+                        robot.outtake.lift.setTargetPos(0);
+                        robot.outtake.lock();
+                    }
 
                     break;
             }
@@ -194,10 +201,6 @@ public class Auto extends LinearOpMode {
             if(runtime.seconds() > 29.3) {
                 autoState = AutoState.STOP;
                 robot.outtake.retractWrist();
-            }
-            if(runtime.seconds() > 29.5) {
-                robot.outtake.lift.setTargetPos(0);
-                robot.outtake.lock();
             }
 
             robot.write();
@@ -211,6 +214,7 @@ public class Auto extends LinearOpMode {
                 if (!drivetrain.followerIsWithinTolerance()) autoState = AutoState.STOP;
                 telemetry.addData("Running trajectory " + trajIndex + " out of ", trajectoryList.size());
                 telemetry.addData("runtime", runtime.seconds());
+                telemetry.addData("error", drivetrain.getLastError());
                 telemetry.addData("state: ", autoState);
                 telemetry.addData("alliance: ", alliance);
                 telemetry.addData("side: ", side);
