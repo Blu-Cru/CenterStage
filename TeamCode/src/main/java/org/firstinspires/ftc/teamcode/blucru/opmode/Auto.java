@@ -122,6 +122,7 @@ public class Auto extends LinearOpMode {
                     telemetry.addData("Park: ", parkType);
                     telemetry.addData("Alliance: ", alliance);
                     telemetry.addData("Side: ", side);
+                    telemetry.addData("camera state: ", cvMaster.visionPortal.getCameraState());
                     telemetry.addData("POSITION: ", cvMaster.propDetector.position);
                     telemetry.addData("average 0", cvMaster.propDetector.average0);
                     telemetry.addData("average 1", cvMaster.propDetector.average1);
