@@ -260,7 +260,7 @@ public class Cycles {
                 .waitSeconds(INTAKE_1_TIME)
 
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(stackHeight - 2);
+                    robot.intake.dropToStack(stackHeight - 1);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
@@ -330,7 +330,7 @@ public class Cycles {
                 .waitSeconds(INTAKE_1_TIME)
                 // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(stackHeight - 2);
+                    robot.intake.dropToStack(stackHeight - 1);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
@@ -401,7 +401,7 @@ public class Cycles {
 
                 // drop to ground
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_2_TIME, () -> {
-                    robot.intake.dropToStack(stackHeight - 2);
+                    robot.intake.dropToStack(stackHeight - 1);
                 })
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {

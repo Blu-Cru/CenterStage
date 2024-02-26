@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -9,27 +10,24 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
+@Config
 @TeleOp(name = "intake test", group = "TeleOp")
 public class IntakeTest extends LinearOpMode {
+    public static int stackHeight = 4;
+    Robot robot;
     Intake intake;
     Drivetrain drivetrain;
     double horz, vert, rotate;
-
-    Gamepad lastGamepad1;
-    Gamepad lastGamepad2;
 
     RobotState robotState;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
-        Drivetrain drivetrain = robot.addDrivetrain(true);
-        Intake intake = robot.addIntake();
+        robot = new Robot(hardwareMap);
+        drivetrain = robot.addDrivetrain(true);
+        intake = robot.addIntake();
 
         drivetrain.setDrivePower(0.8);
-
-        lastGamepad1 = new Gamepad();
-        lastGamepad2 = new Gamepad();
 
         robot.init();
 
@@ -46,37 +44,25 @@ public class IntakeTest extends LinearOpMode {
                 gamepad1.rumble(150);
             }
 
-            if(gamepad1.b) {
-                drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
-            } else if (gamepad1.x) {
-                drivetrain.driveToHeading(horz, vert, 0);
-            } else {
-                drivetrain.drive(horz, vert, rotate);
-            }
+            if(gamepad1.b) drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
+            else if (gamepad1.x) drivetrain.driveToHeading(horz, vert, 0);
+            else drivetrain.drive(horz, vert, rotate);
 
-            if(gamepad2.left_trigger > 0.1) {
-                intake.setIntakePower(gamepad2.left_trigger);
-            } else if (gamepad2.right_trigger > 0.1){
-                intake.setIntakePower(-gamepad2.right_trigger);
-            } else {
-                intake.setIntakePower(0);
-            }
 
-            if(gamepad2.a) {
-                intake.downIntakeWrist();
-            } else {
-                intake.retractIntakeWrist();
-            }
+            if(gamepad1.left_trigger > 0.1) intake.setIntakePower(gamepad1.left_trigger);
+            else if (gamepad1.right_trigger > 0.1) intake.setIntakePower(-gamepad1.right_trigger);
+            else intake.setIntakePower(0);
 
-            write(robot);
+            if(gamepad1.a) intake.downIntakeWrist();
+            else if(gamepad1.y) intake.dropToStack(stackHeight);
+            else intake.retractIntakeWrist();
+
+            write();
         }
     }
 
-    public void write(Robot robot) {
+    public void write() {
         robot.write();
-
-        lastGamepad1.copy(gamepad1);
-        lastGamepad2.copy(gamepad2);
 
         telemetry.addData("robot state", robotState);
         robot.telemetry(telemetry);
