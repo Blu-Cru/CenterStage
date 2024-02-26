@@ -80,8 +80,9 @@ public class Duo extends LinearOpMode {
 
     public void initialize() {
         robotState = RobotState.RETRACT;
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap); // initialize robot
 
+        // add subsystems
         drivetrain = robot.addDrivetrain(true);
         outtake = robot.addOuttake();
         intake = robot.addIntake();
@@ -93,8 +94,8 @@ public class Duo extends LinearOpMode {
 
         robot.init();
 
-        alliance = Initialization.alliance;
-        boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
+        alliance = Initialization.alliance; // set alliance based on auto
+        boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set board heading based on alliance
     }
 
     public void read() {
@@ -107,17 +108,14 @@ public class Duo extends LinearOpMode {
         double vert = -gamepad1.left_stick_y;
         double rotate = -gamepad1.right_stick_x;
 
-        // resets heading offset (face forwards)
+        // resets heading offset (face away from board)
         if(gamepad1.right_stick_button) {
             drivetrain.resetHeading(boardHeading);
             gamepad1.rumble(100);
         }
-        if(gamepad1.b) {
-            drivetrain.driveToHeading(horz, vert, boardHeading);
-        } else if(gamepad1.x) {
-            drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI);
-        } else
-            drivetrain.drive(horz, vert, rotate);
+        if(gamepad1.b) drivetrain.driveToHeading(horz, vert, boardHeading); // drive to outtake heading
+        else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI); // drive to opposite outtake heading
+        else drivetrain.drive(horz, vert, rotate); // drive normally
 
         // INTAKE
         if(gamepad2.left_bumper && outtake.liftIntakeReady()) {
@@ -163,18 +161,9 @@ public class Duo extends LinearOpMode {
                     outtakeTimer.reset();
                 }
 
-                if(gamepad2.x) {
-                    robotState = RobotState.LIFTING;
-                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                }
-                if(gamepad2.y) {
-                    robotState = RobotState.LIFTING;
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                }
-                if(gamepad2.b) {
-                    robotState = RobotState.LIFTING;
-                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
-                }
+                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
@@ -196,7 +185,7 @@ public class Duo extends LinearOpMode {
                 } else outtake.setTurretAngle(270);
 
                 // WRIST CONTROL
-                if(Math.abs(outtake.getTurretAngle() - 270) < 5) {
+                if(outtake.turret.isCentered()) {
                     if(gamepad2.dpad_down && !lastDown2) outtake.toggleWrist();
                 } else outtake.extendWrist();
                 lastDown2 = gamepad2.dpad_down;

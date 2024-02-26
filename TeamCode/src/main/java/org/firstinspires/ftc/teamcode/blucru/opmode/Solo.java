@@ -124,14 +124,15 @@ public class Solo extends LinearOpMode {
         deltaTime = totalTimer.milliseconds() - lastTime;
         lastTime = totalTimer.milliseconds();
 
+        // write telemetry only some loops to reduce loop times
         loop++;
-        if(loop > 10) {
+        if(loop > 50) {
             telemetry.addData("robot state", robotState);
             robot.telemetry(telemetry);
             telemetry.addData("loop time", deltaTime);
             telemetry.addData("alliance", alliance);
             telemetry.update();
-            loop = 0;
+            loop = 0; // reset loop counter
         }
     }
 

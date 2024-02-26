@@ -188,7 +188,7 @@ public class Auto extends LinearOpMode {
 
                     break;
                 case STOP:
-                    drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
+                    drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0)); // stop the robot
 
                     if(runtime.seconds() > 29.5) {
                         robot.outtake.lift.setTargetPos(0);

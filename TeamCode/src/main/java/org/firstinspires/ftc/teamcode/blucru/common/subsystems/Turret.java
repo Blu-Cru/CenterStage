@@ -47,6 +47,10 @@ public class Turret implements Subsystem{
         return TURRET_RADIUS * Math.sin(Math.toRadians(targetAngle)) - Math.abs(BUCKET_WIDTH * Math.cos(Math.toRadians(targetAngle)));
     }
 
+    public boolean isCentered() {
+        return Math.abs(targetAngle - 270) < 5;
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("turret angle", targetAngle);
     }

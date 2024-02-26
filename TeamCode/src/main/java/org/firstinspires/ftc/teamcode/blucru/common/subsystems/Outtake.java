@@ -34,7 +34,7 @@ public class Outtake implements Subsystem{
     Servo wrist, backLock, frontLock;
     public Lift lift;
 
-    Turret turret;
+    public Turret turret;
 
     public boolean outtaking;
 
@@ -82,12 +82,15 @@ public class Outtake implements Subsystem{
         lift.write();
         turret.write();
 
+        // write wrist position
         if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
         else if(!wristRetracted && wrist.getPosition() != WRIST_OUTTAKE) wrist.setPosition(WRIST_OUTTAKE);
 
+        // write back lock position
         if(backLocked && backLock.getPosition() != BACK_LOCKED) backLock.setPosition(BACK_LOCKED);
         else if(!backLocked && backLock.getPosition() != BACK_UNLOCKED) backLock.setPosition(BACK_UNLOCKED);
 
+        // write front lock position
         if(frontLocked && frontLock.getPosition() != FRONT_LOCKED) frontLock.setPosition(FRONT_LOCKED);
         else if(!frontLocked && frontLock.getPosition() != FRONT_UNLOCKED) frontLock.setPosition(FRONT_UNLOCKED);
     }
@@ -102,6 +105,7 @@ public class Outtake implements Subsystem{
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
+    // increase target height by one pixel height
     public void incrementTargetHeight(int pixels) {
         setTargetHeight(targetHeight + pixels * PIXEL_HEIGHT);
     }
