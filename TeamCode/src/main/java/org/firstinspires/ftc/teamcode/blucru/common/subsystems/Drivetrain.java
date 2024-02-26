@@ -10,8 +10,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double OUTTAKE_DISTANCE = 3.6; // correct distance for outtake for distance PID
     public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches
 
+    public DrivetrainState drivetrainState;
     boolean isTeleOp;
     public double drivePower = 0.5;
     private double dt;
@@ -36,6 +39,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     boolean readingDistance; // NOT USED
     ArrayList<Double> errors; // NOT USED
 
+    MotionProfile headingMotionProfile;
     PIDController headingPID;
     double targetHeading = 0;
     double heading; // estimated heading
@@ -51,6 +55,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
+        this.drivetrainState = DrivetrainState.IDLE;
         this.isTeleOp = isTeleOp;
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
@@ -67,6 +72,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastRotate = 0;
             lastTime = System.currentTimeMillis();
             heading = getOdoHeading();
+
+            headingMotionProfile = new MotionProfile(heading, heading);
         }
     }
 
@@ -77,6 +84,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastTime = System.currentTimeMillis();
 
             heading = getOdoHeading();
+        }
+
+        switch (drivetrainState) {
+            case IDLE:
+                break;
+            case MOTION_PROFILE:
+                break;
         }
 
         pose = this.getPoseEstimate();
