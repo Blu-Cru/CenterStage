@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
-@TeleOp(name = "lift test", group = "TeleOp")
+@TeleOp(name = "lift test", group = "test")
 public class LiftTest extends LinearOpMode {
     public static double maxVelocity = 10000.0;
     public static double maxAcceleration = 7000.0;

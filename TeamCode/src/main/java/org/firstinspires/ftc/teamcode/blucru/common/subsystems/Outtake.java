@@ -168,6 +168,14 @@ public class Outtake implements Subsystem{
         backLocked = true;
     }
 
+    public Lift getLift() {
+        return lift;
+    }
+
+    public Turret getTurret() {
+        return turret;
+    }
+
     public void telemetry(Telemetry telemetry) {
         lift.telemetry(telemetry);
         turret.telemetry(telemetry);

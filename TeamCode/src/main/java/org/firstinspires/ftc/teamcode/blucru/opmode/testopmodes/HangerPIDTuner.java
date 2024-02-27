@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
 @Disabled
-@TeleOp(name = "hang PID tuner", group = "TeleOp")
+@TeleOp(name = "hang PID tuner", group = "tuner")
 public class HangerPIDTuner extends LinearOpMode {
     private PIDController controller;
     public static double p = 0, i = 0, d = 0;

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-@TeleOp(name = "outtake test", group = "TeleOp")
+@TeleOp(name = "outtake test", group = "test")
 public class OuttakeTest extends LinearOpMode {
     Robot robot;
     Drivetrain drivetrain;

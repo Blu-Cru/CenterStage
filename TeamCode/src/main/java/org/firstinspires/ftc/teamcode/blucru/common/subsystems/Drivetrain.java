@@ -313,8 +313,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             telemetry.addData("reading distance", readingDistance);
         }
         telemetry.addData("heading", heading);
-        telemetry.addData("odo heading", odoHeading);
-        telemetry.addData("imu heading", imuHeading);
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
     }
@@ -322,6 +320,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("dt", dt);
         telemetry.addData("last drive vector", lastDriveVector);
+        telemetry.addData("odo heading", odoHeading);
+        telemetry.addData("imu heading", imuHeading);
         distanceSensors.telemetry(telemetry);
     }
 }

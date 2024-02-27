@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
-@TeleOp(name = "turn PID tuner", group = "TeleOp")
+@TeleOp(name = "turn PID tuner", group = "tuner")
 public class TurnPIDTuner extends LinearOpMode {
     public static double p = 1.2, i = 0, d = 0;
     public static double target = 0;

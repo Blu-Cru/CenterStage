@@ -100,6 +100,10 @@ public class Intake implements Subsystem{
         return intakeRoller.getPower();
     }
 
+    public IntakeWrist getIntakeWrist() {
+        return intakeWrist;
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake power", intakePower);
     }

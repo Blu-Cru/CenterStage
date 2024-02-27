@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Config
-@TeleOp(name = "Distance test", group = "TeleOp")
+@TeleOp(name = "Distance test", group = "test")
 public class DistancePIDTest extends LinearOpMode {
     public static double Q = 0.3;
     public static double R = 0.3;

@@ -14,6 +14,7 @@ public class Robot {
 
     public Outtake outtake;
     public Intake intake;
+    public IntakeWrist intakeWrist;
     public Drivetrain drivetrain;
     public Hanger hanger;
     public Plane plane;
@@ -66,6 +67,12 @@ public class Robot {
         intake = new Intake(hardwareMap);
         subsystems.add(intake);
         return intake;
+    }
+
+    public IntakeWrist addIntakeWrist() {
+        intakeWrist = new IntakeWrist(hardwareMap);
+        subsystems.add(intakeWrist);
+        return intakeWrist;
     }
 
     public Drivetrain addDrivetrain(boolean isTeleOp) {

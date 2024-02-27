@@ -14,7 +14,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@TeleOp(name="vision test", group="Linear Opmode")
+@TeleOp(name="vision test", group="test")
 public class VisionTest extends LinearOpMode {
     CVMaster cvMaster;
     Alliance alliance = Alliance.BLUE;

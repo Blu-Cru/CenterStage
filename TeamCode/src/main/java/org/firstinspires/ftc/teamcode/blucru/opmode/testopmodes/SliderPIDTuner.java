@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 
 @Config
-@TeleOp(name = "slide PID tuner", group = "TeleOp")
+@TeleOp(name = "slide PID tuner", group = "tuner")
 public class SliderPIDTuner extends LinearOpMode {
     private PIDController controller;
     public static double p = 0.01, i = 0, d = 0.0002;

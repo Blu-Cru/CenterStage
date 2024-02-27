@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 
-@TeleOp(name = "drive test", group = "TeleOp")
+@TeleOp(name = "drive test", group = "test")
 public class DriveTest extends LinearOpMode {
     Robot robot;
 

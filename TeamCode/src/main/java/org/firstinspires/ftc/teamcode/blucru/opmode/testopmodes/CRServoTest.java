@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 @Config
-@TeleOp(name = "crservo test", group = "TeleOp")
+@TeleOp(name = "crservo test", group = "hardware test")
 public class CRServoTest extends LinearOpMode {
     public static String name = "intake roller";
     @Override

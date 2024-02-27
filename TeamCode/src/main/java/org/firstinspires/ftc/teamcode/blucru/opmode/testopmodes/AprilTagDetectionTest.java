@@ -47,7 +47,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 
-@TeleOp(name = "AprilTag test", group = "Concept")
+@TeleOp(name = "AprilTag test", group = "test")
 public class AprilTagDetectionTest extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
