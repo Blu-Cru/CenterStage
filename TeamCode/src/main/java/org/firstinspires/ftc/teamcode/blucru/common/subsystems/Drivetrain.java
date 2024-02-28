@@ -17,11 +17,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4;
     public static double MAX_ACCEL_DRIVE_DELTA = 5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
+    public static double HEADING_DECELERATION = 1; // radians per second, for calculating new target heading after turning
     public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants for heading
     public static double HEADING_PID_TOLERANCE = 0.05; // radians
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04; // PID constants for distance sensors
@@ -106,7 +108,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void driveMaintainHeading(double x, double y, double rotate) {
         if(Math.abs(rotate) > 0.05) drive(x, y, rotate);
         else {
-            if(lastDriveVector.norm() < 0.1) targetHeading = heading;
+            Vector2d driveVector = new Vector2d(x, y);
+            if(lastDriveVector.norm() < 0.1 && driveVector.norm() < 0.1) targetHeading = heading;
             driveToHeading(x, y, targetHeading);
         }
     }
