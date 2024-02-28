@@ -112,6 +112,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void drive(double x, double y, double rotate) {
+        drivetrainState = DrivetrainState.IDLE;
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         x = driveVector.getX();
@@ -198,9 +199,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         x = driveVector.getX();
         y = driveVector.getY();
-        double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
 
-        setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate));
+        driveToHeading(x, y, targetHeading);
     }
 
     public Vector2d setComponent(Vector2d vector, double component, double angle) {
