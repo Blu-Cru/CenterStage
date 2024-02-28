@@ -63,6 +63,7 @@ public class TurnDecelTest extends LinearOpMode {
                         startDecelHeading = drivetrain.getHeading(); // get the current heading
                         startDecelVelocity = drivetrain.getPoseVelocity().getHeading(); // get the current heading velocity
                         startDecelTime = runtime.seconds(); // get the current time
+                        gamepad1.rumble(100); // rumble the controller to indicate the start of deceleration
                     }
 
                     telemetry.addLine("Use right stick to turn robot");
@@ -72,13 +73,17 @@ public class TurnDecelTest extends LinearOpMode {
                     if(drivetrain.isStopped() && timeSinceSecs(startDecelTime) > 1) {
                         state = State.STOP;
                         endHeading = drivetrain.getHeading();
+                        gamepad1.rumble(100); // rumble the controller to indicate the end of deceleration
                     }
                     telemetry.addLine("Robot is decelerating");
                     break;
                 case STOP:
                     drivetrain.drive(0, 0, 0); // stop the robot
 
-                    if(gamepad1.b) state = State.TURNING; // reset the op mode
+                    if(gamepad1.b) {
+                        state = State.TURNING; // reset the op mode
+                        gamepad1.rumble(100); // rumble the controller to indicate the reset
+                    }
 
                     telemetry.addLine("Robot has stopped");
                     telemetry.addData("Start Heading", startDecelHeading);
