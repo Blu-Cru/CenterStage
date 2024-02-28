@@ -330,6 +330,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         readingDistance = false;
     }
 
+    public double getHeading() {return heading;}
+
+    public boolean isStopped() {
+        Pose2d poseVelocity = getPoseVelocity();
+        return poseVelocity.vec().norm() < 0.1 && Math.abs(poseVelocity.getHeading()) < 0.1;
+    }
+
     public void telemetry(Telemetry telemetry) {
         if(isTeleOp) {
             telemetry.addData("drive power", drivePower);
