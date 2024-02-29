@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
@@ -21,6 +22,7 @@ theoretical coefficient to angular velocity squared. Doing multiple tests at dif
 which theory is correct.
 */
 
+@TeleOp(name = "Turn Decel Test", group = "test")
 public class TurnDecelTest extends LinearOpMode {
     Robot robot;
     Drivetrain drivetrain;
@@ -44,7 +46,9 @@ public class TurnDecelTest extends LinearOpMode {
         drivetrain = robot.addDrivetrain(true);
         intake = robot.addIntake();
         state = State.TURNING;
+        drivetrain.setDrivePower(1);
 
+        robot.init();
 
         waitForStart();
         runtime = new ElapsedTime(); // start timer
@@ -53,11 +57,13 @@ public class TurnDecelTest extends LinearOpMode {
             telemetry.addData("STATE:", state);
             switch (state) {
                 case TURNING:
+                    double horz = gamepad1.left_stick_x;
+                    double vert = -gamepad1.left_stick_y;
                     double rotate = -gamepad1.right_stick_x;
-                    drivetrain.drive(0, 0, rotate);
+                    drivetrain.drive(horz, vert, rotate);
 
-                    // press a to calculate deceleration
-                    if (gamepad1.a) {
+                    // press dpad up to calculate deceleration
+                    if (gamepad1.dpad_up) {
                         state = State.DECEL; // change op mode state
                         drivetrain.drive(0, 0, 0); // stop the robot
                         startDecelHeading = drivetrain.getHeading(); // get the current heading
@@ -66,11 +72,17 @@ public class TurnDecelTest extends LinearOpMode {
                         gamepad1.rumble(100); // rumble the controller to indicate the start of deceleration
                     }
 
+                    if(gamepad1.right_stick_button) {
+                        drivetrain.resetHeading(90);
+                        gamepad1.rumble(200);
+                    }
+
                     telemetry.addLine("Use right stick to turn robot");
                     telemetry.addLine("Press a to calculate deceleration");
+                    telemetry.addData("heading:", drivetrain.getHeading());
                     break;
                 case DECEL:
-                    if(drivetrain.isStopped() && timeSinceSecs(startDecelTime) > 1) {
+                    if(drivetrain.isStopped() && timeSinceSecs(startDecelTime) > 1.5) {
                         state = State.STOP;
                         endHeading = drivetrain.getHeading();
                         gamepad1.rumble(100); // rumble the controller to indicate the end of deceleration
