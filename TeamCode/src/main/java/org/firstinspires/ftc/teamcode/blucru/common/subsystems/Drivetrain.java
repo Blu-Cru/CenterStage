@@ -23,7 +23,7 @@ import java.util.Vector;
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4;
     public static double MAX_ACCEL_DRIVE_DELTA = 5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
-    public static double HEADING_DECELERATION = 16; // radians per second, for calculating new target heading after turning
+    public static double HEADING_DECELERATION = 12; // radians per second, for calculating new target heading after turning
     public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants for heading
     public static double HEADING_PID_TOLERANCE = 0.05; // radians
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04; // PID constants for distance sensors
@@ -34,9 +34,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public DrivetrainState drivetrainState;
     boolean isTeleOp;
     public double drivePower = 0.5;
-    private double dt;
-    private Pose2d pose;
-    private double lastTime;
+    double dt;
+    Pose2d pose;
+    Pose2d velocity;
+    double lastTime;
 
     boolean readingDistance; // NOT USED
     ArrayList<Double> errors; // NOT USED
@@ -70,6 +71,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(isTeleOp) {
             fieldCentric = true;
             initializePose();
+            velocity = new Pose2d(0,0,0);
             lastDriveVector = new Vector2d(0,0);
             lastRotate = 0;
             lastTime = System.currentTimeMillis();
@@ -86,6 +88,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastTime = System.currentTimeMillis();
 
             heading = getOdoHeading();
+            velocity = getPoseVelocity();
         }
 
         switch (drivetrainState) {
@@ -106,18 +109,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveMaintainHeading(double x, double y, double rotate) {
-        if(Math.abs(rotate) > 0.05) {
+        if(Math.abs(rotate) > 0.01) {
             drive(x, y, rotate);
-        }
-        else {
-            if(lastRotate > 0.05) {
-                targetHeading =
+        } else {
+            if(lastRotate > 0.01) {
+                targetHeading = calculateNewTargetHeading();
             }
             Vector2d driveVector = new Vector2d(x, y);
             if(lastDriveVector.norm() < 0.1 && driveVector.norm() < 0.1) targetHeading = heading;
             driveToHeading(x, y, targetHeading);
         }
-        lastRotate = rotate;
     }
 
     public void drive(double x, double y, double rotate) {
@@ -126,6 +127,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         x = driveVector.getX();
         y = driveVector.getY();
+        lastRotate = rotate;
 
         setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
     }
@@ -197,25 +199,24 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         distanceSensors.read(heading);
         Vector2d distanceVector = new Vector2d(x,y);
 
-        Vector2d driveVector = calculateDriveVector(distanceVector);
-
         double component;
         if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
             component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
             // set component in direction opposite target heading
-            driveVector = setComponent(driveVector, component, -(heading - targetHeading));
+            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
         }
 
-        x = driveVector.getX();
-        y = driveVector.getY();
+        x = distanceVector.getX();
+        y = distanceVector.getY();
 
         driveToHeading(x, y, targetHeading);
     }
 
+    // set the component of a vector in a direction
     public Vector2d setComponent(Vector2d vector, double component, double angle) {
-        vector = vector.rotated(-angle);
-        vector = new Vector2d(component, vector.getY());
-        return vector.rotated(angle);
+        vector = vector.rotated(-angle); // rotate so the component is in the x direction
+        vector = new Vector2d(component, vector.getY()); // set the x component
+        return vector.rotated(angle); // rotate back
     }
 
     public double getDistanceSensorAngleError(double targetHeading) {
@@ -231,7 +232,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public double calculateNewTargetHeading() {
         // vf^2 = vi^2 + 2a(xf - xi)
-        // 0 = v
+        // 0 = velocity * velocity + 2 * -HEADING_DECELERATION * (targetHeading - heading)
+        // velocity * velocity = 2 * HEADING_DECELERATION * (targetHeading - heading)
+        // target heading = heading + 0.5 * velocity * velocity / HEADING_DECELERATION
+        if (velocity.getHeading() > 0) { // if velocity is positive, add to heading
+            return heading + 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
+        } else { // if velocity is negative, subtract to heading
+            return heading - 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
+        }
     }
 
     public boolean followerIsWithinTolerance() {
