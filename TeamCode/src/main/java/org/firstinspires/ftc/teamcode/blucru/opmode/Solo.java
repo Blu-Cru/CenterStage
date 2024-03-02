@@ -54,16 +54,16 @@ public class Solo extends LinearOpMode {
                 // intake/outtake
                 if(gamepad1.left_trigger > 0.3) {
                     intake.setIntakePower(gamepad1.left_trigger);
-                    outtake.unlock();
+                    outtake.locks.unlockAll();
                 } else if(gamepad1.right_trigger > 0.3) {
                     intake.setIntakePower(-gamepad1.right_trigger);
-                    outtake.lock();
+                    outtake.locks.lockAll();
                 } else if(timeSince(stopIntakeTimeSeconds) < 0.5) {
                     intake.setIntakePower(-1);
-                    outtake.lock();
+                    outtake.locks.lockAll();
                 } else {
                     intake.setIntakePower(0);
-                    outtake.lock();
+                    outtake.locks.lockAll();
                 }
 
                 // if LT was released, start timer
@@ -83,9 +83,9 @@ public class Solo extends LinearOpMode {
 // reverse intake
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
 // lock/unlock for depositing
-                if(gamepad1.left_bumper) outtake.unlockFrontLockBack();
-                else if(gamepad1.right_bumper) outtake.unlock();
-                else outtake.lock();
+                if(gamepad1.left_bumper) outtake.locks.unlockFrontLockBack();
+                else if(gamepad1.right_bumper) outtake.locks.unlockAll();
+                else outtake.locks.lockAll();
 
                 break;
         }

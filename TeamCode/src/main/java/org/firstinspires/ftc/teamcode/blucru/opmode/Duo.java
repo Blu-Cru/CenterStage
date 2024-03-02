@@ -120,15 +120,15 @@ public class Duo extends LinearOpMode {
         // INTAKE
         if(gamepad2.left_bumper && outtake.liftIntakeReady()) {
             intake.setIntakePower(1);
-            outtake.unlock();
+            outtake.locks.unlockAll();
         } else if(gamepad2.right_bumper) {
             intake.setIntakePower(-1);
-            outtake.lock();
+            outtake.locks.lockAll();
         } else {
             intake.setIntakePower(0);
-            if (gamepad2.dpad_left) outtake.unlockFrontLockBack();
-            else if(gamepad2.dpad_right) outtake.unlock();
-            else outtake.lock();
+            if (gamepad2.dpad_left) outtake.locks.unlockFrontLockBack();
+            else if(gamepad2.dpad_right) outtake.locks.unlockAll();
+            else outtake.locks.lockAll();
         }
 
         // toggle intake wrist
