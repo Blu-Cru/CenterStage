@@ -8,8 +8,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class MotionProfile {
     public double vMax;
     public double aMax;
-    public int xTarget;
-    public int xI;
+    public double xTarget;
+    public double xI;
     public double vI;
     public double flip;
     public boolean decel;
@@ -21,7 +21,7 @@ public class MotionProfile {
     double a0, a1, a2, a3;
     double distance;
 
-    public MotionProfile(int xTarget, int xI) {
+    public MotionProfile(double xTarget, double xI) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = 1000;
@@ -35,7 +35,7 @@ public class MotionProfile {
         calculate();
     }
 
-    public MotionProfile(int xTarget, int xI, double vMax, double aMax) {
+    public MotionProfile(double xTarget, double xI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
@@ -51,7 +51,7 @@ public class MotionProfile {
         calculate();
     }
 
-    public MotionProfile(int xTarget, int xI, double vI, double vMax, double aMax) {
+    public MotionProfile(double xTarget, double xI, double vI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
         this.vMax = vMax;
@@ -135,25 +135,23 @@ public class MotionProfile {
         }
     }
 
-    public int calculateTargetPosition(double time) {
-        int instantTargetPos;
+    public double getInstantTargetPosition(double time) {
+        double instantTargetPos;
         double dt;
 
         if(time < t0) {
             dt = time;
-            instantTargetPos = (int) ((vI * dt) + ((aMax * dt * dt / 2.0) * flip) + xI);
+            instantTargetPos = (vI * dt) + ((aMax * dt * dt / 2.0) * flip) + xI;
         } else if(time < t0 + t1) {
             dt = time - t0;
-            instantTargetPos = (int) ((d0 + 0.5 * aMax * dt * dt) * flip + xI);
+            instantTargetPos = (d0 + 0.5 * aMax * dt * dt) * flip + xI;
         } else if(time < t0 + t1 + t2) {
             dt = time - t0 - t1;
-            instantTargetPos = (int) ((d0 + d1 + vMax * dt) * flip + xI);
+            instantTargetPos = (d0 + d1 + vMax * dt) * flip + xI;
         } else if(time < t0 + t1 + t2 + t3) {
             dt = time - t0 - t1 - t2;
-            instantTargetPos = (int) ((d0 + d1 + d2 + vMax * dt - 0.5 * aMax * dt * dt) * flip + xI);
-        } else {
-            instantTargetPos = xTarget;
-        }
+            instantTargetPos = (d0 + d1 + d2 + vMax * dt - 0.5 * aMax * dt * dt) * flip + xI;
+        } else instantTargetPos = xTarget;
 
         return instantTargetPos;
     }

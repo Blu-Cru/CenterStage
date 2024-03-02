@@ -97,7 +97,7 @@ public class Lift implements Subsystem{
 
         switch(liftState) {
             case MoPro:
-                targetPos = Range.clip(motionProfile.calculateTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
+                targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
                 if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
                     power = 0;
                     resetEncoder();

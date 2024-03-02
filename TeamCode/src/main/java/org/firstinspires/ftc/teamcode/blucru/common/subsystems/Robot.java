@@ -18,6 +18,7 @@ public class Robot {
     public IntakeWrist intakeWrist;
     public Drivetrain drivetrain;
     public Hanger hanger;
+    public IntakeWrist intakeWrist;
     public Plane plane;
     public PurplePixelHolder purplePixelHolder;
     public CVMaster cvMaster;
@@ -87,6 +88,12 @@ public class Robot {
         hanger = new Hanger(hardwareMap);
         subsystems.add(hanger);
         return hanger;
+    }
+
+    public IntakeWrist addIntakeWrist() {
+        intakeWrist = new IntakeWrist(hardwareMap);
+        subsystems.add(intakeWrist);
+        return intakeWrist;
     }
 
     public Plane addPlane() {

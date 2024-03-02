@@ -34,9 +34,9 @@ public class IntakeTest extends LinearOpMode {
         while(opModeIsActive()) {
             robot.read();
 
-            vert = Math.pow(-gamepad1.left_stick_y, 3);
-            horz = Math.pow(gamepad1.left_stick_x, 3);
-            rotate = Math.pow(-gamepad1.right_stick_x, 3);
+            vert = -gamepad1.left_stick_y;
+            horz = gamepad1.left_stick_x;
+            rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading(90);
