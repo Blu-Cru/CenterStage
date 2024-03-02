@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+// park trajectories
 public class Parks {
     public static double reflect = 1;
 

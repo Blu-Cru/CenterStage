@@ -10,8 +10,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 import java.util.ArrayList;
 
 public class Robot {
-    private HardwareMap hardwareMap;
+    HardwareMap hardwareMap;
 
+    // all subsystems
     public Outtake outtake;
     public Intake intake;
     public IntakeWrist intakeWrist;
@@ -21,7 +22,8 @@ public class Robot {
     public PurplePixelHolder purplePixelHolder;
     public CVMaster cvMaster;
 
-    private ArrayList<Subsystem> subsystems;
+    // list of all subsystems for easy iteration
+    ArrayList<Subsystem> subsystems;
 
     public Robot(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;

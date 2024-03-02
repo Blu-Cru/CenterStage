@@ -46,7 +46,7 @@ public class LiftTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.init();
-        outtake.lift.liftState = LiftState.AUTO;
+        outtake.lift.liftState = LiftState.PID;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -102,7 +102,7 @@ public class LiftTest extends LinearOpMode {
                 outtake.lift.power = -gamepad1.left_stick_y;
             }
             if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
-                outtake.lift.liftState = LiftState.AUTO;
+                outtake.lift.liftState = LiftState.PID;
             }
 
             robot.write();

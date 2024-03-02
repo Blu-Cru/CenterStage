@@ -48,7 +48,7 @@ public class Solo extends LinearOpMode {
                 outtake.outtaking = false;
                 // drop down
                 if(gamepad1.a && gamepad1.left_bumper) intake.dropToStack(3);
-                else if(gamepad1.a) intake.downIntakeWrist();
+                else if(gamepad1.a) intake.dropToGround();
                 else intake.retractIntakeWrist();
 
                 // intake/outtake

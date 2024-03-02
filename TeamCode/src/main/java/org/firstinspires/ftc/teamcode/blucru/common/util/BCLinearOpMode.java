@@ -53,8 +53,8 @@ public class BCLinearOpMode extends LinearOpMode {
 
             // calculate average loop time
             loopTimeSum += runtime.milliseconds() - lastTime;
-            loopTimeCount++;
             lastTime = runtime.milliseconds();
+            loopTimeCount++;
 
             if(timeSinceMillis(lastTelemetryTime) > 100) { // update telemetry every 0.1 seconds
                 lastTelemetryTime = runtime.milliseconds();
@@ -78,16 +78,9 @@ public class BCLinearOpMode extends LinearOpMode {
 
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
 
-    public void addOuttake() {
-        outtake = robot.addOuttake();
-        lift = outtake.getLift();
-        turret = outtake.getTurret();
-    }
+    public void addOuttake() {outtake = robot.addOuttake();}
 
-    public void addIntake() {
-        intake = robot.addIntake();
-        intakeWrist = intake.getIntakeWrist();
-    }
+    public void addIntake() {intake = robot.addIntake();}
 
     public void addIntakeWrist() {intakeWrist = robot.addIntakeWrist();}
 

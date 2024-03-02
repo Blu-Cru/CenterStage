@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 
@@ -56,7 +55,7 @@ public class Lift implements Subsystem{
         liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
         liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
 
-        liftState = LiftState.AUTO;
+        liftState = LiftState.PID;
 
         targetPos = 0;
         velocity = 0;
@@ -109,7 +108,7 @@ public class Lift implements Subsystem{
                     power = PID;
                 }
                 break;
-            case AUTO:
+            case PID:
                 // if lift is down and stalling, reset encoder and set power to 0
                 if(currentPos < -10 && targetPos == 0) {
                     power = 0;
@@ -182,7 +181,7 @@ public class Lift implements Subsystem{
     }
 
     public void setTargetPos(int pos) {
-        liftState = LiftState.AUTO;
+        liftState = LiftState.PID;
         targetPos = Range.clip(pos, MIN_POS, MAX_POS);
     }
 
@@ -202,11 +201,11 @@ public class Lift implements Subsystem{
         return currentPos;
     }
 
-    public int toTicks(double inches) {
+    public int toTicks(double inches) { // convert inches to motor ticks
         return (int) (inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV);
     }
 
-    public double toInches(double ticks) {
+    public double toInches(double ticks) { // convert motor ticks to inches
         return ticks * PULLEY_CIRCUMFERENCE / TICKS_PER_REV;
     }
 

@@ -25,10 +25,6 @@ public class BCOpmodeTest extends BCLinearOpMode {
         drivetrain.drive(vert, horz, rotate);
     }
 
-    public void write() {
-
-    }
-
     public void telemetry() {
         telemetry.addData("testing opmode", "telemetry");
     }

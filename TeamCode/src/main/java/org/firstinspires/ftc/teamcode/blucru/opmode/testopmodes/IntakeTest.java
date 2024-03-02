@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
@@ -53,7 +52,7 @@ public class IntakeTest extends LinearOpMode {
             else if (gamepad1.right_trigger > 0.1) intake.setIntakePower(-gamepad1.right_trigger);
             else intake.setIntakePower(0);
 
-            if(gamepad1.a) intake.downIntakeWrist();
+            if(gamepad1.a) intake.dropToGround();
             else if(gamepad1.y) intake.dropToStack(stackHeight);
             else intake.retractIntakeWrist();
 

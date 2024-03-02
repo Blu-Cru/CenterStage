@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
@@ -51,7 +50,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(-52 + Poses.FIELD_OFFSET_X, -42 * reflect), Math.toRadians(150))
 
                 // drop intake
-                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
+                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
@@ -65,7 +64,7 @@ public class Cycles {
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 // stop outtaking and retract wrist
@@ -116,7 +115,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(-52 + Poses.FIELD_OFFSET_X, -42 * reflect), Math.toRadians(150))
 
                 // drop intake
-                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
+                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
@@ -130,7 +129,7 @@ public class Cycles {
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 // stop outtaking and retract wrist
@@ -183,7 +182,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(-52 + Poses.FIELD_OFFSET_X, -42 * reflect), Math.toRadians(150))
 
                 // drop intake
-                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT))
+                .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
@@ -197,7 +196,7 @@ public class Cycles {
                 // lock and raise intake, start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 // stop outtaking and retract wrist
@@ -248,7 +247,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
@@ -266,7 +265,7 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
                     robot.intake.setIntakePower(0);
@@ -318,7 +317,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
@@ -336,7 +335,7 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
                     robot.intake.setIntakePower(0);
@@ -388,7 +387,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
@@ -407,7 +406,7 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
                     robot.intake.setIntakePower(0);

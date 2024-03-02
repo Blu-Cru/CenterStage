@@ -145,7 +145,7 @@ public class PreloadDeposits {
                 // lock and start outtake
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
@@ -212,7 +212,7 @@ public class PreloadDeposits {
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 // stop outtake
@@ -292,7 +292,7 @@ public class PreloadDeposits {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
-                    robot.intake.setIntakeWristTargetHeight(Intake.WRIST_AUTO_READY_HEIGHT);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
                 })
                 // stop outtake
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {

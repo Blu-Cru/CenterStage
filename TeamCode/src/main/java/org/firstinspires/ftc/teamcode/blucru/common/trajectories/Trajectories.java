@@ -14,8 +14,6 @@ import java.util.ArrayList;
 public class Trajectories {
     static double reflect = 1;
 
-    ArrayList<TrajectorySequence>[] trajectories = new ArrayList[3];
-
     ArrayList<TrajectorySequence> trajectoriesFar;
     ArrayList<TrajectorySequence> trajectoriesCenter;
     ArrayList<TrajectorySequence> trajectoriesClose;

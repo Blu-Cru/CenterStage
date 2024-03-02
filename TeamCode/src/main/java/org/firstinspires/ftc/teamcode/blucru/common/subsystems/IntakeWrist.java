@@ -12,6 +12,11 @@ public class IntakeWrist implements Subsystem{
     public static double PARALLEL_POS = 0.42;
     public static double RADIUS = 4.7244;
 
+    public static double RETRACT_HEIGHT = 4.7; // inches
+    public static double GROUND_HEIGHT = -1.8; // inches for intaking at ground level
+    public static double STACK1_HEIGHT = -1.2; // inches for intaking at one pixel height level
+    public static double AUTO_MID_HEIGHT = 2.5; // inches for position to be ready to auto stack
+
     Servo wrist;
 
     public double targetAngleDeg; // degrees
@@ -47,6 +52,31 @@ public class IntakeWrist implements Subsystem{
 
     public static double toX(double height) {
         return RADIUS * Math.cos(Math.asin(height / RADIUS));
+    }
+
+    public void dropToStack(int stackHeight) {
+        targetAngleDeg = toDeg(getTargetHeight(stackHeight));
+    }
+
+    public double getTargetHeight(int stackHeight) {
+        if(stackHeight == 0) {
+            return GROUND_HEIGHT; // drop to ground
+        } else {
+            stackHeight = Math.max(0, Math.min(4, stackHeight));
+            return STACK1_HEIGHT + (stackHeight - 1) * 0.5;
+        }
+    }
+
+    public void dropToGround() {
+        targetAngleDeg = toDeg(GROUND_HEIGHT);
+    }
+
+    public void retract() {
+        targetAngleDeg = toDeg(RETRACT_HEIGHT);
+    }
+
+    public void dropToAutoMidPos() {
+        targetAngleDeg = toDeg(AUTO_MID_HEIGHT);
     }
 
     public void telemetry(Telemetry telemetry) {

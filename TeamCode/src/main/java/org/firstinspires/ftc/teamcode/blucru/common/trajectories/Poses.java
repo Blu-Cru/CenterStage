@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+// poses for trajectories
 public class Poses {
     public static double FIELD_OFFSET_X = 0;
     /*

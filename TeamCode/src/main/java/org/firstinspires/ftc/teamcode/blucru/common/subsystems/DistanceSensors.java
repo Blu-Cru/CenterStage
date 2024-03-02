@@ -19,10 +19,10 @@ public class DistanceSensors implements Subsystem {
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
 
+    // kalman filter variables
     public static double Q = 0.4;
     public static double R = 0.4;
     public static int N = 3;
-
 
     double rightDistance;
     double leftDistance;
@@ -33,6 +33,7 @@ public class DistanceSensors implements Subsystem {
     public boolean sensing;
 
     public DistanceSensors(HardwareMap hardwareMap) {
+        // instantiate distance sensors
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "right distance");
         leftDistanceSensor = hardwareMap.get(DistanceSensor.class, "left distance");
     }
@@ -53,6 +54,7 @@ public class DistanceSensors implements Subsystem {
         rightDistance = rightDistanceSensor.getDistance(DistanceUnit.INCH);
         leftDistance = leftDistanceSensor.getDistance(DistanceUnit.INCH);
 
+        // if the distance sensors are sensing, calculate the angle and distance from the wall
         if(rightDistance < DISTANCE_SENSOR_MAX && leftDistance < DISTANCE_SENSOR_MAX) {
             sensing = true;
             angle = Math.atan((rightDistance - leftDistance) / DISTANCE_SENSOR_OFFSET);

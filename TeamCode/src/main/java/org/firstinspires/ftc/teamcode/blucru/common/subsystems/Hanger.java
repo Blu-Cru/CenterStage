@@ -10,11 +10,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Hanger implements Subsystem {
-    public static double p = 0.005, i = 0, d = 0;
+    public static double p = 0.005, i = 0, d = 0; // PID values
 
-    private DcMotorEx hangerMotor;
+    DcMotorEx hangerMotor;
 
-    private double PID;
+    double PID;
     public double power;
     double lastPower;
 
@@ -37,7 +37,7 @@ public class Hanger implements Subsystem {
     }
 
     public void read() {
-        currentPos = hangerMotor.getCurrentPosition();
+//        currentPos = hangerMotor.getCurrentPosition();
     }
 
     public void write() {
@@ -45,7 +45,7 @@ public class Hanger implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("hanger pos", hangerMotor.getCurrentPosition());
+//        telemetry.addData("hanger pos", hangerMotor.getCurrentPosition());
     }
 
     public void setPower(double power) {

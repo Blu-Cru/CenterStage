@@ -132,7 +132,7 @@ public class Duo extends LinearOpMode {
         }
 
         // toggle intake wrist
-        if(gamepad2.a && outtake.liftIntakeReady()) intake.downIntakeWrist();
+        if(gamepad2.a && outtake.liftIntakeReady()) intake.dropToGround();
         else if (gamepad2.dpad_down && outtake.liftIntakeReady()) intake.dropToStack(2);
         else intake.retractIntakeWrist();
 

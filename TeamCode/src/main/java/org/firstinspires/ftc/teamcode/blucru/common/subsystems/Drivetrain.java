@@ -18,11 +18,11 @@ import java.util.ArrayList;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
-    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4;
+    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4; // drive powers for teleop
     public static double MAX_ACCEL_DRIVE_DELTA = 5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1
-    public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02;
+    public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants
     public static double HEADING_PID_TOLERANCE = 0.05; // radians
-    public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04;
+    public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04; // PID constants
     public static double DISTANCE_PID_ANGLE_TOLERANCE = 0.5; // radians
     public static double OUTTAKE_DISTANCE = 3.6;
     public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 15.0; // inches
@@ -75,7 +75,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void read() {
         if(isTeleOp) {
-            updatePoseEstimate();
+            updatePoseEstimate(); //only update pose in teleop because pose is updated in follower in auto
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
@@ -92,6 +92,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     }
 
+    // base drive method
     public void drive(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
@@ -113,43 +114,43 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public Vector2d calculateDriveVector(Vector2d input) {
-        // scale acceleration to match drive power
-        double scaledAccelDelta = MAX_ACCEL_DRIVE_DELTA / drivePower;
-        double scaledDecelDelta = MAX_DECEL_DRIVE_DELTA / drivePower;
-
-        // scale down so magnitude isnt greater than 1
-//        input = input.div(input.norm()).times(Range.clip(input.norm(), 0, 1));
-
         // rotate input vector to match robot heading
         if (fieldCentric) {
             input = input.rotated(-heading);
         } else {
-            input = input.rotated(Math.toRadians(-90));
+            input = input.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
         }
+
+        // scale acceleration to match drive power
+        double scaledMaxAccelVectorDelta = MAX_ACCEL_DRIVE_DELTA / drivePower;
+        double scaledMaxDecelVectorDelta = MAX_DECEL_DRIVE_DELTA / drivePower;
 
         // calculate the delta between the last drive vector and the current drive vector
-        Vector2d delta = input.minus(lastDriveVector);
-        double deltaMag;
+        Vector2d driveVectorDelta = input.minus(lastDriveVector);
+        double limitedDriveVectorDeltaMagnitude;
 
-        // if we are decelerating, limit the delta to the max decel delta
-        if(lastDriveVector.norm() > input.norm()) {
-            deltaMag = Range.clip(delta.norm(), 0, (scaledDecelDelta * dt / 1000.0));
+        boolean decelerating = driveVectorDelta.norm() < lastDriveVector.norm();
+
+        if(decelerating) {
+            // if we are decelerating, limit the delta to the max decel delta
+            limitedDriveVectorDeltaMagnitude = Range.clip(driveVectorDelta.norm(), 0, (scaledMaxDecelVectorDelta * dt / 1000.0));
         } else {
             // otherwise, limit the delta to the max accel delta
-
-            deltaMag = Range.clip(delta.norm(), 0, (scaledAccelDelta * dt / 1000.0));
+            limitedDriveVectorDeltaMagnitude = Range.clip(driveVectorDelta.norm(), 0, (scaledMaxAccelVectorDelta * dt / 1000.0));
         }
 
+        Vector2d scaledDriveVectorDelta = driveVectorDelta.div(driveVectorDelta.norm()).times(limitedDriveVectorDeltaMagnitude);
         Vector2d driveVector;
         // add the delta to the last drive vector
-        if(delta.norm() != 0) {
-            driveVector = lastDriveVector.plus(delta.div(delta.norm()).times(deltaMag));
+        if(driveVectorDelta.norm() != 0) {
+            driveVector = lastDriveVector.plus(scaledDriveVectorDelta);
         } else {
             driveVector = lastDriveVector;
         }
         lastDriveVector = driveVector;
 
         return input;
+        // return driveVector;
     }
 
 //    public boolean imuAccurate() {

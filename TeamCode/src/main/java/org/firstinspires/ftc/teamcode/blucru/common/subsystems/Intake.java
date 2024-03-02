@@ -5,24 +5,18 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Intake implements Subsystem{
-    public static double WRIST_RETRACT_HEIGHT = 4.7; // inches
-    public static double WRIST_INTAKE_HEIGHT = -1.8; // inches
-    public static double WRIST_STACK1_HEIGHT = -1.2; // inches
-    public static double WRIST_AUTO_READY_HEIGHT = 2.5; // inches
-
     public static double MAX_POWER = 1;
     double lastPower;
 
     private DcMotorEx intakeMotor;
     private CRServo intakeRoller;
-    private IntakeWrist intakeWrist;
+    public IntakeWrist intakeWrist;
 
     double intakePower;
 
@@ -33,7 +27,7 @@ public class Intake implements Subsystem{
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake motor");
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-        intakeWrist = new IntakeWrist(hardwareMap);
+        intakeWrist = new IntakeWrist(hardwareMap); // instantiate intake wrist
     }
 
     public void init() {
@@ -54,32 +48,15 @@ public class Intake implements Subsystem{
     }
 
     public void retractIntakeWrist() {
-        setIntakeWristTargetHeight(WRIST_RETRACT_HEIGHT);
+        intakeWrist.retract();
     }
 
-    public void downIntakeWrist() {
-        setIntakeWristTargetHeight(WRIST_INTAKE_HEIGHT);
+    public void dropToGround() {
+        intakeWrist.dropToGround();
     }
 
     public void dropToStack(int stackHeight) {
-        setIntakeWristTargetHeight(getTargetHeight(stackHeight));
-    }
-
-    public double getTargetHeight(int stackHeight) {
-        if(stackHeight == 0) {
-            return Intake.WRIST_INTAKE_HEIGHT;
-        } else {
-            stackHeight = Math.max(0, Math.min(4, stackHeight));
-            return WRIST_STACK1_HEIGHT + (stackHeight - 1) * 0.5;
-        }
-    }
-
-    public void setIntakeWristTargetAngle(double targetAngleDeg) {
-        intakeWrist.targetAngleDeg = targetAngleDeg;
-    }
-
-    public void setIntakeWristTargetHeight(double targetHeight) {
-        setIntakeWristTargetAngle(intakeWrist.toDeg(targetHeight));
+        intakeWrist.dropToStack(stackHeight);
     }
 
     public void setIntakePower(double power) {

@@ -9,14 +9,15 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
-public class KTrajectorySequenceBuilder extends TrajectorySequenceBuilder {
+// custom trajectory sequence builder for BluCru
+public class BCTrajectorySequenceBuilder extends TrajectorySequenceBuilder {
     public static double reflect;
 
-    public KTrajectorySequenceBuilder(Pose2d startPose,
-                                      TrajectoryVelocityConstraint velocityConstraint,
-                                      TrajectoryAccelerationConstraint accelerationConstraint,
-                                      double maxAngVel,
-                                      double maxAngAccel) {
+    public BCTrajectorySequenceBuilder(Pose2d startPose,
+                                       TrajectoryVelocityConstraint velocityConstraint,
+                                       TrajectoryAccelerationConstraint accelerationConstraint,
+                                       double maxAngVel,
+                                       double maxAngAccel) {
         super(startPose,
                 velocityConstraint,
               accelerationConstraint,
@@ -25,50 +26,50 @@ public class KTrajectorySequenceBuilder extends TrajectorySequenceBuilder {
     }
 
     public static void setReflect(double reflect) {
-        KTrajectorySequenceBuilder.reflect = reflect;
+        BCTrajectorySequenceBuilder.reflect = reflect;
     }
 
-    public KTrajectorySequenceBuilder splineToConstantHeading(double x, double y, double endTangent) {
+    public BCTrajectorySequenceBuilder splineToConstantHeading(double x, double y, double endTangent) {
         super.splineToConstantHeading(new Vector2d(x, y * reflect), Math.toRadians(endTangent * reflect));
         return this;
     }
 
-    public KTrajectorySequenceBuilder splineToConstantHeading(Vector2d endPos, double endTangent) {
+    public BCTrajectorySequenceBuilder splineToConstantHeading(Vector2d endPos, double endTangent) {
         super.splineToConstantHeading(new Vector2d(endPos.getX(), endPos.getY() * reflect), Math.toRadians(endTangent * reflect));
         return this;
     }
 
-    public KTrajectorySequenceBuilder splineToSplineHeading(double x, double y, double heading, double endTangent) {
+    public BCTrajectorySequenceBuilder splineToSplineHeading(double x, double y, double heading, double endTangent) {
         super.splineToSplineHeading(new Pose2d(x, y * reflect, Math.toRadians(heading * reflect)), Math.toRadians(endTangent * reflect));
         return this;
     }
 
-    public KTrajectorySequenceBuilder splineToSplineHeading(Pose2d endPose, double endTangent) {
+    public BCTrajectorySequenceBuilder splineToSplineHeading(Pose2d endPose, double endTangent) {
         super.splineToSplineHeading(new Pose2d(endPose.getX(), endPose.getY() * reflect, Math.toRadians(endPose.getHeading() * reflect)), Math.toRadians(endTangent * reflect));
         return this;
     }
 
-    public KTrajectorySequenceBuilder setConstraints(int constraint) {
+    public BCTrajectorySequenceBuilder setConstraints(int constraint) {
         super.setConstraints(Constraints.velos[constraint], Constraints.accels[constraint]);
         return this;
     }
 
-    public KTrajectorySequenceBuilder setTangent(double degrees) {
+    public BCTrajectorySequenceBuilder setTangent(double degrees) {
         super.setTangent(Math.toRadians(degrees * reflect));
         return this;
     }
 
-    public KTrajectorySequenceBuilder waitSeconds(double seconds) {
+    public BCTrajectorySequenceBuilder waitSeconds(double seconds) {
         super.waitSeconds(seconds);
         return this;
     }
 
-    public KTrajectorySequenceBuilder addTemporalMarkerOffset(double seconds, MarkerCallback callback) {
+    public BCTrajectorySequenceBuilder addTemporalMarkerOffset(double seconds, MarkerCallback callback) {
         super.UNSTABLE_addTemporalMarkerOffset(seconds, callback);
         return this;
     }
 
-    public KTrajectorySequenceBuilder intakeCenter(int stackHeight) {
+    public BCTrajectorySequenceBuilder intakeCenter(int stackHeight) {
         this.setConstraints(1)
         .setTangent(135)
         // retract turret
