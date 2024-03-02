@@ -111,16 +111,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveMaintainHeading(double x, double y, double rotate) {
-        if(Math.abs(rotate) > 0.01) {
+        if(Math.abs(rotate) > 0.05) {
             drive(x, y, rotate);
         } else {
-            if(lastRotate > 0.01) {
+            if(Math.abs(lastRotate) > 0.05) {
                 targetHeading = calculateNewTargetHeading();
             }
+
             Vector2d driveVector = new Vector2d(x, y);
-            if(lastDriveVector.norm() < 0.1 && driveVector.norm() < 0.1) targetHeading = heading;
+            if(lastDriveVector.norm() < 0.05 && driveVector.norm() < 0.05) targetHeading = heading;
             driveToHeading(x, y, targetHeading);
         }
+        lastRotate = rotate;
     }
 
     public void drive(double x, double y, double rotate) {
@@ -129,12 +131,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         x = driveVector.getX();
         y = driveVector.getY();
-        lastRotate = rotate;
 
         setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
     }
 
     public void driveToHeading(double x, double y, double targetHeading) {
+        this.targetHeading = targetHeading;
         double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
 
         drive(x, y, rotate);
@@ -177,7 +179,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastDriveVector = driveVector;
 
 //        return input;
-         return driveVector;
+        return driveVector;
     }
 
 //    public boolean imuAccurate() {
@@ -272,7 +274,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else if(heading - target > Math.PI) heading -= 2 * Math.PI;
 
         if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
-        else return Range.clip(headingPID.calculate(heading, target), -1, 1);
+        else return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
     }
 
     public double getOdoHeading() {
@@ -365,6 +367,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(isTeleOp) {
             telemetry.addData("drive power", drivePower);
             telemetry.addData("field centric", fieldCentric);
+            telemetry.addData("target heading", targetHeading);
         } else {
             telemetry.addData("reading distance", readingDistance);
         }

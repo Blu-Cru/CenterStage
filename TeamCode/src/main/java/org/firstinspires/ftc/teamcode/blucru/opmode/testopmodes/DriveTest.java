@@ -13,17 +13,14 @@ import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 @TeleOp(name = "drive test", group = "test")
 public class DriveTest extends LinearOpMode {
     Robot robot;
+    Drivetrain drivetrain;
 
     double vert, horz, rotate;
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
-        Drivetrain drivetrain = robot.addDrivetrain(true);
+        robot = new Robot(hardwareMap);
+        drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
-
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
 
         robot.init();
 
@@ -32,14 +29,13 @@ public class DriveTest extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
 
         while(opModeIsActive()) {
             robot.read();
 
-            vert = Math.pow(-gamepad1.left_stick_y, 3);
-            horz = Math.pow(gamepad1.left_stick_x, 3);
-            rotate = Math.pow(-gamepad1.right_stick_x, 3);
+            vert = -gamepad1.left_stick_y;
+            horz = gamepad1.left_stick_x;
+            rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading(Math.toRadians(90));
@@ -59,7 +55,7 @@ public class DriveTest extends LinearOpMode {
                     drivetrain.driveToHeading(horz, vert, 0);
                 }
             } else {
-                drivetrain.drive(horz, vert, rotate);
+                drivetrain.driveMaintainHeading(horz, vert, rotate);
             }
 
             robot.write();
