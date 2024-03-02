@@ -36,8 +36,8 @@ public class BCLinearOpMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        robot.init();
         initialize();
+        robot.init();
         while(opModeInInit()) {
             initLoop();
             telemetry.update();

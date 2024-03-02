@@ -28,16 +28,13 @@ public class DriveTest extends LinearOpMode {
         robot.init();
 
         drivetrain.fieldCentric = true;
-        drivetrain.drivePower = 0.5;
+        drivetrain.drivePower = 0.8;
 
         waitForStart();
 
         drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(90)));
 
         while(opModeIsActive()) {
-            for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-                module.clearBulkCache();
-            }
             robot.read();
 
             vert = Math.pow(-gamepad1.left_stick_y, 3);

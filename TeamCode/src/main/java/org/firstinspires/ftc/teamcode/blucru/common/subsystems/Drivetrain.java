@@ -149,8 +149,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
         lastDriveVector = driveVector;
 
-        return input;
-        // return driveVector;
+//        return input;
+         return driveVector;
     }
 
 //    public boolean imuAccurate() {
