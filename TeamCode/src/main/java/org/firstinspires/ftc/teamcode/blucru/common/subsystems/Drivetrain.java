@@ -47,13 +47,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     MotionProfile headingMotionProfile;
     PIDController headingPID;
     double targetHeading = 0;
-    double heading; // estimated heading
+    double heading; // estimated field heading (0 is facing right, positive is counterclockwise)
     double imuHeading; // heading retrieved from IMU
     double odoHeading; // heading retrieved from odometry
-    public boolean fieldCentric;
+    public boolean fieldCentric; // whether the robot is field centric or robot centric
 
     Vector2d lastDriveVector; // drive vector in previous loop
-    double lastRotate; //not used
+    double lastRotate; // rotate input in previous loop
 
     public DistanceSensors distanceSensors;
     PIDController distancePID;
@@ -111,22 +111,25 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveMaintainHeading(double x, double y, double rotate) {
-        if(Math.abs(rotate) > 0.05) {
-            drive(x, y, rotate);
-        } else {
-            if(Math.abs(lastRotate) > 0.05) {
-                targetHeading = calculateNewTargetHeading();
-            }
+        boolean turning = Math.abs(rotate) > 0.05;
+        boolean wasJustTurning = Math.abs(lastRotate) > 0.05;
+        boolean moving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;
 
-            Vector2d driveVector = new Vector2d(x, y);
-            if(lastDriveVector.norm() < 0.05 && driveVector.norm() < 0.05) targetHeading = heading;
+        if(turning) // if driver is turning, drive with turning normally
+            drive(x, y, rotate);
+        else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
+            driveToHeading(x, y, calculateNewTargetHeading());
+        else if(!moving) // if driver is not moving, drive with turning normally
+            driveToHeading(x, y, heading);
+        else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
-        }
+
+        // recording last turn input
         lastRotate = rotate;
     }
 
     public void drive(double x, double y, double rotate) {
-        drivetrainState = DrivetrainState.IDLE;
+//        drivetrainState = DrivetrainState.IDLE;
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         x = driveVector.getX();
@@ -142,23 +145,24 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         drive(x, y, rotate);
     }
 
+    // rotate for field centric
+    // apply slew rate limiter to drive vector
     public Vector2d calculateDriveVector(Vector2d input) {
-        // rotate input vector to match robot heading
-        if (fieldCentric) {
-            input = input.rotated(-heading);
-        } else {
+        if (fieldCentric)
+            input = input.rotated(-heading); // rotate input vector to match robot heading if field centric
+        else
             input = input.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
-        }
 
         // scale acceleration to match drive power
+        // maximum change in the drive vector per second at the drive power
         double scaledMaxAccelVectorDelta = MAX_ACCEL_DRIVE_DELTA / drivePower;
         double scaledMaxDecelVectorDelta = MAX_DECEL_DRIVE_DELTA / drivePower;
 
-        // calculate the delta between the last drive vector and the current drive vector
+        // calculate the change between the last drive vector and the current drive vector
         Vector2d driveVectorDelta = input.minus(lastDriveVector);
         double limitedDriveVectorDeltaMagnitude;
 
-        boolean decelerating = driveVectorDelta.norm() < lastDriveVector.norm();
+        boolean decelerating = input.norm() < lastDriveVector.norm();
 
         if(decelerating) {
             // if we are decelerating, limit the delta to the max decel delta
@@ -168,17 +172,19 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             limitedDriveVectorDeltaMagnitude = Range.clip(driveVectorDelta.norm(), 0, (scaledMaxAccelVectorDelta * dt / 1000.0));
         }
 
+        // scale the drive vector delta to the limited magnitude
         Vector2d scaledDriveVectorDelta = driveVectorDelta.div(driveVectorDelta.norm()).times(limitedDriveVectorDeltaMagnitude);
-        Vector2d driveVector;
-        // add the delta to the last drive vector
-        if(driveVectorDelta.norm() != 0) {
-            driveVector = lastDriveVector.plus(scaledDriveVectorDelta);
-        } else {
-            driveVector = lastDriveVector;
-        }
-        lastDriveVector = driveVector;
 
-//        return input;
+        Vector2d driveVector;
+        if(driveVectorDelta.norm() == 0) // catch divide by zero
+            driveVector = lastDriveVector;
+        else
+            // add the scaled delta to the last drive vector
+            driveVector = lastDriveVector.plus(scaledDriveVectorDelta);
+
+        // record the drive vector for the next loop
+        lastDriveVector = driveVector;
+        
         return driveVector;
     }
 
