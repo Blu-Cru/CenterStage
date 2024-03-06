@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
@@ -95,7 +94,7 @@ public class OuttakeTest extends LinearOpMode {
                     outtake.outtaking = true;
                     if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                         outtake.wristRetracted = false;
-                        robotState = RobotState.OUTTAKE;
+                        robotState = RobotState.OUTTAKE_WRIST_UP;
                         outtakeTimer.reset();
                     }
 
@@ -117,7 +116,7 @@ public class OuttakeTest extends LinearOpMode {
                         outtake.lift.setTargetPos(0);
                     }
                     break;
-                case OUTTAKE:
+                case OUTTAKE_WRIST_UP:
                     outtake.outtaking = true;
 
                     if(outtakeTimer.seconds() > 1) {

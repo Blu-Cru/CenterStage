@@ -48,9 +48,12 @@ public class Duo extends LinearOpMode {
 
     ElapsedTime totalTimer;
     ElapsedTime outtakeTimer;
+    ElapsedTime retractTimer;
     double lastTime, deltaTime;
     int loop;
     double boardHeading;
+
+    boolean retractRequested = false;
 
     boolean lastDown2 = false;
     boolean lastA2 = false;
@@ -91,6 +94,7 @@ public class Duo extends LinearOpMode {
 
         totalTimer = new ElapsedTime();
         outtakeTimer = new ElapsedTime();
+        retractTimer = new ElapsedTime();
 
         robot.init();
 
@@ -141,23 +145,25 @@ public class Duo extends LinearOpMode {
                 outtake.outtaking = false;
 
                 if(gamepad2.x) {
+                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.y) {
+                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.b) {
+                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
                 break;
             case LIFTING:
-                outtake.outtaking = true;
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
-                    robotState = RobotState.OUTTAKE;
+                    robotState = RobotState.OUTTAKE_WRIST_UP;
                     outtakeTimer.reset();
                 }
 
@@ -167,14 +173,13 @@ public class Duo extends LinearOpMode {
 
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
+                    retractRequested = false;
                     outtake.outtaking = false;
                     outtake.lift.setMotionProfileTargetPos(0);
                 }
                 lastA2 = gamepad2.a;
                 break;
-            case OUTTAKE:
-                outtake.outtaking = true;
-
+            case OUTTAKE_WRIST_UP:
                 // TURRET CONTROL
                 if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
                     if(!outtake.wristRetracted) {
@@ -184,10 +189,11 @@ public class Duo extends LinearOpMode {
                     } else outtake.setTurretAngle(270);
                 } else outtake.setTurretAngle(270);
 
-                // WRIST CONTROL
-                if(outtake.turret.isCentered()) {
-                    if(gamepad2.dpad_down && !lastDown2) outtake.toggleWrist();
-                } else outtake.extendWrist();
+                // retract wrist
+                if(outtake.turret.isCentered() && gamepad2.dpad_down && !lastDown2) {
+                    outtake.retractWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                }
                 lastDown2 = gamepad2.dpad_down;
 
                 // Change height
@@ -202,12 +208,58 @@ public class Duo extends LinearOpMode {
                 lastRSDown2 = gamepad2.right_stick_y > 0.3;
 
                 // retract
-                if(gamepad2.a && !lastA2 && outtake.wristRetracted) {
+                if(gamepad2.a && !lastA2 && outtake.turret.isCentered()) {
+                    retractRequested = true;
+                    retractTimer.reset();
+                    outtake.retractWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+//                    outtake.outtaking = false;
+//                    outtake.lift.setMotionProfileTargetPos(0);
+                }
+                lastA2 = gamepad2.a;
+                break;
+            case OUTTAKE_WRIST_RETRACT:
+                // retract
+                if((gamepad2.a && !lastA2) || (retractRequested && retractTimer.seconds() > 0.5)) {
                     robotState = RobotState.RETRACT;
+                    retractRequested = false;
                     outtake.outtaking = false;
                     outtake.lift.setMotionProfileTargetPos(0);
                 }
-                lastA2 = gamepad2.a;
+
+                // extend wrist
+                if(gamepad2.dpad_down && !lastDown2) {
+                    outtake.extendWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    outtakeTimer.reset();
+                }
+                lastDown2 = gamepad2.dpad_down;
+
+                // Change height
+                if(gamepad2.x) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                }
+                if(gamepad2.y) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                }
+                if(gamepad2.b) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                }
+
+                // increment height by one pixel
+                if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) {
+                    retractRequested = false;
+                    outtake.incrementTargetHeight(1);
+                }
+                lastRSUp2 = gamepad2.right_stick_y < -0.3;
+                if(gamepad2.right_stick_y > 0.3 && !lastRSDown2 && !gamepad2.right_stick_button) {
+                    retractRequested = false;
+                    outtake.incrementTargetHeight(-1);
+                }
+                lastRSDown2 = gamepad2.right_stick_y > 0.3;
                 break;
         }
 

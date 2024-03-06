@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
@@ -323,7 +322,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 fastPower = 0.7;
                 normalPower = DRIVE_POWER_LIFTING;
                 break;
-            case OUTTAKE:
+            case OUTTAKE_WRIST_UP:
                 slowPower = 0.25;
                 fastPower = 0.7;
                 normalPower = DRIVE_POWER_OUTTAKE;

@@ -78,7 +78,7 @@ public class Solo extends LinearOpMode {
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
 
                 break;
-            case OUTTAKE:
+            case OUTTAKE_WRIST_UP:
                 outtake.outtaking = true;
 // reverse intake
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
