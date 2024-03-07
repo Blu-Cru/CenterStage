@@ -1,21 +1,13 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
 
@@ -36,51 +28,22 @@ right joystick : turn
 public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_DELAY_SECONDS = 0.3;
 
-//    Alliance alliance;
-
-//    Robot robot;
-//    Drivetrain drivetrain;
-//    Outtake outtake;
-//    Intake intake;
-//    Hanger hanger;
-//    Plane plane;
-
     private RobotState robotState;
 
-    ElapsedTime totalTimer;
-    ElapsedTime outtakeTimer;
-    ElapsedTime retractTimer;
-    double lastTime, deltaTime;
-    int loop;
-    double boardHeading;
+    double scoringHeading; // heading to score on board
 
     boolean retractRequested = false;
 
+    // timer variables
+    double outtakeTime = 0;
+    double retractTime = 0;
+
+    // gamepad states
     boolean lastDown2 = false;
     boolean lastA2 = false;
     boolean lastRSUp2 = false;
     boolean lastRSDown2 = false;
     boolean lastUp1 = false;
-
-//    @Override
-//    public void runOpMode() throws InterruptedException {
-//        initialize();
-//
-//        while(opModeInInit()) {
-//            telemetry.addData("PICK UP UR CONTROLELRS", "");
-//            telemetry.update();
-//        }
-//
-//        waitForStart();
-//
-//
-//        while(opModeIsActive()) {
-//            // updates states based on gamepad input
-//            read();
-//            // writes to hardware
-//            write();
-//        }
-//    }
 
     public void initialize() {
         robotState = RobotState.RETRACT;
@@ -92,11 +55,7 @@ public class Duo extends BCLinearOpMode {
         addHanger();
         addPlane();
 
-        totalTimer = new ElapsedTime();
-        outtakeTimer = new ElapsedTime();
-        retractTimer = new ElapsedTime();
-
-        boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set board heading based on alliance
+        scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set board heading based on alliance
     }
 
     public void read() {
@@ -109,11 +68,11 @@ public class Duo extends BCLinearOpMode {
 
         // resets heading offset (face away from board)
         if(gamepad1.right_stick_button) {
-            drivetrain.resetHeading(boardHeading);
+            drivetrain.resetHeading(scoringHeading);
             gamepad1.rumble(100);
         }
-        if(gamepad1.b) drivetrain.driveToHeading(horz, vert, boardHeading); // drive to outtake heading
-        else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI); // drive to opposite outtake heading
+        if(gamepad1.b) drivetrain.driveToHeading(horz, vert, scoringHeading); // drive to outtake heading
+        else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
         else drivetrain.driveMaintainHeading(horz, vert, rotate); // drive normally
 
         // INTAKE
@@ -159,7 +118,7 @@ public class Duo extends BCLinearOpMode {
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTimer.reset();
+                    outtakeTime = currentSecs();
                 }
 
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
@@ -176,7 +135,7 @@ public class Duo extends BCLinearOpMode {
                 break;
             case OUTTAKE_WRIST_UP:
                 // TURRET CONTROL
-                if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
+                if(secsSince(outtakeTime) > OUTTAKE_DELAY_SECONDS) {
                     if(!outtake.wristRetracted) {
                         if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
                         else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
@@ -187,7 +146,7 @@ public class Duo extends BCLinearOpMode {
                 // retract wrist
                 if(outtake.turret.isCentered() && gamepad2.dpad_down && !lastDown2) {
                     outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastDown2 = gamepad2.dpad_down;
 
@@ -199,23 +158,22 @@ public class Duo extends BCLinearOpMode {
                 // increment height by one pixel
                 if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(1);
                 lastRSUp2 = gamepad2.right_stick_y < -0.3;
+
                 if(gamepad2.right_stick_y > 0.3 && !lastRSDown2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(-1);
                 lastRSDown2 = gamepad2.right_stick_y > 0.3;
 
                 // retract
                 if(gamepad2.a && !lastA2 && outtake.turret.isCentered()) {
                     retractRequested = true;
-                    retractTimer.reset();
+                    retractTime = currentSecs();
                     outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
-//                    outtake.outtaking = false;
-//                    outtake.lift.setMotionProfileTargetPos(0);
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastA2 = gamepad2.a;
                 break;
-            case OUTTAKE_WRIST_RETRACT:
+            case OUTTAKE_WRIST_RETRACTED:
                 // retract
-                if((gamepad2.a && !lastA2) || (retractRequested && retractTimer.seconds() > 0.5)) {
+                if((gamepad2.a && !lastA2) || (retractRequested && secsSince(retractTime) > 0.5)) {
                     robotState = RobotState.RETRACT;
                     retractRequested = false;
                     outtake.outtaking = false;
@@ -228,7 +186,7 @@ public class Duo extends BCLinearOpMode {
                     retractRequested = false;
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTimer.reset();
+                    outtakeTime = currentSecs();
                 }
                 lastDown2 = gamepad2.dpad_down;
 

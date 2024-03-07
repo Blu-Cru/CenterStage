@@ -1,56 +1,32 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
 @TeleOp(name = "Solo", group = "2")
-public class Solo extends LinearOpMode {
-    public static double OUTTAKE_DELAY_SECONDS = 0.3;
-    Robot robot;
-    Drivetrain drivetrain;
-    Intake intake;
-    Outtake outtake;
-    Hanger hanger;
-    Plane plane;
-    Alliance alliance;
+public class Solo extends BCLinearOpMode {
+    public static double OUTTAKE_DELAY = 300;
+    public static double REVERSE_INTAKE_TIME = 1000;
+    public static double RETRACT_DELAY = 350;
+
     RobotState robotState;
-    ElapsedTime totalTimer;
-    ElapsedTime outtakeTimer;
-    ElapsedTime retractTimer;
-    double boardHeading, lastTime, deltaTime, loop;
+
+    double boardHeading;
     boolean retractRequested = false;
 
     // timer variables
-    double stopIntakeTimeSeconds = -5;
+    double stopIntakeTime = -10000; // init at -10000 ms to prevent immediate outtake
+    double outtakeTime = 0;
+    double retractTime = 0;
 
     // gamepad variables
     double lastLT = 0;
     boolean lastA1;
     boolean lastDown1;
-
-    public void runOpMode()  throws InterruptedException {
-        initialize();
-        robot.init();
-
-        waitForStart();
-
-        while (opModeIsActive()) {
-            read();
-            robot.read();
-            write();
-        }
-    }
 
     public void read() {
         switch (robotState) {
@@ -68,7 +44,7 @@ public class Solo extends LinearOpMode {
                 } else if(gamepad1.right_trigger > 0.3) {
                     intake.setIntakePower(-gamepad1.right_trigger);
                     outtake.lock();
-                } else if(timeSince(stopIntakeTimeSeconds) < 1.0) {
+                } else if(timeSince(stopIntakeTime) < REVERSE_INTAKE_TIME) {
                     intake.setIntakePower(-1);
                     outtake.lock();
                 } else {
@@ -77,7 +53,7 @@ public class Solo extends LinearOpMode {
                 }
 
                 // if LT was released, start timer
-                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTimeSeconds = totalTimer.seconds();
+                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTime = currentTime();
                 lastLT = gamepad1.left_trigger;
 
                 if(gamepad1.x) {
@@ -103,7 +79,7 @@ public class Solo extends LinearOpMode {
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTimer.reset();
+                    outtakeTime = currentTime();
                 }
 
                 if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
@@ -127,18 +103,16 @@ public class Solo extends LinearOpMode {
                 outtake.outtaking = true;
 
                 // TURRET CONTROL
-                if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
-                    if(!outtake.wristRetracted) {
-                        if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
-                        else if (gamepad1.right_trigger > 0.1) outtake.setTurretAngle(gamepad1.right_trigger * 60 + 270);
-                        else outtake.setTurretAngle(270);
-                    } else outtake.setTurretAngle(270);
-                } else outtake.setTurretAngle(270);
+                if(timeSince(outtakeTime) > OUTTAKE_DELAY && !outtake.wristRetracted) {
+                    if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
+                    else if (gamepad1.right_trigger > 0.1) outtake.setTurretAngle(gamepad1.right_trigger * 60 + 270);
+                    else outtake.centerTurret();
+                } else outtake.centerTurret();
 
                 // retract wrist
                 if(outtake.turret.isCentered() && gamepad1.dpad_down && !lastDown1) {
                     outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastDown1 = gamepad1.dpad_down;
 
@@ -146,7 +120,6 @@ public class Solo extends LinearOpMode {
                 if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 if(gamepad1.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
-
 
 // reverse intake
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
@@ -160,15 +133,15 @@ public class Solo extends LinearOpMode {
                 // retract
                 if(gamepad1.a && !lastA1 && outtake.turret.isCentered()) {
                     retractRequested = true;
-                    retractTimer.reset();
+                    retractTime = currentTime();
                     outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastA1 = gamepad1.a;
                 break;
-            case OUTTAKE_WRIST_RETRACT:
+            case OUTTAKE_WRIST_RETRACTED:
                 // retract
-                if((gamepad1.a && !lastA1) || (retractRequested && retractTimer.seconds() > 0.35)) {
+                if((gamepad1.a && !lastA1) || (retractRequested && timeSince(retractTime) > RETRACT_DELAY)) {
                     robotState = RobotState.RETRACT;
                     retractRequested = false;
                     outtake.outtaking = false;
@@ -180,7 +153,7 @@ public class Solo extends LinearOpMode {
                     retractRequested = false;
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTimer.reset();
+                    outtakeTime = currentTime();
                 }
                 lastDown1 = gamepad1.dpad_down;
 
@@ -200,7 +173,6 @@ public class Solo extends LinearOpMode {
                 break;
         }
 
-
 // DRIVING
 
         drivetrain.setDrivePower(robotState, gamepad1);
@@ -219,45 +191,17 @@ public class Solo extends LinearOpMode {
     }
 
     public void initialize() {
-        robot = new Robot(hardwareMap);
-        drivetrain = robot.addDrivetrain(true);
-        intake = robot.addIntake();
-        outtake = robot.addOuttake();
-        hanger = robot.addHanger();
-        plane = robot.addPlane();
-
-        alliance = Initialization.ALLIANCE;
-        drivetrain.setPoseEstimate(Initialization.POSE);
+        addDrivetrain(true);
+        addIntake();
+        addOuttake();
+        addHanger();
+        addPlane();
 
         robotState = RobotState.RETRACT;
-        totalTimer = new ElapsedTime();
-        outtakeTimer = new ElapsedTime();
-        retractTimer = new ElapsedTime();
         boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
-        lastTime = System.currentTimeMillis();
-        deltaTime = 0;
     }
 
-    public void write() {
-        robot.write();
-
-        deltaTime = totalTimer.milliseconds() - lastTime;
-        lastTime = totalTimer.milliseconds();
-
-        // write telemetry only some loops to reduce loop times
-        loop++;
-        if(loop > 50) {
-            telemetry.addData("robot state", robotState);
-            robot.telemetry(telemetry);
-            telemetry.addData("loop time", deltaTime);
-            telemetry.addData("alliance", alliance);
-            telemetry.update();
-            loop = 0; // reset loop counter
-        }
-    }
-
-    // seconds
-    public double timeSince(double time) {
-        return totalTimer.seconds() - time;
+    public void telemetry() {
+        telemetry.addData("robot state", robotState);
     }
 }

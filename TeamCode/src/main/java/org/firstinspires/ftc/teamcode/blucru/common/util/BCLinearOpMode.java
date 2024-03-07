@@ -58,7 +58,7 @@ public class BCLinearOpMode extends LinearOpMode {
             lastTime = runtime.milliseconds();
             loopTimeCount++;
 
-            if(timeSinceMillis(lastTelemetryTime) > 100) { // update telemetry every 0.1 seconds
+            if(timeSince(lastTelemetryTime) > 100) { // update telemetry every 0.1 seconds
                 lastTelemetryTime = runtime.milliseconds();
                 telemetry();
                 robot.telemetry(telemetry);
@@ -93,11 +93,15 @@ public class BCLinearOpMode extends LinearOpMode {
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
 
-    public double timeSinceSecs(double timeSecs) {
+    public double currentSecs() {return runtime.seconds();}
+
+    public double currentTime() {return runtime.milliseconds();}
+
+    public double secsSince(double timeSecs) {
         return runtime.seconds() - timeSecs;
     }
 
-    private double timeSinceMillis(double timeMillis) {
+    public double timeSince(double timeMillis) {
         return runtime.milliseconds() - timeMillis;
     }
 
