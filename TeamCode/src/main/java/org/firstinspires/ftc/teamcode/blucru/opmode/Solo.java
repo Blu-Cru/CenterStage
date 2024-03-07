@@ -9,14 +9,14 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
 @TeleOp(name = "Solo", group = "2")
 public class Solo extends BCLinearOpMode {
-    public static double OUTTAKE_DELAY = 300;
+    public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double REVERSE_INTAKE_TIME = 1000;
-    public static double RETRACT_DELAY = 350;
+    public static double RETRACT_WRIST_DELAY = 300;
+    public static double FULL_RETRACT_DELAY = 500;
 
     RobotState robotState;
 
     double boardHeading;
-    boolean retractRequested = false;
 
     // timer variables
     double stopIntakeTime = -10000; // init at -10000 ms to prevent immediate outtake
@@ -31,7 +31,6 @@ public class Solo extends BCLinearOpMode {
     public void read() {
         switch (robotState) {
             case RETRACT:
-                outtake.outtaking = false;
                 // drop down
                 if(gamepad1.a && gamepad1.left_bumper) intake.dropToStack(3);
                 else if(gamepad1.a) intake.dropToGround();
@@ -53,7 +52,7 @@ public class Solo extends BCLinearOpMode {
                 }
 
                 // if LT was released, start timer
-                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTime = currentTime();
+                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3)) stopIntakeTime = currentTime();
                 lastLT = gamepad1.left_trigger;
 
                 if(gamepad1.x) {
@@ -74,8 +73,6 @@ public class Solo extends BCLinearOpMode {
 
                 break;
             case LIFTING:
-                outtake.outtaking = true;
-
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
@@ -92,7 +89,6 @@ public class Solo extends BCLinearOpMode {
 
                 if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
-                    retractRequested = false;
                     outtake.outtaking = false;
                     outtake.lift.setMotionProfileTargetPos(0);
                 }
@@ -100,10 +96,8 @@ public class Solo extends BCLinearOpMode {
 
                 break;
             case OUTTAKE_WRIST_UP:
-                outtake.outtaking = true;
-
                 // TURRET CONTROL
-                if(timeSince(outtakeTime) > OUTTAKE_DELAY && !outtake.wristRetracted) {
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
                     if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
                     else if (gamepad1.right_trigger > 0.1) outtake.setTurretAngle(gamepad1.right_trigger * 60 + 270);
                     else outtake.centerTurret();
@@ -131,26 +125,24 @@ public class Solo extends BCLinearOpMode {
                 else outtake.lock();
 
                 // retract
-                if(gamepad1.a && !lastA1 && outtake.turret.isCentered()) {
-                    retractRequested = true;
+                if(gamepad1.a && !lastA1) {
                     retractTime = currentTime();
-                    outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
+                    outtake.centerTurret();
+                    outtake.incrementTargetHeight(1);
+                    robotState = RobotState.RETRACTING;
                 }
                 lastA1 = gamepad1.a;
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 // retract
-                if((gamepad1.a && !lastA1) || (retractRequested && timeSince(retractTime) > RETRACT_DELAY)) {
+                if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
-                    retractRequested = false;
                     outtake.outtaking = false;
                     outtake.lift.setMotionProfileTargetPos(0);
                 }
 
                 // extend wrist
                 if(gamepad1.dpad_down && !lastDown1) {
-                    retractRequested = false;
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKE_WRIST_UP;
                     outtakeTime = currentTime();
@@ -159,16 +151,26 @@ public class Solo extends BCLinearOpMode {
 
                 // Change height
                 if(gamepad1.x) {
-                    retractRequested = false;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad1.y) {
-                    retractRequested = false;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad1.b) {
-                    retractRequested = false;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                }
+                break;
+            case RETRACTING:
+                // retract wrist
+                if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
+                    outtake.retractWrist();
+                }
+
+                // fully retract
+                if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
+                    outtake.outtaking = false;
+                    outtake.lift.setMotionProfileTargetPos(0);
+                    robotState = RobotState.RETRACT;
                 }
                 break;
         }
