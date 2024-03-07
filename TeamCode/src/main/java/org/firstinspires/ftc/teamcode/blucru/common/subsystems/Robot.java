@@ -101,6 +101,12 @@ public class Robot {
         return purplePixelHolder;
     }
 
+    public Locks addLocks() {
+        Locks locks = new Locks(hardwareMap);
+        subsystems.add(locks);
+        return locks;
+    }
+
     public CVMaster addCVMaster(Alliance alliance) {
         cvMaster = new CVMaster(hardwareMap, alliance);
         subsystems.add(cvMaster);

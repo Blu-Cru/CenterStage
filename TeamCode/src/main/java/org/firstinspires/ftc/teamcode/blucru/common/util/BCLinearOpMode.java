@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Locks;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
@@ -27,6 +28,7 @@ public class BCLinearOpMode extends LinearOpMode {
     public Plane plane;
     public Hanger hanger;
     public PurplePixelHolder purplePixelHolder;
+    public Locks locks;
 
     ElapsedTime runtime;
     double lastTime;
@@ -89,6 +91,8 @@ public class BCLinearOpMode extends LinearOpMode {
     public void addHanger() {hanger = robot.addHanger();}
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
+
+    public void addLocks() {locks = robot.addLocks();}
 
     public double timeSinceSecs(double timeSecs) {
         return runtime.seconds() - timeSecs;

@@ -14,12 +14,6 @@ public class Outtake implements Subsystem{
     // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.28;
 
-    public static double BACK_UNLOCKED = 0.7;
-    public static double BACK_LOCKED = BACK_UNLOCKED - 0.2;
-
-    public static double FRONT_UNLOCKED = 0.7;
-    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.15;
-
     public static double PIXEL_HEIGHT = 2.6; // inches
     public static double LOW_HEIGHT = 3.8; // inches
     public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2; // inches
@@ -28,10 +22,7 @@ public class Outtake implements Subsystem{
     public static double MIN_HEIGHT = LOW_HEIGHT;
     public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
 
-    public static int LIFT_WRIST_CLEAR_POS = 500;
-    public static int LIFT_INTAKE_READY_POS = 50;
-
-    Servo wrist, backLock, frontLock;
+    Servo wrist;
     public Lift lift;
     public Locks locks;
     public Turret turret;
@@ -60,8 +51,6 @@ public class Outtake implements Subsystem{
         locks.init();
         turret.init();
         wrist.setPosition(WRIST_RETRACT);
-        backLock.setPosition(BACK_LOCKED);
-        frontLock.setPosition(FRONT_LOCKED);
     }
 
     public void read() {
@@ -110,7 +99,11 @@ public class Outtake implements Subsystem{
     }
 
     public boolean liftIntakeReady() {
-        return lift.getCurrentPos() < LIFT_INTAKE_READY_POS;
+        return lift.intakeReady();
+    }
+
+    public boolean liftWristClear() {
+        return lift.wristClear();
     }
 
     public void centerTurret() {
