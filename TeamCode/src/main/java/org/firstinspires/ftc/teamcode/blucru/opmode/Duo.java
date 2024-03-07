@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
 
 /*
@@ -32,17 +33,17 @@ right joystick : turn
  */
 @Config
 @TeleOp(name = "Main TeleOp", group = "1")
-public class Duo extends LinearOpMode {
+public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_DELAY_SECONDS = 0.3;
 
-    Alliance alliance;
+//    Alliance alliance;
 
-    Robot robot;
-    Drivetrain drivetrain;
-    Outtake outtake;
-    Intake intake;
-    Hanger hanger;
-    Plane plane;
+//    Robot robot;
+//    Drivetrain drivetrain;
+//    Outtake outtake;
+//    Intake intake;
+//    Hanger hanger;
+//    Plane plane;
 
     private RobotState robotState;
 
@@ -61,50 +62,44 @@ public class Duo extends LinearOpMode {
     boolean lastRSDown2 = false;
     boolean lastUp1 = false;
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        initialize();
-
-        while(opModeInInit()) {
-            telemetry.addData("PICK UP UR CONTROLELRS", "");
-            telemetry.update();
-        }
-
-        waitForStart();
-
-
-        while(opModeIsActive()) {
-            // updates states based on gamepad input
-            read();
-            // writes to hardware
-            write();
-        }
-    }
+//    @Override
+//    public void runOpMode() throws InterruptedException {
+//        initialize();
+//
+//        while(opModeInInit()) {
+//            telemetry.addData("PICK UP UR CONTROLELRS", "");
+//            telemetry.update();
+//        }
+//
+//        waitForStart();
+//
+//
+//        while(opModeIsActive()) {
+//            // updates states based on gamepad input
+//            read();
+//            // writes to hardware
+//            write();
+//        }
+//    }
 
     public void initialize() {
         robotState = RobotState.RETRACT;
-        robot = new Robot(hardwareMap); // initialize robot
 
         // add subsystems
-        drivetrain = robot.addDrivetrain(true);
-        outtake = robot.addOuttake();
-        intake = robot.addIntake();
-        hanger = robot.addHanger();
-        plane = robot.addPlane();
+        addDrivetrain(true);
+        addOuttake();
+        addIntake();
+        addHanger();
+        addPlane();
 
         totalTimer = new ElapsedTime();
         outtakeTimer = new ElapsedTime();
         retractTimer = new ElapsedTime();
 
-        robot.init();
-
-        alliance = Initialization.alliance; // set alliance based on auto
         boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set board heading based on alliance
     }
 
     public void read() {
-        robot.read();
-
         // DRIVING
         drivetrain.setDrivePower(robotState, gamepad1);
 
@@ -119,7 +114,7 @@ public class Duo extends LinearOpMode {
         }
         if(gamepad1.b) drivetrain.driveToHeading(horz, vert, boardHeading); // drive to outtake heading
         else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, boardHeading - Math.PI); // drive to opposite outtake heading
-        else drivetrain.drive(horz, vert, rotate); // drive normally
+        else drivetrain.driveMaintainHeading(horz, vert, rotate); // drive normally
 
         // INTAKE
         if(gamepad2.left_bumper && outtake.liftIntakeReady()) {
@@ -226,9 +221,11 @@ public class Duo extends LinearOpMode {
                     outtake.outtaking = false;
                     outtake.lift.setMotionProfileTargetPos(0);
                 }
+                lastA2 = gamepad2.a;
 
                 // extend wrist
                 if(gamepad2.dpad_down && !lastDown2) {
+                    retractRequested = false;
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKE_WRIST_UP;
                     outtakeTimer.reset();
@@ -286,20 +283,7 @@ public class Duo extends LinearOpMode {
         lastUp1 = gamepad1.dpad_up;
     }
 
-    public void write() {
-        robot.write();
-
-        deltaTime = totalTimer.milliseconds() - lastTime;
-        lastTime = totalTimer.milliseconds();
-
-        loop++;
-        if(loop > 10) {
-            telemetry.addData("robot state", robotState);
-            robot.telemetry(telemetry);
-            telemetry.addData("loop time", deltaTime);
-            telemetry.addData("alliance", alliance);
-            telemetry.update();
-            loop = 0;
-        }
+    public void telemetry() {
+        telemetry.addData("robot state", robotState);
     }
 }

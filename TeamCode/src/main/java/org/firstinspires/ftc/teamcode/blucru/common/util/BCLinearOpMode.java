@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
@@ -35,6 +36,7 @@ public class BCLinearOpMode extends LinearOpMode {
     double lastTelemetryTime;
 
     public void runOpMode() throws InterruptedException {
+        alliance = Initialization.ALLIANCE;
         robot = new Robot(hardwareMap);
         initialize();
         robot.init();
@@ -61,6 +63,7 @@ public class BCLinearOpMode extends LinearOpMode {
                 telemetry();
                 robot.telemetry(telemetry);
 
+                telemetry.addData("alliance:", alliance);
                 double loopTimeAvg = loopTimeSum / loopTimeCount;
                 resetLoopTime();
                 telemetry.addData("Loop Time", loopTimeAvg);

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @TeleOp(name = "Solo", group = "2")
 public class Solo extends LinearOpMode {
+    public static double OUTTAKE_DELAY_SECONDS = 0.3;
     Robot robot;
     Drivetrain drivetrain;
     Intake intake;
@@ -25,19 +26,28 @@ public class Solo extends LinearOpMode {
     Alliance alliance;
     RobotState robotState;
     ElapsedTime totalTimer;
+    ElapsedTime outtakeTimer;
+    ElapsedTime retractTimer;
     double boardHeading, lastTime, deltaTime, loop;
+    boolean retractRequested = false;
 
     // timer variables
-    double stopIntakeTimeSeconds = 0;
+    double stopIntakeTimeSeconds = -5;
 
     // gamepad variables
     double lastLT = 0;
+    boolean lastA1;
+    boolean lastDown1;
 
     public void runOpMode()  throws InterruptedException {
         initialize();
+        robot.init();
+
+        waitForStart();
 
         while (opModeIsActive()) {
             read();
+            robot.read();
             write();
         }
     }
@@ -58,7 +68,7 @@ public class Solo extends LinearOpMode {
                 } else if(gamepad1.right_trigger > 0.3) {
                     intake.setIntakePower(-gamepad1.right_trigger);
                     outtake.lock();
-                } else if(timeSince(stopIntakeTimeSeconds) < 0.5) {
+                } else if(timeSince(stopIntakeTimeSeconds) < 1.0) {
                     intake.setIntakePower(-1);
                     outtake.lock();
                 } else {
@@ -70,37 +80,142 @@ public class Solo extends LinearOpMode {
                 if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3))  stopIntakeTimeSeconds = totalTimer.seconds();
                 lastLT = gamepad1.left_trigger;
 
+                if(gamepad1.x) {
+                    outtake.outtaking = true;
+                    robotState = RobotState.LIFTING;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                }
+                if(gamepad1.y) {
+                    outtake.outtaking = true;
+                    robotState = RobotState.LIFTING;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                }
+                if(gamepad1.b) {
+                    outtake.outtaking = true;
+                    robotState = RobotState.LIFTING;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                }
+
                 break;
             case LIFTING:
                 outtake.outtaking = true;
 
+                if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
+                    outtake.wristRetracted = false;
+                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    outtakeTimer.reset();
+                }
+
+                if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(gamepad1.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+
 // reverse intake
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+                else intake.setIntakePower(0);
+
+                if(gamepad1.a && !lastA1) {
+                    robotState = RobotState.RETRACT;
+                    retractRequested = false;
+                    outtake.outtaking = false;
+                    outtake.lift.setMotionProfileTargetPos(0);
+                }
+                lastA1 = gamepad1.a;
 
                 break;
             case OUTTAKE_WRIST_UP:
                 outtake.outtaking = true;
+
+                // TURRET CONTROL
+                if(outtakeTimer.seconds() > OUTTAKE_DELAY_SECONDS) {
+                    if(!outtake.wristRetracted) {
+                        if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
+                        else if (gamepad1.right_trigger > 0.1) outtake.setTurretAngle(gamepad1.right_trigger * 60 + 270);
+                        else outtake.setTurretAngle(270);
+                    } else outtake.setTurretAngle(270);
+                } else outtake.setTurretAngle(270);
+
+                // retract wrist
+                if(outtake.turret.isCentered() && gamepad1.dpad_down && !lastDown1) {
+                    outtake.retractWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                }
+                lastDown1 = gamepad1.dpad_down;
+
+                // Change height
+                if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(gamepad1.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+
+
 // reverse intake
                 if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+                else intake.setIntakePower(0);
+
 // lock/unlock for depositing
                 if(gamepad1.left_bumper) outtake.unlockFrontLockBack();
                 else if(gamepad1.right_bumper) outtake.unlock();
                 else outtake.lock();
 
+                // retract
+                if(gamepad1.a && !lastA1 && outtake.turret.isCentered()) {
+                    retractRequested = true;
+                    retractTimer.reset();
+                    outtake.retractWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_RETRACT;
+                }
+                lastA1 = gamepad1.a;
+                break;
+            case OUTTAKE_WRIST_RETRACT:
+                // retract
+                if((gamepad1.a && !lastA1) || (retractRequested && retractTimer.seconds() > 0.35)) {
+                    robotState = RobotState.RETRACT;
+                    retractRequested = false;
+                    outtake.outtaking = false;
+                    outtake.lift.setMotionProfileTargetPos(0);
+                }
+
+                // extend wrist
+                if(gamepad1.dpad_down && !lastDown1) {
+                    retractRequested = false;
+                    outtake.extendWrist();
+                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    outtakeTimer.reset();
+                }
+                lastDown1 = gamepad1.dpad_down;
+
+                // Change height
+                if(gamepad1.x) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                }
+                if(gamepad1.y) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                }
+                if(gamepad1.b) {
+                    retractRequested = false;
+                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                }
                 break;
         }
 
+
 // DRIVING
+
+        drivetrain.setDrivePower(robotState, gamepad1);
+
         double horz = gamepad1.left_stick_x;
         double vert = -gamepad1.left_stick_y;
         double rotate = -gamepad1.right_stick_x;
 
-        if(gamepad1.left_stick_button) {
+        if (gamepad1.left_stick_button) drivetrain.driveToHeading(horz, vert, boardHeading);
+        else drivetrain.driveMaintainHeading(horz, vert, rotate);
+
+        if(gamepad1.right_stick_button) {
             drivetrain.resetHeading(boardHeading);
             gamepad1.rumble(100);
         }
-        if (gamepad1.right_stick_button) drivetrain.driveToHeading(horz, vert, boardHeading);
-        else drivetrain.drive(horz, vert, rotate);
     }
 
     public void initialize() {
@@ -110,9 +225,14 @@ public class Solo extends LinearOpMode {
         outtake = robot.addOuttake();
         hanger = robot.addHanger();
         plane = robot.addPlane();
-        alliance = Initialization.alliance;
+
+        alliance = Initialization.ALLIANCE;
+        drivetrain.setPoseEstimate(Initialization.POSE);
+
         robotState = RobotState.RETRACT;
         totalTimer = new ElapsedTime();
+        outtakeTimer = new ElapsedTime();
+        retractTimer = new ElapsedTime();
         boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
         lastTime = System.currentTimeMillis();
         deltaTime = 0;

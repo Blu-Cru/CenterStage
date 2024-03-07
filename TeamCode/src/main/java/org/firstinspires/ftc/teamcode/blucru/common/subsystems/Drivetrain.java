@@ -78,7 +78,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastTime = System.currentTimeMillis();
             heading = getOdoHeading();
 
-            headingMotionProfile = new MotionProfile(heading, heading);
+            pose = this.getPoseEstimate();
+//            headingMotionProfile = new MotionProfile(heading, heading);
         }
     }
 
