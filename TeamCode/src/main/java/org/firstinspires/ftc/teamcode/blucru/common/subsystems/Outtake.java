@@ -21,7 +21,7 @@ public class Outtake implements Subsystem{
     public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.15;
 
     public static double PIXEL_HEIGHT = 2.6; // inches
-    public static double LOW_HEIGHT = 4; // inches
+    public static double LOW_HEIGHT = 4.3; // inches
     public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2; // inches
     public static double HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4;
 
