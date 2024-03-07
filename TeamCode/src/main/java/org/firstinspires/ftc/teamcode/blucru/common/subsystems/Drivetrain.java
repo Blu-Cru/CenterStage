@@ -21,7 +21,7 @@ import java.util.ArrayList;
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4; // drive powers for teleop
-    public static double MAX_ACCEL_DRIVE_DELTA = 5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
+    public static double MAX_ACCEL_DRIVE_DELTA = 3.5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
 
     public static double HEADING_DECELERATION = 12; // radians per second, for calculating new target heading after turning
     public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants for heading
@@ -30,7 +30,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04; // PID constants for distance sensors
     public static double DISTANCE_PID_ANGLE_TOLERANCE = 0.5; // radians
     public static double OUTTAKE_DISTANCE = 3.6; // correct distance for outtake for distance PID
-    public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches
+
+    public static double TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
     public DrivetrainState drivetrainState;
     boolean isTeleOp;
