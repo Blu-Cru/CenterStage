@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.blucru.opmode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -74,7 +73,7 @@ public class Auto extends LinearOpMode {
                 case INIT:
                     if(gamepad1.x && !lastX) {
                         alliance = alliance.flip();
-                        Initialization.alliance = alliance;
+                        Initialization.ALLIANCE = alliance;
                     }
                     lastX = gamepad1.x;
                     if(gamepad1.b && !lastB) side = side.flip();

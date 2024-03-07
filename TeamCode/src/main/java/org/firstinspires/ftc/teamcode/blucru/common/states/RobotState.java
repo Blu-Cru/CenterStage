@@ -4,5 +4,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.states;
 public enum RobotState {
     RETRACT,
     LIFTING,
-    OUTTAKE,
+    OUTTAKE_WRIST_UP,
+    OUTTAKE_TURRET_TURNED,
+    OUTTAKE_WRIST_RETRACT
 }
