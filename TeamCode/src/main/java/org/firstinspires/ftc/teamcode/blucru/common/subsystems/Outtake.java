@@ -101,6 +101,7 @@ public class Outtake implements Subsystem{
     }
 
     public void setTargetHeight(double targetHeight) {
+        this.outtaking = true;
         this.targetHeight = Range.clip(targetHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
@@ -116,7 +117,6 @@ public class Outtake implements Subsystem{
 
     public void retractLift() {
         outtaking = false;
-        lift.liftState = LiftState.MoPro;
         lift.setMotionProfileTargetPos(0);
     }
 

@@ -16,7 +16,7 @@ public class Solo extends BCLinearOpMode {
 
     RobotState robotState;
 
-    double boardHeading;
+    double scoringHeading;
 
     // timer variables
     double stopIntakeTime = -10000; // init at -10000 ms to prevent immediate outtake
@@ -56,17 +56,14 @@ public class Solo extends BCLinearOpMode {
                 lastLT = gamepad1.left_trigger;
 
                 if(gamepad1.x) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad1.y) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad1.b) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -89,8 +86,7 @@ public class Solo extends BCLinearOpMode {
 
                 if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
-                    outtake.outtaking = false;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.retractLift();
                 }
                 lastA1 = gamepad1.a;
 
@@ -137,8 +133,7 @@ public class Solo extends BCLinearOpMode {
                 // retract
                 if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
-                    outtake.outtaking = false;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.retractLift();
                 }
 
                 // extend wrist
@@ -168,8 +163,7 @@ public class Solo extends BCLinearOpMode {
 
                 // fully retract
                 if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
-                    outtake.outtaking = false;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.retractLift();
                     robotState = RobotState.RETRACT;
                 }
                 break;
@@ -183,11 +177,11 @@ public class Solo extends BCLinearOpMode {
         double vert = -gamepad1.left_stick_y;
         double rotate = -gamepad1.right_stick_x;
 
-        if (gamepad1.left_stick_button) drivetrain.driveToHeading(horz, vert, boardHeading);
+        if (gamepad1.left_stick_button) drivetrain.driveToHeading(horz, vert, scoringHeading);
         else drivetrain.driveMaintainHeading(horz, vert, rotate);
 
         if(gamepad1.right_stick_button) {
-            drivetrain.resetHeading(boardHeading);
+            drivetrain.resetHeading(scoringHeading);
             gamepad1.rumble(100);
         }
     }
@@ -200,7 +194,7 @@ public class Solo extends BCLinearOpMode {
         addPlane();
 
         robotState = RobotState.RETRACT;
-        boardHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
+        scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0;
     }
 
     public void telemetry() {
