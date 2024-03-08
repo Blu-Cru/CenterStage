@@ -20,10 +20,9 @@ import java.util.ArrayList;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
-    public static double DRIVE_POWER_RETRACT = 0.8, DRIVE_POWER_LIFTING = 0.6, DRIVE_POWER_OUTTAKE = 0.4; // drive powers for teleop
     public static double MAX_ACCEL_DRIVE_DELTA = 3.5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
 
-    public static double HEADING_DECELERATION = 12; // radians per second, for calculating new target heading after turning
+    public static double HEADING_DECELERATION = 12; // radians per second squared, for calculating new target heading after turning
     public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants for heading
     public static double HEADING_PID_TOLERANCE = 0.05; // radians
 
@@ -41,8 +40,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     Pose2d velocity;
     double lastTime;
 
-    boolean readingDistance; // NOT USED
-    ArrayList<Double> errors; // NOT USED
+//    boolean readingDistance;
+//    ArrayList<Double> errors;
 
     MotionProfile headingMotionProfile;
     PIDController headingPID;
@@ -66,7 +65,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
         distanceSensors = new DistanceSensors(hardwareMap);
 
-        readingDistance = false;
+//        readingDistance = false;
     }
 
     public void init() {
@@ -102,9 +101,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
 
         pose = this.getPoseEstimate();
-        if(readingDistance) {
-            distanceSensors.read(heading);
-        }
+//        if(readingDistance) {
+//            distanceSensors.read(heading);
+//        }
     }
 
     public void write() {
@@ -114,13 +113,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void driveMaintainHeading(double x, double y, double rotate) {
         boolean turning = Math.abs(rotate) > 0.05;
         boolean wasJustTurning = Math.abs(lastRotate) > 0.05;
-        boolean moving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;
+        boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;
 
         if(turning) // if driver is turning, drive with turning normally
             drive(x, y, rotate);
         else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
             driveToHeading(x, y, calculateNewTargetHeading());
-        else if(!moving) // if driver is not moving, drive with turning normally
+        else if(!driving) // if driver is not moving, drive with turning normally
             driveToHeading(x, y, heading);
         else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
@@ -317,17 +316,27 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             case RETRACT:
                 slowPower = 0.35;
                 fastPower = 1.0;
-                normalPower = DRIVE_POWER_RETRACT;
+                normalPower = 0.8;
                 break;
             case LIFTING:
                 slowPower = 0.3;
                 fastPower = 0.7;
-                normalPower = DRIVE_POWER_LIFTING;
+                normalPower = 0.6;
                 break;
             case OUTTAKE_WRIST_UP:
                 slowPower = 0.25;
+                fastPower = 0.8;
+                normalPower = 0.4;
+                break;
+            case OUTTAKE_WRIST_RETRACTED:
+                slowPower = 0.3;
                 fastPower = 0.7;
-                normalPower = DRIVE_POWER_OUTTAKE;
+                normalPower = 0.55;
+                break;
+            case RETRACTING:
+                slowPower = 0.3;
+                fastPower = 0.8;
+                normalPower = 0.7;
                 break;
             default:
                 slowPower = 0.3;
@@ -342,7 +351,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else setDrivePower(normalPower);
     }
 
-    // resets IMU (intake facing forwards)
+    // resets heading
     public void resetHeading(double heading) {
 //        resetIMU(heading);
         setPoseEstimate(new Pose2d(0,0,heading));
@@ -354,14 +363,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setExternalHeading(Initialization.POSE.getHeading());
     }
 
-    public void startReadingDistance() {
-        readingDistance = true;
-        errors.clear();
-    }
-
-    public void stopReadingDistance() {
-        readingDistance = false;
-    }
+//    public void startReadingDistance() {
+//        readingDistance = true;
+//        errors.clear();
+//    }
+//
+//    public void stopReadingDistance() {
+//        readingDistance = false;
+//    }
 
     public double getHeading() {return heading;}
 
@@ -376,7 +385,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             telemetry.addData("field centric", fieldCentric);
             telemetry.addData("target heading", targetHeading);
         } else {
-            telemetry.addData("reading distance", readingDistance);
+//            telemetry.addData("reading distance", readingDistance);
         }
         telemetry.addData("heading", heading);
         telemetry.addData("x", pose.getX());

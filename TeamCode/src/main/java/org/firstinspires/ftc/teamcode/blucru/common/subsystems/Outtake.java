@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 @Config
 public class Outtake implements Subsystem{
     public static double WRIST_RETRACT = 0.61;
-    // 60 degrees change
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.28;
 
     public static double BACK_UNLOCKED = 0.7;

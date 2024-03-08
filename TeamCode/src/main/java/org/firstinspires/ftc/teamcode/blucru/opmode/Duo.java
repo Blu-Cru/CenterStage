@@ -26,13 +26,13 @@ right joystick : turn
 @Config
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
-    public static double OUTTAKE_DELAY_SECONDS = 0.3;
+    public static double OUTTAKE_TURN_TURRET_DELAY = 300;
+    public static double RETRACT_WRIST_DELAY = 300;
+    public static double FULL_RETRACT_DELAY = 500;
 
     private RobotState robotState;
 
     double scoringHeading; // heading to score on board
-
-    boolean retractRequested = false;
 
     // timer variables
     double outtakeTime = 0;
@@ -55,7 +55,7 @@ public class Duo extends BCLinearOpMode {
         addHanger();
         addPlane();
 
-        scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set board heading based on alliance
+        scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set the heading to score on the backboard
     }
 
     public void read() {
@@ -71,6 +71,7 @@ public class Duo extends BCLinearOpMode {
             drivetrain.resetHeading(scoringHeading);
             gamepad1.rumble(100);
         }
+
         if(gamepad1.b) drivetrain.driveToHeading(horz, vert, scoringHeading); // drive to outtake heading
         else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
         else drivetrain.driveMaintainHeading(horz, vert, rotate); // drive normally
@@ -96,20 +97,15 @@ public class Duo extends BCLinearOpMode {
 
         switch(robotState) {
             case RETRACT:
-                outtake.outtaking = false;
-
                 if(gamepad2.x) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad2.y) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                 }
                 if(gamepad2.b) {
-                    outtake.outtaking = true;
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
@@ -118,7 +114,7 @@ public class Duo extends BCLinearOpMode {
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTime = currentSecs();
+                    outtakeTime = currentTime();
                 }
 
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
@@ -127,15 +123,13 @@ public class Duo extends BCLinearOpMode {
 
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
-                    retractRequested = false;
-                    outtake.outtaking = false;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.retractLift();
                 }
                 lastA2 = gamepad2.a;
                 break;
             case OUTTAKE_WRIST_UP:
                 // TURRET CONTROL
-                if(secsSince(outtakeTime) > OUTTAKE_DELAY_SECONDS) {
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY) {
                     if(!outtake.wristRetracted) {
                         if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
                         else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
@@ -163,58 +157,57 @@ public class Duo extends BCLinearOpMode {
                 lastRSDown2 = gamepad2.right_stick_y > 0.3;
 
                 // retract
-                if(gamepad2.a && !lastA2 && outtake.turret.isCentered()) {
-                    retractRequested = true;
-                    retractTime = currentSecs();
+                if(gamepad2.a && !lastA2) {
+                    retractTime = currentTime();
                     outtake.retractWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
+                    outtake.centerTurret();
+                    outtake.incrementTargetHeight(1);
+                    robotState = RobotState.RETRACTING;
                 }
                 lastA2 = gamepad2.a;
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 // retract
-                if((gamepad2.a && !lastA2) || (retractRequested && secsSince(retractTime) > 0.5)) {
+                if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
-                    retractRequested = false;
-                    outtake.outtaking = false;
-                    outtake.lift.setMotionProfileTargetPos(0);
+                    outtake.retractLift();
                 }
                 lastA2 = gamepad2.a;
 
                 // extend wrist
                 if(gamepad2.dpad_down && !lastDown2) {
-                    retractRequested = false;
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKE_WRIST_UP;
-                    outtakeTime = currentSecs();
+                    outtakeTime = currentTime();
                 }
                 lastDown2 = gamepad2.dpad_down;
 
                 // Change height
-                if(gamepad2.x) {
-                    retractRequested = false;
-                    outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                }
-                if(gamepad2.y) {
-                    retractRequested = false;
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                }
-                if(gamepad2.b) {
-                    retractRequested = false;
-                    outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
-                }
+                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
                 if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) {
-                    retractRequested = false;
                     outtake.incrementTargetHeight(1);
                 }
                 lastRSUp2 = gamepad2.right_stick_y < -0.3;
                 if(gamepad2.right_stick_y > 0.3 && !lastRSDown2 && !gamepad2.right_stick_button) {
-                    retractRequested = false;
                     outtake.incrementTargetHeight(-1);
                 }
                 lastRSDown2 = gamepad2.right_stick_y > 0.3;
+                break;
+            case RETRACTING:
+                // retract wrist
+                if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
+                    outtake.retractWrist();
+                }
+
+                // fully retract
+                if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
+                    outtake.retractLift();
+                    robotState = RobotState.RETRACT;
+                }
                 break;
         }
 
