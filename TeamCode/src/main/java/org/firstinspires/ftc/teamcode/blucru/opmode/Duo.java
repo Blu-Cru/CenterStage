@@ -27,8 +27,8 @@ right joystick : turn
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
-    public static double RETRACT_WRIST_DELAY = 300;
-    public static double FULL_RETRACT_DELAY = 500;
+    public static double RETRACT_WRIST_DELAY = 250;
+    public static double FULL_RETRACT_DELAY = 350;
 
     private RobotState robotState;
 

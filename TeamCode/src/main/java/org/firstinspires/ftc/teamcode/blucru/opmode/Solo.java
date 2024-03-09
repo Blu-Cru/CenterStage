@@ -25,7 +25,6 @@ public class Solo extends BCLinearOpMode {
 
     // gamepad variables
     double lastIntakePower;
-    double lastLT = 0;
     boolean lastA1;
     boolean lastDown1;
 
