@@ -24,6 +24,7 @@ public class Solo extends BCLinearOpMode {
     double retractTime = 0;
 
     // gamepad variables
+    double lastIntakePower;
     double lastLT = 0;
     boolean lastA1;
     boolean lastDown1;
@@ -31,29 +32,38 @@ public class Solo extends BCLinearOpMode {
     public void read() {
         switch (robotState) {
             case RETRACT:
-                // drop down
-                if(gamepad1.a && gamepad1.left_bumper) intake.dropToStack(3);
-                else if(gamepad1.a) intake.dropToGround();
-                else intake.retractIntakeWrist();
-
-                // intake/outtake
-                if(gamepad1.left_trigger > 0.3) {
-                    intake.setIntakePower(gamepad1.left_trigger);
-                    outtake.unlock();
-                } else if(gamepad1.right_trigger > 0.3) {
-                    intake.setIntakePower(-gamepad1.right_trigger);
-                    outtake.lock();
-                } else if(timeSince(stopIntakeTime) < REVERSE_INTAKE_TIME) {
-                    intake.setIntakePower(-1);
-                    outtake.lock();
-                } else {
-                    intake.setIntakePower(0);
-                    outtake.lock();
+                // drop down and intake
+                if(outtake.liftIntakeReady()){
+                    if(gamepad1.a && gamepad1.left_bumper) {
+                        intake.dropToStack(3);
+                        intake.setIntakePower(1);
+                        outtake.unlock();
+                    } else if(gamepad1.a) {
+                        intake.dropToGround();
+                        intake.setIntakePower(1);
+                        outtake.unlock();
+                    } else if(gamepad1.left_trigger > 0.3) {
+                        intake.retractIntakeWrist();
+                        intake.setIntakePower(gamepad1.left_trigger);
+                        outtake.unlock();
+                    } else if(gamepad1.right_trigger > 0.3) {
+                        intake.retractIntakeWrist();
+                        intake.setIntakePower(-gamepad1.right_trigger);
+                        outtake.lock();
+                    } else if(timeSince(stopIntakeTime) < REVERSE_INTAKE_TIME) {
+                        intake.retractIntakeWrist();
+                        intake.setIntakePower(-1);
+                        outtake.lock();
+                    } else {
+                        intake.retractIntakeWrist();
+                        intake.setIntakePower(0);
+                        outtake.lock();
+                    }
                 }
 
-                // if LT was released, start timer
-                if(lastLT > 0.3 && !(gamepad1.left_trigger > 0.3)) stopIntakeTime = currentTime();
-                lastLT = gamepad1.left_trigger;
+                // if intake just stopped, start timer
+                if(lastIntakePower > 0.1 && !(intake.getIntakePower() > 0.1)) stopIntakeTime = currentTime();
+                lastIntakePower = intake.getIntakePower();
 
                 if(gamepad1.x) {
                     robotState = RobotState.LIFTING;
@@ -67,9 +77,12 @@ public class Solo extends BCLinearOpMode {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                 }
-
                 break;
             case LIFTING:
+                // stop intake
+                intake.retractIntakeWrist();
+                intake.setIntakePower(0);
+
                 if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
@@ -130,6 +143,10 @@ public class Solo extends BCLinearOpMode {
                 lastA1 = gamepad1.a;
                 break;
             case OUTTAKE_WRIST_RETRACTED:
+                // stop intake
+                intake.retractIntakeWrist();
+                intake.setIntakePower(0);
+
                 // retract
                 if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
@@ -156,6 +173,10 @@ public class Solo extends BCLinearOpMode {
                 }
                 break;
             case RETRACTING:
+                // stop intake
+                intake.retractIntakeWrist();
+                intake.setIntakePower(0);
+
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
                     outtake.retractWrist();

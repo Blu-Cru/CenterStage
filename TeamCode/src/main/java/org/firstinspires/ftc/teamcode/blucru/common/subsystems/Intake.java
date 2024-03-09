@@ -63,6 +63,10 @@ public class Intake implements Subsystem{
         intakePower = power * MAX_POWER;
     }
 
+    public double getIntakePower() {
+        return intakePower;
+    }
+
     private void setPower(double power) {
         power = Range.clip(power, -1, 1);
         // only update if power has changed
