@@ -105,8 +105,8 @@ public class Outtake implements Subsystem{
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
-    // increase target height by one pixel height
-    public void incrementTargetHeight(int pixels) {
+    // increment target height by number of pixels
+    public void incrementTargetHeight(double pixels) {
         setTargetHeight(targetHeight + pixels * PIXEL_HEIGHT);
     }
 

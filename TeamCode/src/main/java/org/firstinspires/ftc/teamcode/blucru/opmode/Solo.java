@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 public class Solo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double REVERSE_INTAKE_TIME = 1000;
-    public static double RETRACT_WRIST_DELAY = 500;
-    public static double FULL_RETRACT_DELAY = 800;
+    public static double RETRACT_WRIST_DELAY = 250;
+    public static double FULL_RETRACT_DELAY = 350;
 
     RobotState robotState;
 
@@ -137,7 +137,7 @@ public class Solo extends BCLinearOpMode {
                 if(gamepad1.a && !lastA1) {
                     retractTime = currentTime();
                     outtake.centerTurret();
-                    outtake.incrementTargetHeight(1);
+                    outtake.incrementTargetHeight(0.7);
                     robotState = RobotState.RETRACTING;
                 }
                 lastA1 = gamepad1.a;
