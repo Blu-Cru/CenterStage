@@ -10,8 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.61;
-    // 60 degrees change
+    public static double WRIST_RETRACT = 0.7;
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.28;
 
     public static double BACK_UNLOCKED = 0.7;
@@ -101,12 +100,13 @@ public class Outtake implements Subsystem{
     }
 
     public void setTargetHeight(double targetHeight) {
+        this.outtaking = true;
         this.targetHeight = Range.clip(targetHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
-    // increase target height by one pixel height
-    public void incrementTargetHeight(int pixels) {
+    // increment target height by number of pixels
+    public void incrementTargetHeight(double pixels) {
         setTargetHeight(targetHeight + pixels * PIXEL_HEIGHT);
     }
 
@@ -116,7 +116,6 @@ public class Outtake implements Subsystem{
 
     public void retractLift() {
         outtaking = false;
-        lift.liftState = LiftState.MoPro;
         lift.setMotionProfileTargetPos(0);
     }
 
