@@ -18,14 +18,17 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.BCTrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
@@ -72,7 +75,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-//    private IMU imu;
+    private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     private List<Integer> lastEncPositions = new ArrayList<>();
@@ -97,12 +100,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-//        if(isTeleOp) {
-//            imu = hardwareMap.get(IMU.class, "imu");
-//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                    DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-//            imu.initialize(parameters);
-//        }
+        if(isTeleOp) {
+            imu = hardwareMap.get(IMU.class, "imu");
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                    DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+            imu.initialize(parameters);
+        }
 
 
         leftFront = hardwareMap.get(DcMotorEx.class, "front left");
@@ -257,11 +260,11 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void resetIMU(double heading) {
-//        imu.resetDeviceConfigurationForOpMode();
-//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-//        imu.initialize(parameters);
-//        this.setExternalHeading(heading);
+        imu.resetDeviceConfigurationForOpMode();
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+        imu.initialize(parameters);
+        this.setExternalHeading(heading);
     }
 
     public void followTrajectoryAsync(Trajectory trajectory) {
@@ -390,15 +393,15 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-//        if (isTeleOp)
-//            return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        if (isTeleOp)
+            return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-//        if(isTeleOp)
-//            return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        if(isTeleOp)
+            return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
         return (double) 0;
     }
 

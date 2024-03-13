@@ -76,7 +76,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastDriveVector = new Vector2d(0,0);
             lastRotate = 0;
             lastTime = System.currentTimeMillis();
-            heading = getOdoHeading();
+            heading = getIMUHeading();
 
             pose = this.getPoseEstimate();
 //            headingMotionProfile = new MotionProfile(heading, heading);
@@ -89,7 +89,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
-            heading = getOdoHeading();
+            heading = getIMUHeading();
             velocity = getPoseVelocity();
         }
 
@@ -293,15 +293,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return heading;
     }
 
-//    public double getIMUHeading() {
-//        double heading = getExternalHeading();
-//        if(heading > Math.PI) {
-//            heading -= 2*Math.PI;
-//        } else if(heading < -Math.PI) {
-//            heading += 2*Math.PI;
-//        }
-//        return heading;
-//    }
+    public double getIMUHeading() {
+        double heading = getExternalHeading();
+        if(heading > Math.PI) {
+            heading -= 2*Math.PI;
+        } else if(heading < -Math.PI) {
+            heading += 2*Math.PI;
+        }
+        return heading;
+    }
 
     public void setDrivePower(RobotState robotState, Gamepad gamepad) {
         boolean slow = false;
