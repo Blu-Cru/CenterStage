@@ -16,7 +16,7 @@ public class BCOpmodeTest extends BCLinearOpMode {
         telemetry.update();
     }
 
-    public void read() {
+    public void periodic() {
         // drive
         double vert = -gamepad1.left_stick_y;
         double horz = gamepad1.left_stick_x;

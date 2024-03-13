@@ -77,6 +77,12 @@ public class Robot {
         return intakeWrist;
     }
 
+    public IntakeColorSensors addIntakeColorSensors() {
+        IntakeColorSensors intakeColorSensors = new IntakeColorSensors(hardwareMap);
+        subsystems.add(intakeColorSensors);
+        return intakeColorSensors;
+    }
+
     public Drivetrain addDrivetrain(boolean isTeleOp) {
         drivetrain = new Drivetrain(hardwareMap, isTeleOp);
         subsystems.add(drivetrain);

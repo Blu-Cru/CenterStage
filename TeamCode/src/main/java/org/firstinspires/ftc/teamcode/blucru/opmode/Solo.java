@@ -28,7 +28,7 @@ public class Solo extends BCLinearOpMode {
     boolean lastA1;
     boolean lastDown1;
 
-    public void read() {
+    public void periodic() {
         switch (robotState) {
             case RETRACT:
                 outtake.outtaking = false;

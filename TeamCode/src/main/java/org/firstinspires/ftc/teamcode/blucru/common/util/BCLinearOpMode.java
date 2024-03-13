@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeColorSensors;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
@@ -25,6 +26,7 @@ public class BCLinearOpMode extends LinearOpMode {
     public Turret turret;
     public Intake intake;
     public IntakeWrist intakeWrist;
+    public IntakeColorSensors intakeColorSensors;
     public Plane plane;
     public Hanger hanger;
     public PurplePixelHolder purplePixelHolder;
@@ -47,10 +49,8 @@ public class BCLinearOpMode extends LinearOpMode {
         waitForStart();
         runtime = new ElapsedTime(); // start timer
         while (opModeIsActive()) {
-            read();
             robot.read();
-
-            write();
+            periodic();
             robot.write();
 
             // calculate average loop time
@@ -75,8 +75,7 @@ public class BCLinearOpMode extends LinearOpMode {
     // methods to be overriden
     public void initialize() {}
     public void initLoop() {}
-    public void read() {}
-    public void write() {}
+    public void periodic() {}
     public void telemetry() {}
 
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
@@ -86,6 +85,8 @@ public class BCLinearOpMode extends LinearOpMode {
     public void addIntake() {intake = robot.addIntake();}
 
     public void addIntakeWrist() {intakeWrist = robot.addIntakeWrist();}
+
+    public void addIntakeColorSensors() {intakeColorSensors = robot.addIntakeColorSensors();}
 
     public void addPlane() {plane = robot.addPlane();}
 
