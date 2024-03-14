@@ -81,76 +81,21 @@ public class SampleMecanumDrive extends MecanumDrive {
     boolean isTeleOp;
 
     public SampleMecanumDrive(HardwareMap hardwareMap, boolean isTeleOp) {
-        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+        this(hardwareMap);
 
         this.isTeleOp = isTeleOp;
 
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0);
-
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
-
-        batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
-
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
-
-        // TODO: adjust the names of the following hardware devices to match your configuration
-//        if(isTeleOp) {
+        if(isTeleOp) {
 //            imu = hardwareMap.get(IMU.class, "imu");
 //            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
 //                    DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
 //            imu.initialize(parameters);
-//        }
-
-
-        leftFront = hardwareMap.get(DcMotorEx.class, "front left");
-        leftRear = hardwareMap.get(DcMotorEx.class, "back left");
-        rightRear = hardwareMap.get(DcMotorEx.class, "back right");
-        rightFront = hardwareMap.get(DcMotorEx.class, "front right");
-
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
         }
-
-        if (RUN_USING_ENCODER) {
-            setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
-            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
-        }
-
-        // TODO: reverse any motors using DcMotor.setDirection()
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        List<Integer> lastTrackingEncPositions = new ArrayList<>();
-        List<Integer> lastTrackingEncVels = new ArrayList<>();
-
-        // TODO: if desired, use setLocalizer() to change the localization method
-//        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
-         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
-
-        trajectorySequenceRunner = new TrajectorySequenceRunner(
-                follower, HEADING_PID, batteryVoltageSensor,
-                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
-        );
     }
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        hardwareMap = hardwareMap;
         this.isTeleOp = false;
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -165,13 +110,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-//        if(isTeleOp) {
-//            imu = hardwareMap.get(IMU.class, "imu");
-//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                    DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-//            imu.initialize(parameters);
-//        }
-
 
         leftFront = hardwareMap.get(DcMotorEx.class, "front left");
         leftRear = hardwareMap.get(DcMotorEx.class, "back left");
