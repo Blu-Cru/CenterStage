@@ -93,7 +93,7 @@ public class OuttakeTest extends LinearOpMode {
                     break;
                 case LIFTING:
                     outtake.outtaking = true;
-                    if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
+                    if(outtake.liftWristClear()) {
                         outtake.wristRetracted = false;
                         robotState = RobotState.OUTTAKE;
                         outtakeTimer.reset();

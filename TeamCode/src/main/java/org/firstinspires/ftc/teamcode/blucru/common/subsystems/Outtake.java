@@ -138,6 +138,22 @@ public class Outtake implements Subsystem{
         return turret;
     }
 
+    public void lock() {
+        locks.lockAll();
+    }
+
+    public void unlock() {
+        locks.unlockAll();
+    }
+
+    public void unlockFrontLockBack() {
+        locks.unlockFrontLockBack();
+    }
+
+    public void lockFront() {
+        locks.lockFront();
+    }
+
     public void telemetry(Telemetry telemetry) {
         lift.telemetry(telemetry);
         locks.telemetry(telemetry);
