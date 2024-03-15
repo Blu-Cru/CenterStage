@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Turret;
 
-public class BCLinearOpMode extends LinearOpMode {
+public abstract class BCLinearOpMode extends LinearOpMode {
     public Alliance alliance;
     Robot robot;
     public Drivetrain drivetrain;
