@@ -28,6 +28,9 @@ public class Lift implements Subsystem{
     public static double fastVelocity = 8000.0, fastAccel = 12000.0;
     public static double MAX_UP_POWER = 0.85, MAX_DOWN_POWER = -0.8;
 
+    public static int LIFT_WRIST_CLEAR_POS = 500;
+    public static int LIFT_INTAKE_READY_POS = 50;
+
     public LiftState liftState;
     private DcMotorEx liftMotor;
     private DcMotorEx liftMotor2;
@@ -168,6 +171,14 @@ public class Lift implements Subsystem{
         } else {
             return (int) (velocity * velocity / (-2 * motionProfile.aMax));
         }
+    }
+
+    public boolean intakeReady() {
+        return currentPos < LIFT_INTAKE_READY_POS;
+    }
+
+    public boolean wristClear() {
+        return currentPos < LIFT_WRIST_CLEAR_POS;
     }
 
     public void setPower(double power) {

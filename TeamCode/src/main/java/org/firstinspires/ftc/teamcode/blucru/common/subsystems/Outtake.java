@@ -13,12 +13,6 @@ public class Outtake implements Subsystem{
     public static double WRIST_RETRACT = 0.7;
     public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.28;
 
-    public static double BACK_UNLOCKED = 0.7;
-    public static double BACK_LOCKED = BACK_UNLOCKED - 0.2;
-
-    public static double FRONT_UNLOCKED = 0.7;
-    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.15;
-
     public static double PIXEL_HEIGHT = 2.6; // inches
     public static double LOW_HEIGHT = 4.3; // inches
     public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2; // inches
@@ -27,12 +21,9 @@ public class Outtake implements Subsystem{
     public static double MIN_HEIGHT = LOW_HEIGHT;
     public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
 
-    public static int LIFT_WRIST_CLEAR_POS = 500;
-    public static int LIFT_INTAKE_READY_POS = 50;
-
-    Servo wrist, backLock, frontLock;
+    Servo wrist;
     public Lift lift;
-
+    public Locks locks;
     public Turret turret;
 
     public boolean outtaking;
@@ -41,31 +32,24 @@ public class Outtake implements Subsystem{
 
     public double targetHeight; // inches
 
-    public boolean frontLocked;
-    public boolean backLocked;
 
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
-        backLock = hardwareMap.get(Servo.class, "back lock");
-        frontLock = hardwareMap.get(Servo.class, "front lock");
 
         lift = new Lift(hardwareMap);
+        locks = new Locks(hardwareMap);
         turret = new Turret(hardwareMap);
 
         outtaking = false;
-
-        frontLocked = true;
-        backLocked = true;
 
         wristRetracted = true;
     }
 
     public void init() {
         lift.init();
+        locks.init();
         turret.init();
         wrist.setPosition(WRIST_RETRACT);
-        backLock.setPosition(BACK_LOCKED);
-        frontLock.setPosition(FRONT_LOCKED);
     }
 
     public void read() {
@@ -74,24 +58,18 @@ public class Outtake implements Subsystem{
         }
 
         lift.read();
+        locks.read();
         turret.read();
     }
 
     public void write() {
         lift.write();
+        locks.write();
         turret.write();
 
         // write wrist position
         if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
         else if(!wristRetracted && wrist.getPosition() != WRIST_OUTTAKE) wrist.setPosition(WRIST_OUTTAKE);
-
-        // write back lock position
-        if(backLocked && backLock.getPosition() != BACK_LOCKED) backLock.setPosition(BACK_LOCKED);
-        else if(!backLocked && backLock.getPosition() != BACK_UNLOCKED) backLock.setPosition(BACK_UNLOCKED);
-
-        // write front lock position
-        if(frontLocked && frontLock.getPosition() != FRONT_LOCKED) frontLock.setPosition(FRONT_LOCKED);
-        else if(!frontLocked && frontLock.getPosition() != FRONT_UNLOCKED) frontLock.setPosition(FRONT_UNLOCKED);
     }
 
     public void setManualSlidePower(double power) {
@@ -120,7 +98,11 @@ public class Outtake implements Subsystem{
     }
 
     public boolean liftIntakeReady() {
-        return lift.getCurrentPos() < LIFT_INTAKE_READY_POS;
+        return lift.intakeReady();
+    }
+
+    public boolean liftWristClear() {
+        return lift.wristClear();
     }
 
     public void centerTurret() {
@@ -147,26 +129,6 @@ public class Outtake implements Subsystem{
         wristRetracted = false;
     }
 
-    public void lock() {
-        frontLocked = true;
-        backLocked = true;
-    }
-
-    public void unlock() {
-        frontLocked = false;
-        backLocked = false;
-    }
-
-    public void lockFront() {
-        frontLocked = true;
-        backLocked = false;
-    }
-
-    public void unlockFrontLockBack() {
-        frontLocked = false;
-        backLocked = true;
-    }
-
     public Lift getLift() {
         return lift;
     }
@@ -175,8 +137,25 @@ public class Outtake implements Subsystem{
         return turret;
     }
 
+    public void lock() {
+        locks.lockAll();
+    }
+
+    public void unlock() {
+        locks.unlockAll();
+    }
+
+    public void unlockFrontLockBack() {
+        locks.unlockFrontLockBack();
+    }
+
+    public void lockFront() {
+        locks.lockFront();
+    }
+
     public void telemetry(Telemetry telemetry) {
         lift.telemetry(telemetry);
+        locks.telemetry(telemetry);
         turret.telemetry(telemetry);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
