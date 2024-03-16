@@ -82,7 +82,7 @@ public class Solo extends BCLinearOpMode {
                 intake.retractIntakeWrist();
                 intake.setIntakePower(0);
 
-                if(outtake.lift.getCurrentPos() > Outtake.LIFT_WRIST_CLEAR_POS) {
+                if(outtake.liftWristClear()) {
                     outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKE_WRIST_UP;
                     outtakeTime = currentTime();
