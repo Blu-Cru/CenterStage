@@ -22,7 +22,7 @@ public class Intake implements Subsystem{
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
-        intakeRoller.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeRoller.setDirection(DcMotorSimple.Direction.FORWARD);
 
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake motor");
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
