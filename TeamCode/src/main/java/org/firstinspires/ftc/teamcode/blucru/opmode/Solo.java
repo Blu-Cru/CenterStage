@@ -12,7 +12,7 @@ public class Solo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double REVERSE_INTAKE_TIME = 1000;
     public static double RETRACT_WRIST_DELAY = 250;
-    public static double FULL_RETRACT_DELAY = 350;
+    public static double FULL_RETRACT_DELAY_AFTER_WRIST = 100;
 
     RobotState robotState;
 
@@ -22,6 +22,7 @@ public class Solo extends BCLinearOpMode {
     double stopIntakeTime = -10000; // init at -10000 ms to prevent immediate outtake
     double outtakeTime = 0;
     double retractTime = 0;
+    double retractWristTime = 0;
 
     // gamepad variables
     double lastIntakePower;
@@ -136,7 +137,7 @@ public class Solo extends BCLinearOpMode {
                 if(gamepad1.a && !lastA1) {
                     retractTime = currentTime();
                     outtake.centerTurret();
-                    outtake.incrementTargetHeight(0.7);
+                    outtake.incrementTargetHeight(1);
                     robotState = RobotState.RETRACTING;
                 }
                 lastA1 = gamepad1.a;
@@ -177,12 +178,13 @@ public class Solo extends BCLinearOpMode {
                 intake.setIntakePower(0);
 
                 // retract wrist
-                if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30) {
+                if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30 && !outtake.wristRetracted) {
                     outtake.retractWrist();
+                    retractWristTime = currentTime();
                 }
 
                 // fully retract
-                if(timeSince(retractTime) > FULL_RETRACT_DELAY && outtake.lift.getAbsPosError() < 30) {
+                if(timeSince(retractWristTime) > FULL_RETRACT_DELAY_AFTER_WRIST && outtake.lift.getAbsPosError() < 30) {
                     outtake.retractLift();
                     robotState = RobotState.RETRACT;
                 }
