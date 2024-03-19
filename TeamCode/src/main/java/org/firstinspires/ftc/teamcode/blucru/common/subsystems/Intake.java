@@ -77,6 +77,10 @@ public class Intake implements Subsystem{
         return intakePower;
     }
 
+    public void intake() {
+        setIntakePower(1);
+    }
+
     private void setPower(double power) {
         power = Range.clip(power, -1, 1);
         // only update if power has changed

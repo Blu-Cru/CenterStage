@@ -29,11 +29,15 @@ public class ColorSensorTest extends BCLinearOpMode {
         addIntakeColorSensors();
         intakeColorSensors.startReading();
 
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+//        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+//        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+    }
+
+    public void telemetry() {
+        intakeColorSensors.testTelemetry(telemetry);
     }
 
     public void end() {
-        relativeLayout.setBackgroundColor(Color.CYAN);
+//        relativeLayout.setBackgroundColor(Color.CYAN);
     }
 }

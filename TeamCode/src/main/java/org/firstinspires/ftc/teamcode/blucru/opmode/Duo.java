@@ -26,9 +26,12 @@ right joystick : turn
 @Config
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
+    // timer variables
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double RETRACT_WRIST_DELAY = 250;
     public static double FULL_RETRACT_DELAY = 350;
+    public static double INTAKE_FULL_REVERSE_TIME = 1000;
+    public static double START_INTAKE_READ_DELAY = 100;
 
     private RobotState robotState;
 
@@ -37,6 +40,8 @@ public class Duo extends BCLinearOpMode {
     // timer variables
     double outtakeTime = 0;
     double retractTime = 0;
+    double intakeFullTime = -10000; // init at -10000 ms to prevent immediate outtake
+    double startIntakeTime = 0;
 
     // gamepad states
     boolean lastDown2 = false;
@@ -76,27 +81,9 @@ public class Duo extends BCLinearOpMode {
         else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
         else drivetrain.driveMaintainHeading(horz, vert, rotate); // drive normally
 
-        // INTAKE
-        if(gamepad2.left_bumper && outtake.liftIntakeReady()) {
-            intake.setIntakePower(1);
-            outtake.unlock();
-        } else if(gamepad2.right_bumper) {
-            intake.setIntakePower(-1);
-            outtake.lock();
-        } else {
-            intake.setIntakePower(0);
-            if (gamepad2.dpad_left) outtake.unlockFrontLockBack();
-            else if(gamepad2.dpad_right) outtake.unlock();
-            else outtake.lock();
-        }
-
-        // toggle intake wrist
-        if(gamepad2.a && outtake.liftIntakeReady()) intake.dropToGround();
-        else if (gamepad2.dpad_down && outtake.liftIntakeReady()) intake.dropToStack(2);
-        else intake.retractIntakeWrist();
-
         switch(robotState) {
             case RETRACT:
+                // LIFT
                 if(gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
@@ -108,6 +95,60 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                }
+
+                // INTAKE
+                if(gamepad1.left_bumper && outtake.lift.intakeReady()) {
+                    robotState = RobotState.INTAKING;
+                    intake.startReadingColor();
+                    startIntakeTime = currentTime();
+                    outtake.unlock();
+                    intake.intake();
+                    intake.dropToGround();
+                }
+
+                if(gamepad1.a && outtake.lift.intakeReady()) {
+                    robotState = RobotState.INTAKING;
+                    intake.startReadingColor();
+                    startIntakeTime = currentTime();
+                    outtake.unlock();
+                    intake.intake();
+                    intake.dropToStack(2);
+                }
+
+                if(gamepad1.right_bumper) {
+                    intake.setIntakePower(-1);
+                } else {
+                    intake.setIntakePower(0);
+                }
+
+                // REVERSE INTAKE
+                if(timeSince(intakeFullTime) < INTAKE_FULL_REVERSE_TIME || gamepad2.right_bumper) {
+                    intake.setIntakePower(-1);
+                    intake.retractIntakeWrist();
+                    outtake.lock();
+                }
+                break;
+            case INTAKING:
+                if(intake.isFull() && timeSince(startIntakeTime) > START_INTAKE_READ_DELAY) {
+                    intakeFullTime = currentTime();
+                    robotState = RobotState.RETRACT;
+                    intake.stopReadingColor();
+                    intake.setIntakePower(-1);
+                    intake.retractIntakeWrist();
+                    outtake.lock();
+                } else if(gamepad1.left_bumper) {
+                    intake.intake();
+                    intake.dropToGround();
+                } else if(gamepad1.a) {
+                    intake.intake();
+                    intake.dropToStack(2);
+                } else {
+                    outtake.lock();
+                    intake.setIntakePower(0);
+                    intake.retractIntakeWrist();
+                    robotState = RobotState.RETRACT;
+                    intake.stopReadingColor();
                 }
                 break;
             case LIFTING:
@@ -126,15 +167,20 @@ public class Duo extends BCLinearOpMode {
                     outtake.retractLift();
                 }
                 lastA2 = gamepad2.a;
+
+                // reverse intake
+                if(gamepad1.right_bumper) {
+                    intake.setIntakePower(-1);
+                } else {
+                    intake.setIntakePower(0);
+                }
                 break;
             case OUTTAKE_WRIST_UP:
                 // TURRET CONTROL
-                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY) {
-                    if(!outtake.wristRetracted) {
-                        if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
-                        else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
-                        else outtake.setTurretAngle(270);
-                    } else outtake.setTurretAngle(270);
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
+                    if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
+                    else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
+                    else outtake.setTurretAngle(270);
                 } else outtake.setTurretAngle(270);
 
                 // retract wrist
@@ -165,6 +211,13 @@ public class Duo extends BCLinearOpMode {
                     robotState = RobotState.RETRACTING;
                 }
                 lastA2 = gamepad2.a;
+
+                // reverse intake
+                if(gamepad1.right_bumper) {
+                    intake.setIntakePower(-1);
+                } else {
+                    intake.setIntakePower(0);
+                }
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 // retract
@@ -196,17 +249,32 @@ public class Duo extends BCLinearOpMode {
                     outtake.incrementTargetHeight(-1);
                 }
                 lastRSDown2 = gamepad2.right_stick_y > 0.3;
+
+                // reverse intake
+                if(gamepad1.right_bumper) {
+                    intake.setIntakePower(-1);
+                } else {
+                    intake.setIntakePower(0);
+                }
                 break;
             case RETRACTING:
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
                     outtake.retractWrist();
+                    outtake.lock();
                 }
 
                 // fully retract
                 if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
                     outtake.retractLift();
                     robotState = RobotState.RETRACT;
+                }
+
+                // reverse intake
+                if(gamepad1.right_bumper) {
+                    intake.setIntakePower(-1);
+                } else {
+                    intake.setIntakePower(0);
                 }
                 break;
         }
