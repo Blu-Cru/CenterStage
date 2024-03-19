@@ -70,6 +70,8 @@ public class BCLinearOpMode extends LinearOpMode {
                 telemetry.update();
             }
         }
+
+        end();
     }
 
     // methods to be overriden
@@ -77,6 +79,7 @@ public class BCLinearOpMode extends LinearOpMode {
     public void initLoop() {}
     public void periodic() {}
     public void telemetry() {}
+    public void end() {}
 
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
 
