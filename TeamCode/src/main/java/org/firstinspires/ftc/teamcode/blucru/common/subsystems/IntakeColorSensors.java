@@ -8,8 +8,17 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 
 public class IntakeColorSensors implements Subsystem{
+    public enum sensorType {
+        FRONT,
+        BACK
+    }
+
+    public static double FRONT_DISTANCE_LOW = 0.3, FRONT_DISTANCE_HIGH = 1.5; // inches
+    public static double BACK_DISTANCE_LOW = 0.3, BACK_DISTANCE_HIGH = 1.5; // inches
+
     public static double BLUE_LOW_H = 80;
     public static double BLUE_HIGH_H = 140;
     public static double PURPLE_LOW_H = 250;
@@ -19,6 +28,7 @@ public class IntakeColorSensors implements Subsystem{
     public static double GREEN_LOW_H = 100;
     public static double GREEN_HIGH_H = 140;
 
+    public SlotState frontSlotState, backSlotState;
     RevColorSensorV3 frontSensor, backSensor;
     NormalizedRGBA frontRGBA, backRGBA;
     double frontR, backR;
@@ -41,8 +51,6 @@ public class IntakeColorSensors implements Subsystem{
         frontRGBA = frontSensor.getNormalizedColors();
         backRGBA = backSensor.getNormalizedColors();
 
-
-
         frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
         backDistance = backSensor.getDistance(DistanceUnit.INCH);
         frontLightDetected = frontSensor.getLightDetected();
@@ -59,19 +67,22 @@ public class IntakeColorSensors implements Subsystem{
             frontR = frontRGBA.red;
             frontG = frontRGBA.green;
             frontB = frontRGBA.blue;
-            getHSV(frontRGBA, frontHSV);
+            getHSV(frontRGBA, frontHSV); // sets frontHSV
             frontHue = frontHSV[0];
 
             backR = backRGBA.red;
             backG = backRGBA.green;
             backB = backRGBA.blue;
-            getHSV(backRGBA, backHSV);
+            getHSV(backRGBA, backHSV); // sets backHSV
             backHue = backHSV[0];
 
             frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
             frontLightDetected = frontSensor.getLightDetected();
             backLightDetected = backSensor.getLightDetected();
+
+            frontSlotState = calculateSlotState(frontDistance, sensorType.FRONT);
+            backSlotState = calculateSlotState(backDistance, sensorType.BACK);
         } else {
             frontSensor.enableLed(false);
             backSensor.enableLed(false);
@@ -80,6 +91,20 @@ public class IntakeColorSensors implements Subsystem{
 
     public void write() {
 
+    }
+
+    public SlotState calculateSlotState(double distance, sensorType sensor) {
+        if(sensor == sensorType.FRONT) {
+            if(distance >= FRONT_DISTANCE_LOW && distance <= FRONT_DISTANCE_HIGH)
+                return SlotState.FULL;
+            else
+                return SlotState.EMPTY;
+        } else {
+            if(distance >= BACK_DISTANCE_LOW && distance <= BACK_DISTANCE_HIGH)
+                return SlotState.FULL;
+            else
+                return SlotState.EMPTY;
+        }
     }
 
     // scales the front RGB values to be between 0 and 255

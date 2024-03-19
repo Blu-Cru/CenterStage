@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 
 @Config
 public class Intake implements Subsystem{
@@ -17,6 +18,7 @@ public class Intake implements Subsystem{
     private DcMotorEx intakeMotor;
     private CRServo intakeRoller;
     public IntakeWrist intakeWrist;
+    public IntakeColorSensors intakeColorSensors;
 
     double intakePower;
 
@@ -28,10 +30,12 @@ public class Intake implements Subsystem{
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
         intakeWrist = new IntakeWrist(hardwareMap); // instantiate intake wrist
+        intakeColorSensors = new IntakeColorSensors(hardwareMap); // instantiate intake color sensors
     }
 
     public void init() {
         intakeWrist.init();
+        intakeColorSensors.init();
         //set all motors to zero power
         intakeRoller.setPower(0);
         lastPower = 0;
@@ -39,12 +43,18 @@ public class Intake implements Subsystem{
 
     public void read() {
         intakeWrist.read();
+        intakeColorSensors.read();
     }
 
     public void write() {
         intakeWrist.write();
+        intakeColorSensors.write();
 
         setPower(intakePower);
+    }
+
+    public boolean isFull() {
+        return intakeColorSensors.frontSlotState == SlotState.FULL && intakeColorSensors.backSlotState == SlotState.FULL;
     }
 
     public void retractIntakeWrist() {
@@ -79,6 +89,14 @@ public class Intake implements Subsystem{
 
     public IntakeWrist getIntakeWrist() {
         return intakeWrist;
+    }
+
+    public void startReadingColor() {
+        intakeColorSensors.startReading();
+    }
+
+    public void stopReadingColor() {
+        intakeColorSensors.stopReading();
     }
 
     public void telemetry(Telemetry telemetry) {
