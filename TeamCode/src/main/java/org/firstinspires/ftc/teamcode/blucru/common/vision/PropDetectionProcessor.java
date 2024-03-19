@@ -81,12 +81,12 @@ public class PropDetectionProcessor implements VisionProcessor {
 
     }
 
-    public Mat processFrame(Mat input, long captureTime) {
-        Mat mat = new Mat();
+    public Mat processFrame(Mat inputRGB, long captureTime) {
+        Mat inputHSV = new Mat();
 
-        Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
-        if(mat.empty()) {
-            return input;
+        Imgproc.cvtColor(inputRGB, inputHSV, Imgproc.COLOR_RGB2HSV);
+        if(inputHSV.empty()) {
+            return inputRGB;
         }
 
         Mat thresh = new Mat();
@@ -97,7 +97,7 @@ public class PropDetectionProcessor implements VisionProcessor {
             Scalar lower = new Scalar(blueLowH,40,20);
             Scalar upper = new Scalar(blueHighH, 255, 255);
 
-            Core.inRange(mat, lower, upper, thresh);
+            Core.inRange(inputHSV, lower, upper, thresh);
         } else {
             Scalar lower1 = new Scalar(redLowH1, 40, 20);
             Scalar upper1 = new Scalar(redHighH1, 255, 255);
@@ -108,8 +108,8 @@ public class PropDetectionProcessor implements VisionProcessor {
             Mat thresh1 = new Mat();
             Mat thresh2 = new Mat();
 
-            Core.inRange(mat, lower2, upper2, thresh2);
-            Core.inRange(mat, lower1, upper1, thresh1);
+            Core.inRange(inputHSV, lower2, upper2, thresh2);
+            Core.inRange(inputHSV, lower1, upper1, thresh1);
 
             // combine the 2 red threshes
             Core.bitwise_or(thresh1, thresh2, thresh);
@@ -122,7 +122,7 @@ public class PropDetectionProcessor implements VisionProcessor {
 
 
         Mat masked = new Mat();
-        Core.bitwise_and(mat, mat, masked, thresh);
+        Core.bitwise_and(inputHSV, inputHSV, masked, thresh);
 
 
         //calculate average HSV values of the white thresh values
@@ -175,7 +175,7 @@ public class PropDetectionProcessor implements VisionProcessor {
         // input.release();
         //scaledThresh.release();
         scaledMask.release();
-        mat.release();
+        inputHSV.release();
         masked.release();
         thresh.release();
         //change the return to whatever mat you want in camera stream
