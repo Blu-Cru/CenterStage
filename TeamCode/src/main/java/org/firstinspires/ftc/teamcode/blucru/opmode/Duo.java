@@ -241,14 +241,14 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
-                if(gamepad2.right_stick_y < -0.3 && !lastRSUp2 && !gamepad2.right_stick_button) {
+                if(gamepad2.right_stick_y < -0.5 && !lastRSUp2 && !gamepad2.right_stick_button) {
                     outtake.incrementTargetHeight(1);
                 }
-                lastRSUp2 = gamepad2.right_stick_y < -0.3;
-                if(gamepad2.right_stick_y > 0.3 && !lastRSDown2 && !gamepad2.right_stick_button) {
+                lastRSUp2 = gamepad2.right_stick_y < -0.5;
+                if(gamepad2.right_stick_y > 0.5 && !lastRSDown2 && !gamepad2.right_stick_button) {
                     outtake.incrementTargetHeight(-1);
                 }
-                lastRSDown2 = gamepad2.right_stick_y > 0.3;
+                lastRSDown2 = gamepad2.right_stick_y > 0.5;
 
                 // reverse intake
                 if(gamepad1.right_bumper) {
