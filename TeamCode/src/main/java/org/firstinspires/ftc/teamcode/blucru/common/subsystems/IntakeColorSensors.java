@@ -173,6 +173,13 @@ public class IntakeColorSensors implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("READING: ", reading);
+        telemetry.addData("FRONT SLOT STATE: ", frontSlotState);
+        telemetry.addData("BACK SLOT STATE: ", backSlotState);
+        telemetry.addData("front distance", frontDistance);
+        telemetry.addData("back distance", backDistance);
+    }
+
+    public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("front R", frontR);
         telemetry.addData("front G", frontG);
         telemetry.addData("front B", frontB);
@@ -181,8 +188,6 @@ public class IntakeColorSensors implements Subsystem{
         telemetry.addData("back G", backG);
         telemetry.addData("back B", backB);
         telemetry.addData("back hue", backHue);
-        telemetry.addData("front distance", frontDistance);
-        telemetry.addData("back distance", backDistance);
         telemetry.addData("front light detected", frontLightDetected);
         telemetry.addData("back light detected", backLightDetected);
     }
