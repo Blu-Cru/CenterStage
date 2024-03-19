@@ -58,7 +58,7 @@ public class Duo extends BCLinearOpMode {
         scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set the heading to score on the backboard
     }
 
-    public void read() {
+    public void periodic() {
         // DRIVING
         drivetrain.setDrivePower(robotState, gamepad1);
 
