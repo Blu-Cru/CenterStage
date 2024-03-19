@@ -212,6 +212,10 @@ public class Lift implements Subsystem{
         return currentPos;
     }
 
+    public int getAbsPosError() {
+        return Math.abs(targetPos - currentPos);
+    }
+
     public int toTicks(double inches) { // convert inches to motor ticks
         return (int) (inches / PULLEY_CIRCUMFERENCE * TICKS_PER_REV);
     }

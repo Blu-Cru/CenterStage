@@ -177,12 +177,12 @@ public class Solo extends BCLinearOpMode {
                 intake.setIntakePower(0);
 
                 // retract wrist
-                if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
+                if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30) {
                     outtake.retractWrist();
                 }
 
                 // fully retract
-                if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
+                if(timeSince(retractTime) > FULL_RETRACT_DELAY && outtake.lift.getAbsPosError() < 30) {
                     outtake.retractLift();
                     robotState = RobotState.RETRACT;
                 }
