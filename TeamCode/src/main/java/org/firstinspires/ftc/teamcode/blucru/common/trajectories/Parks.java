@@ -9,9 +9,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class Parks {
     public static double reflect = 1;
 
-    public static double TURRET_RETRACT_DELAY = 0.1;
-    public static double WRIST_RETRACT_DELAY = 0.5;
-    public static double LIFT_RETRACT_DELAY = 0.8;
+    public static double
+            TURRET_RETRACT_DELAY = 0.1,
+            WRIST_RETRACT_DELAY = 0.5,
+            LIFT_RETRACT_DELAY = 0.8;
 
     public Parks(double reflect) {
         this.reflect = reflect;

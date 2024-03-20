@@ -24,7 +24,7 @@ public class Placements {
                 .setTangent(Math.toRadians(90 * reflect))
                 .lineTo(Poses.BACKDROP_PLACEMENT_CLOSE_POSE.vec())
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -36,7 +36,7 @@ public class Placements {
                 .splineToConstantHeading(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToConstantHeading(Poses.BACKDROP_PLACEMENT_CENTER_POSE.vec(), Math.toRadians(90 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -48,7 +48,7 @@ public class Placements {
                 .splineTo(new Vector2d(12, -55 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.BACKDROP_PLACEMENT_FAR_POSE, Math.toRadians(135 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -62,7 +62,7 @@ public class Placements {
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -52 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -76,7 +76,7 @@ public class Placements {
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -90,7 +90,7 @@ public class Placements {
                 .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -40*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(135 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }
@@ -105,7 +105,7 @@ public class Placements {
                 .splineTo(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE, Math.toRadians(180))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 // drop down and start intake
 
                 .waitSeconds(WAIT_TIME)
@@ -123,7 +123,7 @@ public class Placements {
                 .splineToSplineHeading(new Pose2d(-54.5 + Poses.FIELD_OFFSET_X, -35 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(70 * reflect))
                 // release purple pixel
-                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retract())
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .waitSeconds(WAIT_TIME)
                 .build();
     }

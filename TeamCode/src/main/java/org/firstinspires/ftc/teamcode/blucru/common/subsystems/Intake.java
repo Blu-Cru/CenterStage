@@ -13,22 +13,23 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 
 @Config
 public class Intake implements Subsystem{
-    public static double MAX_POWER = 1;
-    public static double JAM_CURRENT = 10.0; // if current exceeds this, unjam
-    double lastPower;
-
-    private DcMotorEx intakeMotor;
-    private CRServo intakeRoller;
-    public IntakeWrist intakeWrist;
-    public IntakeColorSensors intakeColorSensors;
+    public static double
+            MAX_POWER = 1,
+            JAM_CURRENT = 10.0; // if current exceeds this, unjam
 
     enum IntakeState {
         IDLE,
         UNJAMMING
     }
 
+    private DcMotorEx intakeMotor;
+    private CRServo intakeRoller;
+    public IntakeWrist intakeWrist;
+    public IntakeColorSensors intakeColorSensors;
+
     IntakeState intakeState;
     double intakePower;
+    double lastPower;
     double intakeCurrent;
     double startUnjamTime;
 

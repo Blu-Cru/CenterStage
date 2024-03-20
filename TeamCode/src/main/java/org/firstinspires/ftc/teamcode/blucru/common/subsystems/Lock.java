@@ -7,10 +7,11 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lock implements Subsystem{
-    public static double FLAT = 0.7;
-    public static double LOCKED_FRONT = FLAT + toTicks(45);
-    public static double LOCK_BACK_POS = FLAT - toTicks(45);
-    public static double UNLOCKED_BACK = FLAT - toTicks(180);
+    public static double
+            FLAT = 0.7,
+            LOCKED_FRONT = FLAT + toTicks(45),
+            LOCK_BACK_POS = FLAT - toTicks(45),
+            UNLOCKED_BACK = FLAT - toTicks(180);
 
     enum LockState {
         LOCKED_FRONT,

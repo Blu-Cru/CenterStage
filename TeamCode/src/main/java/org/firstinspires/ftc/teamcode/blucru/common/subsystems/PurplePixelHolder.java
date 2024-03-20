@@ -7,15 +7,23 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PurplePixelHolder implements Subsystem{
     public static double EXTENDED = 0.49;
-    public static double RETRACTED = EXTENDED - 0.333;
+    public static double RETRACTED_RIGHT = EXTENDED - 0.333;
+    public static double RETRACTED_LEFT = EXTENDED + 0.333;
+
+    enum PurplePixelState {
+        RETRACTED_RIGHT,
+        RETRACTED_LEFT,
+        EXTENDED
+    }
 
     private Servo purplePixelHolder;
 
-    public boolean retracted = false;
+    PurplePixelState purplePixelState;
     private double position;
 
     public PurplePixelHolder(HardwareMap hardwareMap) {
         purplePixelHolder = hardwareMap.get(Servo.class, "purple pixel");
+        purplePixelState = PurplePixelState.EXTENDED;
     }
 
     public void init() {
@@ -23,18 +31,32 @@ public class PurplePixelHolder implements Subsystem{
     }
 
     public void read() {
-        position = retracted ? RETRACTED : EXTENDED;
+        switch(purplePixelState) {
+            case RETRACTED_RIGHT:
+                position = RETRACTED_RIGHT;
+                break;
+            case RETRACTED_LEFT:
+                position = RETRACTED_LEFT;
+                break;
+            case EXTENDED:
+                position = EXTENDED;
+                break;
+        }
     }
 
     public void write() {
         if(purplePixelHolder.getPosition() != position) purplePixelHolder.setPosition(position);
     }
 
-    public void retract() {
-        retracted = true;
+    public void retractRight() {
+        purplePixelState = PurplePixelState.RETRACTED_RIGHT;
+    }
+
+    public void retractLeft() {
+        purplePixelState = PurplePixelState.RETRACTED_LEFT;
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("purple pixel retracted", retracted);
+        telemetry.addData("Purple Pixel state", purplePixelState);
     }
 }

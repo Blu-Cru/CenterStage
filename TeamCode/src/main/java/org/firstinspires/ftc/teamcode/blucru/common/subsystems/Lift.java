@@ -14,22 +14,24 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 
 @Config
 public class Lift implements Subsystem{
-    public static double kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04;
-    public static int YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1250;
-    public static int RETRACT_POS = 0, LOW_POS = 1200, MED_POS = 1500, HIGH_POS = 1800;
-    public static int MIN_POS = 0, MAX_POS = 2300;
-    public static double stallCurrent = 20; // amps
-    public static double resetCurrent = 1; // amps
-    public final int tolerance = 5; // ticks
+    public static double
+            kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04, // PID values
 
-    public static double TICKS_PER_REV = 384.5;
-    public static double PULLEY_CIRCUMFERENCE = 4.40945; // inches
+            stallCurrent = 20, // amps
+            resetCurrent = 1, // amps
 
-    public static double fastVelocity = 8000.0, fastAccel = 12000.0;
-    public static double MAX_UP_POWER = 0.85, MAX_DOWN_POWER = -0.8;
+            TICKS_PER_REV = 384.5, // ticks
+            PULLEY_CIRCUMFERENCE = 4.40945, // inches
 
-    public static int LIFT_WRIST_CLEAR_POS = 500;
-    public static int LIFT_INTAKE_READY_POS = 50;
+            fastVelocity = 8000.0, fastAccel = 12000.0, // ticks per second, ticks per second squared
+            MAX_UP_POWER = 0.85, MAX_DOWN_POWER = -0.8;
+
+    public static int
+            YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1250, // ticks
+            MIN_POS = 0, MAX_POS = 2300,
+            PID_TOLERANCE = 5, // ticks
+            WRIST_CLEAR_POS = 500,
+            INTAKE_READY_POS = 50;
 
     public LiftState liftState;
     private DcMotorEx liftMotor;
@@ -104,7 +106,7 @@ public class Lift implements Subsystem{
                 if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
                     power = 0;
                     resetEncoder();
-                } else if (Math.abs(targetPos - currentPos) < tolerance) {
+                } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
                     power = 0;
                 } else {
                     PID = getLiftPID(currentPos, targetPos);
@@ -118,7 +120,7 @@ public class Lift implements Subsystem{
                     resetEncoder();
 //                } else if (getCurrent() > stallCurrent) {
 //                    setTargetPos(currentPos - getDecelDelta());
-                } else if (Math.abs(targetPos - currentPos) < tolerance) {
+                } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
                     power = 0;
                 } else {
                     power = PID;
@@ -174,11 +176,11 @@ public class Lift implements Subsystem{
     }
 
     public boolean intakeReady() {
-        return currentPos < LIFT_INTAKE_READY_POS;
+        return currentPos < INTAKE_READY_POS;
     }
 
     public boolean wristClear() {
-        return currentPos < LIFT_WRIST_CLEAR_POS;
+        return currentPos < WRIST_CLEAR_POS;
     }
 
     public void setPower(double power) {

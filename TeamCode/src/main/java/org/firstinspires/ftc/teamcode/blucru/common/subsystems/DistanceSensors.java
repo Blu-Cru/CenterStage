@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
 
 public class DistanceSensors implements Subsystem {
-    public static double DISTANCE_SENSOR_OFFSET = 5.875; // distance between distance sensors in inches
-    public static double DISTANCE_SENSOR_MAX = 45; // max distance the distance sensors can read
+    public static double
+            DISTANCE_SENSOR_OFFSET = 5.875, // distance between distance sensors in inches
+            DISTANCE_SENSOR_MAX = 45; // max distance the distance sensors can read
     DistanceSensor rightDistanceSensor;
     DistanceSensor leftDistanceSensor;
 

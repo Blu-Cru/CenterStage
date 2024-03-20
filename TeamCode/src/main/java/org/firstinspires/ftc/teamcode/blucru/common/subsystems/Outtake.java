@@ -9,16 +9,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Outtake implements Subsystem{
-    public static double WRIST_RETRACT = 0.68;
-    public static double WRIST_OUTTAKE = WRIST_RETRACT - 0.28;
+    public static double
+            WRIST_RETRACT = 0.68,
+            WRIST_OUTTAKE = WRIST_RETRACT - 0.28,
 
-    public static double PIXEL_HEIGHT = 2.6; // inches
-    public static double LOW_HEIGHT = 4.3; // inches
-    public static double MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2; // inches
-    public static double HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4;
+            PIXEL_HEIGHT = 2.6, // inches
+            LOW_HEIGHT = 4.3, // inches
+            MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2, // inches
+            HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4,
 
-    public static double MIN_HEIGHT = LOW_HEIGHT;
-    public static double MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
+            MIN_HEIGHT = LOW_HEIGHT,
+            MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
 
     Servo wrist;
     public Lift lift;
