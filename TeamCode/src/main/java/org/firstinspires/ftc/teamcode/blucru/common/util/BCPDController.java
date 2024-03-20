@@ -7,13 +7,7 @@ public class BCPDController extends PIDController {
         super(kP, 0, kD);
     }
 
-    double targetPos, targetVelocity;
-
-    public double calculate(double currentPos, double targetPos, double targetVelocity) {
-        return calculate(currentPos, targetPos) + targetVelocity * getD();
-    }
-
     public double calculate(double currentPos, double targetPos, double currentVelocity, double targetVelocity) {
-        return calculate(currentPos, targetPos) + (targetVelocity - currentVelocity) * getD();
+        return getP() * (targetPos - currentPos) + getD() * (targetVelocity - currentVelocity);
     }
 }

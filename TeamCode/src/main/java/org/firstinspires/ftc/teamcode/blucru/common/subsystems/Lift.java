@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCPDController;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 
 @Config
@@ -35,7 +36,7 @@ public class Lift implements Subsystem{
     public LiftState liftState;
     DcMotorEx liftMotor;
     DcMotorEx liftMotor2;
-    PIDController liftPID;
+    BCPDController liftPID;
 
     double PID;
     double ff = kF;
@@ -69,7 +70,7 @@ public class Lift implements Subsystem{
 
     public void init() {
         setTargetPos(0);
-        liftPID = new PIDController(kP, kI, kD);
+        liftPID = new BCPDController(kP, kD);
 
         //set all motors to zero power
         liftMotor.setPower(0);
@@ -105,13 +106,13 @@ public class Lift implements Subsystem{
             case MoPro:
                 targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
                 targetVelocity = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
-                if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
+                if(targetPos == 0 && targetVelocity == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.1) {
                     power = 0;
                     resetEncoder();
                 } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
                     power = 0;
                 } else {
-                    PID = getLiftPID(currentPos, targetPos);
+                    PID = getLiftPD(currentPos, targetPos, currentVelocity, targetVelocity);
                     power = PID;
                 }
                 break;
@@ -139,6 +140,10 @@ public class Lift implements Subsystem{
 
     public double getLiftPID(double currentPos, double targetPos) {
         return Range.clip(liftPID.calculate(currentPos, targetPos), MAX_DOWN_POWER, MAX_UP_POWER);
+    }
+
+    public double getLiftPD(double currentPos, double targetPos, double currentVelocity, double targetVelocity) {
+        return Range.clip(liftPID.calculate(currentPos, targetPos, currentVelocity, targetVelocity), MAX_DOWN_POWER, MAX_UP_POWER);
     }
 
 //    public void setMotionProfileTargetHeight(double targetHeight) {
