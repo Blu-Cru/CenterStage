@@ -17,8 +17,7 @@ public class Lift implements Subsystem{
     public static double
             kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04, // PID values
 
-            stallCurrent = 20, // amps
-            resetCurrent = 1, // amps
+            stallCurrent = 20, resetCurrent = 1, // amps
 
             TICKS_PER_REV = 384.5, // ticks
             PULLEY_CIRCUMFERENCE = 4.40945, // inches
@@ -28,29 +27,30 @@ public class Lift implements Subsystem{
 
     public static int
             YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1250, // ticks
-            MIN_POS = 0, MAX_POS = 2300,
+            MIN_POS = 0, MAX_POS = 2500,
             PID_TOLERANCE = 5, // ticks
             WRIST_CLEAR_POS = 500,
             INTAKE_READY_POS = 50;
 
     public LiftState liftState;
-    private DcMotorEx liftMotor;
-    private DcMotorEx liftMotor2;
-    private PIDController liftPID;
+    DcMotorEx liftMotor;
+    DcMotorEx liftMotor2;
+    PIDController liftPID;
 
-    private double PID;
-    private double ff = kF;
+    double PID;
+    double ff = kF;
 
-    public double power;
+    double power;
     double lastPower;
-    private int targetPos;
-    private int currentPos;
+    int targetPos;
+    int currentPos;
 
-    private MotionProfile motionProfile;
-    private ElapsedTime motionProfileTimer;
+    MotionProfile motionProfile;
+    ElapsedTime motionProfileTimer;
     ElapsedTime retractTimer;
 
-    private double velocity;
+    double targetVelocity;
+    double currentVelocity;
 
     public Lift(HardwareMap hardwareMap) {
         // declares motors
@@ -63,7 +63,8 @@ public class Lift implements Subsystem{
         liftState = LiftState.PID;
 
         targetPos = 0;
-        velocity = 0;
+        targetVelocity = 0;
+        currentVelocity = 0;
     }
 
     public void init() {
@@ -94,7 +95,7 @@ public class Lift implements Subsystem{
 
     public void read() {
         currentPos = liftMotor.getCurrentPosition();
-        velocity = liftMotor.getVelocity();
+        currentVelocity = liftMotor.getVelocity();
     }
 
     public void write() {
@@ -103,6 +104,7 @@ public class Lift implements Subsystem{
         switch(liftState) {
             case MoPro:
                 targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
+                targetVelocity = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
                 if(targetPos == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.5) {
                     power = 0;
                     resetEncoder();
@@ -145,7 +147,7 @@ public class Lift implements Subsystem{
 
     public void setMotionProfileTargetPos(int targetPos) {
         targetPos = Range.clip(targetPos, MIN_POS, MAX_POS);
-        setMotionProfile(new MotionProfile(targetPos, currentPos, velocity, fastVelocity, fastAccel));
+        setMotionProfile(new MotionProfile(targetPos, currentPos, currentVelocity, fastVelocity, fastAccel));
 
         if(targetPos == 0) {
             retractTimer.reset();
@@ -168,10 +170,10 @@ public class Lift implements Subsystem{
     }
 
     public int getDecelDelta() {
-        if(velocity > 0) {
-            return (int) (velocity * velocity / (2 * motionProfile.aMax));
+        if(currentVelocity > 0) {
+            return (int) (currentVelocity * currentVelocity / (2 * motionProfile.aMax));
         } else {
-            return (int) (velocity * velocity / (-2 * motionProfile.aMax));
+            return (int) (currentVelocity * currentVelocity / (-2 * motionProfile.aMax));
         }
     }
 
@@ -234,7 +236,7 @@ public class Lift implements Subsystem{
     }
 
     public void testTelemetry(Telemetry telemetry) {
-        telemetry.addData("velocity", velocity);
+        telemetry.addData("velocity", currentVelocity);
     }
 
     public void motionProfileTelemetry(Telemetry telemetry) {
