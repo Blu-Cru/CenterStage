@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PurplePixelHolder implements Subsystem{
-    public static double EXTENDED = 0.49;
-    public static double RETRACTED_RIGHT = EXTENDED - 0.333;
-    public static double RETRACTED_LEFT = EXTENDED + 0.333;
+    public static double
+            EXTENDED = 0.49,
+            RETRACTED_RIGHT = EXTENDED - 0.333,
+            RETRACTED_LEFT = EXTENDED + 0.333;
 
     enum PurplePixelState {
         RETRACTED_RIGHT,
