@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 
 @Config
 public class Outtake implements Subsystem{
@@ -23,7 +22,7 @@ public class Outtake implements Subsystem{
 
     Servo wrist;
     public Lift lift;
-    public Locks locks;
+    public Lock lock;
     public Turret turret;
 
     public boolean outtaking;
@@ -37,7 +36,7 @@ public class Outtake implements Subsystem{
         wrist = hardwareMap.get(Servo.class, "wrist");
 
         lift = new Lift(hardwareMap);
-        locks = new Locks(hardwareMap);
+        lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
 
         outtaking = false;
@@ -47,7 +46,7 @@ public class Outtake implements Subsystem{
 
     public void init() {
         lift.init();
-        locks.init();
+        lock.init();
         turret.init();
         wrist.setPosition(WRIST_RETRACT);
     }
@@ -58,13 +57,13 @@ public class Outtake implements Subsystem{
         }
 
         lift.read();
-        locks.read();
+        lock.read();
         turret.read();
     }
 
     public void write() {
         lift.write();
-        locks.write();
+        lock.write();
         turret.write();
 
         // write wrist position
@@ -138,24 +137,24 @@ public class Outtake implements Subsystem{
     }
 
     public void lock() {
-        locks.lockAll();
+        lock.lockAll();
     }
 
     public void unlock() {
-        locks.unlockAll();
+        lock.unlockAll();
     }
 
     public void unlockFrontLockBack() {
-        locks.unlockFrontLockBack();
+        lock.unlockFrontLockBack();
     }
 
     public void lockFront() {
-        locks.lockFront();
+        lock.lockFront();
     }
 
     public void telemetry(Telemetry telemetry) {
         lift.telemetry(telemetry);
-        locks.telemetry(telemetry);
+        lock.telemetry(telemetry);
         turret.telemetry(telemetry);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);

@@ -148,7 +148,7 @@ public class Duo extends BCLinearOpMode {
             case LIFTING:
                 if(outtake.liftWristClear()) {
                     outtake.wristRetracted = false;
-                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
 
@@ -170,7 +170,7 @@ public class Duo extends BCLinearOpMode {
                     intake.setIntakePower(0);
                 }
                 break;
-            case OUTTAKE_WRIST_UP:
+            case OUTTAKING:
                 // TURRET CONTROL
                 if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
                     if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
@@ -215,13 +215,11 @@ public class Duo extends BCLinearOpMode {
                     intake.setIntakePower(0);
                 }
 
-                if(gamepad2.dpad_left) {
-                    outtake.locks.unlockFrontLockBack();
-                } else if (gamepad2.dpad_right) {
-                    outtake.locks.unlockAll();
-                } else {
-                    outtake.lock();
-                }
+                if(gamepad2.dpad_left)
+                    outtake.lock.unlockFrontLockBack();
+                else if (gamepad2.dpad_right)
+                    outtake.lock.unlockAll();
+
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 // retract
@@ -235,7 +233,7 @@ public class Duo extends BCLinearOpMode {
                 // extend wrist
                 if(gamepad2.dpad_down && !lastDown2) {
                     outtake.extendWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
                 lastDown2 = gamepad2.dpad_down;

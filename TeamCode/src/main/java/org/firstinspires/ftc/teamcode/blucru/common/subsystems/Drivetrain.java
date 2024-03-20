@@ -16,8 +16,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-import java.util.ArrayList;
-
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double MAX_ACCEL_DRIVE_DELTA = 3.5, MAX_DECEL_DRIVE_DELTA = 30.0; // magnitude per second at power 1 for slew rate limiter
@@ -323,7 +321,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 fastPower = 0.7;
                 normalPower = 0.6;
                 break;
-            case OUTTAKE_WRIST_UP:
+            case OUTTAKING:
                 slowPower = 0.25;
                 fastPower = 0.8;
                 normalPower = 0.4;

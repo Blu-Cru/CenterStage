@@ -85,7 +85,7 @@ public class Solo extends BCLinearOpMode {
 
                 if(outtake.liftWristClear()) {
                     outtake.wristRetracted = false;
-                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
 
@@ -104,7 +104,7 @@ public class Solo extends BCLinearOpMode {
                 lastA1 = gamepad1.a;
 
                 break;
-            case OUTTAKE_WRIST_UP:
+            case OUTTAKING:
                 // TURRET CONTROL
                 if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
                     if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
@@ -156,7 +156,7 @@ public class Solo extends BCLinearOpMode {
                 // extend wrist
                 if(gamepad1.dpad_down && !lastDown1) {
                     outtake.extendWrist();
-                    robotState = RobotState.OUTTAKE_WRIST_UP;
+                    robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
                 lastDown1 = gamepad1.dpad_down;

@@ -5,7 +5,7 @@ public enum RobotState {
     INTAKING,
     RETRACT,
     LIFTING,
-    OUTTAKE_WRIST_UP,
+    OUTTAKING,
     OUTTAKE_WRIST_RETRACTED,
     RETRACTING
 }

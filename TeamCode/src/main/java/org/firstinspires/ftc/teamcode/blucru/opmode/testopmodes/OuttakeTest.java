@@ -94,7 +94,7 @@ public class OuttakeTest extends LinearOpMode {
                     outtake.outtaking = true;
                     if(outtake.liftWristClear()) {
                         outtake.wristRetracted = false;
-                        robotState = RobotState.OUTTAKE_WRIST_UP;
+                        robotState = RobotState.OUTTAKING;
                         outtakeTimer.reset();
                     }
 
@@ -116,7 +116,7 @@ public class OuttakeTest extends LinearOpMode {
                         outtake.lift.setTargetPos(0);
                     }
                     break;
-                case OUTTAKE_WRIST_UP:
+                case OUTTAKING:
                     outtake.outtaking = true;
 
                     if(outtakeTimer.seconds() > 1) {

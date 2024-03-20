@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -107,10 +106,10 @@ public class Robot {
         return purplePixelHolder;
     }
 
-    public Locks addLocks() {
-        Locks locks = new Locks(hardwareMap);
-        subsystems.add(locks);
-        return locks;
+    public Lock addLocks() {
+        Lock lock = new Lock(hardwareMap);
+        subsystems.add(lock);
+        return lock;
     }
 
     public CVMaster addCVMaster(Alliance alliance) {

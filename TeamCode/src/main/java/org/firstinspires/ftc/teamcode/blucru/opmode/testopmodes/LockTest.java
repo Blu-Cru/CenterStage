@@ -8,8 +8,8 @@ public class LockTest extends BCLinearOpMode {
     }
 
     public void read() {
-        if(gamepad1.left_bumper) locks.unlockFrontLockBack();
-        else if(gamepad1.right_bumper) locks.unlockAll();
-        else locks.unlockAll();
+        if(gamepad1.left_bumper) lock.unlockFrontLockBack();
+        else if(gamepad1.right_bumper) lock.unlockAll();
+        else lock.unlockAll();
     }
 }
