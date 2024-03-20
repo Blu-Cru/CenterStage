@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 
 @Config
 public class Intake implements Subsystem{
     public static double MAX_POWER = 1;
+    public static double JAM_CURRENT = 10.0;
     double lastPower;
 
     private DcMotorEx intakeMotor;
@@ -20,7 +22,15 @@ public class Intake implements Subsystem{
     public IntakeWrist intakeWrist;
     public IntakeColorSensors intakeColorSensors;
 
+    enum IntakeState {
+        IDLE,
+        UNJAMMING
+    }
+
+    IntakeState intakeState;
     double intakePower;
+    double intakeCurrent;
+    double startUnjamTime;
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
@@ -31,6 +41,7 @@ public class Intake implements Subsystem{
 
         intakeWrist = new IntakeWrist(hardwareMap); // instantiate intake wrist
         intakeColorSensors = new IntakeColorSensors(hardwareMap); // instantiate intake color sensors
+        intakeState = IntakeState.IDLE;
     }
 
     public void init() {
@@ -44,13 +55,29 @@ public class Intake implements Subsystem{
     public void read() {
         intakeWrist.read();
         intakeColorSensors.read();
+
+        if (intakePower > 0.5 || intakeState == IntakeState.UNJAMMING) {
+            intakeCurrent = intakeMotor.getCurrent(CurrentUnit.AMPS);
+        }
+
+        if (intakeCurrent > JAM_CURRENT) {
+            intakeState = IntakeState.UNJAMMING;
+            startUnjamTime = System.currentTimeMillis();
+        }
     }
 
     public void write() {
         intakeWrist.write();
         intakeColorSensors.write();
 
-        setPower(intakePower);
+        if(intakeState == IntakeState.UNJAMMING) {
+            if(System.currentTimeMillis() - startUnjamTime > 500) {
+                intakeState = IntakeState.IDLE; // unjamming for 500ms
+            }
+            setPower(-0.8);
+        } else {
+            setPower(intakePower);
+        }
     }
 
     public boolean isFull() {
