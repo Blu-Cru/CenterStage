@@ -54,7 +54,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     Vector2d lastDriveVector; // drive vector in previous loop
     double lastRotate; // rotate input in previous loop
 
-    public DistanceSensors distanceSensors;
+//    public DistanceSensors distanceSensors;
     PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
@@ -63,7 +63,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.isTeleOp = isTeleOp;
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
         distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
-        distanceSensors = new DistanceSensors(hardwareMap);
+//        distanceSensors = new DistanceSensors(hardwareMap);
 
 //        readingDistance = false;
     }
@@ -205,22 +205,22 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        return correctedHeading + Math.PI/2;
 //    }
 
-    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-        distanceSensors.read(heading);
-        Vector2d distanceVector = new Vector2d(x,y);
-
-        double component;
-        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
-            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
-            // set component in direction opposite target heading
-            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
-        }
-
-        x = distanceVector.getX();
-        y = distanceVector.getY();
-
-        driveToHeading(x, y, targetHeading);
-    }
+//    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
+//        distanceSensors.read(heading);
+//        Vector2d distanceVector = new Vector2d(x,y);
+//
+//        double component;
+//        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
+//            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
+//            // set component in direction opposite target heading
+//            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
+//        }
+//
+//        x = distanceVector.getX();
+//        y = distanceVector.getY();
+//
+//        driveToHeading(x, y, targetHeading);
+//    }
 
     // set the component of a vector in a direction
     public Vector2d setComponent(Vector2d vector, double component, double angle) {
@@ -229,16 +229,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return vector.rotated(angle); // rotate back
     }
 
-    public double getDistanceSensorAngleError(double targetHeading) {
-        double error = heading - targetHeading - distanceSensors.angle;
-        if(error > Math.PI) {
-            error -= 2 * Math.PI;
-        } else if (error < -Math.PI) {
-            error += 2 * Math.PI;
-        }
-
-        return Math.abs(error);
-    }
+//    public double getDistanceSensorAngleError(double targetHeading) {
+//        double error = heading - targetHeading - distanceSensors.angle;
+//        if(error > Math.PI) {
+//            error -= 2 * Math.PI;
+//        } else if (error < -Math.PI) {
+//            error += 2 * Math.PI;
+//        }
+//
+//        return Math.abs(error);
+//    }
 
     public double calculateNewTargetHeading() {
         // vf^2 = vi^2 + 2a(xf - xi)
@@ -397,6 +397,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("last drive vector", lastDriveVector);
         telemetry.addData("odo heading", odoHeading);
         telemetry.addData("imu heading", imuHeading);
-        distanceSensors.telemetry(telemetry);
+//        distanceSensors.telemetry(telemetry);
     }
 }

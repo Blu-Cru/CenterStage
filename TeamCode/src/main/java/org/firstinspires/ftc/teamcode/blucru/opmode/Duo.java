@@ -61,6 +61,7 @@ public class Duo extends BCLinearOpMode {
         addPlane();
 
         scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set the heading to score on the backboard
+        intake.startReadingColor();
     }
 
     public void periodic() {
@@ -84,63 +85,57 @@ public class Duo extends BCLinearOpMode {
         switch(robotState) {
             case RETRACT:
                 // LIFT
-                if(gamepad2.x) {
+                if (gamepad2.x) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                    intake.stopReadingColor();
                 }
-                if(gamepad2.y) {
+                if (gamepad2.y) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                    intake.stopReadingColor();
+
                 }
-                if(gamepad2.b) {
+                if (gamepad2.b) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                    intake.stopReadingColor();
                 }
 
                 // INTAKE
-                if(gamepad1.left_bumper && outtake.lift.intakeReady()) {
+                if (gamepad2.left_bumper && outtake.lift.intakeReady() && !intake.isFull()) {
                     robotState = RobotState.INTAKING;
-                    intake.startReadingColor();
                     startIntakeTime = currentTime();
                     outtake.unlock();
                     intake.intake();
                     intake.dropToGround();
-                }
-
-                if(gamepad1.a && outtake.lift.intakeReady()) {
+                } else if (gamepad2.a && outtake.lift.intakeReady() && !intake.isFull()) {
                     robotState = RobotState.INTAKING;
-                    intake.startReadingColor();
                     startIntakeTime = currentTime();
                     outtake.unlock();
                     intake.intake();
                     intake.dropToStack(2);
-                }
 
-                if(gamepad1.right_bumper) {
-                    intake.setIntakePower(-1);
-                } else {
-                    intake.setIntakePower(0);
-                }
-
-                // REVERSE INTAKE
-                if(timeSince(intakeFullTime) < INTAKE_FULL_REVERSE_TIME || gamepad2.right_bumper) {
+                    // REVERSE INTAKE
+                } else if(timeSince(intakeFullTime) < INTAKE_FULL_REVERSE_TIME || gamepad2.right_bumper) {
                     intake.setIntakePower(-1);
                     intake.retractIntakeWrist();
                     outtake.lock();
+                } else {
+                    intake.setIntakePower(0);
                 }
                 break;
             case INTAKING:
                 if(intake.isFull() && timeSince(startIntakeTime) > START_INTAKE_READ_DELAY) {
                     intakeFullTime = currentTime();
                     robotState = RobotState.RETRACT;
-                    intake.stopReadingColor();
                     intake.setIntakePower(-1);
                     intake.retractIntakeWrist();
                     outtake.lock();
-                } else if(gamepad1.left_bumper) {
+                } else if(gamepad2.left_bumper) {
                     intake.intake();
                     intake.dropToGround();
-                } else if(gamepad1.a) {
+                } else if(gamepad2.a) {
                     intake.intake();
                     intake.dropToStack(2);
                 } else {
@@ -148,7 +143,6 @@ public class Duo extends BCLinearOpMode {
                     intake.setIntakePower(0);
                     intake.retractIntakeWrist();
                     robotState = RobotState.RETRACT;
-                    intake.stopReadingColor();
                 }
                 break;
             case LIFTING:
@@ -165,11 +159,12 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
                     outtake.retractLift();
+                    intake.startReadingColor();
                 }
                 lastA2 = gamepad2.a;
 
                 // reverse intake
-                if(gamepad1.right_bumper) {
+                if(gamepad2.right_bumper) {
                     intake.setIntakePower(-1);
                 } else {
                     intake.setIntakePower(0);
@@ -208,15 +203,24 @@ public class Duo extends BCLinearOpMode {
                     outtake.retractWrist();
                     outtake.centerTurret();
                     outtake.incrementTargetHeight(1);
+                    intake.startReadingColor();
                     robotState = RobotState.RETRACTING;
                 }
                 lastA2 = gamepad2.a;
 
                 // reverse intake
-                if(gamepad1.right_bumper) {
+                if(gamepad2.right_bumper) {
                     intake.setIntakePower(-1);
                 } else {
                     intake.setIntakePower(0);
+                }
+
+                if(gamepad2.dpad_left) {
+                    outtake.locks.unlockFrontLockBack();
+                } else if (gamepad2.dpad_right) {
+                    outtake.locks.unlockAll();
+                } else {
+                    outtake.lock();
                 }
                 break;
             case OUTTAKE_WRIST_RETRACTED:
@@ -224,6 +228,7 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
                     outtake.retractLift();
+                    intake.startReadingColor();
                 }
                 lastA2 = gamepad2.a;
 
@@ -268,6 +273,7 @@ public class Duo extends BCLinearOpMode {
                 if(timeSince(retractTime) > FULL_RETRACT_DELAY) {
                     outtake.retractLift();
                     robotState = RobotState.RETRACT;
+                    intake.startReadingColor();
                 }
 
                 // reverse intake

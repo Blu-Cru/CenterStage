@@ -109,5 +109,6 @@ public class Intake implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake power", intakePower);
+        intakeColorSensors.telemetry(telemetry);
     }
 }

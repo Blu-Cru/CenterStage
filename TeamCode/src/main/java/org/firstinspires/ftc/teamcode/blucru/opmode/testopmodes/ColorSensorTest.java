@@ -18,11 +18,11 @@ public class ColorSensorTest extends BCLinearOpMode {
         }
         lastA = gamepad1.a;
 
-        relativeLayout.post(new Runnable() {
-            public void run() {
-                relativeLayout.setBackgroundColor(Color.HSVToColor(intakeColorSensors.getFrontHSV()));
-            }
-        });
+//        relativeLayout.post(new Runnable() {
+//            public void run() {
+//                relativeLayout.setBackgroundColor(Color.HSVToColor(intakeColorSensors.getFrontHSV()));
+//            }
+//        });
     }
 
     public void initialize() {

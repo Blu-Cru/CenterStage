@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Turret implements Subsystem{
     public final double BUCKET_LENGTH = 5.984; // inches
     public final double BUCKET_WIDTH = 1.733; // inches
-    public static double TURRET_CENTER = 0.51; // ticks of turret servo at 270 degrees
+    public static double TURRET_CENTER = 0.48; // ticks of turret servo at 270 degrees
 
     private Servo turret;
 

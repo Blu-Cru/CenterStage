@@ -35,8 +35,8 @@ public class DistancePIDTest extends LinearOpMode {
         Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 
-        drivetrain.distanceSensors.setQ(Q);
-        drivetrain.distanceSensors.setR(R);
+//        drivetrain.distanceSensors.setQ(Q);
+//        drivetrain.distanceSensors.setR(R);
 
         robot.init();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -65,20 +65,20 @@ public class DistancePIDTest extends LinearOpMode {
             if(gamepad1.b) {
                 targetHeading = Math.toRadians(180);
                 if(gamepad1.left_bumper) {
-                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
+//                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
                 } else {
                     drivetrain.driveToHeading(horz, vert, targetHeading);
                 }
             } else if(gamepad1.x) {
                 targetHeading = Math.toRadians(0);
                 if(gamepad1.left_bumper) {
-                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
+//                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
                 } else {
                     drivetrain.driveToHeading(horz, vert, targetHeading);
                 }
             } else if(gamepad1.a) {
                 targetHeading = Math.toRadians(90);
-                drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
+//                drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
             } else {
                 drivetrain.drive(horz, vert, rotate);
             }
@@ -88,8 +88,8 @@ public class DistancePIDTest extends LinearOpMode {
             robot.write();
 
             robot.telemetry(telemetry);
-            drivetrain.distanceSensors.testTelemetry(telemetry);
-            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
+//            drivetrain.distanceSensors.testTelemetry(telemetry);
+//            telemetry.addData("heading error", drivetrain.getDistanceSensorAngleError(targetHeading));
             telemetry.update();
         }
     }

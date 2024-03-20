@@ -10,7 +10,8 @@ public class Locks implements Subsystem{
     public static double BACK_LOCKED = BACK_UNLOCKED - 0.2;
 
     public static double FRONT_UNLOCKED = 0.7;
-    public static double FRONT_LOCKED = FRONT_UNLOCKED - 0.15;
+    public static double FRONT_LOCKED = FRONT_UNLOCKED + 0.25;
+    public static double LOCK_BACK_POS = 0.2;
 
     public boolean frontLocked;
     public boolean backLocked;
@@ -61,8 +62,7 @@ public class Locks implements Subsystem{
     }
 
     public void unlockFrontLockBack() {
-        frontLocked = false;
-        backLocked = true;
+        frontLock.setPosition(LOCK_BACK_POS);
     }
 
     public void telemetry(Telemetry telemetry) {

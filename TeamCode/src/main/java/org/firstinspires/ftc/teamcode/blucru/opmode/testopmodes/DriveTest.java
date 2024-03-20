@@ -44,13 +44,13 @@ public class DriveTest extends LinearOpMode {
 
             if(gamepad1.b) {
                 if(gamepad1.left_bumper) {
-                    drivetrain.driveToDistanceToHeading(horz, vert, 10, Math.toRadians(180));
+//                    drivetrain.driveToDistanceToHeading(horz, vert, 10, Math.toRadians(180));
                 } else {
                     drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
                 }
             } else if (gamepad1.x) {
                 if(gamepad1.left_bumper) {
-                    drivetrain.driveToDistanceToHeading(horz, vert, 10, 0);
+//                    drivetrain.driveToDistanceToHeading(horz, vert, 10, 0);
                 } else {
                     drivetrain.driveToHeading(horz, vert, 0);
                 }
