@@ -9,9 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Turret implements Subsystem{
-    public final double
+    public static final double
             BUCKET_LENGTH = 5.984,
-            BUCKET_WIDTH = 1.733; // inches
+            BUCKET_WIDTH = 1.733, // inches
+            BUCKET_HYPOTENUSE = Math.sqrt(BUCKET_LENGTH * BUCKET_LENGTH + BUCKET_WIDTH * BUCKET_WIDTH);
     public static double TURRET_CENTER = 0.48; // ticks of turret servo at 270 degrees
 
     private Servo turret;
@@ -56,6 +57,17 @@ public class Turret implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("turret angle", targetAngle);
+    }
+
+    public static double xToAngle(double x) {
+        double zeroAngle = Math.toDegrees(Math.asin(BUCKET_WIDTH / BUCKET_HYPOTENUSE));
+        if(x == 0) {
+            return 270;
+        } else if(x > 0) {
+            return 270 + zeroAngle + Math.toDegrees(Math.asin(BUCKET_WIDTH / x));
+        } else {
+            return 270 - zeroAngle + Math.toDegrees(Math.asin(BUCKET_HYPOTENUSE / x));
+        }
     }
 
     public void testTelemetry(Telemetry telemetry) {

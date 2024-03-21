@@ -113,6 +113,10 @@ public class Outtake implements Subsystem{
         turret.targetAngle = angleDeg;
     }
 
+    public void setTurretX(double inchesX) {
+//        turret.targetAngle = Math.toDegrees(Math.atan(x / turret.BUCKET_LENGTH));
+    }
+
     public double getTurretAngle() {
         return turret.targetAngle;
     }
