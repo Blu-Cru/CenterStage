@@ -50,6 +50,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
     }
 
     public void telemetry() {
+        telemetry.addData("mode", mode);
         telemetry.addData("target x", targetX);
         telemetry.addData("target y", targetY);
         telemetry.addData("target heading", targetHeading);

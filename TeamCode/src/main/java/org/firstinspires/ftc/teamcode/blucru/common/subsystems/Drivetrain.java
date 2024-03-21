@@ -28,6 +28,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02; // PID constants for heading
     public static double HEADING_PID_TOLERANCE = 0.05; // radians
 
+    public static double TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4;
+
     public static double DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04; // PID constants for distance sensors
     public static double DISTANCE_PID_ANGLE_TOLERANCE = 0.5; // radians
     public static double OUTTAKE_DISTANCE = 3.6; // correct distance for outtake for distance PID
@@ -59,7 +61,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     Vector2d lastDriveVector; // drive vector in previous loop
     double lastRotate; // rotate input in previous loop
 
-    public DistanceSensors distanceSensors;
+//    public DistanceSensors distanceSensors;
     PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
@@ -70,9 +72,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         headingPID.setTolerance(HEADING_PID_TOLERANCE);
 //        distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
 //        distancePID.setTolerance(0.1);
-        distanceSensors = new DistanceSensors(hardwareMap);
+//        distanceSensors = new DistanceSensors(hardwareMap);
 
 //        readingDistance = false;
+        translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
     }
 
     public void init() {
@@ -211,22 +214,22 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        return correctedHeading + Math.PI/2;
 //    }
 
-    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-        distanceSensors.read(heading);
-        Vector2d distanceVector = new Vector2d(x,y);
-
-        double component;
-        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
-            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
-            // set component in direction opposite target heading
-            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
-        }
-
-        x = distanceVector.getX();
-        y = distanceVector.getY();
-
-        driveToHeading(x, y, targetHeading);
-    }
+//    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
+//        distanceSensors.read(heading);
+//        Vector2d distanceVector = new Vector2d(x,y);
+//
+//        double component;
+//        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
+//            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
+//            // set component in direction opposite target heading
+//            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
+//        }
+//
+//        x = distanceVector.getX();
+//        y = distanceVector.getY();
+//
+//        driveToHeading(x, y, targetHeading);
+//    }
 
     public void driveToPosition(Pose2d targetPosition) {
         translationPID.setTargetPosition(targetPosition.vec());
@@ -243,16 +246,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return vector.rotated(angle); // rotate back
     }
 
-    public double getDistanceSensorAngleError(double targetHeading) {
-        double error = heading - targetHeading - distanceSensors.angle;
-        if(error > Math.PI) {
-            error -= 2 * Math.PI;
-        } else if (error < -Math.PI) {
-            error += 2 * Math.PI;
-        }
-
-        return Math.abs(error);
-    }
+//    public double getDistanceSensorAngleError(double targetHeading) {
+//        double error = heading - targetHeading - distanceSensors.angle;
+//        if(error > Math.PI) {
+//            error -= 2 * Math.PI;
+//        } else if (error < -Math.PI) {
+//            error += 2 * Math.PI;
+//        }
+//
+//        return Math.abs(error);
+//    }
 
     public double calculateNewTargetHeading() {
         // vf^2 = vi^2 + 2a(xf - xi)
@@ -414,6 +417,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("last drive vector", lastDriveVector);
         telemetry.addData("odo heading", odoHeading);
         telemetry.addData("imu heading", imuHeading);
-        distanceSensors.telemetry(telemetry);
+//        distanceSensors.telemetry(telemetry);
     }
 }
