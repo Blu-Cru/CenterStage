@@ -14,13 +14,46 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 /*
 Controls:
 
-release everything: retracted state
-a : release cone/intake
-b : low height
-x : medium height
-y : high height
-left joystick : strafe (field centric)
-right joystick : turn
+Gamepad 1:
+    - left stick: drive
+    - right stick: rotate
+    - right stick button: reset heading
+    - b: drive to outtake heading
+    - x: drive to opposite outtake heading
+    - dpad up: toggle plane
+
+retracted state:
+    - left bumper: intake ground level
+    - a: intake stack level
+    - right bumper: reverse intake
+
+
+intaking state:
+    - left bumper: intake ground level
+    - a: intake stack level
+    - right bumper: reverse intake
+    - RELEASE GOES TO RETRACT
+
+lifting state:
+    - a: go to retract state
+    - x: lift to low
+    - y: lift to mid
+    - b: lift to high
+    - right bumper: reverse intake
+    - right stick y: manual slide control
+    - share: reset slides
+
+outtaking state:
+    - a: go to retract state
+    - x: lift to low
+    - y: lift to mid
+    - b: lift to high
+    - right bumper: reverse intake
+    - right stick y: increment outtake height by one pixel
+    - share: reset slides
+    - dpad left: unlock front lock
+    - dpad right: unlock all locks
+
 
  */
 @Config
@@ -124,6 +157,11 @@ public class Duo extends BCLinearOpMode {
                 } else {
                     intake.setIntakePower(0);
                 }
+
+                // RESET SLIDES
+                if(gamepad2.share) {
+                    outtake.lift.resetEncoder();
+                }
                 break;
             case INTAKING:
                 if(intake.isFull() && timeSince(startIntakeTime) > START_INTAKE_READ_DELAY) {
@@ -173,8 +211,10 @@ public class Duo extends BCLinearOpMode {
             case OUTTAKING:
                 // TURRET CONTROL
                 if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
-                    if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
-                    else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
+//                    if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
+//                    else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
+                    if(Math.abs(gamepad2.right_stick_x) > 0.05)
+                        outtake.setTurretAngle(gamepad2.right_stick_x * 60 + 270);
                     else outtake.setTurretAngle(270);
                 } else outtake.setTurretAngle(270);
 
@@ -289,10 +329,7 @@ public class Duo extends BCLinearOpMode {
             outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
         }
 
-        // RESET SLIDES
-        if(gamepad2.share) {
-            outtake.lift.resetEncoder();
-        }
+
 
         // MANUAL HANG
         if(Math.abs(gamepad2.left_stick_y) > 0.2)
