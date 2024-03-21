@@ -314,9 +314,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         double normalPower = 0.5;
         switch (robotState) {
             case RETRACT:
-                slowPower = 0.35;
+                slowPower = 0.4;
                 fastPower = 1.0;
-                normalPower = 0.8;
+                normalPower = 0.9;
                 break;
             case LIFTING:
                 slowPower = 0.3;
@@ -326,17 +326,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             case OUTTAKING:
                 slowPower = 0.25;
                 fastPower = 0.8;
-                normalPower = 0.4;
+                normalPower = 0.5;
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 slowPower = 0.3;
                 fastPower = 0.7;
-                normalPower = 0.55;
+                normalPower = 0.7;
                 break;
             case RETRACTING:
                 slowPower = 0.3;
                 fastPower = 0.8;
-                normalPower = 0.7;
+                normalPower = 0.75;
                 break;
             default:
                 slowPower = 0.3;
