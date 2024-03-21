@@ -65,7 +65,7 @@ public class Lock implements Subsystem{
     }
 
     public void unlockAll() {
-        if(lockState == LockState.LOCKED_BACK) {
+        if(lockState == LockState.LOCKED_BACK || lockState == LockState.UNLOCKED_BACK) {
             lockState = LockState.UNLOCKED_BACK;
             lockPos = UNLOCKED_BACK;
         } else {
