@@ -19,7 +19,9 @@ public class Outtake implements Subsystem{
             HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4,
 
             MIN_HEIGHT = LOW_HEIGHT,
-            MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10;
+            MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10,
+
+            MAX_TELEOP_TURRET_X = 5.2; // inches
 
     Servo wrist;
     public Lift lift;
@@ -113,8 +115,13 @@ public class Outtake implements Subsystem{
         turret.targetAngle = angleDeg;
     }
 
-    public void setTurretX(double inchesX) {
-//        turret.targetAngle = Math.toDegrees(Math.atan(x / turret.BUCKET_LENGTH));
+    public void setTurretX(double xInches) {
+        setTurretAngle(Turret.xToAngle(xInches));
+    }
+
+    public void teleOpTurnTurret(double x) {
+        double xInches = x * MAX_TELEOP_TURRET_X;
+        setTurretX(xInches);
     }
 
     public double getTurretAngle() {

@@ -214,7 +214,7 @@ public class Duo extends BCLinearOpMode {
 //                    if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
 //                    else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
                     if(Math.abs(gamepad2.right_stick_x) > 0.05)
-                        outtake.setTurretAngle(gamepad2.right_stick_x * 60 + 270);
+                        outtake.teleOpTurnTurret(gamepad2.right_stick_x);
                     else outtake.setTurretAngle(270);
                 } else outtake.setTurretAngle(270);
 

@@ -63,10 +63,13 @@ public class Turret implements Subsystem{
         double zeroAngle = Math.toDegrees(Math.asin(BUCKET_WIDTH / BUCKET_HYPOTENUSE));
         if(x == 0) {
             return 270;
-        } else if(x > 0) {
-            return 270 + zeroAngle + Math.toDegrees(Math.asin(BUCKET_WIDTH / x));
         } else {
-            return 270 - zeroAngle + Math.toDegrees(Math.asin(BUCKET_HYPOTENUSE / x));
+            double additionalAngle = Math.toDegrees(Math.asin(x / BUCKET_HYPOTENUSE));
+            if(x > 0) {
+                return 270 + zeroAngle + additionalAngle;
+            } else {
+                return 270 - zeroAngle + additionalAngle;
+            }
         }
     }
 
