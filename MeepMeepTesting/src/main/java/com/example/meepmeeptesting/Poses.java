@@ -20,7 +20,7 @@ public class Poses {
 
     public static double STACK_X = -58;
     public static double CENTER_Y = -10;
-    public static double STACK_SETUP_X = -54;
+    public static double STACK_SETUP_X = -50;
 
     public static Pose2d BACKDROP_STARTING_POSE;
     public static Pose2d WING_STARTING_POSE;

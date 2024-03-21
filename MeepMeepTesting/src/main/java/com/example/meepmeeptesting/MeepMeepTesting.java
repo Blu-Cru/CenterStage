@@ -21,16 +21,17 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE)
+                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
+                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                                .setTangent(Math.toRadians(135 * reflect))
+                                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .setTangent(Math.toRadians(150 * reflect))
-//                                // drop down, start intake, unlock
-//                                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-//                                    robot.intake.dropToStack(3);
-//                                    robot.intake.setIntakePower(1);
-//                                    robot.outtake.unlock();
-//                                })
-                                .splineToLinearHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180)), Math.toRadians(100))
+                                .splineToConstantHeading(new Vector2d(-54, -8 * reflect), Math.toRadians(180 * reflect))
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -16 * reflect), Math.toRadians(-90 * reflect))
+                                .splineToConstantHeading(new Vector2d(-60, -8 * reflect), Math.toRadians(90 * reflect))
+                                // intake ready
+
                                 .build()
                 );
 
