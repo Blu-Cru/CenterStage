@@ -8,9 +8,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lock implements Subsystem{
     public static double
-            FLAT = 0.7,
-            LOCKED_FRONT = FLAT + toTicks(45),
-            LOCK_BACK_POS = FLAT - toTicks(45),
+            FLAT = 0.72,
+            LOCKED_FRONT = FLAT + toTicks(60),
+            LOCK_BACK_POS = FLAT - toTicks(60),
             UNLOCKED_BACK = FLAT - toTicks(180);
 
     enum LockState {

@@ -10,13 +10,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class IntakeWrist implements Subsystem{
     public static double
-            PARALLEL_POS = 0.33,
-            RADIUS = 4.7244,
+            PARALLEL_POS = 0.27,
+            RADIUS = 3.77953,
 
-            RETRACT_HEIGHT = 4.5, // inches
-            GROUND_HEIGHT = -2.9, // inches for intaking at ground level
-            STACK1_HEIGHT = -1.7, // inches for intaking at one pixel height level
-            AUTO_MID_HEIGHT = 2.5; // inches for position to be ready to auto stack
+            RETRACT_HEIGHT = 3.7, // inches
+            GROUND_HEIGHT = -2.6, // inches for intaking at ground level
+            STACK1_HEIGHT = -1.8, // inches for intaking at one pixel height level
+            AUTO_MID_HEIGHT = 2; // inches for position to be ready to auto stack
 
     Servo wrist;
 

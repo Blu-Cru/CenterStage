@@ -17,8 +17,8 @@ public class IntakeColorSensors implements Subsystem{
     }
 
     public static double
-            FRONT_DISTANCE_LOW = 0.1,
-            FRONT_DISTANCE_HIGH = 1.5, // inches
+            FRONT_DISTANCE_LOW = 0.05,
+            FRONT_DISTANCE_HIGH = 0.75, // inches
 
             BACK_DISTANCE_LOW = 0.1,
             BACK_DISTANCE_HIGH = 1.1; // inches
