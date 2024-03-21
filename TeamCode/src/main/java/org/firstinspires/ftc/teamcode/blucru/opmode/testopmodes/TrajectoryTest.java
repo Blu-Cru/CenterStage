@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajectories;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Placements;
@@ -38,6 +39,7 @@ public class TrajectoryTest extends LinearOpMode {
     Robot robot;
     Drivetrain drivetrain;
     Outtake outtake;
+    PurplePixelHolder pph;
     double lastTime;
 
     ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
@@ -48,6 +50,7 @@ public class TrajectoryTest extends LinearOpMode {
         robot = new Robot(hardwareMap);
         drivetrain = robot.addDrivetrain(false);
         outtake = robot.addOuttake();
+        pph = robot.addPurplePixelHolder();
 
         poses = new Poses(reflect);
         intakeTrajectories = new IntakeTrajectories(reflect);
