@@ -60,17 +60,7 @@ public class Turret implements Subsystem{
     }
 
     public static double xToAngle(double x) {
-        double zeroAngle = Math.toDegrees(Math.asin(BUCKET_WIDTH / BUCKET_HYPOTENUSE));
-        if(x == 0) {
-            return 270;
-        } else {
-            double additionalAngle = Math.toDegrees(Math.asin(x / BUCKET_HYPOTENUSE));
-            if(x > 0) {
-                return 270 + zeroAngle + additionalAngle;
-            } else {
-                return 270 - zeroAngle + additionalAngle;
-            }
-        }
+        return Math.toDegrees(Math.asin(x / BUCKET_HYPOTENUSE)) + 270;
     }
 
     public void testTelemetry(Telemetry telemetry) {
