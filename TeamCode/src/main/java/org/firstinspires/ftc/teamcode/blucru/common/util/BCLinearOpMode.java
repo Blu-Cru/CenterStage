@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.util;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -100,6 +102,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addHanger() {hanger = robot.addHanger();}
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
+
+    public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 
     public double currentSecs() {return runtime.seconds();}
 

@@ -13,8 +13,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
@@ -30,6 +35,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
+            TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
+
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
     public DrivetrainState drivetrainState;
@@ -42,6 +49,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
 //    boolean readingDistance;
 //    ArrayList<Double> errors;
+
+    public DrivetrainTranslationPID translationPID;
+    public Pose2d targetPose;
 
     MotionProfile headingMotionProfile;
     PIDController headingPID;
@@ -62,10 +72,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.drivetrainState = DrivetrainState.IDLE;
         this.isTeleOp = isTeleOp;
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
-        distancePID = new PIDController(DISTANCE_P, DISTANCE_I, DISTANCE_D);
-//        distanceSensors = new DistanceSensors(hardwareMap);
+        headingPID.setTolerance(HEADING_PID_TOLERANCE);
 
-//        readingDistance = false;
+        translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
     }
 
     public void init() {
@@ -93,13 +102,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             velocity = getPoseVelocity();
         }
 
-        switch (drivetrainState) {
-            case IDLE:
-                break;
-            case MOTION_PROFILE:
-                break;
-        }
-
         pose = this.getPoseEstimate();
 //        if(readingDistance) {
 //            distanceSensors.read(heading);
@@ -107,7 +109,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void write() {
-
+        switch(drivetrainState) {
+            case IDLE:
+                break;
+            case DRIVE_TO_POSITION:
+                driveToPosition(targetPose);
+                break;
+        }
     }
 
     public void driveMaintainHeading(double x, double y, double rotate) {
@@ -222,6 +230,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        driveToHeading(x, y, targetHeading);
 //    }
 
+    public void driveToPosition(Pose2d targetPosition) {
+        translationPID.setTargetPosition(targetPosition.vec());
+        Vector2d rawDriveVector = translationPID.calculate(pose.vec(), drivePower).rotated(-pose.getHeading());
+        double rotate = getPIDRotate(heading, targetPosition.getHeading());
+
+        setWeightedDrivePower(new Pose2d(rawDriveVector.getX(), rawDriveVector.getY(), rotate));
+    }
+
     // set the component of a vector in a direction
     public Vector2d setComponent(Vector2d vector, double component, double angle) {
         vector = vector.rotated(-angle); // rotate so the component is in the x direction
@@ -279,8 +295,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(heading - target < -Math.PI) heading += 2*Math.PI;
         else if(heading - target > Math.PI) heading -= 2 * Math.PI;
 
-        if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
-        else return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
+        return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
     }
 
     public double getOdoHeading() {
@@ -361,6 +376,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void initializePose() {
         setPoseEstimate(Initialization.POSE);
         setExternalHeading(Initialization.POSE.getHeading());
+    }
+
+    public void setTargetPose(Pose2d targetPose) {
+        this.targetPose = targetPose;
     }
 
 //    public void startReadingDistance() {
