@@ -325,7 +325,6 @@ public class Duo extends BCLinearOpMode {
 
         // MANUAL SLIDE
         if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
-            outtake.lift.liftState = LiftState.MANUAL;
             outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
         }
 

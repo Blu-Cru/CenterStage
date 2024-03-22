@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 
 @Config
 public class Outtake implements Subsystem{
@@ -75,6 +76,7 @@ public class Outtake implements Subsystem{
     }
 
     public void setManualSlidePower(double power) {
+        lift.liftState = LiftState.MANUAL;
         lift.power = power;
         targetHeight = targetHeight + lift.toInches(lift.getDecelDelta());
     }

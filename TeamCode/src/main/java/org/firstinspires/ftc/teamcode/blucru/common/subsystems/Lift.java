@@ -106,7 +106,7 @@ public class Lift implements Subsystem{
             case MoPro:
                 targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
                 targetVelocity = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
-                if(targetPos == 0 && targetVelocity == 0 && currentPos < 2 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.1) {
+                if(targetPos == 0 && targetVelocity == 0 && currentPos < 0 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.1) {
                     power = 0;
                     resetEncoder();
                 } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
