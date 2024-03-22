@@ -99,7 +99,7 @@ public class LiftTest extends LinearOpMode {
 
             if(Math.abs(gamepad1.left_stick_y) > 0.1) {
                 outtake.lift.liftState = LiftState.MANUAL;
-                outtake.lift.power = -gamepad1.left_stick_y;
+                outtake.setManualSlidePower(-gamepad1.left_stick_y);
             }
             if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
                 outtake.lift.liftState = LiftState.PID;

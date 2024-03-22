@@ -156,6 +156,27 @@ public class MotionProfile {
         return instantTargetPos;
     }
 
+    public double getInstantTargetVelocity(double time) {
+        double instantTargetVel;
+        double dt;
+
+        if(time < t0) {
+            dt = time;
+            instantTargetVel = vI + (aMax * dt * flip);
+        } else if(time < t0 + t1) {
+            dt = time - t0;
+            instantTargetVel = aMax * dt * flip;
+        } else if(time < t0 + t1 + t2) {
+            dt = time - t0 - t1;
+            instantTargetVel = vMax * flip;
+        } else if(time < t0 + t1 + t2 + t3) {
+            dt = time - t0 - t1 - t2;
+            instantTargetVel = vMax - (aMax * dt);
+        } else instantTargetVel = 0;
+
+        return instantTargetVel;
+    }
+
     public void setConstraints(double maxVelocity, double maxAcceleration) {
         this.vMax = maxVelocity;
         this.aMax = maxAcceleration;

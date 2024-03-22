@@ -84,6 +84,11 @@ public class Lock implements Subsystem{
         lockPos = LOCK_BACK_POS;
     }
 
+    public void reset() {
+        lockState = LockState.UNLOCKED_FRONT;
+        lockPos = FLAT;
+    }
+
     public static double toTicks(double degrees) {
         return (degrees / 300.0);
     }
