@@ -87,6 +87,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             lastTime = System.currentTimeMillis();
             heading = getOdoHeading();
 
+            drivetrainState = DrivetrainState.IDLE;
             pose = this.getPoseEstimate();
 //            headingMotionProfile = new MotionProfile(heading, heading);
         }
@@ -295,7 +296,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(heading - target < -Math.PI) heading += 2*Math.PI;
         else if(heading - target > Math.PI) heading -= 2 * Math.PI;
 
-        return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
+        if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
+        else return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
     }
 
     public double getOdoHeading() {

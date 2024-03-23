@@ -20,7 +20,7 @@ public class Poses {
 
     public static double CENTER_Y = -10;
 
-    public static double STACK_X = -56.5 + FIELD_OFFSET_X;
+    public static double STACK_X = -57.5 + FIELD_OFFSET_X;
     public static double STACK_SETUP_X = -55.5 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;
