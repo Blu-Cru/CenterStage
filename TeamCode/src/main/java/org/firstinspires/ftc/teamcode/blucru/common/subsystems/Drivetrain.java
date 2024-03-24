@@ -25,7 +25,7 @@ import java.util.Vector;
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
             MAX_ACCEL_DRIVE_DELTA = 3.5,
-            MAX_DECEL_DRIVE_DELTA = 30.0, // magnitude per second at power 1 for slew rate limiter
+            MAX_DECEL_DRIVE_DELTA = 15.0, // magnitude per second at power 1 for slew rate limiter
 
             HEADING_DECELERATION = 12, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02, // PID constants for heading
@@ -334,6 +334,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 slowPower = 0.4;
                 fastPower = 1.0;
                 normalPower = 0.9;
+                break;
+            case INTAKING:
+                slowPower = 0.4;
+                fastPower = 1.0;
+                normalPower = 0.85;
                 break;
             case LIFTING:
                 slowPower = 0.3;

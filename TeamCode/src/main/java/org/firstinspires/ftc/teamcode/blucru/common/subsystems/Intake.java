@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 public class Intake implements Subsystem{
     public static double
             MAX_POWER = 1,
-            JAM_CURRENT = 10.0; // if current exceeds this, unjam
+            JAM_CURRENT = 6.0; // if current exceeds this, unjam
 
     enum IntakeState {
         IDLE,
@@ -30,6 +30,7 @@ public class Intake implements Subsystem{
     IntakeState intakeState;
     double intakePower;
     double lastPower;
+    double powerBeforeUnjamming;
     double intakeCurrent;
     double startUnjamTime;
 
@@ -63,7 +64,12 @@ public class Intake implements Subsystem{
 
         if (intakeCurrent > JAM_CURRENT) {
             intakeState = IntakeState.UNJAMMING;
+            intakePower = -1;
             startUnjamTime = System.currentTimeMillis();
+
+            if(intakeState != IntakeState.UNJAMMING) {
+                powerBeforeUnjamming = intakePower;
+            }
         }
     }
 
@@ -74,8 +80,10 @@ public class Intake implements Subsystem{
         if(intakeState == IntakeState.UNJAMMING) {
             if(System.currentTimeMillis() - startUnjamTime > 500) {
                 intakeState = IntakeState.IDLE; // unjamming for 500ms
+                intakePower = powerBeforeUnjamming;
+            } else {
+                setPower(-1);
             }
-            setPower(-0.8);
         } else {
             setPower(intakePower);
         }
@@ -137,6 +145,7 @@ public class Intake implements Subsystem{
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake power", intakePower);
+        telemetry.addData("intake current", intakeCurrent);
         intakeColorSensors.telemetry(telemetry);
     }
 }
