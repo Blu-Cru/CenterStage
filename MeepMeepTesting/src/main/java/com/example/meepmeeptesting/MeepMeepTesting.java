@@ -20,23 +20,22 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity test = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
+                .setDimensions(14.3,14.3)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
-                                .setTangent(Math.toRadians(135 * reflect))
+                        drive.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+                                .setTangent(Math.toRadians(90 * reflect))
                                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                // retract
-
-                                // drop down
-
-                                .splineToSplineHeading(new Pose2d(20, -20 * reflect, Math.toRadians(135 * reflect)), Math.toRadians(180*reflect))
+                                .splineToConstantHeading(new Vector2d(-36, -58 * reflect), Math.toRadians(90 * reflect))
+                                .splineToSplineHeading(new Pose2d(-45, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
                                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                                // release purple pixel
-
-                                .splineToConstantHeading(new Vector2d(17, -20 * reflect), Math.toRadians(135 * reflect))
+//                                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+//                                    robot.purplePixelHolder.release(reflect);
+//                                    robot.intake.dropToStack(4);
+//                                })
+                                .splineToConstantHeading(new Vector2d(-47, -23 * reflect), Math.toRadians(140*reflect))
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToSplineHeading(new Pose2d(6, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
-                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
+//                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> robot.intake.intake())
+                                .splineToConstantHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180*reflect)).vec(), Math.toRadians(130*reflect))
                                 .build()
                 );
 

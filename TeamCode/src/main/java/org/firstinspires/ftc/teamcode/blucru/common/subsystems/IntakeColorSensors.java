@@ -69,27 +69,27 @@ public class IntakeColorSensors implements Subsystem{
 
     public void read() {
         if(reading) {
-            frontSensor.enableLed(true);
-            backSensor.enableLed(true);
-            frontRGBA = frontSensor.getNormalizedColors();
-            backRGBA = backSensor.getNormalizedColors();
+//            frontSensor.enableLed(true);
+//            backSensor.enableLed(true);
+//            frontRGBA = frontSensor.getNormalizedColors();
+//            backRGBA = backSensor.getNormalizedColors();
 
-            frontR = frontRGBA.red;
-            frontG = frontRGBA.green;
-            frontB = frontRGBA.blue;
-            getHSV(frontRGBA, frontHSV); // sets frontHSV
-            frontHue = frontHSV[0];
-
-            backR = backRGBA.red;
-            backG = backRGBA.green;
-            backB = backRGBA.blue;
-            getHSV(backRGBA, backHSV); // sets backHSV
-            backHue = backHSV[0];
+//            frontR = frontRGBA.red;
+//            frontG = frontRGBA.green;
+//            frontB = frontRGBA.blue;
+//            getHSV(frontRGBA, frontHSV); // sets frontHSV
+//            frontHue = frontHSV[0];
+//
+//            backR = backRGBA.red;
+//            backG = backRGBA.green;
+//            backB = backRGBA.blue;
+//            getHSV(backRGBA, backHSV); // sets backHSV
+//            backHue = backHSV[0];
 
             frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
-            frontLightDetected = frontSensor.getLightDetected();
-            backLightDetected = backSensor.getLightDetected();
+//            frontLightDetected = frontSensor.getLightDetected();
+//            backLightDetected = backSensor.getLightDetected();
 
             frontSlotState = calculateSlotState(frontDistance, sensorType.FRONT);
             backSlotState = calculateSlotState(backDistance, sensorType.BACK);

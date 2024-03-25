@@ -36,6 +36,24 @@ public class IntakeTrajectories {
                 .build();
     }
 
+    public TrajectorySequence placePurpleIntakeFromWingCenter(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CENTER_POSE)
+                .setTangent(Math.toRadians(90 * reflect))
+                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .splineToConstantHeading(new Vector2d(-36, -58 * reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-45, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
+                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    robot.purplePixelHolder.release(reflect);
+                    robot.intake.dropToStack(4);
+                })
+                .splineToConstantHeading(new Vector2d(-47, -23 * reflect), Math.toRadians(140*reflect))
+                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> robot.intake.intake())
+                .splineToConstantHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180*reflect)).vec(), Math.toRadians(130*reflect))
+                .build();
+    }
+
     public TrajectorySequence placePurpleIntakeThroughCenterFromBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                 .setTangent(Math.toRadians(135 * reflect))
