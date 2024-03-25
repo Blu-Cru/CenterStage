@@ -21,6 +21,8 @@ public class Robot {
     public PurplePixelHolder purplePixelHolder;
     public CVMaster cvMaster;
 
+    public boolean intakingInAuto = false;
+
     // list of all subsystems for easy iteration
     ArrayList<Subsystem> subsystems;
 
@@ -38,6 +40,10 @@ public class Robot {
 
         for(Subsystem subsystem : subsystems) {
             subsystem.init();
+        }
+
+        if(intakingInAuto && intake.isFull()) {
+            drivetrain.stop();
         }
     }
 

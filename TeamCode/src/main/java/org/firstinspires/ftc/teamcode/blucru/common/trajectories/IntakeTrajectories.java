@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -50,7 +51,7 @@ public class IntakeTrajectories {
                 .splineToConstantHeading(new Vector2d(-47, -23 * reflect), Math.toRadians(140*reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> robot.intake.intake())
-                .splineToConstantHeading(new Pose2d(Poses.STACK_X, -12 * reflect, Math.toRadians(180*reflect)).vec(), Math.toRadians(130*reflect))
+                .splineToConstantHeading(new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect)).vec(), Math.toRadians(130*reflect))
                 .build();
     }
 

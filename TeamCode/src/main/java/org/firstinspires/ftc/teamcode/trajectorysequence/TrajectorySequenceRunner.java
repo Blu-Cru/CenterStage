@@ -88,6 +88,8 @@ public class TrajectorySequenceRunner {
 
     public void stop() {
         follower.followTrajectory(null);
+        currentTrajectorySequence = null;
+        remainingMarkers.clear();
     }
 
     public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {

@@ -141,6 +141,7 @@ public class Intake implements Subsystem{
 
     public void stopReadingColor() {
         intakeColorSensors.stopReading();
+        intakeColorSensors.reset();
     }
 
     public void telemetry(Telemetry telemetry) {

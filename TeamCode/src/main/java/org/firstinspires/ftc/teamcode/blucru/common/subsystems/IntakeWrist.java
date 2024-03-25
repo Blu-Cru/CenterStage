@@ -52,7 +52,8 @@ public class IntakeWrist implements Subsystem{
         return Math.toDegrees(Math.asin(height / RADIUS));
     }
 
-    public static double toX(double height) {
+    public static double toX(int stackHeight) {
+        double height = getTargetHeight(stackHeight);
         return RADIUS * Math.cos(Math.asin(height / RADIUS));
     }
 
@@ -60,7 +61,7 @@ public class IntakeWrist implements Subsystem{
         targetAngleDeg = toDeg(getTargetHeight(stackHeight));
     }
 
-    public double getTargetHeight(int stackHeight) {
+    public static double getTargetHeight(int stackHeight) {
         if(stackHeight == 0) {
             return GROUND_HEIGHT; // drop to ground
         } else {

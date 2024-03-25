@@ -181,6 +181,11 @@ public class IntakeColorSensors implements Subsystem{
         reading = !reading;
     }
 
+    public void reset() {
+        frontSlotState = SlotState.EMPTY;
+        backSlotState = SlotState.EMPTY;
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("READING: ", reading);
         telemetry.addData("FRONT SLOT STATE: ", frontSlotState);
