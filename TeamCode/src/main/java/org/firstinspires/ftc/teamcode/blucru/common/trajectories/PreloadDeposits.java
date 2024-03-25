@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -533,6 +532,43 @@ public class PreloadDeposits {
                     robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
+                .build();
+    }
+
+    public TrajectorySequence depositCloseFromStart(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
+                .setTangent(Math.toRadians(90))
+                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .splineToConstantHeading(new Vector2d(13, -58 * reflect), Math.toRadians(60 * reflect))
+                .splineToSplineHeading(new Pose2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect, Math.toRadians(180)), 0)
+
+                // lift
+                .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+                })
+                // wrist back
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
+                    robot.outtake.extendWrist();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 + 45 * reflect);
+                })
+
+                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .splineToConstantHeading(Poses.DEPOSIT_CLOSE_POSE.vec(), 0)
+
+                // release
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
+                    robot.outtake.unlock();
+                })
+                // lift clear
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
+                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+                    robot.outtake.centerTurret();
+                })
+
+                .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
                 .build();
     }
 }

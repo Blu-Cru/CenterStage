@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Turret;
 
 public abstract class BCLinearOpMode extends LinearOpMode {
     public Alliance alliance;
-    Robot robot;
+    public Robot robot;
     public Drivetrain drivetrain;
     public Outtake outtake;
     public Lift lift;
@@ -48,11 +48,13 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         robot.init();
         while(opModeInInit()) {
             initLoop();
+            telemetry();
             telemetry.update();
         }
         waitForStart();
+        onStart();
         runtime = new ElapsedTime(); // start timer
-        while (opModeIsActive()) {
+        while (!isStopRequested() && opModeIsActive()) {
             robot.read();
             periodic();
             robot.write();
@@ -81,6 +83,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     // methods to be overriden
     public void initialize() {}
     public void initLoop() {}
+    public void onStart() {}
     public void periodic() {}
     public void telemetry() {}
     public void end() {}

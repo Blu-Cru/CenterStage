@@ -49,7 +49,7 @@ public class TrajectoryTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
         drivetrain = robot.addDrivetrain(false);
-        outtake = robot.addOuttake();
+//        outtake = robot.addOuttake();
         pph = robot.addPurplePixelHolder();
 
         poses = new Poses(reflect);
@@ -57,11 +57,11 @@ public class TrajectoryTest extends LinearOpMode {
         preloadDeposits = new PreloadDeposits(reflect);
         placements = new Placements(reflect);
 
-        placementFar = placements.placementBackdropFar(robot);
-        yellowDepositFar = preloadDeposits.depositFromBackdropFar(robot);
-        intakeCenterFromFar = intakeTrajectories.intakeCenterFromFar(robot, 3);
+//        placementFar = placements.placementBackdropFar(robot);
+        yellowDepositFar = preloadDeposits.depositCloseFromStart(robot);
+        intakeCenterFromFar = intakeTrajectories.placePurpleIntakeThroughCenterFromBackdropClose(robot);
 
-        trajectoryList.add(placementFar);
+//        trajectoryList.add(placementFar);
         trajectoryList.add(yellowDepositFar);
         trajectoryList.add(intakeCenterFromFar);
 

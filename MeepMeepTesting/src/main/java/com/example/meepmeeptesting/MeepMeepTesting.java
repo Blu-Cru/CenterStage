@@ -21,17 +21,22 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
-                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_CLOSE_POSE)
                                 .setTangent(Math.toRadians(135 * reflect))
-                                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
-                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToConstantHeading(new Vector2d(-54, -8 * reflect), Math.toRadians(180 * reflect))
-                                .splineToConstantHeading(new Vector2d(Poses.STACK_X, -16 * reflect), Math.toRadians(-90 * reflect))
-                                .splineToConstantHeading(new Vector2d(-60, -8 * reflect), Math.toRadians(90 * reflect))
-                                // intake ready
+                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                                // retract
 
+                                // drop down
+
+                                .splineToSplineHeading(new Pose2d(20, -20 * reflect, Math.toRadians(135 * reflect)), Math.toRadians(180*reflect))
+                                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                                // release purple pixel
+
+                                .splineToConstantHeading(new Vector2d(17, -20 * reflect), Math.toRadians(135 * reflect))
+                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                                .splineToSplineHeading(new Pose2d(6, -12 * reflect, Math.toRadians(180)), Math.toRadians(180))
+                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                                 .build()
                 );
 

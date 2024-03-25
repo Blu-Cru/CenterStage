@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 public class Intake implements Subsystem{
     public static double
             MAX_POWER = 1,
-            JAM_CURRENT = 6.0; // if current exceeds this, unjam
+            JAM_CURRENT = 10.0; // if current exceeds this, unjam
 
     enum IntakeState {
         IDLE,

@@ -53,8 +53,8 @@ public class PurplePixelHolder implements Subsystem{
         purplePixelState = PurplePixelState.RETRACTED_RIGHT;
     }
 
-    public void retractLeft() {
-        purplePixelState = PurplePixelState.RETRACTED_LEFT;
+    public void release(double reflect) {
+        purplePixelState = reflect > 0 ? PurplePixelState.RETRACTED_LEFT : PurplePixelState.RETRACTED_RIGHT;
     }
 
     public void telemetry(Telemetry telemetry) {
