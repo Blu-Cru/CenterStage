@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -278,6 +279,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         double xError = lastError.getX();
         double yError = lastError.getY();
         return Math.sqrt(xError * xError + yError * yError);
+    }
+
+    public void idle() {
+        drivetrainState = DrivetrainState.IDLE;
+    }
+
+    public void lockTo(Pose2d pose) {
+        drivetrainState = DrivetrainState.DRIVE_TO_POSITION;
+        setTargetPose(pose);
     }
 
     public void setDrivePower(double power) {
