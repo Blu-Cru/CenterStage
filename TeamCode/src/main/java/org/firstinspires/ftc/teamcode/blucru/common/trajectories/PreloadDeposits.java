@@ -24,6 +24,71 @@ public class PreloadDeposits {
         this.reflect = reflect;
     }
 
+    public TrajectorySequence depositThroughCenterFromWingCenterFarStack(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180)))
+                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .setTangent(Math.toRadians(0 * reflect))
+                // reverse intake, lock
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.setIntakePower(-1);
+                    robot.outtake.lock();
+                    robot.intake.stopReadingColor();
+                })
+                // stop intake, retract wrist
+                .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.intake.retractIntakeWrist();
+                })
+
+                .splineToConstantHeading(new Vector2d(-10 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
+                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
+                .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_FAR_POSE))
+
+                // lift
+                .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
+                    robot.outtake.setTargetPixelHeight(0);
+                })
+                // wrist back
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
+                    robot.outtake.extendWrist();
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
+                    robot.outtake.setTurretAngle(270 - 50 * reflect);
+                })
+
+                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
+                // release white pixel
+                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
+                    robot.outtake.unlockFrontLockBack();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    robot.outtake.setTargetPixelHeight(1);
+                })
+                // turn turret
+                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
+                    robot.outtake.setTurretAngle(270 + 25 * reflect);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.outtake.setTargetPixelHeight(0);
+                })
+                // release yellow pixel
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> {
+                    robot.outtake.unlock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.outtake.incrementTargetHeight(1);
+                    robot.outtake.resetLock();
+                })
+                .waitSeconds(1.1)
+                .build();
+    }
+
     public TrajectorySequence depositFromBackdropClose(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_PLACEMENT_CLOSE_POSE)
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)

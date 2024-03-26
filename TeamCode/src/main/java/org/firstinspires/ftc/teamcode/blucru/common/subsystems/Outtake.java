@@ -87,6 +87,10 @@ public class Outtake implements Subsystem{
         this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
+    public void setTargetPixelHeight(double pixels) {
+        setTargetHeight(LOW_HEIGHT + pixels * PIXEL_HEIGHT);
+    }
+
     // increment target height by number of pixels
     public void incrementTargetHeight(double pixels) {
         setTargetHeight(targetHeight + pixels * PIXEL_HEIGHT);
@@ -164,6 +168,10 @@ public class Outtake implements Subsystem{
 
     public void lockFront() {
         lock.lockFront();
+    }
+
+    public void resetLock() {
+        lock.reset();
     }
 
     public void telemetry(Telemetry telemetry) {

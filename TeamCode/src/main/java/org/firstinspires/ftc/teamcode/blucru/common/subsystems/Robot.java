@@ -44,6 +44,7 @@ public class Robot {
 
         if(intakingInAuto && intake.isFull()) {
             drivetrain.stop();
+            intakingInAuto = false;
         }
     }
 

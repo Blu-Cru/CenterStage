@@ -115,6 +115,7 @@ public class Intake implements Subsystem{
 
     public void intake() {
         setIntakePower(1);
+        startReadingColor();
     }
 
     private void setPower(double power) {

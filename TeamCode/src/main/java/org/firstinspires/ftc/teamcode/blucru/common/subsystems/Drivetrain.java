@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 
 import java.util.ArrayList;
@@ -413,6 +415,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public boolean isStopped() {
         Pose2d poseVelocity = getPoseVelocity();
         return poseVelocity.vec().norm() < 0.1 && Math.abs(poseVelocity.getHeading()) < 0.1;
+    }
+
+    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
+        return super.trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(() -> idle()); // idle the drivetrain before building a trajectory
     }
 
     public void telemetry(Telemetry telemetry) {

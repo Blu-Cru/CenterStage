@@ -19,18 +19,27 @@ public class DepositTrajectories {
         this.reflect = reflect;
     }
 
-    public TrajectorySequence depositCenterFromFarStack(Robot robot, double turretAngle) {
+    public TrajectorySequence depositCenterFromFarStack(Robot robot, double pixelHeight, double turretAngle) {
         return robot.drivetrain.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180 * reflect)))
-                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .setTangent(0)
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(-1);
+                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.outtake.lock();
+                    robot.intake.stopReadingColor();
+                })
+
+                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.intake.retractIntakeWrist();
+                })
+                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+                    robot.outtake.setTargetPixelHeight(pixelHeight);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -42,7 +51,8 @@ public class DepositTrajectories {
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
+                .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_FAR_POSE))
 
                 // release pixel
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {

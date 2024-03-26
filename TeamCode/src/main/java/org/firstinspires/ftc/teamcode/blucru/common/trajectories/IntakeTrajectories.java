@@ -38,20 +38,28 @@ public class IntakeTrajectories {
     }
 
     public TrajectorySequence placePurpleIntakeFromWingCenter(Robot robot) {
+        Pose2d endPose = new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect));
+
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_PLACEMENT_CENTER_POSE)
                 .setTangent(Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(-36, -58 * reflect), Math.toRadians(90 * reflect))
-                .splineToSplineHeading(new Pose2d(-45, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
+                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -58 * reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(-45 + Poses.FIELD_OFFSET_X, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.purplePixelHolder.release(reflect);
                     robot.intake.dropToStack(4);
                 })
-                .splineToConstantHeading(new Vector2d(-47, -23 * reflect), Math.toRadians(140*reflect))
+                .splineToConstantHeading(new Vector2d(-47 + Poses.FIELD_OFFSET_X, -23 * reflect), Math.toRadians(140*reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> robot.intake.intake())
-                .splineToConstantHeading(new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect)).vec(), Math.toRadians(130*reflect))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.intake.intake();
+                    robot.intakingInAuto = true;
+                })
+                .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
+                .addTemporalMarker(() -> robot.drivetrain.lockTo(endPose))
+                .waitSeconds(0.5)
+
                 .build();
     }
 
