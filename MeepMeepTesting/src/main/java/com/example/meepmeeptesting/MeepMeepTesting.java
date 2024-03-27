@@ -22,26 +22,36 @@ public class MeepMeepTesting {
                 .setConstraints(40, 40, Math.toRadians(360), Math.toRadians(400), 12.6)
                 .setDimensions(14.3,14.3)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180)))
-                                .setTangent(Math.toRadians(90 * reflect))
+                        drive.trajectorySequenceBuilder(Poses.DEPOSIT_FAR_POSE)
                                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -58 * reflect), Math.toRadians(90 * reflect))
-                                .splineToSplineHeading(new Pose2d(-45 + Poses.FIELD_OFFSET_X, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
-                                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-//                                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-//                                    robot.purplePixelHolder.release(reflect);
-//                                    robot.intake.dropToStack(4);
+                                .setTangent(Math.toRadians(135 * reflect))
+
+//                                // retract turret
+//                                .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
+//                                // retract wrist
+//                                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+//                                // retract lift
+//                                .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> {
+//                                    robot.outtake.retractLift();
+//                                    robot.intake.intakeWrist.dropToAutoMidPos();
 //                                })
-                                .splineToConstantHeading(new Vector2d(-47 + Poses.FIELD_OFFSET_X, -23 * reflect), Math.toRadians(140*reflect))
+
+                                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -12 * reflect), Math.toRadians(180))
                                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-//                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X + Poses.FIELD_OFFSET_X, -8 * reflect), Math.toRadians(180))
+//                                .UNSTABLE_addTemporalMarkerOffset(-0.7, () -> {
+//                                    robot.intake.dropToStack(stackHeight);
 //                                    robot.intake.intake();
+//                                    robot.outtake.unlock();
 //                                    robot.intakingInAuto = true;
 //                                })
-//                                .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
-//                                .addTemporalMarker(() -> robot.drivetrain.lockTo(endPose))
-                                .waitSeconds(0.5)
-
+//                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    robot.intake.dropToGround();
+//                                })
+                                .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
+                                .splineToConstantHeading(new Vector2d(Poses.STACK_X + Poses.FIELD_OFFSET_X, -20 * reflect), Math.toRadians(270 * reflect))
+                                .waitSeconds(1)
                                 .build()
                 );
 

@@ -22,7 +22,7 @@ public class Outtake implements Subsystem{
             MIN_HEIGHT = LOW_HEIGHT,
             MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10,
 
-            MAX_TELEOP_TURRET_X = 5.2; // inches
+            MAX_TELEOP_TURRET_X = 5.3; // inches
 
     Servo wrist;
     public Lift lift;
