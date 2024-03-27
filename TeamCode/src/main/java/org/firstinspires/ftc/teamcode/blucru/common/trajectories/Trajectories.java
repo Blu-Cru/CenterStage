@@ -24,6 +24,8 @@ public class Trajectories {
     Cycles cycles;
     Poses poses;
     Parks parks;
+    IntakeTrajectories intakeTrajectories;
+    DepositTrajectories depositTrajectories;
 
     AutoType autoType;
     ParkType parkType;
@@ -50,6 +52,21 @@ public class Trajectories {
         cycles = new Cycles(reflect);
         poses = new Poses(reflect);
         parks = new Parks(reflect);
+        intakeTrajectories = new IntakeTrajectories(reflect);
+        depositTrajectories = new DepositTrajectories(reflect);
+    }
+
+    public ArrayList<TrajectorySequence> buildWingCenterTrajectories(Robot robot) {
+        ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
+        trajectoryList.add(intakeTrajectories.placePurpleIntakeFromWingCenter(robot));
+        trajectoryList.add(preloadDeposits.depositThroughCenterFromWingCenterFarStack(robot));
+        trajectoryList.add(intakeTrajectories.intakeCenterFromFar(robot, 3));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 2, 0));
+        trajectoryList.add(intakeTrajectories.intakeCenterFromFar(robot, 1));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 4, 0));
+        trajectoryList.add(parks.parkNone(robot));
+
+        return trajectoryList;
     }
 
     public ArrayList<TrajectorySequence> buildTrajectoriesFar(Robot robot) {

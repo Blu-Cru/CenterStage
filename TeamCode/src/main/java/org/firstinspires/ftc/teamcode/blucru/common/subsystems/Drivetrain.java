@@ -81,11 +81,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void init() {
+        lastDriveVector = new Vector2d(0,0);
+
         if(isTeleOp) {
             fieldCentric = true;
             initializePose();
             velocity = new Pose2d(0,0,0);
-            lastDriveVector = new Vector2d(0,0);
+
             lastRotate = 0;
             lastTime = System.currentTimeMillis();
             heading = getOdoHeading();
@@ -102,11 +104,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
-            heading = getOdoHeading();
+
             velocity = getPoseVelocity();
         }
 
         pose = this.getPoseEstimate();
+        heading = getOdoHeading();
 //        if(readingDistance) {
 //            distanceSensors.read(heading);
 //        }
@@ -236,10 +239,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void driveToPosition(Pose2d targetPosition) {
         translationPID.setTargetPosition(targetPosition.vec());
-        Vector2d rawDriveVector = translationPID.calculate(pose.vec(), drivePower).rotated(-pose.getHeading());
-        double rotate = getPIDRotate(heading, targetPosition.getHeading());
-
-        setWeightedDrivePower(new Pose2d(rawDriveVector.getX(), rawDriveVector.getY(), rotate));
+        Vector2d rawDriveVector = translationPID.calculate(pose.vec());
+//        double rotate = getPIDRotate(heading, targetPosition.getHeading());
+//
+//        setWeightedDrivePower(new Pose2d(rawDriveVector.getX(), rawDriveVector.getY(), rotate));
+        driveToHeading(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
     }
 
     // set the component of a vector in a direction
@@ -399,6 +403,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void setTargetPose(Pose2d targetPose) {
         this.targetPose = targetPose;
+        this.targetHeading = targetPose.getHeading();
     }
 
 //    public void startReadingDistance() {
@@ -430,6 +435,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         } else {
 //            telemetry.addData("reading distance", readingDistance);
         }
+        telemetry.addData("DRIVETRAIN STATE:", drivetrainState);
         telemetry.addData("heading", heading);
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());

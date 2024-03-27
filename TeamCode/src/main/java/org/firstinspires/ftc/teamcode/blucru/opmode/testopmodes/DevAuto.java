@@ -2,19 +2,26 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
+import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajectories;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
+import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "deposit and placement test", group = "test")
-public class DepositAndPlacementTest extends BCLinearOpMode {
+@Autonomous(name = "dev auto", group = "test")
+public class DevAuto extends BCLinearOpMode {
     AutoState state = AutoState.RUNNING;
     Poses poses;
+
+    Trajectories trajectories;
     IntakeTrajectories intakeTrajectories;
     PreloadDeposits preloadDeposits;
 
@@ -28,7 +35,10 @@ public class DepositAndPlacementTest extends BCLinearOpMode {
         enableFTCDashboard();
         addDrivetrain(false);
         addOuttake();
+        addIntake();
         addPurplePixelHolder();
+
+        trajectories = new Trajectories(Alliance.RED, Side.FAR, AutoType.PRELOAD, ParkType.NONE);
 
         poses = new Poses(1);
         intakeTrajectories = new IntakeTrajectories(1);
@@ -37,19 +47,20 @@ public class DepositAndPlacementTest extends BCLinearOpMode {
         depositClose = preloadDeposits.depositCloseFromStart(robot);
         purpleIntake = intakeTrajectories.placePurpleIntakeThroughCenterFromBackdropClose(robot);
 
-        trajectoryList.add(depositClose);
-        trajectoryList.add(purpleIntake);
+//        trajectoryList.add(depositClose);
+//        trajectoryList.add(purpleIntake);
+        trajectoryList = trajectories.buildWingCenterTrajectories(robot);
     }
 
     public void onStart() {
-        drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
+        drivetrain.setPoseEstimate(Poses.WING_STARTING_POSE);
     }
 
     public void periodic() {
         switch(state) {
             case RUNNING:
                 if(!drivetrain.isBusy()) {
-                    if(trajectoryIndex >= trajectoryList.size()) {
+                    if(trajectoryIndex == trajectoryList.size()) {
                         state = AutoState.STOP;
                         break;
                     } else {

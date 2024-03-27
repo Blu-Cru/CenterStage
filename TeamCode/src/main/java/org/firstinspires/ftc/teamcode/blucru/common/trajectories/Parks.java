@@ -53,7 +53,7 @@ public class Parks {
                 // retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.retractWrist())
                 // retract lift
-                .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
+                .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.retractLift())
 
                 .waitSeconds(1.5)
                 .build();

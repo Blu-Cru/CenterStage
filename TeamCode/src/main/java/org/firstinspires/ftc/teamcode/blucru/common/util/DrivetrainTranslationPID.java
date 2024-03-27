@@ -26,16 +26,13 @@ public class DrivetrainTranslationPID {
         targetPosition = new Vector2d(0, 0);
     }
 
-    public Vector2d calculate(Vector2d currentPosition, double maxPower) {
+    public Vector2d calculate(Vector2d currentPosition) {
         double xPower = xController.calculate(currentPosition.getX(), targetPosition.getX());
         double yPower = yController.calculate(currentPosition.getY(), targetPosition.getY());
 
         Vector2d rawDriveVector = new Vector2d(xPower, yPower);
-        double powerMagnitude = rawDriveVector.norm();
-        double limitedMagnitude = Math.min(powerMagnitude, maxPower);
-        Vector2d driveVector = rawDriveVector.div(powerMagnitude).times(limitedMagnitude);
 
-        return driveVector;
+        return rawDriveVector;
     }
 
     public void setTargetPosition(Vector2d targetPosition) {

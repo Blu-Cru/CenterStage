@@ -129,5 +129,7 @@ public class Robot {
         for(Subsystem subsystem : subsystems) {
             subsystem.telemetry(telemetry);
         }
+
+        telemetry.addData("intaking in auto: ", intakingInAuto);
     }
 }

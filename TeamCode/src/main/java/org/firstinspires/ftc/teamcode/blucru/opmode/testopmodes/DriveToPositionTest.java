@@ -25,13 +25,14 @@ public class DriveToPositionTest extends BCLinearOpMode {
         targetHeading = drivetrain.getPoseEstimate().getHeading();
     }
 
-    public void read() {
+    public void periodic() {
         drivetrain.translationPID.setPID(p, i, d);
-        drivetrain.setTargetPose(new Pose2d(targetX, targetY, targetHeading));
 
         if(gamepad1.a) {
             mode = "driver control";
-        } else if(gamepad1.b) {
+        }
+
+        if(gamepad1.b) {
             mode = "drive to position";
         }
 
@@ -45,7 +46,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
 
             drivetrain.driveMaintainHeading(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
         } else if(mode.equals("drive to position")) {
-            drivetrain.drivetrainState = DrivetrainState.DRIVE_TO_POSITION;
+            drivetrain.lockTo(new Pose2d(targetX, targetY, targetHeading));
         }
     }
 

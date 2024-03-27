@@ -23,18 +23,18 @@ public class DepositTrajectories {
         return robot.drivetrain.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180 * reflect)))
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
                     robot.intake.setIntakePower(-1);
                     robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.outtake.lock();
                     robot.intake.stopReadingColor();
                 })
 
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.retractIntakeWrist();
                 })
-                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
 
                 // lift

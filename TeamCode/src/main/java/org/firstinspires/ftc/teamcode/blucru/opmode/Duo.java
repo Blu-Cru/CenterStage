@@ -147,7 +147,7 @@ public class Duo extends BCLinearOpMode {
                     startIntakeTime = currentTime();
                     outtake.unlock();
                     intake.intake();
-                    intake.dropToStack(2);
+                    intake.dropToStack(3);
 
                     // REVERSE INTAKE
                 } else if(timeSince(intakeFullTime) < INTAKE_FULL_REVERSE_TIME || gamepad2.right_bumper) {
@@ -175,7 +175,7 @@ public class Duo extends BCLinearOpMode {
                     intake.dropToGround();
                 } else if(gamepad2.a) {
                     intake.intake();
-                    intake.dropToStack(2);
+                    intake.dropToStack(3);
                 } else {
                     outtake.lock();
                     intake.setIntakePower(0);
@@ -266,6 +266,7 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.a && !lastA2) {
                     robotState = RobotState.RETRACT;
                     outtake.retractLift();
+                    outtake.resetLock();
                     intake.startReadingColor();
                 }
                 lastA2 = gamepad2.a;

@@ -23,61 +23,25 @@ public class MeepMeepTesting {
                 .setDimensions(14.3,14.3)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180)))
+                                .setTangent(Math.toRadians(90 * reflect))
                                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .setTangent(Math.toRadians(0 * reflect))
-                                // drop to intake, start intake, unlock
-//                                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-//                                    robot.intake.dropToStack(3);
-//                                    robot.intake.setIntakePower(1);
-//                                    robot.outtake.unlock();
-//                                })
-
-                                .splineToConstantHeading(new Vector2d(-10 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
-                                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
-                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
-//
-//                                // lift
-//                                .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(670);
-//                                })
-//                                // wrist back
-//                                .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-//                                    robot.outtake.extendWrist();
-//                                })
-//                                // turn turret
-//                                .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-//                                    robot.outtake.setTurretAngle(270 - 50 * reflect);
-//                                })
-
+                                .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -58 * reflect), Math.toRadians(90 * reflect))
+                                .splineToSplineHeading(new Pose2d(-45 + Poses.FIELD_OFFSET_X, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
                                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
-//                                // release white pixel
-//                                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
-//                                    robot.outtake.unlockFrontLockBack();
-//                                })
 //                                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(900);
+//                                    robot.purplePixelHolder.release(reflect);
+//                                    robot.intake.dropToStack(4);
 //                                })
+                                .splineToConstantHeading(new Vector2d(-47 + Poses.FIELD_OFFSET_X, -23 * reflect), Math.toRadians(140*reflect))
+                                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
 //                                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-//                                    robot.outtake.lockFront();
+//                                    robot.intake.intake();
+//                                    robot.intakingInAuto = true;
 //                                })
-//                                // turn turret
-//                                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {
-//                                    robot.outtake.setTurretAngle(270 + 25 * reflect);
-//                                })
-//                                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(670);
-//                                })
-//                                // release yellow pixel
-//                                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-//                                    robot.outtake.unlock();
-//                                })
-//                                .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
-//                                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
-//                                })
-//                                .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
+//                                .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
+//                                .addTemporalMarker(() -> robot.drivetrain.lockTo(endPose))
+                                .waitSeconds(0.5)
+
                                 .build()
                 );
 

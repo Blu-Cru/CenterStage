@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 public class Outtake implements Subsystem{
     public static double
             WRIST_RETRACT = 0.68,
-            WRIST_OUTTAKE = WRIST_RETRACT - 0.26,
+            WRIST_OUTTAKE = WRIST_RETRACT - 0.277,
 
             PIXEL_HEIGHT = 2.6, // inches
             LOW_HEIGHT = 4.3, // inches
