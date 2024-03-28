@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class IntakeWrist implements Subsystem{
     public static double
-            PARALLEL_POS = 0.42,
+            PARALLEL_POS = 0.45,
             RADIUS = 3.77953,
 
             RETRACT_HEIGHT = 3.7, // inches

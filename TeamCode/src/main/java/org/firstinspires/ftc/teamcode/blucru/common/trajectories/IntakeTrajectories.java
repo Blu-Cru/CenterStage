@@ -17,7 +17,7 @@ public class IntakeTrajectories {
             INTAKE_LENGTH = 0.0,
             INTAKE_HYPOTENUSE = INTAKE_LENGTH * INTAKE_LENGTH,
 
-            INTAKE_X = -54 + Poses.FIELD_OFFSET_X,
+            INTAKE_X = -53 + Poses.FIELD_OFFSET_X,
             INTAKE_SETUP_X = INTAKE_X + 2;
 
     double reflect;
@@ -44,7 +44,7 @@ public class IntakeTrajectories {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(-30 + Poses.FIELD_OFFSET_X, -12 * reflect), Math.toRadians(180))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToConstantHeading(new Vector2d(INTAKE_SETUP_X + Poses.FIELD_OFFSET_X, -8 * reflect), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(INTAKE_SETUP_X + Poses.FIELD_OFFSET_X, -8 * reflect, Math.toRadians(190 * reflect)), Math.toRadians(180))
 
                 .UNSTABLE_addTemporalMarkerOffset(-1.4, () -> {
                     robot.intake.dropToStack(stackHeight);
@@ -56,13 +56,13 @@ public class IntakeTrajectories {
                     robot.intake.dropToGround();
                 })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X + Poses.FIELD_OFFSET_X, -20 * reflect), Math.toRadians(270 * reflect))
+                .splineToConstantHeading(new Vector2d(Poses.STACK_X + Poses.FIELD_OFFSET_X, -30 * reflect), Math.toRadians(270 * reflect))
                 .waitSeconds(1)
                 .build();
     }
 
     public TrajectorySequence placePurpleIntakeFromWingCenter(Robot robot) {
-        Pose2d endPose = new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -8 * reflect, Math.toRadians(180*reflect));
+        Pose2d endPose = new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect));
 
         return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE  )
                 .setTangent(Math.toRadians(90 * reflect))
@@ -70,19 +70,23 @@ public class IntakeTrajectories {
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -58 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(new Pose2d(-48 + Poses.FIELD_OFFSET_X, -25 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(135*reflect))
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     robot.purplePixelHolder.release(reflect);
                     robot.intake.dropToStack(4);
                 })
-                .splineToConstantHeading(new Vector2d(-50 + Poses.FIELD_OFFSET_X, -23 * reflect), Math.toRadians(140*reflect))
+                .splineToConstantHeading(new Vector2d(-49 + Poses.FIELD_OFFSET_X, -23 * reflect), Math.toRadians(140*reflect))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                    robot.outtake.unlock();
                     robot.intake.intake();
                     robot.intakingInAuto = true;
                 })
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.intake.dropToGround();
+                })
                 .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
                 .addTemporalMarker(() -> robot.drivetrain.lockTo(endPose))
-                .waitSeconds(1)
+                .waitSeconds(5)
                 .build();
     }
 

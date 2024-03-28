@@ -242,8 +242,11 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void stop() {
-        trajectorySequenceRunner.stop();
         setDriveSignal(new DriveSignal());
+    }
+
+    public void breakFollowing() {
+        trajectorySequenceRunner.breakFollowing();
     }
 
     public void setMode(DcMotor.RunMode runMode) {

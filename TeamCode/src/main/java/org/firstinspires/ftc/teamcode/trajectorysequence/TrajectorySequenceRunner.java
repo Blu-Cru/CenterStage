@@ -86,8 +86,7 @@ public class TrajectorySequenceRunner {
         dashboard.setTelemetryTransmissionInterval(25);
     }
 
-    public void stop() {
-        follower.followTrajectory(null);
+    public void breakFollowing() {
         currentTrajectorySequence = null;
         remainingMarkers.clear();
     }

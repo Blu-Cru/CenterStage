@@ -29,7 +29,7 @@ public class PreloadDeposits {
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(0 * reflect))
                 // reverse intake, lock
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.intake.setIntakePower(-1);
                     robot.outtake.lock();
@@ -45,12 +45,11 @@ public class PreloadDeposits {
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
-                .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_FAR_POSE))
+                .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.setTargetPixelHeight(0);
+                    robot.outtake.setTargetPixelHeight(-1);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -58,11 +57,11 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
-                    robot.outtake.setTurretAngle(270 - 50 * reflect);
+                    robot.outtake.setTurretAngle(270 - 45 * reflect);
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(Poses.DEPOSIT_FAR_POSE.vec(), Math.toRadians(0))
+                .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
                 // release white pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
                     robot.outtake.unlockFrontLockBack();
@@ -71,14 +70,14 @@ public class PreloadDeposits {
                     robot.outtake.setTargetPixelHeight(1);
                 })
                 // turn turret
-                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
-                    robot.outtake.setTurretAngle(270 + 25 * reflect);
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    robot.outtake.setTurretAngle(270 + 20 * reflect);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    robot.outtake.setTargetPixelHeight(0);
+                .UNSTABLE_addTemporalMarkerOffset(0.45, () -> {
+                    robot.outtake.setTargetPixelHeight(-1);
                 })
                 // release yellow pixel
-                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.65, () -> {
                     robot.outtake.unlock();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {

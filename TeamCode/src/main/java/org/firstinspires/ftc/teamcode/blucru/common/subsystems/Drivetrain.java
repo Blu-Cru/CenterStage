@@ -426,7 +426,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return super.trajectorySequenceBuilder(startPose)
-                .addTemporalMarker(() -> idle()); // idle the drivetrain before building a trajectory
+                .addTemporalMarker(() -> {
+                    idle();
+                }); // idle the drivetrain before building a trajectory
     }
 
     public void telemetry(Telemetry telemetry) {

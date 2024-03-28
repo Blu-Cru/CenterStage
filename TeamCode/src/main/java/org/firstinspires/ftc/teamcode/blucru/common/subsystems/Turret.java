@@ -13,7 +13,7 @@ public class Turret implements Subsystem{
             BUCKET_LENGTH = 5.984,
             BUCKET_WIDTH = 1.733, // inches
             BUCKET_HYPOTENUSE = Math.sqrt(BUCKET_LENGTH * BUCKET_LENGTH + BUCKET_WIDTH * BUCKET_WIDTH);
-    public static double TURRET_CENTER = 0.48; // ticks of turret servo at 270 degrees
+    public static double TURRET_CENTER = 0.49; // ticks of turret servo at 270 degrees
 
     private Servo turret;
 
