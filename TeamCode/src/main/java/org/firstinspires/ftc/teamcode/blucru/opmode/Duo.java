@@ -63,7 +63,7 @@ public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double RETRACT_WRIST_DELAY = 250;
     public static double FULL_RETRACT_DELAY = 350;
-    public static double INTAKE_FULL_REVERSE_TIME = 1000;
+    public static double INTAKE_FULL_REVERSE_TIME = 500;
     public static double START_INTAKE_READ_DELAY = 100;
 
     private RobotState robotState;

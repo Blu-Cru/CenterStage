@@ -59,6 +59,9 @@ public class DepositTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-0.1, () -> {
                     robot.outtake.unlock();
                 })
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+                    robot.outtake.incrementTargetHeight(2);
+                })
 
                 .waitSeconds(TOTAL_DEPOSIT_TIME)
                 .build();

@@ -11,9 +11,9 @@ public class IntakeTrajectories {
     public static double
             DROP_INTAKE_TIME = -1.0,
             START_INTAKE_TIME = -0.5,
-            CENTER_TURRET_TIME = 0,
-            WRIST_RETRACT_TIME = 0.3,
-            LIFT_RETRACT_TIME = 0.4,
+            CENTER_TURRET_TIME = 0.3,
+            WRIST_RETRACT_TIME = 0.6,
+            LIFT_RETRACT_TIME = 0.7,
             INTAKE_LENGTH = 0.0,
             INTAKE_HYPOTENUSE = INTAKE_LENGTH * INTAKE_LENGTH,
 

@@ -19,7 +19,7 @@ public class Outtake implements Subsystem{
             MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2, // inches
             HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4,
 
-            MIN_HEIGHT = LOW_HEIGHT,
+            MIN_HEIGHT = LOW_HEIGHT - PIXEL_HEIGHT * 1,
             MAX_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 10,
 
             MAX_TELEOP_TURRET_X = 5.3; // inches
@@ -84,7 +84,7 @@ public class Outtake implements Subsystem{
     public void setTargetHeight(double targetHeight) {
         this.outtaking = true;
         this.targetHeight = Range.clip(targetHeight, MIN_HEIGHT, MAX_HEIGHT);
-        this.lift.setTargetPos((int) lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
+        this.lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
 
     public void setTargetPixelHeight(double pixels) {
