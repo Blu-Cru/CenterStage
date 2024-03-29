@@ -8,12 +8,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lock implements Subsystem{
     public static double
-            FLAT = 0.72,
-            LOCKED_FRONT = FLAT + toTicks(60),
-            LOCK_BACK_POS = FLAT - toTicks(55),
-            UNLOCKED_BACK = FLAT - toTicks(180);
+            FLAT = 0.3,
+            LOCKED_FRONT = FLAT - toTicks(60),
+            LOCK_BACK_POS = FLAT + toTicks(55),
+            UNLOCKED_BACK = FLAT + toTicks(180);
 
-    enum LockState {
+    public enum LockState {
         LOCKED_FRONT,
         LOCKED_BACK,
         UNLOCKED_BACK,
@@ -21,7 +21,7 @@ public class Lock implements Subsystem{
     }
 
     ServoImplEx lock;
-    LockState lockState;
+    public LockState lockState;
     double lockPos;
 
     public Lock(HardwareMap hardwareMap) {
@@ -80,8 +80,13 @@ public class Lock implements Subsystem{
     }
 
     public void unlockFrontLockBack() {
-        lockState = LockState.LOCKED_BACK;
-        lockPos = LOCK_BACK_POS;
+        if(lockState == LockState.UNLOCKED_BACK || lockState == LockState.UNLOCKED_FRONT) {
+            lockState = LockState.UNLOCKED_FRONT;
+            lockPos = FLAT;
+        } else {
+            lockState = LockState.LOCKED_BACK;
+            lockPos = LOCK_BACK_POS;
+        }
     }
 
     public void reset() {

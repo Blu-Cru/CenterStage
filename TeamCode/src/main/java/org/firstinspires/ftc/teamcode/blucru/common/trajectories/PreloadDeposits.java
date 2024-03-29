@@ -67,7 +67,7 @@ public class PreloadDeposits {
                     robot.outtake.unlockFrontLockBack();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    robot.outtake.setTargetPixelHeight(1);
+                    robot.outtake.setTargetPixelHeight(0.5);
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {

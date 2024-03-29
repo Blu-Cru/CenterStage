@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajectories;
@@ -86,5 +87,9 @@ public class DevAuto extends BCLinearOpMode {
     public void telemetry() {
         telemetry.addData("STATE:", state);
         telemetry.addData("Running trajectory " + trajectoryIndex + " out of ", trajectoryList.size());
+    }
+
+    public void end() {
+        Initialization.POSE = drivetrain.getPoseEstimate();
     }
 }

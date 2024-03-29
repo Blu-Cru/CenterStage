@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lock;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 

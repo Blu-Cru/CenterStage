@@ -23,15 +23,17 @@ public class DepositTrajectories {
         return robot.drivetrain.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180 * reflect)))
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                .addTemporalMarker(() -> {
+                    robot.intakingInAuto = false;
+                    robot.intake.stopReadingColor();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.intake.setIntakePower(-1);
                     robot.intake.intakeWrist.dropToAutoMidPos();
                     robot.outtake.lock();
-                    robot.intake.stopReadingColor();
-                    robot.intakingInAuto = false;
                 })
 
-                .UNSTABLE_addTemporalMarkerOffset(1.0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.retractIntakeWrist();
                 })
@@ -56,11 +58,11 @@ public class DepositTrajectories {
                 .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE))
 
                 // release pixel
-                .UNSTABLE_addTemporalMarkerOffset(-0.1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-0, () -> {
                     robot.outtake.unlock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    robot.outtake.incrementTargetHeight(2);
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    robot.outtake.incrementTargetHeight(1.5);
                 })
 
                 .waitSeconds(TOTAL_DEPOSIT_TIME)

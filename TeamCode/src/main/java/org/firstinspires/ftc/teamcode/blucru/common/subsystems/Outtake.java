@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 public class Outtake implements Subsystem{
     public static double
             WRIST_RETRACT = 0.68,
-            WRIST_OUTTAKE = WRIST_RETRACT - 0.28,
+            WRIST_OUTTAKE = WRIST_RETRACT - 0.29,
 
             PIXEL_HEIGHT = 2.6, // inches
             LOW_HEIGHT = 4.3, // inches
@@ -78,7 +78,11 @@ public class Outtake implements Subsystem{
     public void setManualSlidePower(double power) {
         lift.liftState = LiftState.MANUAL;
         lift.power = power;
-        targetHeight = targetHeight + lift.toInches(lift.getDecelDelta());
+        setTargetHeight(getCurrentTargetHeight() + lift.toInches(lift.getDecelDelta()));
+    }
+
+    public double getCurrentTargetHeight() {
+        return lift.getCurrentPos() + turret.getTurretHeightDelta();
     }
 
     public void setTargetHeight(double targetHeight) {
@@ -178,6 +182,7 @@ public class Outtake implements Subsystem{
         lift.telemetry(telemetry);
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
+        telemetry.addData("outtaking:", outtaking);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
     }

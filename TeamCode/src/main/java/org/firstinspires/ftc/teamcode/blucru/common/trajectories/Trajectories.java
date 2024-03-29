@@ -60,10 +60,10 @@ public class Trajectories {
         ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
         trajectoryList.add(intakeTrajectories.placePurpleIntakeFromWingCenter(robot));
         trajectoryList.add(preloadDeposits.depositThroughCenterFromWingCenterFarStack(robot));
-        trajectoryList.add(intakeTrajectories.intakeCenter(robot, 0, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 0, Poses.DEPOSIT_CENTER_POSE));
         trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 1, 0));
-        trajectoryList.add(intakeTrajectories.intakeCenter(robot, 0, Poses.DEPOSIT_CENTER_POSE));
-        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 2.5, -20));
+        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 0, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 2, -20));
         trajectoryList.add(parks.parkNone(robot));
 
         return trajectoryList;
