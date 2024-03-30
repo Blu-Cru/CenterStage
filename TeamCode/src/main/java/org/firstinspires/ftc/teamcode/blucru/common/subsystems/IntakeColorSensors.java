@@ -42,7 +42,9 @@ public class IntakeColorSensors implements Subsystem{
     double frontHue, backHue;
     double frontDistance, backDistance;
     double frontLightDetected, backLightDetected;
-    boolean reading;
+    boolean reading,
+            isFull,
+            wasJustFull;
 
     public IntakeColorSensors(HardwareMap hardwareMap) {
         frontSensor = hardwareMap.get(RevColorSensorV3.class, "front color");
@@ -97,10 +99,12 @@ public class IntakeColorSensors implements Subsystem{
             frontSensor.enableLed(false);
             backSensor.enableLed(false);
         }
+
+        isFull = isFull();
     }
 
     public void write() {
-
+        wasJustFull = isFull; // save last state at the end of loop
     }
 
     public SlotState calculateSlotState(double distance, sensorType sensor) {
@@ -175,6 +179,14 @@ public class IntakeColorSensors implements Subsystem{
 
     public void stopReading() {
         reading = false;
+    }
+
+    public boolean justFilled() {
+        return isFull && !wasJustFull;
+    }
+
+    private boolean isFull() {
+        return frontSlotState == SlotState.FULL && backSlotState == SlotState.FULL;
     }
 
     public void toggleReading() {

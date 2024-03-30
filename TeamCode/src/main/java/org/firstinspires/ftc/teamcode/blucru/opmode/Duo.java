@@ -61,11 +61,12 @@ outtaking state:
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
     // timer variables
-    public static double OUTTAKE_TURN_TURRET_DELAY = 300;
-    public static double RETRACT_WRIST_DELAY = 250;
-    public static double FULL_RETRACT_DELAY = 350;
-    public static double INTAKE_FULL_REVERSE_TIME = 500 ;
-    public static double START_INTAKE_READ_DELAY = 100;
+    public static double OUTTAKE_TURN_TURRET_DELAY = 300,
+            RETRACT_WRIST_DELAY = 250,
+            FULL_RETRACT_DELAY = 350,
+            INTAKE_START_REVERSE_TIME = 100,
+            INTAKE_FULL_REVERSE_TIME = 500 ,
+            START_INTAKE_READ_DELAY = 100;
 
     private RobotState robotState;
 
@@ -170,7 +171,10 @@ public class Duo extends BCLinearOpMode {
                 }
                 break;
             case INTAKING:
-                if(intake.isFull() && timeSince(startIntakeTime) > START_INTAKE_READ_DELAY) {
+                if(intake.isFull()) {
+                    // rumble when full
+                    gamepad2.rumble(50);
+                    gamepad1.rumble(50);
                     intakeFullTime = currentTime();
                     robotState = RobotState.RETRACT;
                     intake.setIntakePower(-1);

@@ -33,6 +33,7 @@ public class Intake implements Subsystem{
     double powerBeforeUnjamming;
     double intakeCurrent;
     double startUnjamTime;
+    boolean wasJustFull;
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
@@ -90,7 +91,7 @@ public class Intake implements Subsystem{
     }
 
     public boolean isFull() {
-        return intakeColorSensors.frontSlotState == SlotState.FULL && intakeColorSensors.backSlotState == SlotState.FULL;
+        return intakeColorSensors.isFull();
     }
 
     public void retractIntakeWrist() {
