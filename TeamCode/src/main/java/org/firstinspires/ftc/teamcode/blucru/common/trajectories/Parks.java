@@ -11,8 +11,8 @@ public class Parks {
 
     public static double
             TURRET_RETRACT_DELAY = 0.1,
-            WRIST_RETRACT_DELAY = 0.4,
-            LIFT_RETRACT_DELAY = 0.5;
+            WRIST_RETRACT_DELAY = 0.3,
+            LIFT_RETRACT_DELAY = 0.4;
 
     public Parks(double reflect) {
         this.reflect = reflect;

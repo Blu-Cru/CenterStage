@@ -64,7 +64,7 @@ public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double RETRACT_WRIST_DELAY = 250;
     public static double FULL_RETRACT_DELAY = 350;
-    public static double INTAKE_FULL_REVERSE_TIME = 500;
+    public static double INTAKE_FULL_REVERSE_TIME = 500 ;
     public static double START_INTAKE_READ_DELAY = 100;
 
     private RobotState robotState;
@@ -159,6 +159,11 @@ public class Duo extends BCLinearOpMode {
                     intake.setIntakePower(0);
                 }
 
+                // MANUAL SLIDE
+                if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
+                    outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
+                }
+
                 // RESET SLIDES
                 if(gamepad2.share) {
                     outtake.lift.resetEncoder();
@@ -212,8 +217,6 @@ public class Duo extends BCLinearOpMode {
             case OUTTAKING:
                 // TURRET CONTROL
                 if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
-//                    if (gamepad2.left_trigger > 0.1) outtake.setTurretAngle(-gamepad2.left_trigger * 60 + 270);
-//                    else if (gamepad2.right_trigger > 0.1) outtake.setTurretAngle(gamepad2.right_trigger * 60 + 270);
                     if(Math.abs(gamepad2.right_stick_x) > 0.05)
                         outtake.teleOpTurnTurret(gamepad2.right_stick_x);
                     else outtake.setTurretAngle(270);
@@ -324,13 +327,6 @@ public class Duo extends BCLinearOpMode {
                 }
                 break;
         }
-
-        // MANUAL SLIDE
-        if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
-            outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
-        }
-
-
 
         // MANUAL HANG
         if(Math.abs(gamepad2.left_stick_y) > 0.2)

@@ -11,9 +11,9 @@ public class IntakeTrajectories {
     public static double
             DROP_INTAKE_TIME = -1.0,
             START_INTAKE_TIME = -0.5,
-            CENTER_TURRET_TIME = 0.3,
-            WRIST_RETRACT_TIME = 0.6,
-            LIFT_RETRACT_TIME = 0.7,
+            CENTER_TURRET_TIME = 0.1,
+            WRIST_RETRACT_TIME = 0.4,
+            LIFT_RETRACT_TIME = 0.5,
             INTAKE_LENGTH = 0.0,
             INTAKE_HYPOTENUSE = INTAKE_LENGTH * INTAKE_LENGTH,
 
@@ -117,9 +117,11 @@ public class IntakeTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.dropToStack(stackHeight);
                 })
-//                .UNSTABLE_addTemporalMarkerOffset()
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.intake.dropToStack(stackHeight - 1);
+                })
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X + Poses.FIELD_OFFSET_X, -20 * reflect), Math.toRadians(270 * reflect))
+                .splineToConstantHeading(new Vector2d(Poses.calculateStackX(stackHeight), -12 * reflect), Math.toRadians(180 * reflect))
                 .waitSeconds(1)
                 .build();
     }

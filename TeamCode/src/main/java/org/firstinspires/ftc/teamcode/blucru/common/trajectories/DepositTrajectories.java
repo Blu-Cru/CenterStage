@@ -58,11 +58,11 @@ public class DepositTrajectories {
                 .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE))
 
                 // release pixel
-                .UNSTABLE_addTemporalMarkerOffset(-0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.unlock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    robot.outtake.incrementTargetHeight(1.5);
+                .UNSTABLE_addTemporalMarkerOffset(TOTAL_DEPOSIT_TIME, () -> {
+                    robot.outtake.incrementTargetHeight(1);
                 })
 
                 .waitSeconds(TOTAL_DEPOSIT_TIME)

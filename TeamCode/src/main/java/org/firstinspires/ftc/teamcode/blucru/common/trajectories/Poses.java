@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
+
 // poses for trajectories
 public class Poses {
     public static double FIELD_OFFSET_X = 0;
@@ -70,5 +72,9 @@ public class Poses {
         PARK_FAR_POSE = new Pose2d(44, -7 * reflect, Math.toRadians(180));
 
         STACK_CLOSE_POSE = new Pose2d(STACK_X + FIELD_OFFSET_X + 1, -42 * reflect, Math.toRadians(150 * reflect));
+    }
+
+    public static double calculateStackX(int stackHeight) {
+        return Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight);
     }
 }
