@@ -39,7 +39,7 @@ public class IntakeTest extends LinearOpMode {
             rotate = -gamepad1.right_stick_x;
 
             if(gamepad1.right_stick_button) {
-                drivetrain.resetHeading(90);
+                drivetrain.resetHeading(Math.toRadians(90));
                 gamepad1.rumble(150);
             }
 

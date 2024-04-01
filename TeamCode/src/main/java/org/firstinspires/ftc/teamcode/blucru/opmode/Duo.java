@@ -173,8 +173,8 @@ public class Duo extends BCLinearOpMode {
             case INTAKING:
                 if(intake.isFull()) {
                     // rumble when full
-                    gamepad2.rumble(50);
-                    gamepad1.rumble(50);
+                    gamepad2.rumble(150);
+                    gamepad1.rumble(150);
                     intakeFullTime = currentTime();
                     robotState = RobotState.RETRACT;
                     intake.setIntakePower(-1);

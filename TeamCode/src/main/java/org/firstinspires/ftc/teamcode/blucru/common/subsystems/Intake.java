@@ -91,7 +91,7 @@ public class Intake implements Subsystem{
     }
 
     public boolean isFull() {
-        return intakeColorSensors.isFull();
+        return intakeColorSensors.isFull;
     }
 
     public void retractIntakeWrist() {

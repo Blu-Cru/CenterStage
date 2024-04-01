@@ -41,10 +41,10 @@ public class PreloadDeposits {
                     robot.intake.retractIntakeWrist();
                 })
 
-                .splineToConstantHeading(new Vector2d(-10 + Poses.FIELD_OFFSET_X, Poses.CENTER_Y * reflect), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-10 + Poses.FIELD_OFFSET_X, -12 * reflect), Math.toRadians(0))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
-                .splineToConstantHeading(new Vector2d(30, Poses.CENTER_Y * reflect), Math.toRadians(0))
-                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
+                .splineToConstantHeading(new Vector2d(20, Poses.CENTER_Y * reflect), Math.toRadians(0))
+//                .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
 
                 // lift
@@ -62,6 +62,7 @@ public class PreloadDeposits {
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
+//                .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE))
                 // release white pixel
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
                     robot.outtake.unlockFrontLockBack();
@@ -71,20 +72,20 @@ public class PreloadDeposits {
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-                    robot.outtake.setTurretAngle(270 + 20 * reflect);
+                    robot.outtake.setTurretAngle(270);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.45, () -> {
                     robot.outtake.setTargetPixelHeight(-1);
                 })
                 // release yellow pixel
-                .UNSTABLE_addTemporalMarkerOffset(0.65, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> {
                     robot.outtake.unlock();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     robot.outtake.incrementTargetHeight(1);
                     robot.outtake.resetLock();
                 })
-                .waitSeconds(1.1)
+                .waitSeconds(1)
                 .build();
     }
 

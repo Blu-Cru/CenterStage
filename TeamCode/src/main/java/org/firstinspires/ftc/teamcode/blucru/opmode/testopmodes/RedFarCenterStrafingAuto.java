@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "dev auto", group = "test")
-public class DevAuto extends BCLinearOpMode {
+@Autonomous(name = "red far center strafing auto", group = "test")
+public class RedFarCenterStrafingAuto extends BCLinearOpMode {
     AutoState state = AutoState.RUNNING;
     Poses poses;
 
@@ -50,7 +50,7 @@ public class DevAuto extends BCLinearOpMode {
 
 //        trajectoryList.add(depositClose);
 //        trajectoryList.add(purpleIntake);
-        trajectoryList = trajectories.buildWingCenterTrajectoriesStraight(robot);
+        trajectoryList = trajectories.buildWingCenterTrajectoriesStrafing(robot);
     }
 
     public void onStart() {

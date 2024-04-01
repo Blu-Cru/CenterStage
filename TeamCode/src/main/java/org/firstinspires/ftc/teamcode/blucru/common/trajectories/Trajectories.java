@@ -56,14 +56,26 @@ public class Trajectories {
         depositTrajectories = new DepositTrajectories(reflect);
     }
 
-    public ArrayList<TrajectorySequence> buildWingCenterTrajectories(Robot robot) {
+    public ArrayList<TrajectorySequence> buildWingCenterTrajectoriesStraight(Robot robot) {
         ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
         trajectoryList.add(intakeTrajectories.placePurpleIntakeFromWingCenter(robot));
         trajectoryList.add(preloadDeposits.depositThroughCenterFromWingCenterFarStack(robot));
-        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 0, Poses.DEPOSIT_CENTER_POSE));
-        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 1, 0));
-        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 0, Poses.DEPOSIT_CENTER_POSE));
-        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 2, -20));
+        trajectoryList.add(intakeTrajectories.intakeCenterStraight(robot, 3, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 0, 0, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(intakeTrajectories.intakeCenterStraight(robot, 1, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 1.5, 0, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(parks.parkNone(robot));
+        return trajectoryList;
+    }
+
+    public ArrayList<TrajectorySequence> buildWingCenterTrajectoriesStrafing(Robot robot) {
+        ArrayList<TrajectorySequence> trajectoryList = new ArrayList<>();
+        trajectoryList.add(intakeTrajectories.placePurpleIntakeFromWingCenter(robot));
+        trajectoryList.add(preloadDeposits.depositThroughCenterFromWingCenterFarStack(robot));
+        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 2, 6, 5, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 1, 0, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(intakeTrajectories.intakeCenterStrafing(robot, 0, 12, 15, Poses.DEPOSIT_CENTER_POSE));
+        trajectoryList.add(depositTrajectories.depositCenterFromFarStack(robot, 2, -20, new Pose2d(Poses.DEPOSIT_X, -38)));
         trajectoryList.add(parks.parkNone(robot));
 
         return trajectoryList;

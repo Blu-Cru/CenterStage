@@ -14,7 +14,7 @@ public class Poses {
     */
     public static double START_Y = -62;
     public static double DEPOSIT_X = 52.5;
-    public static double BACKDROP_SETUP_X = 45;
+    public static double BACKDROP_SETUP_X = 44;
     public static double BACKDROP_Y_DELTA = 3.5;
 
     public static double DEPOSIT_FAR_Y = -36 + BACKDROP_Y_DELTA;
