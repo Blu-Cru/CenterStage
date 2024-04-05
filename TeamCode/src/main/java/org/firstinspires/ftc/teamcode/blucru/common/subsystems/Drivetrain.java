@@ -394,7 +394,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     // resets heading
     public void resetHeading(double heading) {
 //        resetIMU(heading);
-        setPoseEstimate(new Pose2d(0,0,heading));
+        setPoseEstimate(new Pose2d(pose.getX(),pose.getY(),heading));
     }
 
     // set initial pose from auto
