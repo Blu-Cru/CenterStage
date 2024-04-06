@@ -31,12 +31,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             MAX_DECEL_DRIVE_DELTA = 15.0, // magnitude per second at power 1 for slew rate limiter
 
             HEADING_DECELERATION = 12, // radians per second squared, for calculating new target heading after turning
-            HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02, // PID constants for heading
+            HEADING_P = 1.3, HEADING_I = 0, HEADING_D = 0.02, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
 
             DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04, // PID constants for distance sensors
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
+
+            FORWARD_kStatic = 0.07, STRAFE_kStatic = 0.15,
 
             TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
@@ -136,7 +138,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             drive(x, y, rotate);
         else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
             driveToHeading(x, y, calculateNewTargetHeading());
-        else if(!driving) // if driver is not moving, drive with turning normally
+        else if(!driving) // if driver is not moving translationally, update the target heading
             driveToHeading(x, y, heading);
         else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
@@ -162,7 +164,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         drive(x, y, rotate);
     }
 
-    // rotate for field centric
     // apply slew rate limiter to drive vector
     public Vector2d calculateDriveVector(Vector2d input) {
         if (fieldCentric)
@@ -177,8 +178,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // calculate the change between the last drive vector and the current drive vector
         Vector2d driveVectorDelta = input.minus(lastDriveVector);
-        double limitedDriveVectorDeltaMagnitude;
 
+        double limitedDriveVectorDeltaMagnitude;
         boolean decelerating = input.norm() < lastDriveVector.norm();
 
         if(decelerating) {
@@ -196,13 +197,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(driveVectorDelta.norm() == 0) // catch divide by zero
             driveVector = lastDriveVector;
         else
-            // add the scaled delta to the last drive vector
+            // add the scaled change in drive vector to the last drive vector
             driveVector = lastDriveVector.plus(scaledDriveVectorDelta);
 
         // record the drive vector for the next loop
         lastDriveVector = driveVector;
         
-        return driveVector;
+        return driveVector; // return the new drive vector
     }
 
 //    public boolean imuAccurate() {
@@ -448,6 +449,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("dt", dt);
         telemetry.addData("last drive vector", lastDriveVector);
+        telemetry.addData("last drive vector magnitude", lastDriveVector.norm());
         telemetry.addData("odo heading", odoHeading);
         telemetry.addData("imu heading", imuHeading);
 //        distanceSensors.telemetry(telemetry);

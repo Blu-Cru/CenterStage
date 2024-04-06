@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 @Config
 public class Lift implements Subsystem{
     public static double
-            kP = 0.003, kI = 0, kD = 0.0001, kF = 0.04, // PID values
+            kP = 0.003, kI = 0, kD = 0.00009, kF = 0.04, // PID values
 
             stallCurrent = 20, resetCurrent = 1, // amps
 
