@@ -30,7 +30,7 @@ public class DriveMaintainHeadingTest extends LinearOpMode {
                 gamepad1.rumble(150);
             }
 
-            drivetrain.driveMaintainHeading(horz, vert, rotate);
+            drivetrain.teleOpDrive(horz, vert, rotate);
 
             robot.read();
             robot.write();

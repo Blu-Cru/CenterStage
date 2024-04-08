@@ -13,16 +13,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
-
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
@@ -127,7 +121,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
     }
 
-    public void driveMaintainHeading(double x, double y, double rotate) {
+    public void teleOpDrive(double x, double y, double rotate) {
         boolean turning = Math.abs(rotate) > 0.05;
         boolean wasJustTurning = Math.abs(lastRotate) > 0.05;
         boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;

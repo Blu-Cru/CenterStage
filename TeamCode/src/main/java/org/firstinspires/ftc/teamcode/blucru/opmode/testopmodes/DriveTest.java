@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 
 @TeleOp(name = "drive test", group = "test")
 public class DriveTest extends LinearOpMode {
@@ -55,7 +52,7 @@ public class DriveTest extends LinearOpMode {
                     drivetrain.driveToHeading(horz, vert, 0);
                 }
             } else {
-                drivetrain.driveMaintainHeading(horz, vert, rotate);
+                drivetrain.teleOpDrive(horz, vert, rotate);
             }
 
             robot.write();

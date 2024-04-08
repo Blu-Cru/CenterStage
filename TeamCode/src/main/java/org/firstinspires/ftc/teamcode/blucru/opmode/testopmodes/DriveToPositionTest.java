@@ -44,7 +44,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
                 gamepad1.rumble(100);
             }
 
-            drivetrain.driveMaintainHeading(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
+            drivetrain.teleOpDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
         } else if(mode.equals("drive to position")) {
             drivetrain.lockTo(new Pose2d(targetX, targetY, targetHeading));
         }
