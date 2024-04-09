@@ -34,6 +34,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
             TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
+            STATIC_TRANSLATION_VELOCITY_TOLERANCE = 0.8, // inches per second
+            STATIC_HEADING_VELOCITY_TOLERANCE = 0.1, // radians per second
+            kStaticX = 0.13, kStaticY = 0.25, // feedforward constants for static friction
+
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
     public DrivetrainState drivetrainState;
@@ -137,6 +141,20 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // recording last turn input
         lastRotate = rotate;
+    }
+
+    public Vector2d processStaticFriction(Vector2d driveVector) {
+        boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
+
+        if(robotStopped) {
+            double angle = driveVector.angle();
+            double staticMinMagnitude =
+                    kStaticX * kStaticY
+                        /
+                    Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
+            double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
+            return driveVector.div(driveVector.norm()).times(newDriveMagnitude);
+        } else return driveVector;
     }
 
     public void drive(double x, double y, double rotate) {
