@@ -157,19 +157,22 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         } else return driveVector;
     }
 
+    public Pose2d processDrivePower(Pose2d drivePose) {
+        return new Pose2d(drivePose.vec().times(drivePower), drivePose.getHeading() * drivePower);
+    }
+
     public void drive(double x, double y, double rotate) {
 //        drivetrainState = DrivetrainState.IDLE;
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
-        x = driveVector.getX();
-        y = driveVector.getY();
+        Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
 
-        setWeightedDrivePower(new Pose2d(x * drivePower, y * drivePower, rotate * drivePower));
+        setWeightedDrivePower(drivePose);
     }
 
     public void driveToHeading(double x, double y, double targetHeading) {
         this.targetHeading = targetHeading;
-        double rotate = Range.clip(getPIDRotate(heading, targetHeading), -drivePower, drivePower);
+        double rotate = getPIDRotate(heading, targetHeading);
 
         drive(x, y, rotate);
     }
@@ -327,7 +330,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else if(heading - target > Math.PI) heading -= 2 * Math.PI;
 
         if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
-        else return Range.clip(headingPID.calculate(heading, target), -drivePower, drivePower);
+        else return Range.clip(headingPID.calculate(heading, target), -1, 1);
     }
 
     public double getOdoHeading() {
