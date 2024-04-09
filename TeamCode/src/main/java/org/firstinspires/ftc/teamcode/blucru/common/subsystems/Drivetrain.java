@@ -146,7 +146,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public Vector2d processStaticFriction(Vector2d driveVector) {
         boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
 
-        if(robotStopped) {
+        if(robotStopped && driveVector.norm() != 0) {
             double angle = driveVector.angle();
             double staticMinMagnitude =
                     kStaticX * kStaticY
@@ -164,6 +164,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void drive(double x, double y, double rotate) {
 //        drivetrainState = DrivetrainState.IDLE;
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+
+        Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
+
+        setWeightedDrivePower(drivePose);
+    }
+
+    public void driveStaticFriction(double x, double y, double rotate) {
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+        driveVector = processStaticFriction(driveVector);
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
 
