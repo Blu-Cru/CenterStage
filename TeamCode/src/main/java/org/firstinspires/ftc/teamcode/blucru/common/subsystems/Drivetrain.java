@@ -126,8 +126,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void teleOpDrive(double x, double y, double rotate) {
-        boolean turning = Math.abs(rotate) > 0.05;
-        boolean wasJustTurning = Math.abs(lastRotate) > 0.05;
+        boolean turning = Math.abs(rotate) > 0.02;
+        boolean wasJustTurning = Math.abs(lastRotate) > 0.02;
         boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;
 
         if(turning) // if driver is turning, drive with turning normally
