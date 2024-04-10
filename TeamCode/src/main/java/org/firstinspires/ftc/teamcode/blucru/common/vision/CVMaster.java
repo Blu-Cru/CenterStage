@@ -116,4 +116,16 @@ public class CVMaster implements Subsystem {
         visionPortal.setProcessorEnabled(tagDetector, false);
         visionPortal.stopStreaming();
     }
+
+    public void setCameraExposure(double exposure) {
+        exposureControl.setExposure((long) exposure, TimeUnit.MILLISECONDS);
+    }
+
+    public void setCameraGain(double gain) {
+        gainControl.setGain((int) gain);
+    }
+
+    public void setCameraFocus(double focus) {
+        focusControl.setFocusLength(focus);
+    }
 }
