@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
 @Config
@@ -39,18 +40,26 @@ public class AprilTagTest extends BCLinearOpMode {
 
         if (gamepad1.a && !lastA) {
             cvMaster.detectTag();
+            state = State.DETECTING;
             FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
         }
         lastA = gamepad1.a;
 
         if (gamepad1.x && !lastX) {
             cvMaster.stop();
+            state = State.IDLE;
             FtcDashboard.getInstance().stopCameraStream();
         }
         lastX = gamepad1.x;
+
+        robotPose = AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections());
     }
 
     public void telemetry() {
         telemetry.addData("state:", state);
+        telemetry.addData("pose", robotPose);
+        telemetry.addData("x", robotPose.getX());
+        telemetry.addData("y", robotPose.getY());
+        telemetry.addData("heading", robotPose.getHeading());
     }
 }
