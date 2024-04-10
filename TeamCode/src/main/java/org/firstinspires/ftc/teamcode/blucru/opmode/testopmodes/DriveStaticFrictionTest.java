@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
+@TeleOp(name = "Drive static friction test", group = "test")
 public class DriveStaticFrictionTest extends BCLinearOpMode {
     boolean lastA = false;
     enum DriveType {
@@ -37,6 +40,7 @@ public class DriveStaticFrictionTest extends BCLinearOpMode {
 
     public void telemetry() {
         telemetry.addData("drive type", driveType);
+        telemetry.addData("joystick magnitude", Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y));
         drivetrain.testTelemetry(telemetry);
     }
 }

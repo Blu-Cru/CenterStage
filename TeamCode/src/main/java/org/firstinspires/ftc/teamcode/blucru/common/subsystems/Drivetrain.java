@@ -22,10 +22,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
             MAX_ACCEL_DRIVE_DELTA = 3.5,
-            MAX_DECEL_DRIVE_DELTA = 15.0, // magnitude per second at power 1 for slew rate limiter
+            MAX_DECEL_DRIVE_DELTA = 10.0, // magnitude per second at power 1 for slew rate limiter
 
             HEADING_DECELERATION = 12, // radians per second squared, for calculating new target heading after turning
-            HEADING_P = 1.0, HEADING_I = 0, HEADING_D = 0.02, // PID constants for heading
+            HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
 
             DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04, // PID constants for distance sensors
@@ -143,7 +143,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastRotate = rotate;
     }
 
-    public Vector2d processStaticFriction(Vector2d driveVector) {
+    public Pose2d processStaticFriction(Pose2d drivePose) {
+        Vector2d driveVector = drivePose.vec();
         boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
 
         if(robotStopped && driveVector.norm() != 0) {
@@ -153,8 +154,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                         /
                     Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
             double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
-            return driveVector.div(driveVector.norm()).times(newDriveMagnitude);
-        } else return driveVector;
+            return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
+        } else return drivePose;
     }
 
     public Pose2d processDrivePower(Pose2d drivePose) {
@@ -172,11 +173,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void driveStaticFriction(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
-        driveVector = processStaticFriction(driveVector);
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
+        Pose2d staticDrivePose = processStaticFriction(drivePose);
 
-        setWeightedDrivePower(drivePose);
+
+        setWeightedDrivePower(staticDrivePose);
     }
 
     public void driveToHeading(double x, double y, double targetHeading) {
@@ -465,8 +467,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
         telemetry.addData("DRIVETRAIN STATE:", drivetrainState);
         telemetry.addData("heading", heading);
-        telemetry.addData("x", pose.getX());
-        telemetry.addData("y", pose.getY());
+        telemetry.addData("pose x", pose.getX());
+        telemetry.addData("pose y", pose.getY());
+        telemetry.addData("velocity x", velocity.getX());
+        telemetry.addData("velocity y", velocity.getY());
     }
 
     public void testTelemetry(Telemetry telemetry) {
