@@ -34,9 +34,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
             TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
-            STATIC_TRANSLATION_VELOCITY_TOLERANCE = 0.8, // inches per second
-            STATIC_HEADING_VELOCITY_TOLERANCE = 0.1, // radians per second
-            kStaticX = 0.13, kStaticY = 0.25, // feedforward constants for static friction
+            STATIC_TRANSLATION_VELOCITY_TOLERANCE = 10.0, // inches per second
+            STATIC_HEADING_VELOCITY_TOLERANCE = 0.3, // radians per second
+            kStaticX = 0.7, kStaticY = 0.1, // feedforward constants for static friction
 
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
