@@ -21,20 +21,6 @@ public class MotionProfile {
     double a0, a1, a2, a3;
     double distance;
 
-    public MotionProfile(double xTarget, double xI) {
-        this.xTarget = xTarget;
-        this.xI = xI;
-        this.vMax = 1000;
-        this.vI = 0;
-        this.aMax = 2000;
-        if(xTarget < xI) {
-            flip = -1;
-        } else {
-            flip = 1;
-        }
-        calculate();
-    }
-
     public MotionProfile(double xTarget, double xI, double vMax, double aMax) {
         this.xTarget = xTarget;
         this.xI = xI;
