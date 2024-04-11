@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 import java.util.ArrayList;
 
 public class Robot {
+    private static Robot instance;
+
     HardwareMap hardwareMap;
 
     // all subsystems
@@ -23,17 +25,24 @@ public class Robot {
 
     public boolean intakingInAuto = false;
 
-    // list of all subsystems for easy iteration
+    // list of all subsystems
     ArrayList<Subsystem> subsystems;
 
-    public Robot(HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
+    public static Robot getInstance() {
+        if(instance == null) {
+            instance = new Robot();
+        }
+        return instance;
+    }
 
+    private Robot(){
         subsystems = new ArrayList<>();
     }
 
     // initializes subsystems
-    public void init() {
+    public void init(HardwareMap hardwareMap) {
+        this.hardwareMap = hardwareMap;
+
 //        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
 //            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 //        }
@@ -131,5 +140,9 @@ public class Robot {
         }
 
         telemetry.addData("intaking in auto: ", intakingInAuto);
+    }
+
+    public static void kill() {
+        instance = null;
     }
 }

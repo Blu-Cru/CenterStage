@@ -43,9 +43,9 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         alliance = Initialization.ALLIANCE;
-        robot = new Robot(hardwareMap);
+        robot = Robot.getInstance();
         initialize();
-        robot.init();
+        robot.init(hardwareMap);
         while(opModeInInit()) {
             initLoop();
             telemetry();
@@ -78,6 +78,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         }
 
         end();
+        Robot.kill();
     }
 
     // methods to be overriden
@@ -91,8 +92,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
 
     public void addOuttake() {outtake = robot.addOuttake();}
-    public void addLocks() {
-        lock = robot.addLocks();}
+    public void addLocks() {lock = robot.addLocks();}
 
     public void addIntake() {intake = robot.addIntake();}
 
