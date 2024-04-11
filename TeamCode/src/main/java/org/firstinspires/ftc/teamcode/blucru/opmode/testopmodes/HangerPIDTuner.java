@@ -26,7 +26,7 @@ public class HangerPIDTuner extends LinearOpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = Robot.getInstance();
         Intake intake = robot.addIntake();
         Hanger hanger = robot.addHanger();
 

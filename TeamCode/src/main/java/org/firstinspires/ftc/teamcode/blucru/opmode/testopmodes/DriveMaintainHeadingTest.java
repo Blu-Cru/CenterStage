@@ -15,7 +15,7 @@ public class DriveMaintainHeadingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
+        robot = Robot.getInstance();
         drivetrain = robot.addDrivetrain(true);
         intakeWrist = robot.addIntakeWrist();
         robot.init();

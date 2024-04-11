@@ -39,10 +39,12 @@ public class Robot {
         subsystems = new ArrayList<>();
     }
 
-    // initializes subsystems
-    public void init(HardwareMap hardwareMap) {
+    public void create(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
+    }
 
+    // initializes subsystems
+    public void init() {
 //        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
 //            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 //        }

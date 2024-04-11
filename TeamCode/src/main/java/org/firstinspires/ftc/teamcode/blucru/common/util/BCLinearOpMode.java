@@ -44,8 +44,9 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         alliance = Initialization.ALLIANCE;
         robot = Robot.getInstance();
+        robot.create(hardwareMap);
         initialize();
-        robot.init(hardwareMap);
+        robot.init();
         while(opModeInInit()) {
             initLoop();
             telemetry();
