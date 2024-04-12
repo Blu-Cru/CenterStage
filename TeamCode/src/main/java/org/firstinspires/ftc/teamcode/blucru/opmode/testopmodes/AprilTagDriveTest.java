@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import static org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes.AprilTagDriveTest.State.DRIVER_CONTROL;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
+@TeleOp(name = "april tag drive test", group = "test")
 public class AprilTagDriveTest extends BCLinearOpMode {
     enum State {
         DRIVER_CONTROL,
@@ -22,6 +25,10 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         addDrivetrain(true);
         addCVMaster();
         enableFTCDashboard();
+
+        state = DRIVER_CONTROL;
+
+        Poses poses = new Poses(1);
     }
 
     public void onStart() {
@@ -34,6 +41,9 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         double vert = -gamepad1.left_stick_y;
         double rot = -gamepad1.right_stick_x;
         drivetrain.teleOpDrive(horz, vert, rot);
+        if(gamepad1.right_stick_button) {
+            drivetrain.resetHeading(Math.toRadians(180));
+        }
 
         if(gamepad1.a && !lastA) {
             state = State.DRIVE_TO_POSITION;

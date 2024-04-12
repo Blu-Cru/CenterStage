@@ -76,32 +76,30 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         headingPID.setTolerance(HEADING_PID_TOLERANCE);
 
         translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
-    }
 
-    public void init() {
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
         fieldCentric = true;
         lastRotate = 0;
+        drivetrainState = DrivetrainState.TELEOP;
+    }
+
+    public void init() {
         lastTime = System.currentTimeMillis();
         heading = getOdoHeading();
-        drivetrainState = DrivetrainState.TELEOP;
-        pose = this.getPoseEstimate();
 
         if(isTeleOp) {
             initializePose();
 
 //            headingMotionProfile = new MotionProfile(heading, heading);
         }
+
+        pose = this.getPoseEstimate();
     }
 
     public void read() {
         dt = System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
-
-        pose = this.getPoseEstimate();
-        velocity = getPoseVelocity();
-        heading = getOdoHeading();
 
         switch(drivetrainState) {
             case TELEOP:
@@ -111,6 +109,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             case FOLLOWING_TRAJECTORY:
                 break;
         }
+
+        pose = this.getPoseEstimate();
+        velocity = getPoseVelocity();
+        heading = getOdoHeading();
     }
 
     public void write() {
