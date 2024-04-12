@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
 
+import android.graphics.Color;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -17,6 +22,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPI
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
@@ -407,6 +413,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 .addTemporalMarker(() -> {
                     idle();
                 }); // idle the drivetrain before building a trajectory
+    }
+
+    public void drawPose(Telemetry telemetry) {
+        TelemetryPacket packet = new TelemetryPacket();
+        Canvas fieldOverlay = packet.fieldOverlay()
+                        .setStroke("#1d38cf");
+        DashboardUtil.drawRobot(fieldOverlay, pose);
+
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
     public void telemetry(Telemetry telemetry) {
