@@ -105,12 +105,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             updatePoseEstimate(); //only update pose in teleop because pose is updated in follower in auto
             dt = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
-
-
-            velocity = getPoseVelocity();
         }
 
         pose = this.getPoseEstimate();
+        velocity = getPoseVelocity();
         heading = getOdoHeading();
 //        if(readingDistance) {
 //            distanceSensors.read(heading);
@@ -130,7 +128,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void teleOpDrive(double x, double y, double rotate) {
         boolean turning = Math.abs(rotate) > 0.02;
         boolean wasJustTurning = Math.abs(lastRotate) > 0.02;
-        boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05;
+        boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05 || velocity.vec().norm() > 10.0;
 
         if(turning) // if driver is turning, drive with turning normally
             drive(x, y, rotate);
@@ -178,7 +176,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
-
 
         setWeightedDrivePower(staticDrivePose);
     }
@@ -232,40 +229,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return driveVector; // return the new drive vector
     }
 
-//    public boolean imuAccurate() {
-//        double correctedOdoHeading = correctHeading(odoHeading);
-//        double correctedImuHeading = correctHeading(imuHeading);
-//        return Math.abs(correctedOdoHeading - correctedImuHeading) < HEADING_ANGLE_TOLERANCE;
-//    }
-
-//    public double correctHeading(double heading) {
-//        double correctedHeading = heading - Math.PI/2;
-//
-//        if(correctedHeading > Math.PI)
-//            correctedHeading -= 2 * Math.PI;
-//        else if (correctedHeading < -Math.PI)
-//            correctedHeading += 2 * Math.PI;
-//
-//        return correctedHeading + Math.PI/2;
-//    }
-
-//    public void driveToDistanceToHeading(double x, double y, double targetDistance, double targetHeading) {
-//        distanceSensors.read(heading);
-//        Vector2d distanceVector = new Vector2d(x,y);
-//
-//        double component;
-//        if(Math.abs(distanceSensors.getAngleError(heading - targetHeading)) < DISTANCE_PID_ANGLE_TOLERANCE && distanceSensors.sensing) {
-//            component = Range.clip(distancePID.calculate(distanceSensors.distanceFromWall, targetDistance), -drivePower, drivePower);
-//            // set component in direction opposite target heading
-//            distanceVector = setComponent(distanceVector, component, -(heading - targetHeading));
-//        }
-//
-//        x = distanceVector.getX();
-//        y = distanceVector.getY();
-//
-//        driveToHeading(x, y, targetHeading);
-//    }
-
     public void driveToPosition(Pose2d targetPosition) {
         translationPID.setTargetPosition(targetPosition.vec());
         Vector2d rawDriveVector = translationPID.calculate(pose.vec());
@@ -282,27 +245,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return vector.rotated(angle); // rotate back
     }
 
-//    public double getDistanceSensorAngleError(double targetHeading) {
-//        double error = heading - targetHeading - distanceSensors.angle;
-//        if(error > Math.PI) {
-//            error -= 2 * Math.PI;
-//        } else if (error < -Math.PI) {
-//            error += 2 * Math.PI;
-//        }
-//
-//        return Math.abs(error);
-//    }
-
     public double calculateNewTargetHeading() {
         // vf^2 = vi^2 + 2a(xf - xi)
         // 0 = velocity * velocity + 2 * -HEADING_DECELERATION * (targetHeading - heading)
         // velocity * velocity = 2 * HEADING_DECELERATION * (targetHeading - heading)
         // target heading = heading + 0.5 * velocity * velocity / HEADING_DECELERATION
-        if (velocity.getHeading() > 0) { // if velocity is positive, add to heading
+
+        if (velocity.getHeading() > 0) // if velocity is positive, add to heading
             return heading + 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
-        } else { // if velocity is negative, subtract to heading
+        else  // if velocity is negative, subtract to heading
             return heading - 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
-        }
+
     }
 
     public boolean followerIsWithinTolerance() {
@@ -311,9 +264,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public double getTrajectoryFollowerError() {
         Pose2d lastError = getLastError();
-        double xError = lastError.getX();
-        double yError = lastError.getY();
-        return Math.sqrt(xError * xError + yError * yError);
+        return lastError.vec().norm();
     }
 
     public void idle() {
