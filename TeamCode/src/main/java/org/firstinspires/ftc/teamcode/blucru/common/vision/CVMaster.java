@@ -25,9 +25,9 @@ public class CVMaster implements Subsystem {
     public static double fy = 1059.73;
     public static double cx = 625.979;
     public static double cy = 362.585;
-    public static int GAIN = 200;
-    public static long EXPOSURE = 50; // ms
-    public static double FOCUS = 0.5;
+    public static int GAIN = 10;
+    public static long EXPOSURE = 4; // ms
+    public static double FOCUS = 1;
 
     ExposureControl exposureControl;
     GainControl gainControl;
@@ -67,15 +67,9 @@ public class CVMaster implements Subsystem {
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
 
-        while ((visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
-
-        }
-
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);
         focusControl = visionPortal.getCameraControl(FocusControl.class);
-        focusControl.setMode(FocusControl.Mode.Fixed);
-        focusControl.setFocusLength(FOCUS);
     }
 
     public void init() {
@@ -109,11 +103,24 @@ public class CVMaster implements Subsystem {
         exposureControl.setMode(ExposureControl.Mode.Manual);
         exposureControl.setExposure(EXPOSURE, TimeUnit.MILLISECONDS);
         gainControl.setGain(GAIN);
+        focusControl.setFocusLength(FOCUS);
     }
 
     public void stop() {
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
         visionPortal.stopStreaming();
+    }
+
+    public void setCameraExposure(double exposure) {
+        exposureControl.setExposure((long) exposure, TimeUnit.MILLISECONDS);
+    }
+
+    public void setCameraGain(double gain) {
+        gainControl.setGain((int) gain);
+    }
+
+    public void setCameraFocus(double focus) {
+        focusControl.setFocusLength(focus);
     }
 }

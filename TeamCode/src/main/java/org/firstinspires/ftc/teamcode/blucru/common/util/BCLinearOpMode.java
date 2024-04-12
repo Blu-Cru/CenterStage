@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
 public abstract class BCLinearOpMode extends LinearOpMode {
     public Alliance alliance;
@@ -34,6 +35,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public Hanger hanger;
     public PurplePixelHolder purplePixelHolder;
     public Lock lock;
+    public CVMaster cvMaster;
 
     ElapsedTime runtime;
     double lastTime;
@@ -91,8 +93,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
 
     public void addOuttake() {outtake = robot.addOuttake();}
-    public void addLocks() {
-        lock = robot.addLocks();}
+    public void addLocks() {lock = robot.addLocks();}
 
     public void addIntake() {intake = robot.addIntake();}
 
@@ -105,6 +106,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addHanger() {hanger = robot.addHanger();}
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
+
+    public void addCVMaster() {cvMaster = robot.addCVMaster(Initialization.ALLIANCE);}
 
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 

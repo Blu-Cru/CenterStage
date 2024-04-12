@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
@@ -39,14 +40,17 @@ public class VisionTest extends LinearOpMode {
             if(gamepad1.b) {
                 status = "detecting prop";
                 cvMaster.detectProp();
+                FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
             }
             if(gamepad1.x) {
                 status = "detecting tag";
                 cvMaster.detectTag();
+                FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
             }
             if(gamepad1.a) {
                 status = "stopped";
                 cvMaster.stop();
+                FtcDashboard.getInstance().stopCameraStream();
             }
 
             switch (status) {
@@ -60,37 +64,44 @@ public class VisionTest extends LinearOpMode {
                 case "detecting tag":
                     List<AprilTagDetection> currentDetections = cvMaster.tagDetector.getDetections();
 
-                    for (AprilTagDetection detection : currentDetections) {
-                        if(detection.id == 3) {
-                            Pose2d pose3 = AprilTagLocalizer.getRobotPose(3, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.yaw);
-                            telemetry.addLine(String.format("found tag 3, pose estimate (x, y, heading): ", pose3.getX(), pose3.getY(), pose3.getHeading()));
-                        }
+                    AprilTagDetection closestDetection;
+                    double closestDistance = Double.MAX_VALUE;
+                    if(currentDetections.size() > 0) {
+                        closestDetection = currentDetections.get(0);
+                        closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);
 
-                        if(detection.id == 4) {
-                            Vector2d btt4 = AprilTagLocalizer.getRobotToTagVector(detection.ftcPose.x, detection.ftcPose.y);
-                            Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
-                            telemetry.addLine(String.format("found tag 4"));
-                            telemetry.addLine("robot to tag: ");
-                            telemetry.addData("x:", btt4.getX());
-                            telemetry.addData("y:", btt4.getY());
+                        for (AprilTagDetection detection : currentDetections) {
+                            if(detection.id == 3) {
+                                Pose2d pose3 = AprilTagLocalizer.getRobotPose(detection);
+                                telemetry.addLine(String.format("found tag 3, pose estimate (x, y, heading): ", pose3.getX(), pose3.getY(), pose3.getHeading()));
+                            }
 
-                            telemetry.addLine("pose estimate:");
-                            telemetry.addData("x:", pose4.getX());
-                            telemetry.addData("y:", pose4.getY());
-                            telemetry.addData("headnig", Math.toDegrees(pose4.getHeading()));
-                        }
+                            if(detection.id == 4) {
+                                Vector2d btt4 = AprilTagLocalizer.getRobotToTagVector(detection.ftcPose.x, detection.ftcPose.y);
+                                Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
+                                telemetry.addLine(String.format("found tag 4"));
+                                telemetry.addLine("robot to tag: ");
+                                telemetry.addData("x:", btt4.getX());
+                                telemetry.addData("y:", btt4.getY());
 
-                        if (detection.metadata != null) {
-                            telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                            telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                            telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                            telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-                        } else {
-                            telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                            telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-                        }
-                    }   // end for() loop
-                    break;
+                                telemetry.addLine("pose estimate:");
+                                telemetry.addData("x:", pose4.getX());
+                                telemetry.addData("y:", pose4.getY());
+                                telemetry.addData("headnig", Math.toDegrees(pose4.getHeading()));
+                            }
+
+                            if (detection.metadata != null) {
+                                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                            } else {
+                                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
+                            }
+                        }   // end for() loop
+                        break;
+                    }
             }
 
             telemetry.addData("Status", status);
