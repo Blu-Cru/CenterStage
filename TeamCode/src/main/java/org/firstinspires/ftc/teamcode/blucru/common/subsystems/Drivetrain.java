@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
-import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
@@ -40,8 +39,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
             TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
-            STATIC_TRANSLATION_VELOCITY_TOLERANCE = 10.0, // inches per second
-            STATIC_HEADING_VELOCITY_TOLERANCE = 0.3, // radians per second
+            STATIC_TRANSLATION_VELOCITY_TOLERANCE = 15.0, // inches per second
+            STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
             kStaticX = 0.7, kStaticY = 0.1, // feedforward constants for static friction
 
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
@@ -70,7 +69,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
-        this.drivetrainState = DrivetrainState.IDLE;
+        this.drivetrainState = DrivetrainState.TELEOP;
         this.isTeleOp = isTeleOp;
         this.intakingInAuto = false;
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
@@ -81,18 +80,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void init() {
         lastDriveVector = new Vector2d(0,0);
+        velocity = new Pose2d(0,0,0);
+        fieldCentric = true;
+        lastRotate = 0;
+        lastTime = System.currentTimeMillis();
+        heading = getOdoHeading();
+        drivetrainState = DrivetrainState.TELEOP;
+        pose = this.getPoseEstimate();
 
         if(isTeleOp) {
-            fieldCentric = true;
             initializePose();
-            velocity = new Pose2d(0,0,0);
 
-            lastRotate = 0;
-            lastTime = System.currentTimeMillis();
-            heading = getOdoHeading();
-
-            drivetrainState = DrivetrainState.IDLE;
-            pose = this.getPoseEstimate();
 //            headingMotionProfile = new MotionProfile(heading, heading);
         }
     }
@@ -106,7 +104,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         heading = getOdoHeading();
 
         switch(drivetrainState) {
-            case IDLE:
+            case TELEOP:
             case DRIVE_TO_POSITION:
                 updatePoseEstimate();
                 break;
@@ -117,7 +115,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void write() {
         switch(drivetrainState) {
-            case IDLE:
+            case TELEOP:
                 break;
             case DRIVE_TO_POSITION:
                 driveToPosition(targetPose);
@@ -129,16 +127,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void teleOpDrive(double x, double y, double rotate) {
+        drivetrainState = DrivetrainState.TELEOP;
         boolean turning = Math.abs(rotate) > 0.02;
         boolean wasJustTurning = Math.abs(lastRotate) > 0.02;
-        boolean driving = lastDriveVector.norm() > 0.05 || new Vector2d(x, y).norm() > 0.05 || velocity.vec().norm() > 10.0;
+        boolean stopped = lastDriveVector.norm() < 0.05 && new Vector2d(x, y).norm() < 0.05 && velocity.vec().norm() < 10.0;
 
         if(turning) // if driver is turning, drive with turning normally
             drive(x, y, rotate);
         else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
             driveToHeading(x, y, calculateNewTargetHeading());
-        else if(!driving) // if driver is not moving translationally, update the target heading
-            driveToHeading(x, y, heading);
+        else if(stopped) // if drivetrain is stopped, drive to current heading
+            driveToHeading(0, 0, heading);
         else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
 
@@ -166,7 +165,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void drive(double x, double y, double rotate) {
-//        drivetrainState = DrivetrainState.IDLE;
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
@@ -271,7 +269,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void idle() {
-        drivetrainState = DrivetrainState.IDLE;
+        drivetrainState = DrivetrainState.TELEOP;
     }
 
     public void lockTo(Pose2d pose) {

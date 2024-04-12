@@ -37,7 +37,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
         }
 
         if(mode.equals("driver control")) {
-            drivetrain.drivetrainState = DrivetrainState.IDLE;
+            drivetrain.drivetrainState = DrivetrainState.TELEOP;
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading(Math.toRadians(90));

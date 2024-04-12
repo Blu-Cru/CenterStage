@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.states;
 
 public enum DrivetrainState {
-    IDLE,
+    TELEOP,
     DRIVE_TO_POSITION,
     FOLLOWING_TRAJECTORY
 }
