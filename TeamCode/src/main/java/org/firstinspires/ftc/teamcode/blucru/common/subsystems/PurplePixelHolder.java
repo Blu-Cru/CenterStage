@@ -17,7 +17,7 @@ public class PurplePixelHolder implements Subsystem{
         EXTENDED
     }
 
-    private Servo purplePixelHolder;
+    Servo purplePixelHolder;
 
     PurplePixelState purplePixelState;
     private double position;
