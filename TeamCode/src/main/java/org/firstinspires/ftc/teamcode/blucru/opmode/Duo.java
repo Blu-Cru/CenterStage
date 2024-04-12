@@ -4,10 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lock;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
@@ -115,7 +113,7 @@ public class Duo extends BCLinearOpMode {
 
         if(gamepad1.b) drivetrain.driveToHeading(horz, vert, scoringHeading); // drive to outtake heading
         else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
-        else drivetrain.driveMaintainHeading(horz, vert, rotate); // drive normally
+        else drivetrain.teleOpDrive(horz, vert, rotate); // drive normally
 
         switch(robotState) {
             case RETRACT:

@@ -200,7 +200,7 @@ public class Solo extends BCLinearOpMode {
         double rotate = -gamepad1.right_stick_x;
 
         if (gamepad1.left_stick_button) drivetrain.driveToHeading(horz, vert, scoringHeading);
-        else drivetrain.driveMaintainHeading(horz, vert, rotate);
+        else drivetrain.teleOpDrive(horz, vert, rotate);
 
         if(gamepad1.right_stick_button) {
             drivetrain.resetHeading(scoringHeading);
