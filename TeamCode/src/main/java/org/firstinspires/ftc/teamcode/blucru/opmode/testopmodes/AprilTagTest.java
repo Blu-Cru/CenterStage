@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 
@@ -25,10 +23,10 @@ public class AprilTagTest extends BCLinearOpMode {
     boolean lastX = false;
 
     State state = State.IDLE;
-    Pose2d robotPose = Initialization.POSE;
 
     @Override
     public void initialize() {
+        addDrivetrain(true);
         addCVMaster();
         enableFTCDashboard();
     }
@@ -52,14 +50,11 @@ public class AprilTagTest extends BCLinearOpMode {
         }
         lastX = gamepad1.x;
 
-        robotPose = AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections());
+        drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections()));
+        drivetrain.ftcDashDrawPose();
     }
 
     public void telemetry() {
         telemetry.addData("state:", state);
-        telemetry.addData("pose", robotPose);
-        telemetry.addData("x", robotPose.getX());
-        telemetry.addData("y", robotPose.getY());
-        telemetry.addData("heading", robotPose.getHeading());
     }
 }

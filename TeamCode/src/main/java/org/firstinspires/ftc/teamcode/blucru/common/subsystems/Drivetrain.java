@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
 
-import android.graphics.Color;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
@@ -415,7 +413,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 }); // idle the drivetrain before building a trajectory
     }
 
-    public void drawPose(Telemetry telemetry) {
+    public void ftcDashDrawPose() {
         TelemetryPacket packet = new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay()
                         .setStroke("#1d38cf");
