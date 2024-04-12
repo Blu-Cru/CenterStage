@@ -43,7 +43,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     int loopTimeCount;
     double lastTelemetryTime;
 
-    public void runOpMode() throws InterruptedException {
+    public final void runOpMode() throws InterruptedException {
         alliance = Initialization.ALLIANCE;
         robot = new Robot(hardwareMap);
         initialize();

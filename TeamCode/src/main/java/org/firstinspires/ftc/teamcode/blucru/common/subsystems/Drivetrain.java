@@ -55,13 +55,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     Pose2d velocity;
     double lastTime;
 
-//    boolean readingDistance;
-//    ArrayList<Double> errors;
-
     public DrivetrainTranslationPID translationPID;
     public Pose2d targetPose;
 
-    MotionProfile headingMotionProfile;
     PIDController headingPID;
     double targetHeading = 0;
     double heading; // estimated field heading (0 is facing right, positive is counterclockwise)
@@ -71,9 +67,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     Vector2d lastDriveVector; // drive vector in previous loop
     double lastRotate; // rotate input in previous loop
-
-//    public DistanceSensors distanceSensors;
-    PIDController distancePID;
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
@@ -105,18 +98,21 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void read() {
-        if(isTeleOp) {
-            updatePoseEstimate(); //only update pose in teleop because pose is updated in follower in auto
-            dt = System.currentTimeMillis() - lastTime;
-            lastTime = System.currentTimeMillis();
-        }
+        dt = System.currentTimeMillis() - lastTime;
+        lastTime = System.currentTimeMillis();
 
         pose = this.getPoseEstimate();
         velocity = getPoseVelocity();
         heading = getOdoHeading();
-//        if(readingDistance) {
-//            distanceSensors.read(heading);
-//        }
+
+        switch(drivetrainState) {
+            case IDLE:
+            case DRIVE_TO_POSITION:
+                updatePoseEstimate();
+                break;
+            case FOLLOWING_TRAJECTORY:
+                break;
+        }
     }
 
     public void write() {
@@ -125,6 +121,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 break;
             case DRIVE_TO_POSITION:
                 driveToPosition(targetPose);
+                break;
+            case FOLLOWING_TRAJECTORY:
+                updateTrajectory();
                 break;
         }
     }
@@ -284,9 +283,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         drivePower = Range.clip(power, 0.15, 1.0);
     }
 
-    public void setDistancePID(double p, double i, double d) {
-        distancePID.setPID(p, i, d);
-    }
+//    public void setDistancePID(double p, double i, double d) {
+//        distancePID.setPID(p, i, d);
+//    }
 
     public void setTurnPID(double p, double i, double d) {
         headingPID.setPID(p, i, d);
