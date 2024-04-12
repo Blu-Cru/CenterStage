@@ -127,10 +127,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void teleOpDrive(double x, double y, double rotate) {
-        drivetrainState = DrivetrainState.TELEOP;
         boolean turning = Math.abs(rotate) > 0.02;
         boolean wasJustTurning = Math.abs(lastRotate) > 0.02;
-        boolean stopped = lastDriveVector.norm() < 0.05 && new Vector2d(x, y).norm() < 0.05 && velocity.vec().norm() < 10.0;
+        boolean movingTranslation = new Vector2d(x, y).norm() > 0.05;
+        boolean stopped = lastDriveVector.norm() < 0.05 && !movingTranslation && velocity.vec().norm() < 10.0;
 
         if(turning) // if driver is turning, drive with turning normally
             drive(x, y, rotate);
@@ -140,6 +140,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             driveToHeading(0, 0, heading);
         else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
+
+        if(turning && movingTranslation) drivetrainState = DrivetrainState.TELEOP;
 
         // recording last turn input
         lastRotate = rotate;
