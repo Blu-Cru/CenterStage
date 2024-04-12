@@ -22,8 +22,8 @@ public class Intake implements Subsystem{
         UNJAMMING
     }
 
-    private DcMotorEx intakeMotor;
-    private CRServo intakeRoller;
+    DcMotorEx intakeMotor;
+    CRServo intakeRoller;
     public IntakeWrist intakeWrist;
     public IntakeColorSensors intakeColorSensors;
 

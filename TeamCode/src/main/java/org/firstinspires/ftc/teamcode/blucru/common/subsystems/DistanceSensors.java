@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
 
+// not used anymore
 public class DistanceSensors implements Subsystem {
     public static double
             DISTANCE_SENSOR_OFFSET = 5.875, // distance between distance sensors in inches

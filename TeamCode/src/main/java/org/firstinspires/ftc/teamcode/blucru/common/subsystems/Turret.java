@@ -15,19 +15,19 @@ public class Turret implements Subsystem{
             BUCKET_HYPOTENUSE = Math.sqrt(BUCKET_LENGTH * BUCKET_LENGTH + BUCKET_WIDTH * BUCKET_WIDTH);
     public static double TURRET_CENTER = 0.49; // ticks of turret servo at 270 degrees
 
-    private Servo turret;
+    Servo turretServo;
 
     public double targetAngle;
     private double position;
 
     public Turret(HardwareMap hardwareMap) {
-        turret = hardwareMap.get(Servo.class, "turret");
+        turretServo = hardwareMap.get(Servo.class, "turret");
         targetAngle = 270;
         position = toTicks(targetAngle);
     }
 
     public void init() {
-        turret.setPosition(position);
+        turretServo.setPosition(position);
     }
 
     public void read() {
@@ -35,8 +35,8 @@ public class Turret implements Subsystem{
     }
 
     public void write() {
-        if(turret.getPosition() != position) {
-            turret.setPosition(position);
+        if(turretServo.getPosition() != position) {
+            turretServo.setPosition(position);
         }
     }
 
