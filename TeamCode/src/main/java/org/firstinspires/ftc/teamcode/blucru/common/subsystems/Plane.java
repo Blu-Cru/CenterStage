@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
-public class Plane implements Subsystem{
+public class Plane implements Subsystem {
     public static double
             PLANE_RELEASED = 0.65,
             PLANE_RETRACT = 0.44;

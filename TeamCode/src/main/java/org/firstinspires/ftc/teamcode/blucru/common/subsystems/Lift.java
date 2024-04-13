@@ -11,9 +11,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCPDController;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
-public class Lift implements Subsystem{
+public class Lift implements Subsystem {
     public static double
             kP = 0.0031, kI = 0, kD = 0.0001, kF = 0.03, // PID values
             kFprop = 0.000001, // proportional feedfowrad/?/??/

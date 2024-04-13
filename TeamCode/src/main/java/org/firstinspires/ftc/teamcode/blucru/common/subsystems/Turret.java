@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
-public class Turret implements Subsystem{
+public class Turret implements Subsystem {
     public static final double
             BUCKET_LENGTH = 5.984,
             BUCKET_WIDTH = 1.733, // inches

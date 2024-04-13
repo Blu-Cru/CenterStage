@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
-import com.ThermalEquilibrium.homeostasis.Filters.Estimators.Estimator;
-import com.ThermalEquilibrium.homeostasis.Filters.Estimators.KalmanEstimator;
-import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.KalmanFilter;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
-
-import java.util.ArrayList;
-import java.util.function.DoubleSupplier;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 // not used anymore
 public class DistanceSensors implements Subsystem {

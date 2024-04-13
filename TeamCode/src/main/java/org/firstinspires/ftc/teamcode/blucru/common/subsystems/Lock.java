@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
-public class Lock implements Subsystem{
+public class Lock implements Subsystem {
     public static double
             FLAT = 0.3,
             LOCKED_FRONT = FLAT - toTicks(60),
