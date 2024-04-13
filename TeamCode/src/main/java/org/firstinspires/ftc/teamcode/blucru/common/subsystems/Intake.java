@@ -59,35 +59,35 @@ public class Intake implements Subsystem {
         intakeWrist.read();
         intakeColorSensors.read();
 
-        if (intakePower > 0.5 || intakeState == IntakeState.UNJAMMING) {
-            intakeCurrent = intakeMotor.getCurrent(CurrentUnit.AMPS);
-        }
+//        if (intakePower > 0.5 || intakeState == IntakeState.UNJAMMING) {
+//            intakeCurrent = intakeMotor.getCurrent(CurrentUnit.AMPS);
+//        }
 
-        if (intakeCurrent > JAM_CURRENT) {
-            intakeState = IntakeState.UNJAMMING;
-            intakePower = -1;
-            startUnjamTime = System.currentTimeMillis();
-
-            if(intakeState != IntakeState.UNJAMMING) {
-                powerBeforeUnjamming = intakePower;
-            }
-        }
+//        if (intakeCurrent > JAM_CURRENT) {
+//            intakeState = IntakeState.UNJAMMING;
+//            intakePower = -1;
+//            startUnjamTime = System.currentTimeMillis();
+//
+//            if(intakeState != IntakeState.UNJAMMING) {
+//                powerBeforeUnjamming = intakePower;
+//            }
+//        }
     }
 
     public void write() {
         intakeWrist.write();
         intakeColorSensors.write();
 
-        if(intakeState == IntakeState.UNJAMMING) {
-            if(System.currentTimeMillis() - startUnjamTime > 500) {
-                intakeState = IntakeState.IDLE; // unjamming for 500ms
-                intakePower = powerBeforeUnjamming;
-            } else {
-                setPower(-1);
-            }
-        } else {
+//        if(intakeState == IntakeState.UNJAMMING) {
+//            if(System.currentTimeMillis() - startUnjamTime > 500) {
+//                intakeState = IntakeState.IDLE; // unjamming for 500ms
+//                intakePower = powerBeforeUnjamming;
+//            } else {
+//                setPower(-1);
+//            }
+//        } else {
             setPower(intakePower);
-        }
+//        }
     }
 
     public boolean isFull() {

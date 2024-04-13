@@ -35,10 +35,11 @@ public class IntakeWrist implements Subsystem {
     }
 
     public void read() {
-        position = toTicks(targetAngleDeg);
+
     }
 
     public void write() {
+        position = toTicks(targetAngleDeg);
         if(wrist.getPosition() != position) {
             wrist.setPosition(position);
         }
