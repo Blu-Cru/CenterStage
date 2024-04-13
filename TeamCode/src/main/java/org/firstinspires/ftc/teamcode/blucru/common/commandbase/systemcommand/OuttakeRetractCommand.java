@@ -14,7 +14,7 @@ public class OuttakeRetractCommand extends SequentialCommandGroup {
                         new OuttakeIncrementCommand(1),
                         new WaitCommand(500),
                         new OuttakeWristCommand(true),
-                        new WaitCommand(100),
+                        new WaitCommand(500),
                         new LiftRetractCommand()
                 )
         );
