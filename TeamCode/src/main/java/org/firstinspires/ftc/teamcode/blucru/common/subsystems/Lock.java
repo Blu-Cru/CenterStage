@@ -38,6 +38,10 @@ public class Lock implements Subsystem {
     }
 
     public void read() {
+
+    }
+
+    public void write() {
         switch(lockState) {
             case LOCKED_FRONT:
                 lockPos = LOCKED_FRONT;
@@ -52,9 +56,7 @@ public class Lock implements Subsystem {
                 lockPos = FLAT;
                 break;
         }
-    }
 
-    public void write() {
         if(lock.getPosition() != lockPos) {
             lock.setPosition(lockPos);
         }
@@ -62,37 +64,30 @@ public class Lock implements Subsystem {
 
     public void lockAll() {
         lockState = LockState.LOCKED_FRONT;
-        lockPos = LOCKED_FRONT;
     }
 
     public void unlockAll() {
         if(lockState == LockState.LOCKED_BACK || lockState == LockState.UNLOCKED_BACK) {
             lockState = LockState.UNLOCKED_BACK;
-            lockPos = UNLOCKED_BACK;
         } else {
             lockState = LockState.UNLOCKED_FRONT;
-            lockPos = FLAT;
         }
     }
 
     public void lockFront() {
         lockState = LockState.LOCKED_FRONT;
-        lockPos = LOCKED_FRONT;
     }
 
     public void unlockFrontLockBack() {
         if(lockState == LockState.UNLOCKED_BACK || lockState == LockState.UNLOCKED_FRONT) {
             lockState = LockState.UNLOCKED_FRONT;
-            lockPos = FLAT;
         } else {
             lockState = LockState.LOCKED_BACK;
-            lockPos = LOCK_BACK_POS;
         }
     }
 
     public void reset() {
         lockState = LockState.UNLOCKED_FRONT;
-        lockPos = FLAT;
     }
 
     public static double toTicks(double degrees) {
