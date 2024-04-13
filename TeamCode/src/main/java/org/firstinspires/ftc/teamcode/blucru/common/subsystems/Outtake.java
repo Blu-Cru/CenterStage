@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
+import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 
 @Config
 public class Outtake implements Subsystem{
@@ -29,7 +30,7 @@ public class Outtake implements Subsystem{
     public Lock lock;
     public Turret turret;
 
-    public boolean outtaking;
+    public OuttakeState state;
 
     public boolean wristRetracted;
 
@@ -43,7 +44,7 @@ public class Outtake implements Subsystem{
         lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
 
-        outtaking = false;
+        state = OuttakeState.RETRACT;
 
         wristRetracted = true;
     }
@@ -56,8 +57,15 @@ public class Outtake implements Subsystem{
     }
 
     public void read() {
-        if(outtaking) {
-            lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
+        switch(state) {
+            case RETRACT:
+                break;
+            case OUTTAKE:
+                lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
+                break;
+            case MANUAL:
+                updateTargetHeight();
+                break;
         }
 
         lift.read();
@@ -85,7 +93,7 @@ public class Outtake implements Subsystem{
     }
 
     public void setTargetHeight(double targetHeight) {
-        this.outtaking = true;
+        this.state = OuttakeState.OUTTAKE;
         this.targetHeight = Range.clip(targetHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
@@ -104,7 +112,7 @@ public class Outtake implements Subsystem{
     }
 
     public void retractLift() {
-        outtaking = false;
+        state = OuttakeState.RETRACT;
         lift.setMotionProfileTargetPos(0);
     }
 
@@ -181,7 +189,7 @@ public class Outtake implements Subsystem{
         lift.telemetry(telemetry);
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
-        telemetry.addData("outtaking:", outtaking);
+        telemetry.addData("outtake state:", state);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
     }
