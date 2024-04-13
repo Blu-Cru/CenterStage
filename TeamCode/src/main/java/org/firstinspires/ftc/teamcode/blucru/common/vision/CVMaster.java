@@ -100,11 +100,13 @@ public class CVMaster implements Subsystem {
 
     public void detectTag() {
         visionPortal.resumeStreaming();
+
+        visionPortal.setProcessorEnabled(propDetector, false);
+        visionPortal.setProcessorEnabled(tagDetector, true);
+
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);
         focusControl = visionPortal.getCameraControl(FocusControl.class);
-        visionPortal.setProcessorEnabled(propDetector, false);
-        visionPortal.setProcessorEnabled(tagDetector, true);
         exposureControl.setMode(ExposureControl.Mode.Manual);
         exposureControl.setExposure(EXPOSURE, TimeUnit.MILLISECONDS);
         gainControl.setGain(GAIN);

@@ -108,6 +108,7 @@ public class Lift implements Subsystem {
                     power = 0;
                     resetEncoder();
                     liftState = LiftState.PID;
+                    targetPos = 0;
                 } else if (getAbsPosError() < PID_TOLERANCE) {
                     power = 0;
                 } else {

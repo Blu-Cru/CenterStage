@@ -48,7 +48,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         }
         lastA = gamepad1.a;
 
-        if(gamepad1.b) {
+        if(gamepad1.b && !lastB) {
             state = DRIVER_CONTROL;
             drivetrain.drivetrainState = DrivetrainState.TELEOP;
             cvMaster.detectTag();

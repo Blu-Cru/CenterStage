@@ -34,7 +34,7 @@ public class DriveStaticFrictionTest extends BCLinearOpMode {
         if(driveType == DriveType.RAW) {
             drivetrain.drive(horz, vert, rot);
         } else {
-            drivetrain.driveStaticFriction(horz, vert, rot);
+//            drivetrain.driveStaticFriction(horz, vert, rot);
         }
     }
 

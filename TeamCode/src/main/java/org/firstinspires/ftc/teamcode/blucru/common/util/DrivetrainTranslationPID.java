@@ -27,10 +27,14 @@ public class DrivetrainTranslationPID {
     }
 
     public Vector2d calculate(Vector2d currentPosition) {
-        double xPower = xController.calculate(currentPosition.getX(), targetPosition.getX());
-        double yPower = yController.calculate(currentPosition.getY(), targetPosition.getY());
-
-        return new Vector2d(xPower, yPower);
+        Vector2d error = targetPosition.minus(currentPosition);
+        if(error.norm() < tolerance) {
+            return new Vector2d(0,0);
+        } else {
+            double xPower = xController.calculate(currentPosition.getX(), targetPosition.getX());
+            double yPower = yController.calculate(currentPosition.getY(), targetPosition.getY());
+            return new Vector2d(xPower, yPower);
+        }
     }
 
     public void setTargetPosition(Vector2d targetPosition) {
