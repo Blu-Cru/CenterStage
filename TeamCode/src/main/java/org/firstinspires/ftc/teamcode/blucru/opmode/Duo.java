@@ -14,18 +14,31 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
 Controls:
 
 Gamepad 1:
-    - left stick: drive
+    - left stick: drive translationally
     - right stick: rotate
-    - right stick button: reset heading
-    - b: drive to outtake heading
-    - x: drive to opposite outtake heading
+    - right stick press: reset heading
+    - b: drive to deposit heading
+    - x: drive to opposite deposit heading
     - dpad up: toggle plane
+
+Gamepad 2:
 
 retracted state:
     - left bumper: intake ground level
+        -GOES TO INTAKE STATE
     - a: intake stack level
+        -GOES TO INTAKE STATE
     - right bumper: reverse intake
 
+    - b: lift to high
+        -GOES TO LIFTING STATE
+    - x: lift to low
+        -GOES TO LIFTING STATE
+    - y: lift to mid
+        -GOES TO LIFTING STATE
+
+    - press right stick: manual slide control
+    - share: reset slides
 
 intaking state:
     - left bumper: intake ground level
@@ -39,11 +52,11 @@ lifting state:
     - y: lift to mid
     - b: lift to high
     - right bumper: reverse intake
-    - right stick y: manual slide control
-    - share: reset slides
+    GOES TO OUTTAKING WHEN LIFT IS ABOVE WRIST CLEAR POSITION
 
 outtaking state:
-    - a: go to retract state
+    - a: retract
+        -GOES TO RETRACTING STATE
     - x: lift to low
     - y: lift to mid
     - b: lift to high
@@ -62,26 +75,24 @@ public class Duo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300,
             RETRACT_WRIST_DELAY = 250,
             FULL_RETRACT_DELAY = 350,
-            INTAKE_START_REVERSE_TIME = 100,
-            INTAKE_FULL_REVERSE_TIME = 500 ,
-            START_INTAKE_READ_DELAY = 100;
+            INTAKE_FULL_REVERSE_TIME = 500;
 
     private RobotState robotState;
 
-    double scoringHeading; // heading to score on board
+    double scoringHeading; // heading to score on board, teleop heading is driver centric, with 0 pointing to the right
 
     // timer variables
-    double outtakeTime = 0;
-    double retractTime = 0;
-    double intakeFullTime = -10000; // init at -10000 ms to prevent immediate outtake
-    double startIntakeTime = 0;
+    double outtakeTime = 0,
+            retractTime = 0,
+            intakeFullTime = -10000, // init at -10000 ms to prevent immediate outtake
+            startIntakeTime = 0;
 
     // gamepad states
-    boolean lastDown2 = false;
-    boolean lastA2 = false;
-    boolean lastRSUp2 = false;
-    boolean lastRSDown2 = false;
-    boolean lastUp1 = false;
+    boolean lastDown2 = false,
+            lastA2 = false,
+            lastRSUp2 = false,
+            lastRSDown2 = false,
+            lastUp1 = false;
 
     public void initialize() {
         robotState = RobotState.RETRACT;
@@ -160,7 +171,7 @@ public class Duo extends BCLinearOpMode {
 
                 // MANUAL SLIDE
                 if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
-                    outtake.setManualSlidePower(-gamepad2.right_stick_y + Lift.kF);
+                    outtake.setManualSlidePower(-gamepad2.right_stick_y);
                 }
 
                 // RESET SLIDES
