@@ -107,28 +107,22 @@ public class Lift implements Subsystem{
                     power = 0;
                     resetEncoder();
                     liftState = LiftState.PID;
-                } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
+                } else if (getAbsPosError() < PID_TOLERANCE) {
                     power = 0;
                 } else {
                     power = getMotionProfilePD(currentPos, currentVelocity);
                 }
                 break;
             case PID:
-                // if lift is down and stalling, reset encoder and set power to 0
-                if(currentPos < -10 && targetPos == 0) {
-                    power = 0;
-                    resetEncoder();
-//                } else if (getCurrent() > stallCurrent) {
-//                    setTargetPos(currentPos - getDecelDelta());
-                } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
+                if (getAbsPosError() < PID_TOLERANCE) {
                     power = 0;
                 } else {
                     power = PID;
                 }
                 break;
             case MANUAL:
-                // set manual power in opmode
-                setTargetPos(currentPos + getDecelDelta());
+                // set manual power elsewhere
+                setTargetPos(currentPos + getDecelDelta()); // update target position
                 break;
         }
 
