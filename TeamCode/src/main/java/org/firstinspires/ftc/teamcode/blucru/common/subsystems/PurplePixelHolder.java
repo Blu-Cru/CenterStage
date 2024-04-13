@@ -33,6 +33,10 @@ public class PurplePixelHolder implements Subsystem {
     }
 
     public void read() {
+
+    }
+
+    public void write() {
         switch(purplePixelState) {
             case RETRACTED_RIGHT:
                 position = RETRACTED_RIGHT;
@@ -44,9 +48,7 @@ public class PurplePixelHolder implements Subsystem {
                 position = EXTENDED;
                 break;
         }
-    }
 
-    public void write() {
         if(purplePixelServo.getPosition() != position) purplePixelServo.setPosition(position);
     }
 
