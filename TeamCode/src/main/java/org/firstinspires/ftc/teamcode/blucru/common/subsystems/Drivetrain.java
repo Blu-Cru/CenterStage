@@ -392,7 +392,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public boolean isStopped() {
         Pose2d poseVelocity = getPoseVelocity();
-        return poseVelocity.vec().norm() < 0.1 && Math.abs(poseVelocity.getHeading()) < 0.1;
+        if(poseVelocity == null) return true;
+        else return poseVelocity.vec().norm() < 0.1 && Math.abs(poseVelocity.getHeading()) < 0.1;
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
