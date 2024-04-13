@@ -40,10 +40,6 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         double horz = gamepad1.left_stick_x;
         double vert = -gamepad1.left_stick_y;
         double rot = -gamepad1.right_stick_x;
-        drivetrain.teleOpDrive(horz, vert, rot);
-        if(gamepad1.right_stick_button) {
-            drivetrain.resetHeading(Math.toRadians(180));
-        }
 
         if(gamepad1.a && !lastA) {
             state = State.DRIVE_TO_POSITION;
@@ -61,6 +57,11 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         switch(state) {
             case DRIVER_CONTROL:
+                drivetrain.teleOpDrive(horz, vert, rot);
+
+                if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
+
+
                 drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections()));
                 break;
             case DRIVE_TO_POSITION:

@@ -41,7 +41,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 15.0, // inches per second
             STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
-            kStaticX = 0.7, kStaticY = 0.1, // feedforward constants for static friction
+            kStaticX = 0.15, kStaticY = 0.1, // feedforward constants for static friction
 
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
@@ -143,40 +143,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else // drive, turning to target heading
             driveToHeading(x, y, targetHeading);
 
-        if(turning && movingTranslation) drivetrainState = DrivetrainState.TELEOP;
+        drivetrainState = DrivetrainState.TELEOP;
 
         // recording last turn input
         lastRotate = rotate;
     }
 
-    public Pose2d processStaticFriction(Pose2d drivePose) {
-        Vector2d driveVector = drivePose.vec();
-        boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
-
-        if(robotStopped && driveVector.norm() != 0) {
-            double angle = driveVector.angle();
-            double staticMinMagnitude =
-                    kStaticX * kStaticY
-                        /
-                    Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
-            double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
-            return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
-        } else return drivePose;
-    }
-
-    public Pose2d processDrivePower(Pose2d drivePose) {
-        return new Pose2d(drivePose.vec().times(drivePower), drivePose.getHeading() * drivePower);
-    }
-
     public void drive(double x, double y, double rotate) {
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
-
-        Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
-
-        setWeightedDrivePower(drivePose);
-    }
-
-    public void driveStaticFriction(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
@@ -232,6 +205,25 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastDriveVector = driveVector;
         
         return driveVector; // return the new drive vector
+    }
+
+    public Pose2d processStaticFriction(Pose2d drivePose) {
+        Vector2d driveVector = drivePose.vec();
+        boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
+
+        if(robotStopped && driveVector.norm() != 0) {
+            double angle = driveVector.angle();
+            double staticMinMagnitude =
+                    kStaticX * kStaticY
+                            /
+                            Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
+            double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
+            return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
+        } else return drivePose;
+    }
+
+    public Pose2d processDrivePower(Pose2d drivePose) {
+        return new Pose2d(drivePose.vec().times(drivePower), drivePose.getHeading() * drivePower);
     }
 
     public void driveToPosition(Pose2d targetPosition) {
