@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,6 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 public class Lift implements Subsystem{
     public static double
             kP = 0.0031, kI = 0, kD = 0.0001, kF = 0.03, // PID values
+            kFprop = 0.000001, // proportional feedfowrad/?/??/
 
             stallCurrent = 20, resetCurrent = 1, // amps
 
@@ -39,7 +39,6 @@ public class Lift implements Subsystem{
     BCPDController liftPID;
 
     double PID;
-    double ff = kF;
 
     double power;
     double lastPower;
@@ -103,17 +102,15 @@ public class Lift implements Subsystem{
         PID = getLiftPID(currentPos, targetPos);
 
         switch(liftState) {
-            case MoPro:
-                targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
-                targetVelocity = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
-                if(targetPos == 0 && targetVelocity == 0 && currentPos < 0 && retractTimer.seconds() > 3 && retractTimer.seconds() < 3.1) {
+            case MotionProfile:
+                if(motionProfile.done(motionProfileTimer.seconds()) && currentPos < 0 && retractTimer.seconds() > 3) {
                     power = 0;
                     resetEncoder();
+                    liftState = LiftState.PID;
                 } else if (Math.abs(targetPos - currentPos) < PID_TOLERANCE) {
                     power = 0;
                 } else {
-                    PID = getLiftPD(currentPos, targetPos, currentVelocity, targetVelocity);
-                    power = PID;
+                    power = getMotionProfilePD(currentPos, currentVelocity);
                 }
                 break;
             case PID:
@@ -136,6 +133,12 @@ public class Lift implements Subsystem{
         }
 
         setPower(power);
+    }
+
+    public double getMotionProfilePD(double currentPose, double currentVelocity) {
+        int targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
+        double targetVel = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
+        return getLiftPD(currentPose, targetPos, currentVelocity, targetVel);
     }
 
     public double getLiftPID(double currentPos, double targetPos) {
@@ -168,10 +171,15 @@ public class Lift implements Subsystem{
     }
 
     public void setMotionProfile(MotionProfile profile) {
-        liftState = LiftState.MoPro;
+        liftState = LiftState.MotionProfile;
         motionProfile = profile;
         motionProfileTimer.reset();
         liftPID.reset();
+    }
+
+    public void setManualPower(double power) {
+        liftState = LiftState.MANUAL;
+        this.power = power;
     }
 
     public int getDecelDelta() {
@@ -192,7 +200,7 @@ public class Lift implements Subsystem{
 
     public void setPower(double power) {
         power = Range.clip(power, -1, 1);
-        // if power is significantly different from last power, set power
+        // cache motor powers to prevent unnecessary writes
         if(Math.abs(power - lastPower) > 0.02) {
             liftMotor.setPower(power);
             liftMotor2.setPower(power);
@@ -203,6 +211,10 @@ public class Lift implements Subsystem{
     public void setTargetPos(int pos) {
         liftState = LiftState.PID;
         targetPos = Range.clip(pos, MIN_POS, MAX_POS);
+    }
+
+    public double getFeedForward() {
+        return kFprop * getCurrentPos();
     }
 
     public void resetEncoder() {

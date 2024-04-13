@@ -163,6 +163,10 @@ public class MotionProfile {
         return instantTargetVel;
     }
 
+    public boolean done(double time) {
+        return time > t0 + t1 + t2 + t3;
+    }
+
     public void setConstraints(double maxVelocity, double maxAcceleration) {
         this.vMax = maxVelocity;
         this.aMax = maxAcceleration;
