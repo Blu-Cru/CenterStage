@@ -217,7 +217,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             double staticMinMagnitude =
                     kStaticX * kStaticY
                             /
-                            Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
+                    Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
             double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
             return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
         } else return drivePose;
@@ -230,9 +230,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void driveToPosition(Pose2d targetPosition) {
         translationPID.setTargetPosition(targetPosition.vec());
         Vector2d rawDriveVector = translationPID.calculate(pose.vec());
-//        double rotate = getPIDRotate(heading, targetPosition.getHeading());
-//
-//        setWeightedDrivePower(new Pose2d(rawDriveVector.getX(), rawDriveVector.getY(), rotate));
+
         driveToHeading(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
     }
 
@@ -248,12 +246,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         // 0 = velocity * velocity + 2 * -HEADING_DECELERATION * (targetHeading - heading)
         // velocity * velocity = 2 * HEADING_DECELERATION * (targetHeading - heading)
         // target heading = heading + 0.5 * velocity * velocity / HEADING_DECELERATION
+        // use sign of velocity to determine to add or subtract
 
-        if (velocity.getHeading() > 0) // if velocity is positive, add to heading
-            return heading + 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
-        else  // if velocity is negative, subtract to heading
-            return heading - 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
-
+        return heading + Math.signum(velocity.getHeading()) * 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
     }
 
     public boolean followerIsWithinTolerance() {
@@ -421,9 +416,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             telemetry.addData("drive power", drivePower);
             telemetry.addData("field centric", fieldCentric);
             telemetry.addData("target heading", targetHeading);
-        } else {
-//            telemetry.addData("reading distance", readingDistance);
         }
+
         telemetry.addData("DRIVETRAIN STATE:", drivetrainState);
         telemetry.addData("heading", heading);
         telemetry.addData("pose x", pose.getX());
