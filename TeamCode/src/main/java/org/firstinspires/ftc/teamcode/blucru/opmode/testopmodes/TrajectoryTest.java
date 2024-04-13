@@ -47,7 +47,7 @@ public class TrajectoryTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
+        robot = Robot.getInstance();
         drivetrain = robot.addDrivetrain(false);
 //        outtake = robot.addOuttake();
         pph = robot.addPurplePixelHolder();

@@ -38,7 +38,7 @@ public class LiftTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = Robot.getInstance();
         Outtake outtake = robot.addOuttake();
         lastGamepad1 = new Gamepad();
         lastGamepad2 = new Gamepad();

@@ -10,7 +10,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 import java.util.ArrayList;
 
 public class Robot {
-    HardwareMap hardwareMap;
+    private static Robot instance;
+
+    HardwareMap hardwareMap; // reference to hardware
 
     // all subsystems
     public Outtake outtake;
@@ -24,13 +26,22 @@ public class Robot {
 
     public boolean intakingInAuto = false;
 
-    // list of all subsystems for easy iteration
+    // list of all subsystems
     ArrayList<Subsystem> subsystems;
 
-    public Robot(HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
+    public static Robot getInstance() {
+        if(instance == null) {
+            instance = new Robot();
+        }
+        return instance;
+    }
 
+    private Robot(){
         subsystems = new ArrayList<>();
+    }
+
+    public void create(HardwareMap hardwareMap) {
+        this.hardwareMap = hardwareMap;
     }
 
     // initializes subsystems
@@ -132,5 +143,9 @@ public class Robot {
         }
 
         telemetry.addData("intaking in auto: ", intakingInAuto);
+    }
+
+    public static void kill() {
+        instance = null;
     }
 }

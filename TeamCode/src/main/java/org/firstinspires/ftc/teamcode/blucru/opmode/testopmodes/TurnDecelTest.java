@@ -42,7 +42,7 @@ public class TurnDecelTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
+        robot = Robot.getInstance();
         drivetrain = robot.addDrivetrain(true);
         intake = robot.addIntake();
         state = State.TURNING;

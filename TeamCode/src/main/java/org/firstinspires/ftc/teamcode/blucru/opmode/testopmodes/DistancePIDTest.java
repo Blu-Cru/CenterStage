@@ -31,7 +31,7 @@ public class DistancePIDTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = Robot.getInstance();
         Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 

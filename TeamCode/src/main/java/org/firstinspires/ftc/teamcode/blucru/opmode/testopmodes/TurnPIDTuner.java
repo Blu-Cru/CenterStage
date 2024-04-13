@@ -22,7 +22,7 @@ public class TurnPIDTuner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = Robot.getInstance();
         Drivetrain drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 

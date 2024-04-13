@@ -45,7 +45,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public final void runOpMode() throws InterruptedException {
         alliance = Initialization.ALLIANCE;
-        robot = new Robot(hardwareMap);
+        robot = Robot.getInstance();
+        robot.create(hardwareMap);
         initialize();
         robot.init();
         while(opModeInInit()) {
@@ -80,6 +81,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         }
 
         end();
+        Robot.kill();
     }
 
     // methods to be overriden
