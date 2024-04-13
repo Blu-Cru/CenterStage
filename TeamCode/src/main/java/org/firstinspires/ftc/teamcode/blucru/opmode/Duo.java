@@ -264,16 +264,11 @@ public class Duo extends BCLinearOpMode {
                 lastA2 = gamepad2.a;
 
                 // reverse intake
-                if(gamepad2.right_bumper) {
-                    intake.setIntakePower(-1);
-                } else {
-                    intake.setIntakePower(0);
-                }
+                if(gamepad2.right_bumper) intake.setIntakePower(-1);
+                else intake.setIntakePower(0);
 
-                if(gamepad2.dpad_left)
-                    outtake.lock.unlockFrontLockBack();
-                else if (gamepad2.dpad_right)
-                    outtake.lock.unlockAll();
+                if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
+                else if (gamepad2.dpad_right) outtake.lock.unlockAll();
 
                 break;
             case OUTTAKE_WRIST_RETRACTED:
