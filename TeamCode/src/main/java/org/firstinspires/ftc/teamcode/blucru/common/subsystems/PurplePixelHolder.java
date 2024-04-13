@@ -18,18 +18,18 @@ public class PurplePixelHolder implements Subsystem {
         EXTENDED
     }
 
-    private Servo purplePixelHolder;
+    Servo purplePixelServo;
 
     PurplePixelState purplePixelState;
     private double position;
 
     public PurplePixelHolder(HardwareMap hardwareMap) {
-        purplePixelHolder = hardwareMap.get(Servo.class, "purple pixel");
+        purplePixelServo = hardwareMap.get(Servo.class, "purple pixel");
         purplePixelState = PurplePixelState.EXTENDED;
     }
 
     public void init() {
-        purplePixelHolder.setPosition(EXTENDED);
+        purplePixelServo.setPosition(EXTENDED);
     }
 
     public void read() {
@@ -47,7 +47,7 @@ public class PurplePixelHolder implements Subsystem {
     }
 
     public void write() {
-        if(purplePixelHolder.getPosition() != position) purplePixelHolder.setPosition(position);
+        if(purplePixelServo.getPosition() != position) purplePixelServo.setPosition(position);
     }
 
     public void retractRight() {

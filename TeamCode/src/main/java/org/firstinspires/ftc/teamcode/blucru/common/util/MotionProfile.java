@@ -29,11 +29,10 @@ public class MotionProfile {
         this.aMax = aMax;
         if(xTarget < xI) {
             flip = -1;
-            decel = vI > 0;
         } else {
             flip = 1;
-            decel = vI < 0;
         }
+        decel = false;
         calculate();
     }
 
@@ -153,7 +152,6 @@ public class MotionProfile {
             dt = time - t0;
             instantTargetVel = aMax * dt * flip;
         } else if(time < t0 + t1 + t2) {
-            dt = time - t0 - t1;
             instantTargetVel = vMax * flip;
         } else if(time < t0 + t1 + t2 + t3) {
             dt = time - t0 - t1 - t2;

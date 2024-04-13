@@ -11,9 +11,9 @@ public class BCPDController extends PIDController {
     }
 
     public double calculate(double currentPos, double targetPos, double currentVelocity, double targetVelocity) {
-        Vector2d p = new Vector2d(currentPos, currentVelocity);
-        Vector2d target = new Vector2d(targetPos, targetVelocity);
-        Vector2d error = target.minus(p);
+        Vector2d pv = new Vector2d(currentPos, currentVelocity);
+        Vector2d sp = new Vector2d(targetPos, targetVelocity);
+        Vector2d error = sp.minus(pv);
 
         return error.dot(k);
     }

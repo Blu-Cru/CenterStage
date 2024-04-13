@@ -30,9 +30,7 @@ public class DrivetrainTranslationPID {
         double xPower = xController.calculate(currentPosition.getX(), targetPosition.getX());
         double yPower = yController.calculate(currentPosition.getY(), targetPosition.getY());
 
-        Vector2d rawDriveVector = new Vector2d(xPower, yPower);
-
-        return rawDriveVector;
+        return new Vector2d(xPower, yPower);
     }
 
     public void setTargetPosition(Vector2d targetPosition) {

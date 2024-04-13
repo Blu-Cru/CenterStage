@@ -36,13 +36,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            FORWARD_kStatic = 0.07, STRAFE_kStatic = 0.15,
-
             TRANSLATION_P = 0.3, TRANSLATION_I = 0, TRANSLATION_D = 0.002, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 15.0, // inches per second
             STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
-            kStaticX = 0.15, kStaticY = 0.1, // feedforward constants for static friction
+            STRAFE_kStatic = 0.15, FORWARD_kStatic = 0.1, // feedforward constants for static friction
 
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
@@ -215,9 +213,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(robotStopped && driveVector.norm() != 0) {
             double angle = driveVector.angle();
             double staticMinMagnitude =
-                    kStaticX * kStaticY
+                    STRAFE_kStatic * FORWARD_kStatic
                             /
-                    Math.sqrt(kStaticX * Math.cos(angle) * kStaticX * Math.cos(angle) + kStaticY * Math.sin(angle) * kStaticY * Math.sin(angle));
+                    Math.sqrt(STRAFE_kStatic * Math.cos(angle) * STRAFE_kStatic * Math.cos(angle) + FORWARD_kStatic * Math.sin(angle) * FORWARD_kStatic * Math.sin(angle));
             double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
             return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
         } else return drivePose;

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 public class IntakeColorSensors implements Subsystem {
-    public enum sensorType {
+    public enum SensorLocation {
         FRONT,
         BACK
     }
@@ -95,8 +95,8 @@ public class IntakeColorSensors implements Subsystem {
 //            frontLightDetected = frontSensor.getLightDetected();
 //            backLightDetected = backSensor.getLightDetected();
 
-            frontSlotState = calculateSlotState(frontDistance, sensorType.FRONT);
-            backSlotState = calculateSlotState(backDistance, sensorType.BACK);
+            frontSlotState = calculateSlotState(frontDistance, SensorLocation.FRONT);
+            backSlotState = calculateSlotState(backDistance, SensorLocation.BACK);
         } else {
             frontSensor.enableLed(false);
             backSensor.enableLed(false);
@@ -112,8 +112,8 @@ public class IntakeColorSensors implements Subsystem {
         wasJustFull = isFull; // save last state at the end of loop
     }
 
-    public SlotState calculateSlotState(double distance, sensorType sensor) {
-        if(sensor == sensorType.FRONT) {
+    public SlotState calculateSlotState(double distance, SensorLocation sensor) {
+        if(sensor == SensorLocation.FRONT) {
             if(distance >= FRONT_DISTANCE_LOW && distance <= FRONT_DISTANCE_HIGH)
                 return SlotState.FULL;
             else
@@ -204,7 +204,6 @@ public class IntakeColorSensors implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("READING: ", reading);
         telemetry.addData("FRONT SLOT STATE: ", frontSlotState);
         telemetry.addData("BACK SLOT STATE: ", backSlotState);
         telemetry.addData("front distance", frontDistance);
