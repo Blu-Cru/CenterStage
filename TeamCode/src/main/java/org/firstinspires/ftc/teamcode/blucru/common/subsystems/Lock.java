@@ -9,16 +9,16 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 public class Lock implements Subsystem {
     public static double
-            FLAT = 0.3,
-            LOCKED_FRONT = FLAT - toTicks(60),
-            LOCK_BACK_POS = FLAT + toTicks(55),
-            UNLOCKED_BACK = FLAT + toTicks(180);
+            FLAT = 0.1,
+            LOCKED_FRONT = FLAT - toTicks(20),
+            LOCK_BACK_POS = FLAT + toTicks(20),
+            PUSH_POS = FLAT + toTicks(150);
 
     public enum LockState {
         LOCKED_FRONT,
         LOCKED_BACK,
-        UNLOCKED_BACK,
-        UNLOCKED_FRONT
+        UNLOCKED,
+        PUSH
     }
 
     ServoImplEx lock;
@@ -49,12 +49,11 @@ public class Lock implements Subsystem {
             case LOCKED_BACK:
                 lockPos = LOCK_BACK_POS;
                 break;
-            case UNLOCKED_BACK:
-                lockPos = UNLOCKED_BACK;
-                break;
-            case UNLOCKED_FRONT:
+            case UNLOCKED:
                 lockPos = FLAT;
                 break;
+            case PUSH:
+                lockPos = PUSH_POS;
         }
 
         if(lock.getPosition() != lockPos) {
@@ -67,10 +66,10 @@ public class Lock implements Subsystem {
     }
 
     public void unlockAll() {
-        if(lockState == LockState.LOCKED_BACK || lockState == LockState.UNLOCKED_BACK) {
-            lockState = LockState.UNLOCKED_BACK;
+        if(lockState == LockState.LOCKED_BACK || lockState == LockState.PUSH) {
+            lockState = LockState.PUSH;
         } else {
-            lockState = LockState.UNLOCKED_FRONT;
+            lockState = LockState.UNLOCKED;
         }
     }
 
@@ -79,15 +78,11 @@ public class Lock implements Subsystem {
     }
 
     public void unlockFrontLockBack() {
-        if(lockState == LockState.UNLOCKED_BACK || lockState == LockState.UNLOCKED_FRONT) {
-            lockState = LockState.UNLOCKED_FRONT;
-        } else {
-            lockState = LockState.LOCKED_BACK;
-        }
+        lockState = LockState.LOCKED_BACK;
     }
 
     public void reset() {
-        lockState = LockState.UNLOCKED_FRONT;
+        lockState = LockState.UNLOCKED;
     }
 
     public static double toTicks(double degrees) {
