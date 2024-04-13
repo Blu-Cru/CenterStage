@@ -229,10 +229,8 @@ public class Duo extends BCLinearOpMode {
                 break;
             case OUTTAKING:
                 // TURRET CONTROL
-                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
-                    if(Math.abs(gamepad2.right_stick_x) > 0.05)
-                        outtake.teleOpTurnTurret(gamepad2.right_stick_x);
-                    else outtake.setTurretAngle(270);
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted && Math.abs(gamepad2.right_stick_x) > 0.05) {
+                    outtake.teleOpTurnTurret(gamepad2.right_stick_x);
                 } else outtake.setTurretAngle(270);
 
                 // retract wrist
