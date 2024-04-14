@@ -18,7 +18,7 @@ public class Robot {
     public Outtake outtake;
     public Intake intake;
     public IntakeWrist intakeWrist;
-    public Drivetrain drivetrain;
+    public DrivetrainMigrated drivetrain;
     public Hanger hanger;
     public Plane plane;
     public PurplePixelHolder purplePixelHolder;
@@ -101,8 +101,8 @@ public class Robot {
         return intakeColorSensors;
     }
 
-    public Drivetrain addDrivetrain(boolean isTeleOp) {
-        drivetrain = new Drivetrain(hardwareMap, isTeleOp);
+    public DrivetrainMigrated addDrivetrain(boolean isTeleOp) {
+        drivetrain = new DrivetrainMigrated(hardwareMap, isTeleOp);
         subsystems.add(drivetrain);
         return drivetrain;
     }

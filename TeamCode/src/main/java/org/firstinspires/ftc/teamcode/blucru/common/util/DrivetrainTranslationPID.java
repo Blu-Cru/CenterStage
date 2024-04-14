@@ -31,8 +31,8 @@ public class DrivetrainTranslationPID {
         if(error.norm() < tolerance) {
             return new Vector2d(0,0);
         } else {
-            double xPower = xController.calculate(currentPosition.getX(), targetPosition.getX());
-            double yPower = yController.calculate(currentPosition.getY(), targetPosition.getY());
+            double xPower = xController.calculate(currentPosition.x, targetPosition.x);
+            double yPower = yController.calculate(currentPosition.y, targetPosition.y);
             return new Vector2d(xPower, yPower);
         }
     }

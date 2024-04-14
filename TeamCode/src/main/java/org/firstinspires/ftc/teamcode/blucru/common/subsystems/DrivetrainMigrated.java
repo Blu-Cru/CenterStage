@@ -135,7 +135,7 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
 
-        setDrivePowers(new PoseVelocity2d(staticDrivePose.position, staticDrivePose.heading.toDouble());
+        setDrivePowers(new PoseVelocity2d(staticDrivePose.position, staticDrivePose.heading.toDouble()));
     }
 
     public void driveToHeading(double x, double y, double targetHeading) {
@@ -311,6 +311,10 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
     public boolean isStopped() {
         if(velocity == null) return true;
         else return velocity.linearVel.norm() < 0.1 && Math.abs(velocity.angVel) < 0.1;
+    }
+
+    public void breakFollowing() {
+
     }
 
 //    public void ftcDashDrawPose() {

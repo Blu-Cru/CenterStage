@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeColorSensors;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 public abstract class BCLinearOpMode extends LinearOpMode {
     public Alliance alliance;
     public Robot robot;
-    public Drivetrain drivetrain;
+    public DrivetrainMigrated drivetrain;
     public Outtake outtake;
     public Lift lift;
     public Turret turret;

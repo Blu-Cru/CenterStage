@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.util;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -21,19 +22,20 @@ public class AprilTagLocalizer {
     };
 
     public static Vector2d getRobotToTagVector(double detectionX, double detectionY) {
-        double x = -detectionY + CAMERA_POS.getX();
-        double y = detectionX + CAMERA_POS.getY();
+        double x = -detectionY + CAMERA_POS.x;
+        double y = detectionX + CAMERA_POS.y;
         return new Vector2d(x, y);
     }
 
     public static Vector2d getTagToRobotVector(Vector2d robotToTag, double detectionYawRad) {
-        return robotToTag.rotated(-detectionYawRad);
+        return Rotation2d.fromDouble(-detectionYawRad).times(robotToTag);
+//        return robotToTag.rotated(-detectionYawRad);
     }
 
     public static Pose2d getRobotPose(int tagId, double detectionX, double detectionY, double detectionYawRad) {
         Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
         Vector2d tagToRobot = getTagToRobotVector(robotToTag, detectionYawRad);
-        return new Pose2d(TAGS[tagId].getX() + tagToRobot.getX(), TAGS[tagId].getY() + tagToRobot.getY(), TAGS[tagId].getHeading() - detectionYawRad);
+        return new Pose2d(TAGS[tagId].position.x + tagToRobot.x, TAGS[tagId].position.y + tagToRobot.y, TAGS[tagId].heading.toDouble() - detectionYawRad);
     }
 
     public static Pose2d getRobotPose(AprilTagDetection detection) {

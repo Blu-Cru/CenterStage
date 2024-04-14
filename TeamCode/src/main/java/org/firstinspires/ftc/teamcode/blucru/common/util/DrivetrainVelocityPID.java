@@ -27,8 +27,8 @@ public class DrivetrainVelocityPID {
     }
 
     public Vector2d calculateDelta(Vector2d currentVelocity, double maxDeltaMagnitude) {
-        double xDeltaPower = xController.calculate(currentVelocity.getX(), targetVelocity.getX());
-        double yDeltaPower = yController.calculate(currentVelocity.getY(), targetVelocity.getY());
+        double xDeltaPower = xController.calculate(currentVelocity.x, targetVelocity.x);
+        double yDeltaPower = yController.calculate(currentVelocity.y, targetVelocity.y);
 
         Vector2d rawDeltaDriveVector = new Vector2d(xDeltaPower, yDeltaPower);
         double powerMagnitude = rawDeltaDriveVector.norm();
