@@ -11,7 +11,7 @@ public class IntakeCommand extends SequentialCommandGroup {
         super(
                 new SequentialCommandGroup(
                         new DropdownCommand(stackHeight),
-                        new WaitCommand(500),
+                        new WaitCommand(200),
                         new IntakePowerCommand(intakePower)
                 )
         );
