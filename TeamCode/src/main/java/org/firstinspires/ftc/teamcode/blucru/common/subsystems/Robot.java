@@ -145,6 +145,7 @@ public class Robot {
         telemetry.addData("intaking in auto: ", intakingInAuto);
     }
 
+    // call this after every op mode
     public static void kill() {
         instance = null;
     }

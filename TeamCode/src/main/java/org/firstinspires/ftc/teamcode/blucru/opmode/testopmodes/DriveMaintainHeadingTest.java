@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
+@Disabled
 @TeleOp(name = "Drive Maintain Heading Test", group = "test")
 public class DriveMaintainHeadingTest extends LinearOpMode {
     Robot robot;

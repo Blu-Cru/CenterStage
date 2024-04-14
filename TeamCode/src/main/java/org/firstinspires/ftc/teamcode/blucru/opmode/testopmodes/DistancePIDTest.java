@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-@Config
 @Disabled
 @TeleOp(name = "Distance test", group = "test")
 public class DistancePIDTest extends LinearOpMode {

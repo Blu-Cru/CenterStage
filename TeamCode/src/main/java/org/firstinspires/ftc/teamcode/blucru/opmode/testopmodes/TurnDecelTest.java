@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,6 +23,7 @@ theoretical coefficient to angular velocity squared. Doing multiple tests at dif
 which theory is correct.
 */
 
+@Disabled
 @TeleOp(name = "Turn Decel Test", group = "test")
 public class TurnDecelTest extends LinearOpMode {
     Robot robot;

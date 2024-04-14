@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-@Config
 @TeleOp(name = "intake test", group = "test")
 public class IntakeTest extends LinearOpMode {
     public static int stackHeight = 4;

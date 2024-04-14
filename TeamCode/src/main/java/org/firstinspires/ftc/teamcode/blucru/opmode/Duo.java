@@ -68,7 +68,6 @@ outtaking state:
 
 
  */
-@Config
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
     // timer variables
