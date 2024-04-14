@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
@@ -15,7 +15,7 @@ public class IntakeTest extends LinearOpMode {
     public static int stackHeight = 4;
     Robot robot;
     Intake intake;
-    Drivetrain drivetrain;
+    DrivetrainMigrated drivetrain;
     double horz, vert, rotate;
 
     RobotState robotState;

@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
@@ -15,12 +12,10 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 @Config
 public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
@@ -55,9 +50,9 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
             intakingInAuto = false;
     public double drivePower = 0.5;
     double dt, lastTime;
-    PoseVelocity2d velocity;
+    public PoseVelocity2d velocity;
 
-    DrivetrainTranslationPID translationPID;
+    public DrivetrainTranslationPID translationPID;
     PIDController headingPID;
     double targetHeading = 0;
     double heading;

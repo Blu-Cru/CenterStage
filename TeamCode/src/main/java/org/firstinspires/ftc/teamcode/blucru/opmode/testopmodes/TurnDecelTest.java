@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
@@ -25,7 +25,7 @@ which theory is correct.
 @TeleOp(name = "Turn Decel Test", group = "test")
 public class TurnDecelTest extends LinearOpMode {
     Robot robot;
-    Drivetrain drivetrain;
+    DrivetrainMigrated drivetrain;
     Intake intake;
     ElapsedTime runtime;
 
@@ -67,7 +67,7 @@ public class TurnDecelTest extends LinearOpMode {
                         state = State.DECEL; // change op mode state
                         drivetrain.drive(0, 0, 0); // stop the robot
                         startDecelHeading = drivetrain.getHeading(); // get the current heading
-                        startDecelVelocity = drivetrain.getPoseVelocity().getHeading(); // get the current heading velocity
+                        startDecelVelocity = drivetrain.velocity.angVel; // get the current heading velocity
                         startDecelTime = runtime.seconds(); // get the current time
                         gamepad1.rumble(100); // rumble the controller to indicate the start of deceleration
                     }

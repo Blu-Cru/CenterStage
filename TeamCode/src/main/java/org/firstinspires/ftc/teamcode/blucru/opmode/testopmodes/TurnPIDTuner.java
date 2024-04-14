@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
@@ -23,7 +23,7 @@ public class TurnPIDTuner extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Robot robot = Robot.getInstance();
-        Drivetrain drivetrain = robot.addDrivetrain(true);
+        DrivetrainMigrated drivetrain = robot.addDrivetrain(true);
         Intake intake = robot.addIntake();
 
         robot.init();

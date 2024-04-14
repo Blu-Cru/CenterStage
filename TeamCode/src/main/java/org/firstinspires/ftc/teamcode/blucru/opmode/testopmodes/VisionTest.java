@@ -73,7 +73,7 @@ public class VisionTest extends LinearOpMode {
                         for (AprilTagDetection detection : currentDetections) {
                             if(detection.id == 3) {
                                 Pose2d pose3 = AprilTagLocalizer.getRobotPose(detection);
-                                telemetry.addLine(String.format("found tag 3, pose estimate (x, y, heading): ", pose3.getX(), pose3.getY(), pose3.getHeading()));
+                                telemetry.addLine(String.format("found tag 3, pose estimate (x, y, heading): ", pose3.position.x, pose3.position.y, pose3.heading.toDouble()));
                             }
 
                             if(detection.id == 4) {
@@ -81,13 +81,13 @@ public class VisionTest extends LinearOpMode {
                                 Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
                                 telemetry.addLine(String.format("found tag 4"));
                                 telemetry.addLine("robot to tag: ");
-                                telemetry.addData("x:", btt4.getX());
-                                telemetry.addData("y:", btt4.getY());
+                                telemetry.addData("x:", btt4.x);
+                                telemetry.addData("y:", btt4.y);
 
                                 telemetry.addLine("pose estimate:");
-                                telemetry.addData("x:", pose4.getX());
-                                telemetry.addData("y:", pose4.getY());
-                                telemetry.addData("headnig", Math.toDegrees(pose4.getHeading()));
+                                telemetry.addData("x:", pose4.position.x);
+                                telemetry.addData("y:", pose4.position.y);
+                                telemetry.addData("headnig", Math.toDegrees(pose4.heading.toDouble()));
                             }
 
                             if (detection.metadata != null) {

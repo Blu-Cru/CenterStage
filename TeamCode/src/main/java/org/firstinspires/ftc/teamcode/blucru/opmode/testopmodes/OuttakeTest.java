@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @TeleOp(name = "outtake test", group = "test")
 public class OuttakeTest extends LinearOpMode {
     Robot robot;
-    Drivetrain drivetrain;
+    DrivetrainMigrated drivetrain;
     Outtake outtake;
     RobotState robotState;
     Gamepad lastGamepad1;

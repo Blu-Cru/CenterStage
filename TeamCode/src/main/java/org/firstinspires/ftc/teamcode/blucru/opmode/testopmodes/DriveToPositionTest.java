@@ -20,9 +20,9 @@ public class DriveToPositionTest extends BCLinearOpMode {
         addIntakeWrist();
         enableFTCDashboard();
 
-        targetX = drivetrain.getPoseEstimate().getX();
-        targetY = drivetrain.getPoseEstimate().getY();
-        targetHeading = drivetrain.getPoseEstimate().getHeading();
+        targetX = drivetrain.pose.position.x;
+        targetY = drivetrain.pose.position.y;
+        targetHeading = drivetrain.pose.heading.toDouble();
     }
 
     public void periodic() {
@@ -37,7 +37,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
         }
 
         if(mode.equals("driver control")) {
-            drivetrain.drivetrainState = DrivetrainState.TELEOP;
+            drivetrain.idle();
 
             if(gamepad1.right_stick_button) {
                 drivetrain.resetHeading(Math.toRadians(90));
@@ -55,8 +55,5 @@ public class DriveToPositionTest extends BCLinearOpMode {
         telemetry.addData("target x", targetX);
         telemetry.addData("target y", targetY);
         telemetry.addData("target heading", targetHeading);
-        telemetry.addData("current x", drivetrain.getPoseEstimate().getX());
-        telemetry.addData("current y", drivetrain.getPoseEstimate().getY());
-        telemetry.addData("current heading", drivetrain.getPoseEstimate().getHeading());
     }
 }

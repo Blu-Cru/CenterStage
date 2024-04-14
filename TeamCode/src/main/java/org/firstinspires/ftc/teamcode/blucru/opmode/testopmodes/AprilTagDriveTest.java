@@ -50,7 +50,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         if(gamepad1.b && !lastB) {
             state = DRIVER_CONTROL;
-            drivetrain.drivetrainState = DrivetrainState.TELEOP;
+            drivetrain.idle();
             cvMaster.detectTag();
         }
         lastB = gamepad1.b;
@@ -62,12 +62,12 @@ public class AprilTagDriveTest extends BCLinearOpMode {
                 if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
 
 
-                drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections()));
+                drivetrain.pose = AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections());
                 break;
             case DRIVE_TO_POSITION:
                 break;
         }
 
-        drivetrain.ftcDashDrawPose();
+//        drivetrain.ftcDashDrawPose();
     }
 }

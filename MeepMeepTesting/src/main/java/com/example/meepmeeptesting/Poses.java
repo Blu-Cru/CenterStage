@@ -1,6 +1,6 @@
 package com.example.meepmeeptesting;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.Pose2d;
 
 public class Poses {
     public static double FIELD_OFFSET_X = 0;
