@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.states;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.Pose2d;
 
 // class for the initialization state to start teleop
 public class Initialization {
