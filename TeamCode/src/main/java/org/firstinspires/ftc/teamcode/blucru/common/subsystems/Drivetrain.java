@@ -314,9 +314,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(gamepad.left_trigger > 0.1) slow = true;
         if (gamepad.right_trigger > 0.1) fast = true;
 
-        double slowPower = 0.3;
-        double fastPower = 0.8;
-        double normalPower = 0.5;
+        double slowPower;
+        double fastPower;
+        double normalPower;
         switch (robotState) {
             case RETRACT:
                 slowPower = 0.4;
