@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -13,8 +17,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 @Config
 public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
@@ -94,7 +100,7 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
             case TELEOP:
                 break;
             case DRIVE_TO_POSITION:
-                driveToPosition(targetPose);
+                driveToPosition();
                 break;
             case FOLLOWING_TRAJECTORY:
                 break;
@@ -202,14 +208,138 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
         return new Pose2d(drivePose.position.times(drivePower), drivePose.heading.toDouble() * drivePower);
     }
 
-    public void driveToPosition(Pose2d targetPosition) {
-        translationPID.setTargetPosition(targetPosition.position);
+    public void driveToPosition() {
         Vector2d rawDriveVector = translationPID.calculate(pose.position);
 
-        driveToHeading(rawDriveVector.component1(), rawDriveVector.component2(), targetPosition.heading.toDouble());
+        driveToHeading(rawDriveVector.component1(), rawDriveVector.component2(), targetHeading);
     }
 
-    public void telemetry(Telemetry telemetry) {
+    public double calculateNewTargetHeading() {
+        // vf^2 = vi^2 + 2a(xf - xi)
+        // 0 = velocity * velocity + 2 * -HEADING_DECELERATION * (targetHeading - heading)
+        // velocity * velocity = 2 * HEADING_DECELERATION * (targetHeading - heading)
+        // target heading = heading + 0.5 * velocity * velocity / HEADING_DECELERATION
+        // use sign of velocity to determine to add or subtract
 
+        return heading + Math.signum(velocity.angVel) * 0.5 * velocity.angVel * velocity.angVel / HEADING_DECELERATION;
+    }
+
+//    public boolean followerIsWithinTolerance() {
+//        return getTrajectoryFollowerError() < TRAJECTORY_FOLLOWER_ERROR_TOLERANCE;
+//    }
+
+//    public double getTrajectoryFollowerError() {
+//        Pose2d lastError = getLastError();
+//        return lastError.vec().norm();
+//    }
+
+    public void idle() {
+        state = State.TELEOP;
+    }
+
+    public void lockTo(Pose2d pose) {
+        state = State.DRIVE_TO_POSITION;
+        setTargetPose(pose);
+    }
+
+    public void setDrivePower(double power) {
+        drivePower = Range.clip(power, 0.15, 1.0);
+    }
+
+//    public void setDistancePID(double p, double i, double d) {
+//        distancePID.setPID(p, i, d);
+//    }
+
+    public void setTurnPID(double p, double i, double d) {
+        headingPID.setPID(p, i, d);
+    }
+
+    public double getPIDRotate(double heading, double target) {
+        if(heading - target < -Math.PI) heading += 2*Math.PI;
+        else if(heading - target > Math.PI) heading -= 2 * Math.PI;
+
+        if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
+        else return Range.clip(headingPID.calculate(heading, target), -1, 1);
+    }
+
+    public void setDrivePower(RobotState robotState, Gamepad gamepad) {
+        boolean slow = false;
+        boolean fast = false;
+        if(gamepad.left_trigger > 0.1) slow = true;
+        if (gamepad.right_trigger > 0.1) fast = true;
+
+        double slowPower;
+        double fastPower;
+        double normalPower;
+
+        switch (robotState) {
+            case RETRACT:
+                slowPower = 0.4; fastPower = 1.0; normalPower = 0.9; break;
+            case INTAKING:
+                slowPower = 0.4; fastPower = 1.0; normalPower = 0.85; break;
+            case LIFTING:
+                slowPower = 0.3; fastPower = 0.7; normalPower = 0.6; break;
+            case OUTTAKING:
+                slowPower = 0.25; fastPower = 0.8; normalPower = 0.5; break;
+            case OUTTAKE_WRIST_RETRACTED:
+                slowPower = 0.3; fastPower = 0.7; normalPower = 0.7; break;
+            case RETRACTING:
+                slowPower = 0.3; fastPower = 0.8; normalPower = 0.75; break;
+            default:
+                slowPower = 0.3; fastPower = 0.8; normalPower = 0.5; break;
+        }
+
+        if(slow && fast) setDrivePower(normalPower);
+        else if(slow) setDrivePower(slowPower);
+        else if(fast) setDrivePower(fastPower);
+        else setDrivePower(normalPower);
+    }
+
+    // resets heading
+    public void resetHeading(double heading) {
+//        resetIMU(heading);
+        pose = new Pose2d(pose.position, heading);
+    }
+
+    public void setTargetPose(Pose2d targetPose) {
+        translationPID.setTargetPosition(targetPose.position);
+        this.targetHeading = targetPose.heading.toDouble();
+    }
+
+    public double getHeading() {return heading;}
+
+    public boolean isStopped() {
+        if(velocity == null) return true;
+        else return velocity.linearVel.norm() < 0.1 && Math.abs(velocity.angVel) < 0.1;
+    }
+
+//    public void ftcDashDrawPose() {
+//        TelemetryPacket packet = new TelemetryPacket();
+//        Canvas fieldOverlay = packet.fieldOverlay()
+//                .setStroke("#1d38cf");
+//        DashboardUtil.drawRobot(fieldOverlay, pose);
+//
+//        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//    }
+
+    public void telemetry(Telemetry telemetry) {
+        if(isTeleOp) {
+            telemetry.addData("drive power", drivePower);
+            telemetry.addData("field centric", fieldCentric);
+            telemetry.addData("target heading", targetHeading);
+        }
+
+        telemetry.addData("DRIVETRAIN STATE:", state);
+        telemetry.addData("heading", heading);
+        telemetry.addData("pose x", pose.position.x);
+        telemetry.addData("pose y", pose.position.y);
+        telemetry.addData("velocity x", velocity.linearVel.x);
+        telemetry.addData("velocity y", velocity.linearVel.y);
+    }
+
+    public void testTelemetry(Telemetry telemetry) {
+        telemetry.addData("dt", dt);
+        telemetry.addData("last drive vector", lastDriveVector);
+        telemetry.addData("last drive vector magnitude", lastDriveVector.norm());
     }
 }
