@@ -132,7 +132,7 @@ public class Lift implements Subsystem {
     }
 
     public double getMotionProfilePD(double currentPose, double currentVelocity) {
-        int targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
+        targetPos = (int) Range.clip(motionProfile.getInstantTargetPosition(motionProfileTimer.seconds()), MIN_POS, MAX_POS);
         double targetVel = motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds());
         return getLiftPD(currentPose, targetPos, currentVelocity, targetVel);
     }
@@ -250,6 +250,7 @@ public class Lift implements Subsystem {
 
     public void testTelemetry(Telemetry telemetry) {
         telemetry.addData("velocity", currentVelocity);
+        telemetry.addData("target velocity", motionProfile.getInstantTargetVelocity(motionProfileTimer.seconds()));
     }
 
     public void motionProfileTelemetry(Telemetry telemetry) {
