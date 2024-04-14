@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class Robot {
     public boolean intakingInAuto = false;
 
     // list of all subsystems
-    ArrayList<Subsystem> subsystems;
+    ArrayList<BCSubsystem> BCSubsystems;
 
     public static Robot getInstance() {
         if(instance == null) {
@@ -37,7 +37,7 @@ public class Robot {
     }
 
     private Robot(){
-        subsystems = new ArrayList<>();
+        BCSubsystems = new ArrayList<>();
     }
 
     public void create(HardwareMap hardwareMap) {
@@ -50,8 +50,8 @@ public class Robot {
 //            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 //        }
 
-        for(Subsystem subsystem : subsystems) {
-            subsystem.init();
+        for(BCSubsystem BCSubsystem : BCSubsystems) {
+            BCSubsystem.init();
         }
     }
 
@@ -61,8 +61,8 @@ public class Robot {
 //            module.clearBulkCache();
 //        }
 
-        for(Subsystem subsystem : subsystems) {
-            subsystem.read();
+        for(BCSubsystem BCSubsystem : BCSubsystems) {
+            BCSubsystem.read();
         }
 
         if(intakingInAuto && intake.isFull()) {
@@ -72,74 +72,74 @@ public class Robot {
     }
 
     public void write() {
-        for(Subsystem subsystem : subsystems) {
-            subsystem.write();
+        for(BCSubsystem BCSubsystem : BCSubsystems) {
+            BCSubsystem.write();
         }
     }
 
     public Outtake addOuttake() {
         outtake = new Outtake(hardwareMap);
-        subsystems.add(outtake);
+        BCSubsystems.add(outtake);
         return outtake;
     }
 
     public Intake addIntake() {
         intake = new Intake(hardwareMap);
-        subsystems.add(intake);
+        BCSubsystems.add(intake);
         return intake;
     }
 
     public IntakeWrist addIntakeWrist() {
         intakeWrist = new IntakeWrist(hardwareMap);
-        subsystems.add(intakeWrist);
+        BCSubsystems.add(intakeWrist);
         return intakeWrist;
     }
 
     public IntakeColorSensors addIntakeColorSensors() {
         IntakeColorSensors intakeColorSensors = new IntakeColorSensors(hardwareMap);
-        subsystems.add(intakeColorSensors);
+        BCSubsystems.add(intakeColorSensors);
         return intakeColorSensors;
     }
 
     public Drivetrain addDrivetrain(boolean isTeleOp) {
         drivetrain = new Drivetrain(hardwareMap, isTeleOp);
-        subsystems.add(drivetrain);
+        BCSubsystems.add(drivetrain);
         return drivetrain;
     }
 
     public Hanger addHanger() {
         hanger = new Hanger(hardwareMap);
-        subsystems.add(hanger);
+        BCSubsystems.add(hanger);
         return hanger;
     }
 
     public Plane addPlane() {
         plane = new Plane(hardwareMap);
-        subsystems.add(plane);
+        BCSubsystems.add(plane);
         return plane;
     }
 
     public PurplePixelHolder addPurplePixelHolder() {
         purplePixelHolder = new PurplePixelHolder(hardwareMap);
-        subsystems.add(purplePixelHolder);
+        BCSubsystems.add(purplePixelHolder);
         return purplePixelHolder;
     }
 
     public Lock addLocks() {
         Lock lock = new Lock(hardwareMap);
-        subsystems.add(lock);
+        BCSubsystems.add(lock);
         return lock;
     }
 
     public CVMaster addCVMaster(Alliance alliance) {
         cvMaster = new CVMaster(hardwareMap, alliance);
-        subsystems.add(cvMaster);
+        BCSubsystems.add(cvMaster);
         return cvMaster;
     }
 
     public void telemetry(Telemetry telemetry) {
-        for(Subsystem subsystem : subsystems) {
-            subsystem.telemetry(telemetry);
+        for(BCSubsystem BCSubsystem : BCSubsystems) {
+            BCSubsystem.telemetry(telemetry);
         }
 
         telemetry.addData("intaking in auto: ", intakingInAuto);

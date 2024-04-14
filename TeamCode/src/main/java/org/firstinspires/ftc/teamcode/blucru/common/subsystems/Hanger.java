@@ -1,16 +1,15 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 @Config
-public class Hanger implements Subsystem {
+public class Hanger implements BCSubsystem {
     public static double p = 0.005, i = 0, d = 0; // PID values
 
     DcMotorEx hangerMotor;

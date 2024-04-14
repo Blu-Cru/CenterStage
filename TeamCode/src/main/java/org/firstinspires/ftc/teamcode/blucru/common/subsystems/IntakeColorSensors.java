@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
-public class IntakeColorSensors implements Subsystem {
+public class IntakeColorSensors implements BCSubsystem {
     public enum SensorLocation {
         FRONT,
         BACK

@@ -17,13 +17,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 @Config
-public class Drivetrain extends SampleMecanumDrive implements Subsystem {
+public class Drivetrain extends SampleMecanumDrive implements BCSubsystem {
     public static double
             MAX_ACCEL_DRIVE_DELTA = 3.5,
             MAX_DECEL_DRIVE_DELTA = 10.0, // magnitude per second at power 1 for slew rate limiter

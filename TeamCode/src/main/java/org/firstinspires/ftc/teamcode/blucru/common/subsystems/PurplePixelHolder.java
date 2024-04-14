@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
-public class PurplePixelHolder implements Subsystem {
+public class PurplePixelHolder implements BCSubsystem {
     public static double
             EXTENDED = 0.49,
             RETRACTED_RIGHT = EXTENDED - 0.333,

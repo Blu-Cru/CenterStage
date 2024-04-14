@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.blucru.common.util;
 
+import com.arcrobotics.ftclib.command.Subsystem;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public interface Subsystem {
+public interface BCSubsystem extends Subsystem {
 
         void init();
 

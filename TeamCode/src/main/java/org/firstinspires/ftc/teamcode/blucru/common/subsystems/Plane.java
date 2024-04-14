@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 @Config
-public class Plane implements Subsystem {
+public class Plane implements BCSubsystem {
     public static double
             PLANE_RELEASED = 0.65,
             PLANE_RETRACT = 0.44;

@@ -8,11 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 @Config
-public class Intake implements Subsystem {
+public class Intake implements BCSubsystem {
     public static double
             MAX_POWER = 1,
             JAM_CURRENT = 10.0; // if current exceeds this, unjam

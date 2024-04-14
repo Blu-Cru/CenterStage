@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 // not used anymore
-public class DistanceSensors implements Subsystem {
+public class DistanceSensors implements BCSubsystem {
     public static double
             DISTANCE_SENSOR_OFFSET = 5.875, // distance between distance sensors in inches
             DISTANCE_SENSOR_MAX = 45; // max distance the distance sensors can read

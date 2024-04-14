@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 @Config
-public class IntakeWrist implements Subsystem {
+public class IntakeWrist implements BCSubsystem {
     public static double
             PARALLEL_POS = 0.445,
             RADIUS = 3.77953,

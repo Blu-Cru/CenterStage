@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
+import org.firstinspires.ftc.teamcode.blucru.common.util.BCSubsystem;
 
 @Config
-public class Outtake implements Subsystem {
+public class Outtake implements BCSubsystem {
     public static double
             WRIST_RETRACT = 0.68,
             WRIST_OUTTAKE = WRIST_RETRACT - 0.295,
