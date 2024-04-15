@@ -14,6 +14,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     }
 
     Pose2d startPose = new Pose2d(0, 0, 0);
+    Pose2d startVelocity = new Pose2d(0, 0, 0);
     Pose2d endPose = new Pose2d(0, 0, 0);
     double startTimeSecs = 0;
 
@@ -40,6 +41,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     state = State.STOPPING;
                     startTimeSecs = currentSecs();
                     startPose = drivetrain.getPoseEstimate();
+                    startVelocity = drivetrain.getPoseVelocity();
                 }
 
                 telemetry.addLine("Robot is driving, press a to start test");
@@ -70,6 +72,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     public void telemetry() {
         telemetry.addData("state:", state);
         telemetry.addData("start pose:", startPose);
+        telemetry.addData("start velocity:", startVelocity);
         telemetry.addData("end pose:", endPose);
     }
 }
