@@ -28,6 +28,8 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         state = DRIVER_CONTROL;
 
+        drivetrain.fieldCentric = false;
+
         Poses poses = new Poses(1);
     }
 
@@ -57,7 +59,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         switch(state) {
             case DRIVER_CONTROL:
-                drivetrain.teleOpDrive(horz, vert, rot);
+                drivetrain.drive(horz, vert, rot);
 
                 if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
 

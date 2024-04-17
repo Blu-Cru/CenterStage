@@ -23,6 +23,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(true);
+        drivetrain.fieldCentric = false;
     }
 
     @Override
@@ -44,7 +45,6 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     startVelocity = drivetrain.getPoseVelocity();
                 }
 
-                telemetry.addLine("Robot is driving, press a to start test");
 
                 drivetrain.teleOpDrive(horz, vert, rot);
                 break;
@@ -54,7 +54,6 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     endPose = drivetrain.getPoseEstimate();
                     gamepad1.rumble(100); // rumble the controller to indicate the end of deceleration
                 }
-                telemetry.addLine("Robot is decelerating");
                 drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
                 break;
             case STOPPED:
@@ -63,13 +62,24 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     gamepad1.rumble(100); // rumble the controller to indicate the reset
                 }
 
-                telemetry.addLine("Robot has stopped, press b to reset");
                 break;
         }
 
     }
 
     public void telemetry() {
+        switch(state) {
+            case DRIVING:
+                telemetry.addData("Robot is driving, press a to start test", "");
+                break;
+            case STOPPING:
+                telemetry.addData("Robot is decelerating", "");
+                break;
+            case STOPPED:
+                telemetry.addData("Robot has stopped, press b to reset", "");
+                break;
+
+        }
         telemetry.addData("state:", state);
         telemetry.addData("start pose:", startPose);
         telemetry.addData("start velocity:", startVelocity);
