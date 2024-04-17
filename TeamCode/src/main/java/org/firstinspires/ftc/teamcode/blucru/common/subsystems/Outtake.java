@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Outtake implements Subsystem {
     public static double
             WRIST_RETRACT = 0.68,
-            WRIST_OUTTAKE = WRIST_RETRACT - 0.295,
+            WRIST_OUTTAKE = WRIST_RETRACT - 0.32,
 
             PIXEL_HEIGHT = 2.6, // inches
             LOW_HEIGHT = 4.3, // inches
