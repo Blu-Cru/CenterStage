@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
@@ -11,6 +13,7 @@ public class RawDriveTest extends BCLinearOpMode {
     public void initialize() {
         addDrivetrain(true);
         addIntakeWrist();
+        drivetrain.fieldCentric = false;
     }
 
     @Override
@@ -19,7 +22,8 @@ public class RawDriveTest extends BCLinearOpMode {
         horz = gamepad1.left_stick_x;
         rotate = -gamepad1.right_stick_x;
 
-        drivetrain.drive(horz ,vert, rotate);
+        drivetrain.drive(horz, vert, rotate);
+//        drivetrain.setDrivePowers(new PoseVelocity2d(new Vector2d(horz, vert), rotate));
     }
 
     @Override
