@@ -61,10 +61,8 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     state = State.DRIVING; // reset the op mode
                     gamepad1.rumble(100); // rumble the controller to indicate the reset
                 }
-
                 break;
         }
-
     }
 
     public void telemetry() {
@@ -77,6 +75,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                 break;
             case STOPPED:
                 telemetry.addData("Robot has stopped, press b to reset", "");
+                telemetry.addData("MEASURED DECELERATION:", getTranslationalDeceleration());
                 break;
 
         }
@@ -84,5 +83,13 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         telemetry.addData("start pose:", startPose);
         telemetry.addData("start velocity:", startVelocity);
         telemetry.addData("end pose:", endPose);
+    }
+
+    public double getTranslationalDeceleration() {
+        // vf^2 = vi^2 + 2a(xf - xi)
+        // 0 = vi^2 + 2a(xf - xi)
+        // -vi^2 = 2a(xf - xi)
+        // -vi^2 / 2(xf - xi) = a
+        return Math.pow(startVelocity.vec().norm(), 2) / (2 * endPose.minus(startPose).vec().norm());
     }
 }

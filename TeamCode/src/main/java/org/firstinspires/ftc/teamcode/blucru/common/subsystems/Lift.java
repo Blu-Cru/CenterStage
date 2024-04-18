@@ -24,7 +24,7 @@ public class Lift implements Subsystem {
             TICKS_PER_REV = 384.5, // ticks
             PULLEY_CIRCUMFERENCE = 4.40945, // inches
 
-            fastVelocity = 15000.0, fastAccel = 20000.0, // ticks per second, ticks per second squared
+            fastVelocity = 15000.0, fastAccel = 13000.0, // ticks per second, ticks per second squared
             MAX_UP_POWER = 0.9, MAX_DOWN_POWER = -0.85;
 
     public static int
