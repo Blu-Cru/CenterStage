@@ -13,6 +13,7 @@ public class Robot {
     private static Robot instance;
 
     HardwareMap hardwareMap; // reference to hardware
+    Telemetry telemetry; // reference to telemetry
 
     // all subsystems
     public Outtake outtake;
@@ -40,8 +41,9 @@ public class Robot {
         subsystems = new ArrayList<>();
     }
 
-    public void create(HardwareMap hardwareMap) {
+    public void create(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
     }
 
     // initializes subsystems
