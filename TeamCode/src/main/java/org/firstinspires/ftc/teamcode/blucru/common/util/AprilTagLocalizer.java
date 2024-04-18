@@ -3,13 +3,16 @@ package org.firstinspires.ftc.teamcode.blucru.common.util;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
 public class AprilTagLocalizer {
     public static Vector2d CAMERA_POS = new Vector2d(-6.61, 3.78); // position of the camera relative to the center of the robot in inches
-    public static double TAG_X = 64.5; // x position of the tags in inches
+//    public static double TAG_X = 64.5; // x position of the tags in inches
+    public static double TAG_X = Poses.DEPOSIT_X + 12; // x position of the tags in inches
     public static Pose2d[] TAGS = {
             new Pose2d(0, 0, Math.toRadians(0)), // tag 0 (nothing)
             new Pose2d(TAG_X, 42, Math.toRadians(180)), // tag 1 (red right)
@@ -42,7 +45,7 @@ public class AprilTagLocalizer {
 
     public static Pose2d getRobotPose(List<AprilTagDetection> detections) {
         if(detections.size() == 0) {
-            return new Pose2d(0, 0, 0);
+            return Robot.getInstance().drivetrain.pose;
         } else {
             AprilTagDetection closestDetection = detections.get(0);
             double closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);

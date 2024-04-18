@@ -49,7 +49,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     boolean intakingInAuto;
     public double drivePower = 0.5;
     double dt;
-    Pose2d pose;
+    public Pose2d pose;
     Pose2d velocity;
     double lastTime;
 
