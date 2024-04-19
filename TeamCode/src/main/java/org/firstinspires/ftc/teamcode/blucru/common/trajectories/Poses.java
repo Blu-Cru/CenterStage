@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 
 // poses for trajectories
-public class Poses {
+public final class Poses {
     public static double FIELD_OFFSET_X = 0;
     /*
     offset of distance from backdrop to other side
@@ -49,8 +49,8 @@ public class Poses {
 
     public static double reflect = 1;
 
-    public Poses(double reflect) {
-        this.reflect = reflect;
+    public static void setReflect(double reflect) {
+        Poses.reflect = reflect;
 
         BACKDROP_STARTING_POSE = new Pose2d(12, START_Y * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_FAR_POSE = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));
