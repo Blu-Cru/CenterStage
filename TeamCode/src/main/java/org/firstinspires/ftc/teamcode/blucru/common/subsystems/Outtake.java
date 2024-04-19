@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
-import org.firstinspires.ftc.teamcode.blucru.common.states.OuttakeState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
@@ -26,12 +24,18 @@ public class Outtake implements Subsystem {
 
             MAX_TELEOP_TURRET_X = 5.3; // inches
 
+    enum State {
+        RETRACT,
+        OUTTAKE,
+        MANUAL
+    }
+
     Servo wrist;
     public Lift lift;
     public Lock lock;
     public Turret turret;
 
-    public OuttakeState state;
+    State state;
 
     public boolean wristRetracted;
 
@@ -45,7 +49,7 @@ public class Outtake implements Subsystem {
         lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
 
-        state = OuttakeState.RETRACT;
+        state = State.RETRACT;
 
         wristRetracted = true;
     }
@@ -85,16 +89,12 @@ public class Outtake implements Subsystem {
     }
 
     public void setManualSlidePower(double power) {
-        state = OuttakeState.MANUAL;
+        state = State.MANUAL;
         lift.setManualPower(power);
     }
 
-    public double getCurrentTargetHeight() {
-        return lift.getCurrentPos() + turret.getTurretHeightDelta();
-    }
-
     public void setTargetHeight(double targetHeight) {
-        this.state = OuttakeState.OUTTAKE;
+        this.state = State.OUTTAKE;
         this.targetHeight = Range.clip(targetHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
     }
@@ -109,11 +109,11 @@ public class Outtake implements Subsystem {
     }
 
     public void updateTargetHeight() {
-        this.targetHeight = lift.toInches(lift.getTargetPos()) - turret.getTurretHeightDelta();
+        this.targetHeight = lift.toInches(lift.getTargetPos() + lift.getDecelDelta()) - turret.getTurretHeightDelta();
     }
 
     public void retractLift() {
-        state = OuttakeState.RETRACT;
+        state = State.RETRACT;
         lift.setMotionProfileTargetPos(0);
     }
 
