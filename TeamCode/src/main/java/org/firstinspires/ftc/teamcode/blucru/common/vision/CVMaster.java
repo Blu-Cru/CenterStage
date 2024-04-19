@@ -67,7 +67,9 @@ public class CVMaster implements Subsystem {
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
 
-
+        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        gainControl = visionPortal.getCameraControl(GainControl.class);
+        focusControl = visionPortal.getCameraControl(FocusControl.class);
     }
 
     public void init() {
@@ -88,9 +90,6 @@ public class CVMaster implements Subsystem {
 
     public void detectProp() {
         visionPortal.resumeStreaming();
-        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        gainControl = visionPortal.getCameraControl(GainControl.class);
-        focusControl = visionPortal.getCameraControl(FocusControl.class);
 
         visionPortal.setProcessorEnabled(propDetector, true);
         visionPortal.setProcessorEnabled(tagDetector, false);
@@ -104,9 +103,6 @@ public class CVMaster implements Subsystem {
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, true);
 
-        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        gainControl = visionPortal.getCameraControl(GainControl.class);
-        focusControl = visionPortal.getCameraControl(FocusControl.class);
         exposureControl.setMode(ExposureControl.Mode.Manual);
         exposureControl.setExposure(EXPOSURE, TimeUnit.MILLISECONDS);
         gainControl.setGain(GAIN);
