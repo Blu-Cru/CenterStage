@@ -221,6 +221,12 @@ public class Lift implements Subsystem {
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void updatePID() {
+        liftPID.setP(kP);
+        liftPID.setI(kI);
+        liftPID.setD(kD);
+    }
+
     public int getTargetPos() {
         return targetPos;
     }

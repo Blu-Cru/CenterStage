@@ -43,6 +43,8 @@ public class LiftTest extends BCLinearOpMode {
     }
 
     public void periodic() {
+        outtake.lift.updatePID();
+
         if(gamepad1.a && !lastA) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
@@ -95,5 +97,6 @@ public class LiftTest extends BCLinearOpMode {
 
     public void telemetry() {
         outtake.lift.motionProfileTelemetry(telemetry);
+        outtake.testTelemetry(telemetry);
     }
 }
