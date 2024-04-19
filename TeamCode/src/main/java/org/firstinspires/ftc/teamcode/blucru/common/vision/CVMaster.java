@@ -85,7 +85,14 @@ public class CVMaster implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-
+        telemetry.addData("camera state", visionPortal.getCameraState());
+        telemetry.addData("Prop detector enabled", visionPortal.getProcessorEnabled(propDetector));
+        if(visionPortal.getProcessorEnabled(propDetector)) {
+            telemetry.addData("POSITION", propDetector.position);
+        }
+        if(visionPortal.getProcessorEnabled(tagDetector)) {
+            telemetry.addData("Detection processing time", tagDetector.getPerTagAvgPoseSolveTime());
+        }
     }
 
     public void detectProp() {
