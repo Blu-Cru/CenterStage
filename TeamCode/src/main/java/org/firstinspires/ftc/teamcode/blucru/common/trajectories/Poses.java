@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
 
 // poses for trajectories
@@ -49,8 +50,14 @@ public final class Poses {
 
     public static double reflect = 1;
 
-    public static void setReflect(double reflect) {
-        Poses.reflect = reflect;
+    public static void setAlliance(Alliance alliance) {
+        if(alliance == Alliance.RED) {
+            FIELD_OFFSET_X = 0;
+            reflect = 1;
+        } else {
+            FIELD_OFFSET_X = 0;
+            reflect = -1;
+        }
 
         BACKDROP_STARTING_POSE = new Pose2d(12, START_Y * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_FAR_POSE = new Pose2d(5, -39 * reflect, Math.toRadians(-45 * reflect));

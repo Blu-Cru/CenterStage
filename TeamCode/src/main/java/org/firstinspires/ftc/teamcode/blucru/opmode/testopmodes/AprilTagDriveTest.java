@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes.AprilTagD
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
@@ -30,7 +31,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         drivetrain.fieldCentric = false;
 
-        Poses poses = new Poses(1);
+        Poses.setAlliance(Alliance.RED);
     }
 
     public void onStart() {

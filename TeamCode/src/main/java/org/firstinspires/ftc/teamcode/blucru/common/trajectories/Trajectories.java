@@ -47,7 +47,7 @@ public class Trajectories {
             reflect = -1;
         }
 
-        Poses.setReflect(reflect);
+        Poses.setAlliance(alliance);
 
         preloadDeposits = new PreloadDeposits(reflect);
         placements = new Placements(reflect);
