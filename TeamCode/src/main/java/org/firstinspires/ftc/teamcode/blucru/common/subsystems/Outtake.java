@@ -85,8 +85,8 @@ public class Outtake implements Subsystem {
     }
 
     public void setManualSlidePower(double power) {
-        lift.liftState = LiftState.MANUAL;
-        lift.power = power;
+        state = OuttakeState.MANUAL;
+        lift.setManualPower(power);
     }
 
     public double getCurrentTargetHeight() {
