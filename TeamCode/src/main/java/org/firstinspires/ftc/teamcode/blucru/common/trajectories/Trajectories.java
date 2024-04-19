@@ -47,10 +47,11 @@ public class Trajectories {
             reflect = -1;
         }
 
+        Poses.setReflect(reflect);
+
         preloadDeposits = new PreloadDeposits(reflect);
         placements = new Placements(reflect);
         cycles = new Cycles(reflect);
-        poses = new Poses(reflect);
         parks = new Parks(reflect);
         intakeTrajectories = new IntakeTrajectories(reflect);
         depositTrajectories = new DepositTrajectories(reflect);

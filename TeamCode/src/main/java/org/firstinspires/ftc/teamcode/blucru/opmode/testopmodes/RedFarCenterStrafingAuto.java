@@ -41,7 +41,7 @@ public class RedFarCenterStrafingAuto extends BCLinearOpMode {
 
         trajectories = new Trajectories(Alliance.RED, Side.FAR, AutoType.PRELOAD, ParkType.NONE);
 
-        poses = new Poses(1);
+        Poses.setReflect(1);
         intakeTrajectories = new IntakeTrajectories(1);
         preloadDeposits = new PreloadDeposits(1);
 
