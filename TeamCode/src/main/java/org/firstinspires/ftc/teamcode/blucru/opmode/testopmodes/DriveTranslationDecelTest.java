@@ -15,7 +15,12 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
 
     Pose2d startPose = new Pose2d(0, 0, 0);
     Pose2d startVelocity = new Pose2d(0, 0, 0);
+    Pose2d robotVelocity = new Pose2d(0, 0, 0);
     Pose2d endPose = new Pose2d(0, 0, 0);
+    Pose2d deltaPose = new Pose2d(0, 0, 0);
+    double symmetricalDecel = 0;
+    double strafeDecel = 0;
+    double forwardDecel = 0;
     double startTimeSecs = 0;
 
     State state = State.DRIVING;
@@ -52,6 +57,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                 if(drivetrain.isStopped() && secsSince(startTimeSecs) > 1.5) {
                     state = State.STOPPED;
                     endPose = drivetrain.getPoseEstimate();
+                    calculate();
                     gamepad1.rumble(100); // rumble the controller to indicate the end of deceleration
                 }
                 drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 0));
@@ -75,7 +81,11 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                 break;
             case STOPPED:
                 telemetry.addData("Robot has stopped, press b to reset", "");
-                telemetry.addData("MEASURED DECELERATION:", getTranslationalDeceleration());
+                telemetry.addData("SYMMETRICAL DECELERATION:", symmetricalDecel);
+                telemetry.addData("STRAFE DECELERATION:", strafeDecel);
+                telemetry.addData("FORWARD DECELERATION:", forwardDecel);
+                telemetry.addData("ROBOT VELOCITY:", robotVelocity);
+                telemetry.addData("DELTA POSE:", deltaPose);
                 break;
 
         }
@@ -85,11 +95,35 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         telemetry.addData("end pose:", endPose);
     }
 
-    public double getTranslationalDeceleration() {
+    public void calculate() {
+        robotVelocity = new Pose2d(startVelocity.vec().rotated(-startPose.getHeading()), startVelocity.getHeading());
+        deltaPose = endPose.minus(startPose);
+        symmetricalDecel = getSymmetricalDeceleration();
+        strafeDecel = getStrafeDeceleration();
+        forwardDecel = getForwardDeceleration();
+    }
+
+    public double getStrafeDeceleration() {
         // vf^2 = vi^2 + 2a(xf - xi)
         // 0 = vi^2 + 2a(xf - xi)
         // -vi^2 = 2a(xf - xi)
         // -vi^2 / 2(xf - xi) = a
-        return Math.pow(startVelocity.vec().norm(), 2) / (2 * endPose.minus(startPose).vec().norm());
+        return Math.pow(robotVelocity.getY(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getY());
+    }
+
+    public double getForwardDeceleration() {
+        // vf^2 = vi^2 + 2a(xf - xi)
+        // 0 = vi^2 + 2a(xf - xi)
+        // -vi^2 = 2a(xf - xi)
+        // -vi^2 / 2(xf - xi) = a
+        return Math.pow(robotVelocity.getX(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getX());
+    }
+
+    public double getSymmetricalDeceleration() {
+        // vf^2 = vi^2 + 2a(xf - xi)
+        // 0 = vi^2 + 2a(xf - xi)
+        // -vi^2 = 2a(xf - xi)
+        // -vi^2 / 2(xf - xi) = a
+        return Math.pow(startVelocity.vec().norm(), 2) / (2 * deltaPose.vec().norm());
     }
 }
