@@ -179,11 +179,7 @@ public class Lift implements Subsystem {
     }
 
     public int getDecelDelta() {
-        if(currentVelocity > 0) {
-            return (int) (currentVelocity * currentVelocity / (2 * motionProfile.aMax));
-        } else {
-            return (int) (currentVelocity * currentVelocity / (-2 * motionProfile.aMax));
-        }
+        return (int) (currentVelocity * currentVelocity / Math.signum(currentVelocity) * 2 * motionProfile.aMax);
     }
 
     public boolean intakeReady() {
