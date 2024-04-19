@@ -43,6 +43,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     int loopTimeCount;
     double lastTelemetryTime;
 
+    boolean telemetryOptimized = false;
+
     public final void runOpMode() throws InterruptedException {
         alliance = Initialization.ALLIANCE;
         robot = Robot.getInstance();
@@ -67,15 +69,24 @@ public abstract class BCLinearOpMode extends LinearOpMode {
             lastTime = runtime.milliseconds();
             loopTimeCount++;
 
-            if(timeSince(lastTelemetryTime) > 100) { // update telemetry every 0.1 seconds
-                lastTelemetryTime = runtime.milliseconds();
+            if(telemetryOptimized) {
+                if (timeSince(lastTelemetryTime) > 100) { // update telemetry every 0.1 seconds
+                    lastTelemetryTime = runtime.milliseconds();
+                    telemetry();
+                    robot.telemetry(telemetry);
+
+                    telemetry.addData("alliance:", alliance);
+                    double loopTimeAvg = loopTimeSum / loopTimeCount;
+                    resetLoopTime();
+                    telemetry.addData("Loop Time", loopTimeAvg);
+                    telemetry.update();
+                }
+            } else {
                 telemetry();
                 robot.telemetry(telemetry);
-
                 telemetry.addData("alliance:", alliance);
-                double loopTimeAvg = loopTimeSum / loopTimeCount;
+                telemetry.addData("Loop Time", loopTimeSum / loopTimeCount);
                 resetLoopTime();
-                telemetry.addData("Loop Time", loopTimeAvg);
                 telemetry.update();
             }
         }
@@ -112,6 +123,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addCVMaster() {cvMaster = robot.addCVMaster(Initialization.ALLIANCE);}
 
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
+
+    public void optimizeTelemetry() {telemetryOptimized = true;}
 
     public double currentSecs() {return runtime.seconds();}
 

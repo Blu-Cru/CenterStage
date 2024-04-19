@@ -103,6 +103,8 @@ public class Duo extends BCLinearOpMode {
         addHanger();
         addPlane();
 
+        optimizeTelemetry();
+
         scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set the heading to score on the backboard
         intake.startReadingColor();
     }
