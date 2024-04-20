@@ -15,7 +15,7 @@ public class OuttakeExtendCommand extends SequentialCommandGroup {
                                 () -> {
                                     Robot.getInstance().outtake.setTargetPixelHeight(pixelHeight);
                                 }),
-                        new WaitCommand(300),
+                        new WaitCommand(100),
                         new OuttakeWristCommand(false)
                 )
         );

@@ -13,7 +13,7 @@ public class StopIntakeCommand extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                         new DropdownPartialRetractCommand(),
                         new IntakePowerCommand(-1),
-                        new WaitCommand(400),
+                        new WaitCommand(600),
                         new IntakePowerCommand(0),
                         new DropdownFullRetractCommand()
                 )
