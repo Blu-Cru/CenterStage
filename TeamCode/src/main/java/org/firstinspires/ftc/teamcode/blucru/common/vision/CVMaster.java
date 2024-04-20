@@ -90,6 +90,7 @@ public class CVMaster implements Subsystem {
         if(visionPortal.getProcessorEnabled(propDetector)) {
             telemetry.addData("POSITION", propDetector.position);
         }
+        telemetry.addData("Tag detector enabled", visionPortal.getProcessorEnabled(tagDetector));
         if(visionPortal.getProcessorEnabled(tagDetector)) {
             telemetry.addData("Detection processing time", tagDetector.getPerTagAvgPoseSolveTime());
         }

@@ -104,6 +104,7 @@ public class Lift implements Subsystem {
 
         switch(liftState) {
             case MotionProfile:
+                double motionProfilePower = getMotionProfilePD(currentPos, currentVelocity);
                 if(motionProfile.done(motionProfileTimer.seconds()) && currentPos < 0 && retractTimer.seconds() > 3) {
                     power = 0;
                     resetEncoder();
@@ -112,7 +113,7 @@ public class Lift implements Subsystem {
                 } else if (getAbsPosError() < PID_TOLERANCE) {
                     power = 0;
                 } else {
-                    power = getMotionProfilePD(currentPos, currentVelocity);
+                    power = motionProfilePower;
                 }
                 break;
             case PID:
@@ -202,7 +203,9 @@ public class Lift implements Subsystem {
 
     public void setTargetPos(int pos) {
         liftState = LiftState.PID;
-        targetPos = Range.clip(pos, MIN_POS, MAX_POS);
+        int newTargetPos = Range.clip(pos, MIN_POS, MAX_POS);
+//        if(newTargetPos != targetPos) liftPID.reset();
+        targetPos = newTargetPos;
     }
 
     public double getFeedForward() {

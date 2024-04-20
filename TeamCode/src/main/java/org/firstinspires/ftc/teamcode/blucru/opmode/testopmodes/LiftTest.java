@@ -25,12 +25,8 @@ public class LiftTest extends BCLinearOpMode {
     public static double vI = -60;
     public static double vMax = 500;
     public static double aMax = 200;
-    public static int run = 0;
-    int lastRun = run;
-
-    Outtake outtake;
-    Gamepad lastGamepad1;
-    Gamepad lastGamepad2;
+//    public static int run = 0;
+//    int lastRun = run;
 
     boolean lastB = false;
     boolean lastA = false;
@@ -38,17 +34,17 @@ public class LiftTest extends BCLinearOpMode {
     boolean lastY = false;
 
     public void initialize() {
-        addOuttake();
+        addLift();
         enableFTCDashboard();
     }
 
     public void periodic() {
-        outtake.lift.updatePID();
+        lift.updatePID();
 
         if(gamepad1.a && !lastA) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
-                            new InstantCommand(() -> outtake.lift.setMotionProfileTargetPos(0))
+                            new InstantCommand(() -> lift.setMotionProfileTargetPos(0))
                     )
             );
         }
@@ -57,46 +53,46 @@ public class LiftTest extends BCLinearOpMode {
         if(gamepad1.b && !lastB) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
-                            new InstantCommand(() -> outtake.lift.setMotionProfileTargetPos(500))
+                            new InstantCommand(() -> lift.setMotionProfileTargetPos(500))
                     )
             );
         }
         lastB = gamepad1.b;
 
-        if(gamepad1.x && !lastGamepad1.x) {
+        if(gamepad1.x && !lastX) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
-                            new InstantCommand(() -> outtake.lift.setTargetPos(1000))
+                            new InstantCommand(() -> lift.setTargetPos(1000))
                     )
             );
         }
+        lastX = gamepad1.x;
 
-        if(gamepad1.y && !lastGamepad1.y) {
+        if(gamepad1.y && !lastY) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
-                            new InstantCommand(() -> outtake.lift.setTargetPos(1500))
+                            new InstantCommand(() -> lift.setTargetPos(1500))
                     )
             );
         }
+        lastY = gamepad1.y;
 
-        if(Math.abs(gamepad1.left_stick_y) > 0.1) {
-            outtake.lift.liftState = LiftState.MANUAL;
-            outtake.setManualSlidePower(-gamepad1.left_stick_y);
-        }
-        if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
-            outtake.lift.liftState = LiftState.PID;
-        }
+//        if(Math.abs(gamepad1.left_stick_y) > 0.1) {
+//            lift.liftState = LiftState.MANUAL;
+//            outtake.setManualSlidePower(-gamepad1.left_stick_y);
+//        }
+//        if(!(Math.abs(gamepad1.left_stick_y) > 0.1) && Math.abs(lastGamepad1.left_stick_y) > 0.1) {
+//            lift.liftState = LiftState.PID;
+//        }
 
 
-        lastRun = run;
+//        lastRun = run;
         CommandScheduler.getInstance().run();
-        lastGamepad1.copy(gamepad1);
-        lastGamepad2.copy(gamepad2);
-        robot.telemetry(telemetry);
     }
 
     public void telemetry() {
-        outtake.lift.motionProfileTelemetry(telemetry);
-        outtake.testTelemetry(telemetry);
+        lift.testTelemetry(telemetry);
+        lift.motionProfileTelemetry(telemetry);
+//        outtake.testTelemetry(telemetry);
     }
 }

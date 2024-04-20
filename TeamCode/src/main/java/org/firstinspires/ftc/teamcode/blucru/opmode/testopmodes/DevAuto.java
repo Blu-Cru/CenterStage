@@ -20,7 +20,6 @@ import java.util.ArrayList;
 @Autonomous(name = "dev auto", group = "test")
 public class DevAuto extends BCLinearOpMode {
     AutoState state = AutoState.RUNNING;
-    Poses poses;
 
     Trajectories trajectories;
     IntakeTrajectories intakeTrajectories;
@@ -41,7 +40,7 @@ public class DevAuto extends BCLinearOpMode {
 
         trajectories = new Trajectories(Alliance.RED, Side.FAR, AutoType.PRELOAD, ParkType.NONE);
 
-        poses = new Poses(1);
+        Poses.setAlliance(Alliance.RED);
         intakeTrajectories = new IntakeTrajectories(1);
         preloadDeposits = new PreloadDeposits(1);
 

@@ -106,6 +106,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addDrivetrain(boolean isTeleOp) {drivetrain = robot.addDrivetrain(isTeleOp);}
 
     public void addOuttake() {outtake = robot.addOuttake();}
+    public void addLift() {lift = robot.addLift();}
     public void addLocks() {lock = robot.addLocks();}
 
     public void addIntake() {intake = robot.addIntake();}

@@ -155,7 +155,7 @@ public class MotionProfile {
             instantTargetVel = vMax * flip;
         } else if(time < t0 + t1 + t2 + t3) {
             dt = time - t0 - t1 - t2;
-            instantTargetVel = vMax - (aMax * dt);
+            instantTargetVel = (vMax - (aMax * dt))*flip;
         } else instantTargetVel = 0;
 
         return instantTargetVel;

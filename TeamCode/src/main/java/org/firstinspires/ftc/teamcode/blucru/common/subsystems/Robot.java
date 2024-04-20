@@ -16,6 +16,7 @@ public class Robot {
 
     // all subsystems
     public Outtake outtake;
+    public Lift lift;
     public Intake intake;
     public IntakeWrist intakeWrist;
     public Drivetrain drivetrain;
@@ -81,6 +82,12 @@ public class Robot {
         outtake = new Outtake(hardwareMap);
         subsystems.add(outtake);
         return outtake;
+    }
+
+    public Lift addLift() {
+        lift = new Lift(hardwareMap);
+        subsystems.add(lift);
+        return lift;
     }
 
     public Intake addIntake() {
