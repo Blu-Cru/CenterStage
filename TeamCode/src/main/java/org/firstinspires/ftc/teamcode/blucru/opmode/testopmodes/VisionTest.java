@@ -5,11 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
