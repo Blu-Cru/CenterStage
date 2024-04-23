@@ -9,9 +9,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-public class AprilTagLocalizer {
+public final class AprilTagLocalizer {
     public static Vector2d CAMERA_POS = new Vector2d(-6.61, 3.78); // position of the camera relative to the center of the robot in inches
-//    public static double TAG_X = 64.5; // x position of the tags in inches
     public static double TAG_X = Poses.DEPOSIT_X + 12; // x position of the tags in inches
     public static Pose2d[] TAGS = {
             new Pose2d(0, 0, Math.toRadians(0)), // tag 0 (nothing)
