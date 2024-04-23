@@ -7,18 +7,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeColorSensors;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lock;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeColorSensors;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang.Hanger;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lock;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.plane.Plane;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Turret;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
 public abstract class BCLinearOpMode extends LinearOpMode {

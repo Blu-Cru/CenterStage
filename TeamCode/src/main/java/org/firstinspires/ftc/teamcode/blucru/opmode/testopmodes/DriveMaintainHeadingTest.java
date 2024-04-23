@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Disabled

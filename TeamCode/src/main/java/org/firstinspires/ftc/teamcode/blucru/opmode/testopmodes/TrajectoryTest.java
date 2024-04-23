@@ -8,10 +8,10 @@
 //
 //import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
 //import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
-//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Drivetrain;
-//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Lift;
-//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
-//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.PurplePixelHolder;
+//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
+//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
+//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
+//import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixelHolder;
 //import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 //import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajectories;
 //import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Placements;
