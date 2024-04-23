@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.util;
+package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;

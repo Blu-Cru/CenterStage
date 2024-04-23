@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "april tag drive test", group = "test")
 public class AprilTagDriveTest extends BCLinearOpMode {

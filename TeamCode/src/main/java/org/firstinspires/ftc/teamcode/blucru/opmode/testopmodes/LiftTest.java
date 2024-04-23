@@ -1,19 +1,12 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @Config
 @TeleOp(name = "lift test", group = "test")
