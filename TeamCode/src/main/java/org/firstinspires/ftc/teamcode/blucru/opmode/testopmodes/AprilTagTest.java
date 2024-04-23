@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.util.AprilTagLocalizer;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @Config
 @TeleOp(name="April Tag Test", group="test")

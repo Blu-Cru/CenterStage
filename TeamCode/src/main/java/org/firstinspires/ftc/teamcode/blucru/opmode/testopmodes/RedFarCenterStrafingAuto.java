@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajector
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;

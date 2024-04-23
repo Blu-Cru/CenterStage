@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "color sensor test", group = "test")
 public class ColorSensorTest extends BCLinearOpMode {

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 public class LockTest extends BCLinearOpMode {
     public void initialize() {
