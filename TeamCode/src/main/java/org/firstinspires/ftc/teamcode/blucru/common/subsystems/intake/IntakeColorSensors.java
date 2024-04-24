@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 public class IntakeColorSensors implements Subsystem {
-    public enum SensorLocation {
+    enum SensorLocation {
         FRONT,
         BACK
     }

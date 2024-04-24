@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
@@ -369,8 +369,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // set initial pose from auto
     public void initializePose() {
-        setPoseEstimate(Initialization.POSE);
-        setExternalHeading(Initialization.POSE.getHeading());
+        setPoseEstimate(Globals.START_POSE);
+        setExternalHeading(Globals.START_POSE.getHeading());
     }
 
     public void setTargetPose(Pose2d targetPose) {

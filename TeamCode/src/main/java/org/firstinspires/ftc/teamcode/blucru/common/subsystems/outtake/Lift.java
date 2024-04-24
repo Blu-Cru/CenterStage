@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.states.LiftState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.BCPDController;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
@@ -24,8 +23,8 @@ public class Lift implements Subsystem {
             TICKS_PER_REV = 384.5, // ticks
             PULLEY_CIRCUMFERENCE = 4.40945, // inches
 
-            fastVelocity = 15000.0, fastAccel = 13000.0, // ticks per second, ticks per second squared
-            MAX_UP_POWER = 0.9, MAX_DOWN_POWER = -0.85;
+            fastVelocity = 12000.0, fastAccel = 13000.0, // ticks per second, ticks per second squared
+            MAX_UP_POWER = 0.9, MAX_DOWN_POWER = -1;
 
     public static int
             YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1250, // ticks
@@ -34,7 +33,11 @@ public class Lift implements Subsystem {
             WRIST_CLEAR_POS = 500,
             INTAKE_READY_POS = 50;
 
-    public LiftState liftState;
+    enum State {
+        PID, MotionProfile, MANUAL
+    }
+
+    State state;
     DcMotorEx liftMotor;
     DcMotorEx liftMotor2;
     BCPDController liftPID;
@@ -61,7 +64,7 @@ public class Lift implements Subsystem {
         liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
         liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
 
-        liftState = LiftState.PID;
+        state = State.PID;
 
         targetPos = 0;
         targetVelocity = 0;
@@ -102,13 +105,13 @@ public class Lift implements Subsystem {
     public void write() {
         PID = getLiftPID(currentPos, targetPos);
 
-        switch(liftState) {
+        switch(state) {
             case MotionProfile:
                 double motionProfilePower = getMotionProfilePD(currentPos, currentVelocity);
                 if(motionProfile.done(motionProfileTimer.seconds()) && currentPos < 0 && retractTimer.seconds() > 3) {
                     power = 0;
                     resetEncoder();
-                    liftState = LiftState.PID;
+                    state = State.PID;
                     targetPos = 0;
                 } else if (getAbsPosError() < PID_TOLERANCE) {
                     power = 0;
@@ -168,14 +171,14 @@ public class Lift implements Subsystem {
     }
 
     public void setMotionProfile(MotionProfile profile) {
-        liftState = LiftState.MotionProfile;
+        state = State.MotionProfile;
         motionProfile = profile;
         motionProfileTimer.reset();
         liftPID.reset();
     }
 
     public void setManualPower(double power) {
-        liftState = LiftState.MANUAL;
+        state = State.MANUAL;
         this.power = power;
     }
 
@@ -202,7 +205,7 @@ public class Lift implements Subsystem {
     }
 
     public void setTargetPos(int pos) {
-        liftState = LiftState.PID;
+        state = State.PID;
         int newTargetPos = Range.clip(pos, MIN_POS, MAX_POS);
 //        if(newTargetPos != targetPos) liftPID.reset();
         targetPos = newTargetPos;
@@ -247,7 +250,7 @@ public class Lift implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("liftState", liftState);
+        telemetry.addData("lift state", state);
         telemetry.addData("targetPos", targetPos);
         telemetry.addData("currentPos", currentPos);
         telemetry.addData("power", power);

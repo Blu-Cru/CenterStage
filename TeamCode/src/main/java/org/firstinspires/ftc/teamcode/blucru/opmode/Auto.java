@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
@@ -74,7 +74,7 @@ public class Auto extends LinearOpMode {
                 case INIT:
                     if(gamepad1.x && !lastX) {
                         alliance = alliance.flip();
-                        Initialization.ALLIANCE = alliance;
+                        Globals.ALLIANCE = alliance;
                     }
                     lastX = gamepad1.x;
                     if(gamepad1.b && !lastB) side = side.flip();
@@ -233,6 +233,6 @@ public class Auto extends LinearOpMode {
         } else {
             pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
         }
-        Initialization.POSE = pose;
+        Globals.START_POSE = pose;
     }
 }
