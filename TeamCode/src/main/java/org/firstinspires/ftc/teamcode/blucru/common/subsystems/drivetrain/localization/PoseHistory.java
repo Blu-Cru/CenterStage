@@ -46,9 +46,9 @@ public class PoseHistory {
     }
 
     public Pose2d getPoseAtTime(double targetNanoTime) {
-        for (int i = poseHistory.size() - 1; i >= 0; i--) {
+        for (int i = poseHistory.size() - 1; i >= 0; i-= 2) { // increment by 2 for more efficiency
             if (poseHistory.get(i).nanoTime < targetNanoTime) {
-                return poseHistory.get(i).pose;
+                return poseHistory.get(i + 1).pose; // return the pose after the pose marker at the target time because incrementing by 2
             }
         }
         Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
