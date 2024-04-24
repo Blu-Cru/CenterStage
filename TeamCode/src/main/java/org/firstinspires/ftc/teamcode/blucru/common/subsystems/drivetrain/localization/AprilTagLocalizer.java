@@ -42,7 +42,7 @@ public final class AprilTagLocalizer {
         return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
     }
 
-    public static Pose2d getRobotPose(List<AprilTagDetection> detections) {
+    public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections) {
         if(detections.size() == 0) {
             return Robot.getInstance().drivetrain.pose;
         } else {

@@ -50,7 +50,7 @@ public class AprilTagTest extends BCLinearOpMode {
         }
         lastX = gamepad1.x;
 
-        drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPose(cvMaster.tagDetector.getDetections()));
+        drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
         drivetrain.ftcDashDrawPose();
     }
 
