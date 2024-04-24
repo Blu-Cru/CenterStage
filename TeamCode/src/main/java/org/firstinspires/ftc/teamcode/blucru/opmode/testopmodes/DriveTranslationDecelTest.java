@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
@@ -17,7 +18,12 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     Pose2d startVelocity = new Pose2d(0, 0, 0);
     Pose2d robotVelocity = new Pose2d(0, 0, 0);
     Pose2d endPose = new Pose2d(0, 0, 0);
+    Pose2d modelSymmetricalStopPose = new Pose2d(0, 0, 0);
+    Pose2d modelAsymmetricalStopPose = new Pose2d(0, 0, 0);
     Pose2d deltaPose = new Pose2d(0, 0, 0);
+    double modelSymmetricalDecel = 0;
+    double modelStrafeDecel = 0;
+    double modelForwardDecel = 0;
     double symmetricalDecel = 0;
     double strafeDecel = 0;
     double forwardDecel = 0;
@@ -67,6 +73,13 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     state = State.DRIVING; // reset the op mode
                     gamepad1.rumble(100); // rumble the controller to indicate the reset
                 }
+
+                if(gamepad1.right_stick_button) {
+                    modelSymmetricalDecel = symmetricalDecel;
+                    modelStrafeDecel = strafeDecel;
+                    modelForwardDecel = forwardDecel;
+                    gamepad1.rumble(100); // rumble the controller to indicate the data has been saved
+                }
                 break;
         }
     }
@@ -81,6 +94,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                 break;
             case STOPPED:
                 telemetry.addData("Robot has stopped, press b to reset", "");
+                telemetry.addData("Press right stick button to save data", "");
                 telemetry.addData("SYMMETRICAL DECELERATION:", symmetricalDecel);
                 telemetry.addData("STRAFE DECELERATION:", strafeDecel);
                 telemetry.addData("FORWARD DECELERATION:", forwardDecel);
@@ -93,6 +107,11 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         telemetry.addData("start pose:", startPose);
         telemetry.addData("start velocity:", startVelocity);
         telemetry.addData("end pose:", endPose);
+        telemetry.addData("model symmetrical stop pose:", modelSymmetricalStopPose);
+        telemetry.addData("model asymmetrical stop pose:", modelAsymmetricalStopPose);
+        telemetry.addData("model symmetrical deceleration:", modelSymmetricalDecel);
+        telemetry.addData("model strafe deceleration:", modelStrafeDecel);
+        telemetry.addData("model forward deceleration:", modelForwardDecel);
     }
 
     public void calculate() {
@@ -101,6 +120,24 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         symmetricalDecel = getSymmetricalDeceleration();
         strafeDecel = getStrafeDeceleration();
         forwardDecel = getForwardDeceleration();
+
+        modelSymmetricalStopPose = getModelSymmetricalStopPose();
+        modelAsymmetricalStopPose = getModelAsymmetricalStopPose();
+    }
+
+    public Pose2d getModelSymmetricalStopPose() {
+        Vector2d initialVelocity = startVelocity.vec();
+        // x = vi^2 / 2a
+        double x = Math.pow(initialVelocity.norm(), 2) / (2 * modelSymmetricalDecel);
+        return startPose.plus(new Pose2d(x * Math.cos(startPose.getHeading()), x * Math.sin(startPose.getHeading()), drivetrain.calculateNewTargetHeading()));
+    }
+
+    public Pose2d getModelAsymmetricalStopPose() {
+        Vector2d initialVelocity = robotVelocity.vec();
+        double strafeCoast = Math.pow(initialVelocity.getY(), 2) / (2 * modelStrafeDecel) * Math.signum(initialVelocity.getY());
+        double forwardCoast = Math.pow(initialVelocity.getX(), 2) / (2 * modelForwardDecel) * Math.signum(initialVelocity.getX());
+        Vector2d coast = new Vector2d(forwardCoast, strafeCoast);
+        return new Pose2d(startPose.vec().plus(coast.rotated(-startPose.getHeading())), drivetrain.calculateNewTargetHeading());
     }
 
     public double getStrafeDeceleration() {
