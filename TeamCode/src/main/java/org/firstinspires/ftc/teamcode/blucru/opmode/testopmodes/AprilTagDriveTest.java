@@ -71,6 +71,6 @@ public class AprilTagDriveTest extends BCLinearOpMode {
                 break;
         }
 
-        drivetrain.ftcDashDrawPose();
+        drivetrain.ftcDashDrawCurrentPose();
     }
 }
