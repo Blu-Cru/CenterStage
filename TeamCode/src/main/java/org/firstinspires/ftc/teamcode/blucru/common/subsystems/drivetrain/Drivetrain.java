@@ -50,6 +50,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public double drivePower = 0.5;
     double dt;
     public Pose2d pose;
+    Pose2d lastPose;
     public Pose2d velocity;
     double lastTime;
 
@@ -76,6 +77,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
 
+        lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
         fieldCentric = true;
@@ -109,8 +111,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 break;
         }
 
+        lastPose = pose;
         pose = this.getPoseEstimate();
-        velocity = new Pose2d(getPoseVelocity().vec().rotated(-heading), getPoseVelocity().getHeading());
+        velocity = pose.minus(lastPose).div(dt / 1000.0);
         heading = getOdoHeading();
     }
 
