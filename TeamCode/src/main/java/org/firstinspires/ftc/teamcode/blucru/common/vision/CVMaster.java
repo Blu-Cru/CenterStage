@@ -67,6 +67,9 @@ public class CVMaster implements Subsystem {
         visionPortal.setProcessorEnabled(propDetector, false);
         visionPortal.setProcessorEnabled(tagDetector, false);
 
+        while(visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+
+        }
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);
         focusControl = visionPortal.getCameraControl(FocusControl.class);

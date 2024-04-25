@@ -35,6 +35,8 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     public void initialize() {
         addDrivetrain(true);
         drivetrain.fieldCentric = false;
+
+        enableFTCDashboard();
     }
 
     @Override
@@ -53,9 +55,8 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     state = State.STOPPING;
                     startTimeSecs = currentSecs();
                     startPose = drivetrain.getPoseEstimate();
-                    startVelocity = drivetrain.getPoseVelocity();
+                    startVelocity = drivetrain.velocity;
                 }
-
 
                 drivetrain.teleOpDrive(horz, vert, rot);
                 break;
@@ -100,6 +101,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                 telemetry.addData("FORWARD DECELERATION:", forwardDecel);
                 telemetry.addData("ROBOT VELOCITY:", robotVelocity);
                 telemetry.addData("DELTA POSE:", deltaPose);
+//                drivetrain.ftcDashDrawPose();
                 break;
 
         }
@@ -115,7 +117,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     }
 
     public void calculate() {
-        robotVelocity = new Pose2d(startVelocity.vec().rotated(-startPose.getHeading()), startVelocity.getHeading());
+        robotVelocity = new Pose2d(startVelocity.vec().rotated(startPose.getHeading()), startVelocity.getHeading());
         deltaPose = endPose.minus(startPose);
         symmetricalDecel = getSymmetricalDeceleration();
         strafeDecel = getStrafeDeceleration();

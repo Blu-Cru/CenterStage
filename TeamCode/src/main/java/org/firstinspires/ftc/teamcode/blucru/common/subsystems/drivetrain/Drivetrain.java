@@ -50,7 +50,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public double drivePower = 0.5;
     double dt;
     public Pose2d pose;
-    Pose2d velocity;
+    public Pose2d velocity;
     double lastTime;
 
     public DrivetrainTranslationPID translationPID;
@@ -110,7 +110,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         }
 
         pose = this.getPoseEstimate();
-        velocity = getPoseVelocity();
+        velocity = new Pose2d(getPoseVelocity().vec().rotated(-heading), getPoseVelocity().getHeading());
         heading = getOdoHeading();
     }
 
@@ -402,13 +402,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
                 }); // idle the drivetrain before building a trajectory
     }
 
-    public void ftcDashDrawPose() {
+    public void ftcDashDrawPose(Pose2d pose) {
         TelemetryPacket packet = new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay()
                         .setStroke("#1d38cf");
         DashboardUtil.drawRobot(fieldOverlay, pose);
 
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
+    }
+
+    public void ftcDashDrawCurrentPose() {
+        ftcDashDrawPose(pose);
     }
 
     public void telemetry(Telemetry telemetry) {
