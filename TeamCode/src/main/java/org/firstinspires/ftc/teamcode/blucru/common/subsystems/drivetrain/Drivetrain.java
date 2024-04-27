@@ -147,7 +147,16 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void driveScaled(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
-        Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
+        Pose2d drivePose = scaleByDrivePower(new Pose2d(driveVector, rotate));
+        Pose2d staticDrivePose = processStaticFriction(drivePose);
+
+        setWeightedDrivePower(staticDrivePose);
+    }
+
+    public void driveClip(double x, double y, double rotate) {
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+
+        Pose2d drivePose = clipByDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
 
         setWeightedDrivePower(staticDrivePose);
@@ -158,6 +167,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         double rotate = getPIDRotate(heading, targetHeading);
 
         driveScaled(x, y, rotate);
+    }
+
+    public void driveToHeadingClip(double x, double y, double targetHeading) {
+        this.targetHeading = targetHeading;
+        double rotate = getPIDRotate(heading, targetHeading);
+        
+        driveClip(x, y, rotate);
     }
 
     // apply slew rate limiter to drive vector
@@ -217,8 +233,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         } else return drivePose;
     }
 
-    public Pose2d processDrivePower(Pose2d drivePose) {
+    public Pose2d scaleByDrivePower(Pose2d drivePose) {
         return new Pose2d(drivePose.vec().times(drivePower), drivePose.getHeading() * drivePower);
+    }
+
+    public Pose2d clipByDrivePower(Pose2d drivePose) {
+        double newX = Range.clip(drivePose.getX(), -drivePower, drivePower);
+        double newY = Range.clip(drivePose.getY(), -drivePower, drivePower);
+        double newHeading = Range.clip(drivePose.getHeading(), -drivePower, drivePower);
+        return new Pose2d(newX, newY, newHeading);
     }
 
     public void driveToPosition(Pose2d targetPosition) {
