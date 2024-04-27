@@ -59,6 +59,10 @@ public final class AprilTagPoseGetter {
                 }
             }
 
+            if(closestDistance > 30) {
+                return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
+            }
+
             return getRobotPose(closestDetection);
         }
     }
