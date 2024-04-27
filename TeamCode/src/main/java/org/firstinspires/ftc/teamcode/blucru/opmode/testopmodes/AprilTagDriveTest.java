@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagLocalizer;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "april tag drive test", group = "test")
@@ -65,7 +65,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
                 if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
 
 
-                drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
+                drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
                 break;
             case DRIVE_TO_POSITION:
                 break;

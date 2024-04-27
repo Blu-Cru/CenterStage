@@ -7,50 +7,62 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class PoseHistory {
     static double STORAGE_NANOSECONDS = 1.0 * Math.pow(10.0, 9.0);
 
     static class PoseMarker {
-        double nanoTime;
+        long nanoTime;
         Pose2d pose;
 
-        PoseMarker() {
+        PoseMarker(Pose2d pose) {
             nanoTime = System.nanoTime();
-            pose = Robot.getInstance().drivetrain.pose;
+            this.pose = pose;
         }
     }
 
-    ArrayList<PoseMarker> poseHistory;
+    LinkedList<PoseMarker> poseHistory;
 
     /*
-        list of poses and their timestamps
-        poses are stored in the order they were added, so new poses will be at the end of the list
-        timestamps are in nanoseconds
+        Linked list of poses and their timestamps
+        New poses are stored at the front of the linked list
+        Timestamps are in nanoseconds
+
+        The reason for using a linked list is because we need
+        to add and remove elements from the front
+        and back of the list, which is faster with a
+        linked list than an arraylist
      */
 
     public PoseHistory() {
         // initialize pose history
-        poseHistory = new ArrayList<>();
+        poseHistory = new LinkedList<>();
     }
 
-    public void addPose() {
-        poseHistory.add(new PoseMarker());
+    public void add(Pose2d pose) {
+        poseHistory.addFirst(new PoseMarker(pose));
 
-        double currentTime = System.nanoTime();
+        long currentTime = System.nanoTime();
 
         // remove old poses
-        while (poseHistory.size() > 0 && currentTime - poseHistory.get(0).nanoTime > STORAGE_NANOSECONDS) {
-            poseHistory.remove(0);
+        while (poseHistory.size() > 0 && currentTime - poseHistory.getLast().nanoTime > STORAGE_NANOSECONDS) {
+            poseHistory.removeLast();
         }
     }
 
-    public Pose2d getPoseAtTime(double targetNanoTime) {
-        for (int i = poseHistory.size() - 1; i >= 0; i-= 2) { // increment by 2 for more efficiency
-            if (poseHistory.get(i).nanoTime < targetNanoTime) {
-                return poseHistory.get(i + 1).pose; // return the pose after the pose marker at the target time because incrementing by 2
+    public Pose2d getPoseAtTime(long targetNanoTime) {
+        ListIterator<PoseMarker> iterator = poseHistory.listIterator();
+        PoseMarker poseMarker = iterator.next();
+
+        while(iterator.hasNext()) {
+            if (poseMarker.nanoTime < targetNanoTime) {
+                return poseMarker.pose;
             }
+            poseMarker = iterator.next();
         }
+
         Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
         return null;
     }

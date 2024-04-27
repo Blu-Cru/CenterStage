@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagLocalizer;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @Config
@@ -50,7 +50,7 @@ public class AprilTagTest extends BCLinearOpMode {
         }
         lastX = gamepad1.x;
 
-        drivetrain.setPoseEstimate(AprilTagLocalizer.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
+        drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
         drivetrain.ftcDashDrawCurrentPose();
     }
 

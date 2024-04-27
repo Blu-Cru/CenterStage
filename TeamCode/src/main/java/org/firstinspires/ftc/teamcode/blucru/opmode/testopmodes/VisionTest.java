@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagLocalizer;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -71,13 +71,13 @@ public class VisionTest extends LinearOpMode {
 
                         for (AprilTagDetection detection : currentDetections) {
                             if(detection.id == 3) {
-                                Pose2d pose3 = AprilTagLocalizer.getRobotPose(detection);
+                                Pose2d pose3 = AprilTagPoseGetter.getRobotPose(detection);
                                 telemetry.addLine(String.format("found tag 3, pose estimate (x, y, heading): ", pose3.getX(), pose3.getY(), pose3.getHeading()));
                             }
 
                             if(detection.id == 4) {
-                                Vector2d btt4 = AprilTagLocalizer.getRobotToTagVector(detection.ftcPose.x, detection.ftcPose.y);
-                                Pose2d pose4 = AprilTagLocalizer.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
+                                Vector2d btt4 = AprilTagPoseGetter.getRobotToTagVector(detection.ftcPose.x, detection.ftcPose.y);
+                                Pose2d pose4 = AprilTagPoseGetter.getRobotPose(4, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
                                 telemetry.addLine(String.format("found tag 4"));
                                 telemetry.addLine("robot to tag: ");
                                 telemetry.addData("x:", btt4.getX());

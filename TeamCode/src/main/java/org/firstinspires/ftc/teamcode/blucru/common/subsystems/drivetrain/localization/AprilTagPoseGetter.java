@@ -10,7 +10,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.HashMap;
 import java.util.List;
 
-public final class AprilTagLocalizer {
+public final class AprilTagPoseGetter {
     public static Vector2d CAMERA_POS = new Vector2d(-6.61, 3.78); // position of the camera relative to the center of the robot in inches
     public static double TAG_X = Poses.DEPOSIT_X + 12; // x position of the tags in inches
     public static HashMap<Integer, Pose2d> TAGS = new HashMap<Integer, Pose2d>() {{
@@ -21,17 +21,6 @@ public final class AprilTagLocalizer {
         put(5, new Pose2d(TAG_X, -36, Math.toRadians(180))); // tag 5 (blue center)
         put(6, new Pose2d(TAG_X, -42, Math.toRadians(180))); // tag 6 (blue left)
     }};
-
-
-//    public static Pose2d[] TAGS = {
-//            new Pose2d(0, 0, Math.toRadians(0)), // tag 0 (nothing)
-//            new Pose2d(TAG_X, 42, Math.toRadians(180)), // tag 1 (red right)
-//            new Pose2d(TAG_X, 36, Math.toRadians(180)), // tag 2 (red center)
-//            new Pose2d(TAG_X, 30, Math.toRadians(180)), // tag 3 (red left)
-//            new Pose2d(TAG_X, -30, Math.toRadians(180)), // tag 4 (blue right)
-//            new Pose2d(TAG_X, -36, Math.toRadians(180)), // tag 5 (blue center)
-//            new Pose2d(TAG_X, -42, Math.toRadians(180)), // tag 6 (blue left)
-//    };
 
     public static Vector2d getRobotToTagVector(double detectionX, double detectionY) {
         double x = -detectionY + CAMERA_POS.getX();
