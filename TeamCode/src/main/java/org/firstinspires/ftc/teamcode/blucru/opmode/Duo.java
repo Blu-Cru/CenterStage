@@ -120,8 +120,8 @@ public class Duo extends BCLinearOpMode {
             gamepad1.rumble(100);
         }
 
-        if(gamepad1.b) drivetrain.driveToHeading(horz, vert, scoringHeading); // drive to outtake heading
-        else if(gamepad1.x) drivetrain.driveToHeading(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
+        if(gamepad1.b) drivetrain.driveToHeadingScaled(horz, vert, scoringHeading); // drive to outtake heading
+        else if(gamepad1.x) drivetrain.driveToHeadingScaled(horz, vert, scoringHeading - Math.PI); // drive to opposite outtake heading
         else drivetrain.teleOpDrive(horz, vert, rotate); // drive normally
 
         switch(robotState) {

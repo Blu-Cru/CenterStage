@@ -79,7 +79,7 @@ public class RedFarCenterStrafingAuto extends BCLinearOpMode {
                 }
                 break;
             case STOP:
-                drivetrain.drive(0,0,0);
+                drivetrain.driveScaled(0,0,0);
                 break;
         }
     }

@@ -32,7 +32,7 @@ public class DriveStaticFrictionTest extends BCLinearOpMode {
         double rot = -gamepad1.right_stick_x;
 
         if(driveType == DriveType.RAW) {
-            drivetrain.drive(horz, vert, rot);
+            drivetrain.driveScaled(horz, vert, rot);
         } else {
 //            drivetrain.driveStaticFriction(horz, vert, rot);
         }

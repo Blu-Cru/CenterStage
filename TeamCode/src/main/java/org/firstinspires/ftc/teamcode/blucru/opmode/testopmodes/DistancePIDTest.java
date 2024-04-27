@@ -65,20 +65,20 @@ public class DistancePIDTest extends LinearOpMode {
                 if(gamepad1.left_bumper) {
 //                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
                 } else {
-                    drivetrain.driveToHeading(horz, vert, targetHeading);
+                    drivetrain.driveToHeadingScaled(horz, vert, targetHeading);
                 }
             } else if(gamepad1.x) {
                 targetHeading = Math.toRadians(0);
                 if(gamepad1.left_bumper) {
 //                    drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
                 } else {
-                    drivetrain.driveToHeading(horz, vert, targetHeading);
+                    drivetrain.driveToHeadingScaled(horz, vert, targetHeading);
                 }
             } else if(gamepad1.a) {
                 targetHeading = Math.toRadians(90);
 //                drivetrain.driveToDistanceToHeading(horz, vert, targetDistance, targetHeading);
             } else {
-                drivetrain.drive(horz, vert, rotate);
+                drivetrain.driveScaled(horz, vert, rotate);
             }
 
 //            drivetrain.setDistancePID(distanceP, distanceI, distanceD);

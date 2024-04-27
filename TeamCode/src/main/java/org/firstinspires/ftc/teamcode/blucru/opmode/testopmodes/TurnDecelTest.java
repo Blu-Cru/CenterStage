@@ -62,12 +62,12 @@ public class TurnDecelTest extends LinearOpMode {
                     double horz = gamepad1.left_stick_x;
                     double vert = -gamepad1.left_stick_y;
                     double rotate = -gamepad1.right_stick_x;
-                    drivetrain.drive(horz, vert, rotate);
+                    drivetrain.driveScaled(horz, vert, rotate);
 
                     // press dpad up to calculate deceleration
                     if (gamepad1.dpad_up) {
                         state = State.DECEL; // change op mode state
-                        drivetrain.drive(0, 0, 0); // stop the robot
+                        drivetrain.driveScaled(0, 0, 0); // stop the robot
                         startDecelHeading = drivetrain.getHeading(); // get the current heading
                         startDecelVelocity = drivetrain.getPoseVelocity().getHeading(); // get the current heading velocity
                         startDecelTime = runtime.seconds(); // get the current time
@@ -92,7 +92,7 @@ public class TurnDecelTest extends LinearOpMode {
                     telemetry.addLine("Robot is decelerating");
                     break;
                 case STOP:
-                    drivetrain.drive(0, 0, 0); // stop the robot
+                    drivetrain.driveScaled(0, 0, 0); // stop the robot
 
                     if(gamepad1.b) {
                         state = State.TURNING; // reset the op mode

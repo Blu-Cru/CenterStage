@@ -42,13 +42,13 @@ public class PoseHistory {
     }
 
     public void add(Pose2d pose) {
-        poseHistory.addFirst(new PoseMarker(pose));
+        poseHistory.addFirst(new PoseMarker(pose)); // add current pose to front of list
 
         long currentTime = System.nanoTime();
 
         // remove old poses
         while (poseHistory.size() > 0 && currentTime - poseHistory.getLast().nanoTime > STORAGE_NANOSECONDS) {
-            poseHistory.removeLast();
+            poseHistory.removeLast(); // remove oldest pose from back of list until we have less than STORAGE_NANOSECONDS of poses
         }
     }
 

@@ -60,7 +60,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
         switch(state) {
             case DRIVER_CONTROL:
-                drivetrain.drive(horz, vert, rot);
+                drivetrain.driveScaled(horz, vert, rot);
 
                 if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
 

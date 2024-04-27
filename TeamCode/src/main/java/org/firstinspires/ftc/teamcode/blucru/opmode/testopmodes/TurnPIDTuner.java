@@ -46,18 +46,18 @@ public class TurnPIDTuner extends LinearOpMode {
 
             if(gamepad1.a) {
                 target = Math.toRadians(-90);
-                drivetrain.driveToHeading(horz, vert, target);
+                drivetrain.driveToHeadingScaled(horz, vert, target);
             } else if(gamepad1.b) {
                 target = 0;
-                drivetrain.driveToHeading(horz, vert, target);
+                drivetrain.driveToHeadingScaled(horz, vert, target);
             } else if(gamepad1.y) {
                 target = Math.toRadians(90);
-                drivetrain.driveToHeading(horz, vert, target);
+                drivetrain.driveToHeadingScaled(horz, vert, target);
             } else if(gamepad1.x) {
                 target = Math.toRadians(180);
-                drivetrain.driveToHeading(horz, vert, target);
+                drivetrain.driveToHeadingScaled(horz, vert, target);
             } else {
-                drivetrain.drive(horz, vert, rotate);
+                drivetrain.driveScaled(horz, vert, rotate);
             }
 
             robot.write();

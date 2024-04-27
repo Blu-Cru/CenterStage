@@ -41,9 +41,9 @@ public class IntakeTest extends LinearOpMode {
                 gamepad1.rumble(150);
             }
 
-            if(gamepad1.b) drivetrain.driveToHeading(horz, vert, Math.toRadians(180));
-            else if (gamepad1.x) drivetrain.driveToHeading(horz, vert, 0);
-            else drivetrain.drive(horz, vert, rotate);
+            if(gamepad1.b) drivetrain.driveToHeadingScaled(horz, vert, Math.toRadians(180));
+            else if (gamepad1.x) drivetrain.driveToHeadingScaled(horz, vert, 0);
+            else drivetrain.driveScaled(horz, vert, rotate);
 
 
             if(gamepad1.left_trigger > 0.1) intake.setIntakePower(gamepad1.left_trigger);

@@ -102,14 +102,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         dt = System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
 
-        switch(drivetrainState) {
-            case TELEOP:
-            case DRIVE_TO_POSITION:
-                updatePoseEstimate();
-                break;
-            case FOLLOWING_TRAJECTORY:
-                break;
-        }
+        updatePoseEstimate();
 
         lastPose = pose;
         pose = this.getPoseEstimate();
@@ -137,13 +130,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         boolean stopped = lastDriveVector.norm() < 0.05 && !movingTranslation && velocity.vec().norm() < 10.0;
 
         if(turning) // if driver is turning, drive with turning normally
-            drive(x, y, rotate);
+            driveScaled(x, y, rotate);
         else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
-            driveToHeading(x, y, calculateNewTargetHeading());
+            driveToHeadingScaled(x, y, calculateNewTargetHeading());
         else if(stopped) // if drivetrain is stopped, drive to current heading
-            driveToHeading(0, 0, heading);
+            driveToHeadingScaled(0, 0, heading);
         else // drive, turning to target heading
-            driveToHeading(x, y, targetHeading);
+            driveToHeadingScaled(x, y, targetHeading);
 
         drivetrainState = DrivetrainState.TELEOP;
 
@@ -151,7 +144,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastRotate = rotate;
     }
 
-    public void drive(double x, double y, double rotate) {
+    public void driveScaled(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = processDrivePower(new Pose2d(driveVector, rotate));
@@ -160,11 +153,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setWeightedDrivePower(staticDrivePose);
     }
 
-    public void driveToHeading(double x, double y, double targetHeading) {
+    public void driveToHeadingScaled(double x, double y, double targetHeading) {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotate(heading, targetHeading);
 
-        drive(x, y, rotate);
+        driveScaled(x, y, rotate);
     }
 
     // apply slew rate limiter to drive vector
@@ -232,7 +225,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         translationPID.setTargetPosition(targetPosition.vec());
         Vector2d rawDriveVector = translationPID.calculate(pose.vec());
 
-        driveToHeading(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
+        driveToHeadingScaled(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
     }
 
     // set the component of a vector in a direction

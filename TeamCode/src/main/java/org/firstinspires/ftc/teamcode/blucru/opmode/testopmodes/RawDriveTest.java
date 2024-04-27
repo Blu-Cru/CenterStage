@@ -19,7 +19,7 @@ public class RawDriveTest extends BCLinearOpMode {
         horz = gamepad1.left_stick_x;
         rotate = -gamepad1.right_stick_x;
 
-        drivetrain.drive(horz ,vert, rotate);
+        drivetrain.driveScaled(horz ,vert, rotate);
     }
 
     @Override
