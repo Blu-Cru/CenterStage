@@ -65,7 +65,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public boolean fieldCentric; // whether the robot is field centric or robot centric
 
     Vector2d lastDriveVector; // drive vector in previous loop
-    double lastRotate; // rotate input in previous loop
+    double lastRotateInput; // rotate input in previous loop
 
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
@@ -81,7 +81,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
         fieldCentric = true;
-        lastRotate = 0;
+        lastRotateInput = 0;
         drivetrainState = DrivetrainState.TELEOP;
     }
 
@@ -125,7 +125,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void teleOpDrive(double x, double y, double rotate) {
         boolean turning = Math.abs(rotate) > 0.02;
-        boolean wasJustTurning = Math.abs(lastRotate) > 0.02;
+        boolean wasJustTurning = Math.abs(lastRotateInput) > 0.02;
         boolean movingTranslation = new Vector2d(x, y).norm() > 0.05;
         boolean stopped = lastDriveVector.norm() < 0.05 && !movingTranslation && velocity.vec().norm() < 10.0;
 
@@ -141,7 +141,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         drivetrainState = DrivetrainState.TELEOP;
 
         // recording last turn input
-        lastRotate = rotate;
+        lastRotateInput = rotate;
     }
 
     public void driveScaled(double x, double y, double rotate) {
