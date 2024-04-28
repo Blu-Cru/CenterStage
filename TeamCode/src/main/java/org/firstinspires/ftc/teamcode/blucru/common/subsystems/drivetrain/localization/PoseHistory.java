@@ -4,9 +4,6 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -23,7 +20,7 @@ public class PoseHistory {
         }
     }
 
-    LinkedList<PoseMarker> poseHistory;
+    LinkedList<PoseMarker> poseList;
 
     /*
         Linked list of poses and their timestamps
@@ -38,22 +35,22 @@ public class PoseHistory {
 
     public PoseHistory() {
         // initialize pose history
-        poseHistory = new LinkedList<>();
+        poseList = new LinkedList<>();
     }
 
     public void add(Pose2d pose) {
-        poseHistory.addFirst(new PoseMarker(pose)); // add current pose to front of list
+        poseList.addFirst(new PoseMarker(pose)); // add current pose to front of list
 
         long currentTime = System.nanoTime();
 
         // remove old poses
-        while (poseHistory.size() > 0 && currentTime - poseHistory.getLast().nanoTime > STORAGE_NANOSECONDS) {
-            poseHistory.removeLast(); // remove oldest pose from back of list until we have less than STORAGE_NANOSECONDS of poses
+        while (poseList.size() > 0 && currentTime - poseList.getLast().nanoTime > STORAGE_NANOSECONDS) {
+            poseList.removeLast(); // remove oldest pose from back of list until we have less than STORAGE_NANOSECONDS of poses
         }
     }
 
     public Pose2d getPoseAtTime(long targetNanoTime) {
-        ListIterator<PoseMarker> iterator = poseHistory.listIterator();
+        ListIterator<PoseMarker> iterator = poseList.listIterator();
         PoseMarker poseMarker = iterator.next();
 
         while(iterator.hasNext()) {
@@ -65,5 +62,11 @@ public class PoseHistory {
 
         Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
         return null;
+    }
+
+    public void offset(Pose2d poseDelta) {
+        for (PoseMarker marker : poseList) {
+            marker.pose = marker.pose.plus(poseDelta);
+        }
     }
 }
