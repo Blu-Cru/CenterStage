@@ -56,4 +56,8 @@ public class FusedLocalizer implements Localizer {
         Pose2d odoPoseError = tagPoseTimeOfFrame.minus(odoPoseTimeOfFrame);
         poseHistory.offset(odoPoseError);
     }
+
+    public double getWeight() {
+        return 1.0;
+    }
 }

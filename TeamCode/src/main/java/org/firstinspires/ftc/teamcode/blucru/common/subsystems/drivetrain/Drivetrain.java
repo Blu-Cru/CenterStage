@@ -234,7 +234,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public Pose2d scaleByDrivePower(Pose2d drivePose) {
-        return new Pose2d(drivePose.vec().times(drivePower), drivePose.getHeading() * drivePower);
+        return drivePose.times(drivePower);
     }
 
     public Pose2d clipByDrivePower(Pose2d drivePose) {
@@ -248,7 +248,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         translationPID.setTargetPosition(targetPosition.vec());
         Vector2d rawDriveVector = translationPID.calculate(pose.vec());
 
-        driveToHeadingScaled(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
+        driveToHeadingClip(rawDriveVector.getX(), rawDriveVector.getY(), targetPosition.getHeading());
     }
 
     // set the component of a vector in a direction
