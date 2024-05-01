@@ -83,7 +83,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
         fusedLocalizer = new FusedLocalizer(getLocalizer());
-
+        pose = new Pose2d(0,0,0);
         lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
@@ -385,6 +385,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void setTargetPose(Pose2d targetPose) {
         this.targetPose = targetPose;
         this.targetHeading = targetPose.getHeading();
+    }
+
+    public boolean isAtTargetPose() {
+        return pose.vec().distTo(targetPose.vec()) < TRANSLATION_TOLERANCE && Math.abs(heading - targetHeading) < HEADING_PID_TOLERANCE;
     }
 
     public void updateAprilTags(AprilTagProcessor processor) {
