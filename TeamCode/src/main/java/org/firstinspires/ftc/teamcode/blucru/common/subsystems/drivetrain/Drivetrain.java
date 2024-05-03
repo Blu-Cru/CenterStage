@@ -41,7 +41,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            TRANSLATION_P = 0.28, TRANSLATION_I = 0, TRANSLATION_D = 0.05, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
+            TRANSLATION_P = 0.28, TRANSLATION_I = 0, TRANSLATION_D = 0.03, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 15.0, // inches per second
             STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
@@ -392,7 +392,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void updateAprilTags(AprilTagProcessor processor) {
-        fusedLocalizer.updateAprilTags(processor);
+        try {
+            fusedLocalizer.updateAprilTags(processor);
+
+        } catch (Exception e) {
+
+        }
     }
 
 //    public void startReadingDistance() {

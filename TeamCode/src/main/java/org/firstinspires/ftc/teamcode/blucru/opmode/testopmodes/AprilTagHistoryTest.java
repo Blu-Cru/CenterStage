@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@TeleOp(name = "april tag history", group = "test")
 public class AprilTagHistoryTest extends BCLinearOpMode {
     enum State {
         IDLE,
@@ -19,10 +23,13 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
         addCVMaster();
         state = State.IDLE;
         enableFTCDashboard();
+        Poses.setAlliance(Alliance.BLUE);
     }
 
     @Override
     public void periodic() {
+        double horz, vert, rot;
+
         switch(state) {
             case IDLE:
 
@@ -32,9 +39,9 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                 }
                 lastA = gamepad1.a;
 
-                double horz = gamepad1.left_stick_x;
-                double vert = -gamepad1.left_stick_y;
-                double rot = -gamepad1.right_stick_x;
+                horz = gamepad1.left_stick_x;
+                vert = -gamepad1.left_stick_y;
+                rot = -gamepad1.right_stick_x;
 
                 drivetrain.teleOpDrive(horz, vert, rot);
                 if(gamepad1.right_stick_button) {
@@ -50,6 +57,15 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                 }
                 lastA = gamepad1.a;
 
+                horz = gamepad1.left_stick_x;
+                vert = -gamepad1.left_stick_y;
+                rot = -gamepad1.right_stick_x;
+
+                drivetrain.teleOpDrive(horz, vert, rot);
+                if(gamepad1.right_stick_button) {
+                    drivetrain.resetHeading(Math.toRadians(90));
+                }
+
                 drivetrain.updateAprilTags(cvMaster.tagDetector);
                 break;
             case DEPOSIT:
@@ -57,6 +73,8 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                     state = State.IDLE;
                 }
                 lastA = gamepad1.a;
+
+                drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE);
                 break;
         }
 

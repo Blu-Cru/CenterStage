@@ -22,7 +22,7 @@ public class IntakeColorSensors implements Subsystem {
             FRONT_DISTANCE_HIGH = 0.65, // inches
 
             BACK_DISTANCE_LOW = 0.1,
-            BACK_DISTANCE_HIGH = 0.5; // inches
+            BACK_DISTANCE_HIGH = 0.8; // inches
 
     public static double BLUE_LOW_H = 80;
     public static double BLUE_HIGH_H = 140;
@@ -88,19 +88,19 @@ public class IntakeColorSensors implements Subsystem {
 ////            getHSV(backRGBA, backHSV); // sets backHSV
 ////            backHue = backHSV[0];
 //
-//            frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
-//            backDistance = backSensor.getDistance(DistanceUnit.INCH);
+            frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
+            backDistance = backSensor.getDistance(DistanceUnit.INCH);
 ////            frontLightDetected = frontSensor.getLightDetected();
 ////            backLightDetected = backSensor.getLightDetected();
 //
-//            frontSlotState = calculateSlotState(frontDistance, SensorLocation.FRONT);
-//            backSlotState = calculateSlotState(backDistance, SensorLocation.BACK);
+            frontSlotState = calculateSlotState(frontDistance, SensorLocation.FRONT);
+            backSlotState = calculateSlotState(backDistance, SensorLocation.BACK);
 //        } else {
 //            frontSensor.enableLed(false);
 //            backSensor.enableLed(false);
 //        }
-        frontSlotState = SlotState.EMPTY;
-        backSlotState = SlotState.EMPTY;
+//        frontSlotState = SlotState.EMPTY;
+//        backSlotState = SlotState.EMPTY;
     }
 
     public void write() {
