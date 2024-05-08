@@ -103,11 +103,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         switch(drivetrainState) {
             case TELEOP:
             case DRIVE_TO_POSITION:
-                updatePoseEstimate();
-                break;
             case FOLLOWING_TRAJECTORY:
                 break;
         }
+
+        updatePoseEstimate();
 
         pose = this.getPoseEstimate();
         velocity = getPoseVelocity();
@@ -152,6 +152,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = scaleDrivePower(new Pose2d(driveVector, rotate));
+
         Pose2d staticDrivePose = processStaticFriction(drivePose);
 
         setWeightedDrivePower(staticDrivePose);
