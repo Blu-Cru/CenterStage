@@ -21,6 +21,11 @@ public class EHubImuTest extends LinearOpMode {
         imu.initialize(parameters);
         waitForStart();
         while (opModeIsActive()) {
+
+            if(gamepad1.right_stick_button) {
+                imu.resetYaw();
+            }
+
             YawPitchRollAngles ypr = imu.getRobotYawPitchRollAngles();
             telemetry.addData("Yaw", ypr.getYaw(AngleUnit.DEGREES));
             telemetry.addData("Pitch", ypr.getPitch(AngleUnit.DEGREES));
