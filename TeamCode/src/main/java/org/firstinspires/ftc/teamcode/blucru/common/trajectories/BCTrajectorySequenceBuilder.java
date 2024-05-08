@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
-// custom trajectory sequence builder for BluCru
+// custom trajectory sequence builder for BluCru not used rn lmao
 public class BCTrajectorySequenceBuilder extends TrajectorySequenceBuilder {
     public static double reflect;
 
