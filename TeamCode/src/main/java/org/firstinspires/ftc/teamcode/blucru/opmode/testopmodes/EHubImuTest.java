@@ -17,7 +17,7 @@ public class EHubImuTest extends LinearOpMode {
 
         IMU imu = hardwareMap.get(IMU.class, "e hub imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
         waitForStart();
         while (opModeIsActive()) {
