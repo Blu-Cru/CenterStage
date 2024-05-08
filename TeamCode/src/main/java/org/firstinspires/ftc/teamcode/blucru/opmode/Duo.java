@@ -108,7 +108,7 @@ public class Duo extends BCLinearOpMode {
 
     public void periodic() {
         // DRIVING
-        drivetrain.setDrivePower(robotState, gamepad1);
+        drivetrain.setTeleDrivePower(robotState, gamepad1);
 
         double horz = gamepad1.left_stick_x;
         double vert = -gamepad1.left_stick_y;
