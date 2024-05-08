@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.DrivetrainMigrated;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.IntakeColorSensors;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Hanger;
@@ -44,7 +44,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     double lastTelemetryTime;
 
     public final void runOpMode() throws InterruptedException {
-        alliance = Initialization.ALLIANCE;
+        alliance = Globals.ALLIANCE;
         robot = Robot.getInstance();
         robot.create(hardwareMap);
         initialize();
@@ -109,7 +109,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
 
-    public void addCVMaster() {cvMaster = robot.addCVMaster(Initialization.ALLIANCE);}
+    public void addCVMaster() {cvMaster = robot.addCVMaster(Globals.ALLIANCE);}
 
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 

@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Initialization;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
@@ -62,7 +62,7 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
     double lastRotate;
 
     public DrivetrainMigrated(HardwareMap hardwareMap, boolean isTeleOp) {
-        super(hardwareMap, Initialization.POSE);
+        super(hardwareMap, Globals.POSE);
         this.state = isTeleOp ? State.TELEOP : State.DRIVE_TO_POSITION;
         this.isTeleOp = isTeleOp;
         this.intakingInAuto = false;
@@ -80,6 +80,7 @@ public class DrivetrainMigrated extends MecanumDrive implements Subsystem {
 
     public void init() {
         heading = pose.heading.toDouble();
+        pose = Globals.POSE;
     }
 
     public void read() {
