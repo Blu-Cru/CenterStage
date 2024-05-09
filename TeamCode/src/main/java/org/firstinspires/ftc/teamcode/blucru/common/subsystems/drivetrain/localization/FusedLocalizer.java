@@ -25,7 +25,9 @@ public class FusedLocalizer {
     }
 
     public void update() {
-        poseHistory.add(deadWheels.getPoseEstimate());
+        // make a copy of the current pose, so that the pose history doesn't get updated with the same object
+        Pose2d currentPose = deadWheels.getPoseEstimate();
+        poseHistory.add(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
     }
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
