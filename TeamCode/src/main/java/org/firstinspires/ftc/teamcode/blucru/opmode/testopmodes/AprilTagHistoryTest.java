@@ -24,6 +24,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
         state = State.IDLE;
         enableFTCDashboard();
         Poses.setAlliance(Alliance.BLUE);
+        drivetrain.fieldCentric = false;
     }
 
     @Override
@@ -71,6 +72,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
             case DEPOSIT:
                 if(drivetrain.isAtTargetPose() || gamepad1.a && !lastA) {
                     state = State.IDLE;
+                    drivetrain.fieldCentric = false;
                 }
                 lastA = gamepad1.a;
 

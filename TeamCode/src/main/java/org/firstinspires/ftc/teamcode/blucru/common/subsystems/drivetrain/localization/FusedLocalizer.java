@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
@@ -17,11 +19,17 @@ import java.util.List;
 
 public class FusedLocalizer {
     Localizer deadWheels;
+    IMU imu;
     PoseHistory poseHistory;
 
-    public FusedLocalizer(Localizer localizer) {
+    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP));
+
+    public FusedLocalizer(Localizer localizer, HardwareMap hardwareMap) {
         deadWheels = localizer;
         poseHistory = new PoseHistory();
+
+        imu = hardwareMap.get(IMU.class, "e hub imu");
     }
 
     public void update() {
