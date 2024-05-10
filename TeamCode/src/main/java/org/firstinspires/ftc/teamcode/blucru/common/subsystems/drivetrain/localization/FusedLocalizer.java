@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -41,6 +43,7 @@ public class FusedLocalizer {
 
         // calculate change from old odo pose to current pose
         Pose2d odoDeltaPoseFrameToNow = deadWheels.getPoseEstimate().minus(odoPoseTimeOfFrame);
+        Log.v("Fused Localizer", "Odo delta: x " + odoDeltaPoseFrameToNow.getX() + " y " + odoDeltaPoseFrameToNow.getY());
 
         // set pose estimate to tag pose + delta
         deadWheels.setPoseEstimate(tagPoseTimeOfFrame.plus(odoDeltaPoseFrameToNow));

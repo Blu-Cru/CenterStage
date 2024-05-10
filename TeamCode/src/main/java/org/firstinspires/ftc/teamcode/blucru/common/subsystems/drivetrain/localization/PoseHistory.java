@@ -55,10 +55,10 @@ public class PoseHistory {
 
         while(iterator.hasNext()) {
             if (poseMarker.nanoTime < targetNanoTime) {
-                Log.i("Pose marker", "found at time " + poseMarker.nanoTime);
+                Log.i("Pose marker", "found pose x" + poseMarker.pose.getX() + " y " + poseMarker.pose.getY());
                 return poseMarker.pose;
             }
-            Log.v("Pose Marker", "Iterated at time " + poseMarker.nanoTime);
+//            Log.v("Pose Marker", "Iterated at time " + poseMarker.nanoTime);
             poseMarker = iterator.next();
         }
 
