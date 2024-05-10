@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Turret;
+import org.firstinspires.ftc.teamcode.blucru.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
 
 public abstract class BCLinearOpMode extends LinearOpMode {
@@ -37,6 +38,9 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public Lock lock;
     public CVMaster cvMaster;
 
+    public StickyGamepad stickyG1;
+    public StickyGamepad stickyG2;
+
     ElapsedTime runtime;
     double lastTime;
     double loopTimeSum;
@@ -47,11 +51,15 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public final void runOpMode() throws InterruptedException {
         alliance = Globals.ALLIANCE;
+        stickyG1 = new StickyGamepad(gamepad1);
+        stickyG2 = new StickyGamepad(gamepad2);
         robot = Robot.getInstance();
         robot.create(hardwareMap);
         initialize();
         robot.init();
         while(opModeInInit()) {
+            stickyG1.update();
+            stickyG2.update();
             initLoop();
             telemetry();
             telemetry.update();
@@ -60,6 +68,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         onStart();
         runtime = new ElapsedTime(); // start timer
         while (!isStopRequested() && opModeIsActive()) {
+            stickyG1.update();
+            stickyG2.update();
             robot.read();
             periodic();
             robot.write();
