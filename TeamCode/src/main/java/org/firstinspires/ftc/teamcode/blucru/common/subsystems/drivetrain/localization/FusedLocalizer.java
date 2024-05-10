@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +11,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -23,7 +27,12 @@ public class FusedLocalizer {
     PoseHistory poseHistory;
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP));
+            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+
+    double headingOffset = 0;
+    double lastImuUpdateMillis = 0;
+
+    YawPitchRollAngles ypr;
 
     public FusedLocalizer(Localizer localizer, HardwareMap hardwareMap) {
         deadWheels = localizer;
@@ -34,8 +43,18 @@ public class FusedLocalizer {
 
     public void update() {
         // make a copy of the current pose, so that the pose history doesn't get updated with the same object
+        deadWheels.update();
         Pose2d currentPose = deadWheels.getPoseEstimate();
         poseHistory.add(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
+
+        if(System.currentTimeMillis() - lastImuUpdateMillis > 100) {
+            lastImuUpdateMillis = System.currentTimeMillis();
+
+            ypr = imu.getRobotYawPitchRollAngles();
+            Log.v("FusedLocalizer", "Updating IMU, correction = " + (ypr.getYaw(AngleUnit.RADIANS) + headingOffset - deadWheels.getPoseEstimate().getHeading()));
+            Pose2d currentPoseWithHeading = new Pose2d(currentPose.getX(), currentPose.getY(), ypr.getYaw(AngleUnit.RADIANS) + headingOffset);
+            deadWheels.setPoseEstimate(currentPoseWithHeading);
+        }
     }
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
@@ -55,6 +74,18 @@ public class FusedLocalizer {
         // add tag - odo to pose history
         Pose2d odoPoseError = tagPoseTimeOfFrame.minus(odoPoseTimeOfFrame);
         poseHistory.offset(odoPoseError);
+    }
+
+    public void init() {
+        imu.resetDeviceConfigurationForOpMode();
+        imu.initialize(parameters);
+
+        lastImuUpdateMillis = System.currentTimeMillis();
+    }
+
+    public void resetHeading(double newHeading) {
+        headingOffset = newHeading - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        deadWheels.setPoseEstimate(new Pose2d(deadWheels.getPoseEstimate().vec(), newHeading));
     }
 
     public double getWeight() {
