@@ -59,7 +59,7 @@ public final class AprilTagPoseGetter {
                 }
             }
 
-            if(closestDistance > 30) {
+            if(closestDistance > 25) {
                 return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
             }
 
