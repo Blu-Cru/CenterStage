@@ -128,7 +128,8 @@ public class Lift implements Subsystem {
                 break;
             case MANUAL:
                 // set manual power elsewhere
-                setTargetPos(currentPos + getDecelDelta()); // update target position
+                targetPos = Range.clip(currentPos + getDecelDelta(), MIN_POS, MAX_POS);
+//                setTargetPos(currentPos + getDecelDelta()); // update target position
                 break;
         }
 

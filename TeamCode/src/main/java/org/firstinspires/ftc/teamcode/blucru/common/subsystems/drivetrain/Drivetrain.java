@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain;
 
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
@@ -16,11 +18,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.FusedLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
@@ -36,7 +40,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            TRANSLATION_P = 0.28, TRANSLATION_I = 0, TRANSLATION_D = 0.05, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
+            TRANSLATION_P = 0.28, TRANSLATION_I = 0, TRANSLATION_D = 0.03, TRANSLATION_TOLERANCE = 0.4, // PID constants for translation
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 15.0, // inches per second
             STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
@@ -56,6 +60,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public DrivetrainTranslationPID translationPID;
     public Pose2d targetPose;
+    FusedLocalizer fusedLocalizer;
 
     PIDController headingPID;
     double targetHeading = 0;
@@ -76,7 +81,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         headingPID.setTolerance(HEADING_PID_TOLERANCE);
 
         translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
-
+        fusedLocalizer = new FusedLocalizer(getLocalizer());
+        pose = new Pose2d(0,0,0);
         lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
@@ -107,7 +113,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastPose = pose;
         pose = this.getPoseEstimate();
         velocity = pose.minus(lastPose).div(dt / 1000.0);
+//        velocity = getPoseVelocity();
         heading = getOdoHeading();
+
+        if(!isTeleOp) {
+            fusedLocalizer.update();
+        }
     }
 
     public void write() {
@@ -327,51 +338,19 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        return heading;
 //    }
 
-    public void setDrivePower(RobotState robotState, Gamepad gamepad) {
-        boolean slow = false;
-        boolean fast = false;
-        if(gamepad.left_trigger > 0.1) slow = true;
-        if (gamepad.right_trigger > 0.1) fast = true;
+    public void setTeleDrivePower(RobotState robotState, Gamepad gamepad) {
+        boolean slow = gamepad.left_trigger > 0.1,
+                fast = gamepad.right_trigger > 0.1;
 
-        double slowPower;
-        double fastPower;
-        double normalPower;
+        double slowPower, fastPower, normalPower;
         switch (robotState) {
-            case RETRACT:
-                slowPower = 0.4;
-                fastPower = 1.0;
-                normalPower = 0.9;
-                break;
-            case INTAKING:
-                slowPower = 0.4;
-                fastPower = 1.0;
-                normalPower = 0.85;
-                break;
-            case LIFTING:
-                slowPower = 0.3;
-                fastPower = 0.7;
-                normalPower = 0.6;
-                break;
-            case OUTTAKING:
-                slowPower = 0.25;
-                fastPower = 0.8;
-                normalPower = 0.5;
-                break;
-            case OUTTAKE_WRIST_RETRACTED:
-                slowPower = 0.3;
-                fastPower = 0.7;
-                normalPower = 0.7;
-                break;
-            case RETRACTING:
-                slowPower = 0.3;
-                fastPower = 0.8;
-                normalPower = 0.75;
-                break;
-            default:
-                slowPower = 0.3;
-                fastPower = 0.8;
-                normalPower = 0.5;
-                break;
+            case RETRACT: slowPower = 0.4; fastPower = 1.0; normalPower = 0.9; break;
+            case INTAKING: slowPower = 0.3; fastPower = 1.0; normalPower = 0.85; break;
+            case LIFTING: slowPower = 0.3; fastPower = 0.7; normalPower = 0.6; break;
+            case OUTTAKING: slowPower = 0.25; fastPower = 0.8; normalPower = 0.5; break;
+            case OUTTAKE_WRIST_RETRACTED: slowPower = 0.3; fastPower = 0.7; normalPower = 0.7; break;
+            case RETRACTING: slowPower = 0.3; fastPower = 0.8; normalPower = 0.75; break;
+            default: slowPower = 0.3; fastPower = 0.8; normalPower = 0.5; break;
         }
 
         if(slow && fast) setDrivePower(normalPower);
@@ -383,7 +362,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     // resets heading
     public void resetHeading(double heading) {
 //        resetIMU(heading);
-        setPoseEstimate(new Pose2d(pose.getX(),pose.getY(),heading));
+        setPoseEstimate(new Pose2d(pose.vec() ,heading));
     }
 
     // set initial pose from auto
@@ -395,6 +374,21 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void setTargetPose(Pose2d targetPose) {
         this.targetPose = targetPose;
         this.targetHeading = targetPose.getHeading();
+    }
+
+    public boolean isAtTargetPose() {
+        boolean translationAtTarget = pose.vec().distTo(targetPose.vec()) < TRANSLATION_TOLERANCE && Math.abs(heading - targetHeading) < HEADING_PID_TOLERANCE;
+        boolean velocityAtTarget = velocity.vec().norm() < 7.0;
+        return translationAtTarget && velocityAtTarget;
+    }
+
+    public void updateAprilTags(AprilTagProcessor processor) {
+        try {
+            fusedLocalizer.updateAprilTags(processor);
+
+        } catch (Exception e) {
+            Log.e("Drivetrain", "Error updating April tags: " + e.getMessage());
+        }
     }
 
 //    public void startReadingDistance() {

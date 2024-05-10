@@ -108,7 +108,7 @@ public class Duo extends BCLinearOpMode {
 
     public void periodic() {
         // DRIVING
-        drivetrain.setDrivePower(robotState, gamepad1);
+        drivetrain.setTeleDrivePower(robotState, gamepad1);
 
         double horz = gamepad1.left_stick_x;
         double vert = -gamepad1.left_stick_y;
@@ -267,6 +267,11 @@ public class Duo extends BCLinearOpMode {
 
                 if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
                 else if (gamepad2.dpad_right) outtake.lock.unlockAll();
+
+                // MANUAL SLIDE
+                if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
+                    outtake.setManualSlidePower(-gamepad2.right_stick_y);
+                }
 
                 break;
             case OUTTAKE_WRIST_RETRACTED:
