@@ -48,7 +48,7 @@ public class FusedLocalizer {
         Pose2d currentPose = deadWheels.getPoseEstimate();
         poseHistory.add(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
 
-        if(System.currentTimeMillis() - lastImuUpdateMillis > 100) {
+        if(System.currentTimeMillis() - lastImuUpdateMillis > 100 && usingIMU) {
             lastImuUpdateMillis = System.currentTimeMillis();
 
             ypr = imu.getRobotYawPitchRollAngles();

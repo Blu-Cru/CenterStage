@@ -23,6 +23,7 @@ public final class AprilTagPoseGetter {
     }};
 
     public static Vector2d getRobotToTagVector(double detectionX, double detectionY) {
+        //
         double x = -detectionY + CAMERA_POS.getX();
         double y = detectionX + CAMERA_POS.getY();
         return new Vector2d(x, y);
@@ -40,11 +41,43 @@ public final class AprilTagPoseGetter {
         return new Pose2d(tagPose.vec().plus(tagToRobot), tagPose.getHeading() - detectionYawRad);
     }
 
+    public static Pose2d getRobotPoseWithHeading(int tagId, double detectionX, double detectionY, double heading) {
+        Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
+        Vector2d globalTagToRobot =
+    }
+
     public static Pose2d getRobotPose(AprilTagDetection detection) {
         return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
     }
 
+    public static Pose2d getRobotPose(AprilTagDetection detection, double heading) {
+        return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
+    }
+
     public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections) {
+        if(detections.size() == 0) {
+            return Robot.getInstance().drivetrain.pose;
+        } else {
+            AprilTagDetection closestDetection = detections.get(0);
+            double closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);
+
+            for (AprilTagDetection detection : detections) {
+                double distance = Math.hypot(detection.ftcPose.x, detection.ftcPose.y);
+                if(distance < closestDistance) {
+                    closestDetection = detection;
+                    closestDistance = distance;
+                }
+            }
+
+            if(closestDistance > 25) {
+                return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
+            }
+
+            return getRobotPose(closestDetection);
+        }
+    }
+
+    public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections, double heading) {
         if(detections.size() == 0) {
             return Robot.getInstance().drivetrain.pose;
         } else {

@@ -9,6 +9,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -113,7 +114,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         lastPose = pose;
         pose = this.getPoseEstimate();
-        velocity = pose.minus(lastPose).div(dt / 1000.0);
+        velocity = getPoseVelocity();
 //        velocity = getPoseVelocity();
         heading = getOdoHeading();
     }
@@ -278,7 +279,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         // target heading = heading + 0.5 * velocity * velocity / HEADING_DECELERATION
         // use sign of velocity to determine to add or subtract
 
-        return heading + Math.signum(velocity.getHeading()) * 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION;
+        return Angle.norm(heading + Math.signum(velocity.getHeading()) * 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION);
     }
 
     public boolean followerIsWithinTolerance() {
