@@ -29,6 +29,8 @@ public class ImuUpdateTest extends BCLinearOpMode {
         } else {
             drivetrain.teleOpDrive(horz, vert, rot);
         }
+
+        drivetrain.ftcDashDrawCurrentPose();
     }
 
     public void telemetry() {
