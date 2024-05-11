@@ -41,10 +41,10 @@ public final class AprilTagPoseGetter {
         return new Pose2d(tagPose.vec().plus(tagToRobot), tagPose.getHeading() - detectionYawRad);
     }
 
-    public static Pose2d getRobotPoseWithHeading(int tagId, double detectionX, double detectionY, double heading) {
-        Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
-        Vector2d globalTagToRobot =
-    }
+//    public static Pose2d getRobotPoseWithHeading(int tagId, double detectionX, double detectionY, double heading) {
+//        Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
+//        Vector2d globalTagToRobot =
+//    }
 
     public static Pose2d getRobotPose(AprilTagDetection detection) {
         return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
