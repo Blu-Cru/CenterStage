@@ -174,7 +174,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotate(heading, targetHeading);
 
-        driveScaled(x, y, rotate);
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+
+        Pose2d drivePose = new Pose2d(driveVector.times(drivePower), Range.clip(rotate, -drivePower, drivePower));
+        Pose2d staticDrivePose = processStaticFriction(drivePose);
+
+        setWeightedDrivePower(staticDrivePose);
     }
 
     public void driveToHeadingClip(double x, double y, double targetHeading) {
