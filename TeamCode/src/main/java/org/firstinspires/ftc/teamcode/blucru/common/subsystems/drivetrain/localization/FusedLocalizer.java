@@ -31,6 +31,7 @@ public class FusedLocalizer {
 
     double headingOffset = 0;
     double lastImuUpdateMillis = 0;
+    public boolean usingIMU = true;
 
     YawPitchRollAngles ypr;
 

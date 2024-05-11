@@ -60,7 +60,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public DrivetrainTranslationPID translationPID;
     public Pose2d targetPose;
-    FusedLocalizer fusedLocalizer;
+    public FusedLocalizer fusedLocalizer;
 
     PIDController headingPID;
     double targetHeading = 0;
