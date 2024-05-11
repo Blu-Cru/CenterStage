@@ -190,7 +190,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     // apply slew rate limiter to drive vector
-    public Vector2d calculateDriveVector(Vector2d input) {
+    private Vector2d calculateDriveVector(Vector2d input) {
         if (fieldCentric)
             input = input.rotated(-heading); // rotate input vector to match robot heading if field centric
         else
@@ -231,7 +231,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return driveVector; // return the new drive vector
     }
 
-    public Pose2d processStaticFriction(Pose2d drivePose) {
+    private Pose2d processStaticFriction(Pose2d drivePose) {
         Vector2d driveVector = drivePose.vec();
         boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
 
@@ -246,11 +246,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         } else return drivePose;
     }
 
-    public Pose2d scaleByDrivePower(Pose2d drivePose) {
+    private Pose2d scaleByDrivePower(Pose2d drivePose) {
         return drivePose.times(drivePower);
     }
 
-    public Pose2d clipByDrivePower(Pose2d drivePose) {
+    private Pose2d clipByDrivePower(Pose2d drivePose) {
         double newX = Range.clip(drivePose.getX(), -drivePower, drivePower);
         double newY = Range.clip(drivePose.getY(), -drivePower, drivePower);
         double newHeading = Range.clip(drivePose.getHeading(), -drivePower, drivePower);
@@ -265,7 +265,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     // set the component of a vector in a direction
-    public Vector2d setComponent(Vector2d vector, double component, double angle) {
+    private Vector2d setComponent(Vector2d vector, double component, double angle) {
         vector = vector.rotated(-angle); // rotate so the component is in the x direction
         vector = new Vector2d(component, vector.getY()); // set the x component
         return vector.rotated(angle); // rotate back
@@ -312,7 +312,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         headingPID.setPID(p, i, d);
     }
 
-    public double getPIDRotate(double heading, double target) {
+    private double getPIDRotate(double heading, double target) {
         if(heading - target < -Math.PI) heading += 2*Math.PI;
         else if(heading - target > Math.PI) heading -= 2 * Math.PI;
 
