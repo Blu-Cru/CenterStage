@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "april tag history", group = "test")
 public class AprilTagHistoryTest extends BCLinearOpMode {
-    enum State {
+    private enum State {
         IDLE,
         SCANNING,
         DEPOSIT

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 @TeleOp(name = "Drive static friction test", group = "test")
 public class DriveStaticFrictionTest extends BCLinearOpMode {
     boolean lastA = false;
-    enum DriveType {
+    private enum DriveType {
         RAW,
         STATIC_FRICTION
     }

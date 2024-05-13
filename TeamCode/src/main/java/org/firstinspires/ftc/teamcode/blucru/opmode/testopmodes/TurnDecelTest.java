@@ -31,7 +31,7 @@ public class TurnDecelTest extends LinearOpMode {
     Intake intake;
     ElapsedTime runtime;
 
-    enum State {
+    private enum State {
         TURNING,
         DECEL,
         STOP

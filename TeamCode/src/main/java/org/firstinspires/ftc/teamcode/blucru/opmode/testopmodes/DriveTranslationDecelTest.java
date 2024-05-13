@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "Drive Translational Decel test", group = "test")
 public class DriveTranslationDecelTest extends BCLinearOpMode {
-    enum State {
+    private enum State {
         DRIVING,
         STOPPING,
         STOPPED

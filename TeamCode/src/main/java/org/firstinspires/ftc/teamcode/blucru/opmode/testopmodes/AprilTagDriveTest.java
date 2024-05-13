@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import static org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes.AprilTagDriveTest.State.DRIVER_CONTROL;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "april tag drive test", group = "test")
 public class AprilTagDriveTest extends BCLinearOpMode {
-    enum State {
+    private enum State {
         DRIVER_CONTROL,
         DRIVE_TO_POSITION
     }
@@ -27,7 +26,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         addCVMaster();
         enableFTCDashboard();
 
-        state = DRIVER_CONTROL;
+        state = State.DRIVER_CONTROL;
 
         drivetrain.fieldCentric = false;
 
@@ -52,7 +51,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
         lastA = gamepad1.a;
 
         if(gamepad1.b && !lastB) {
-            state = DRIVER_CONTROL;
+            state = State.DRIVER_CONTROL;
             drivetrain.drivetrainState = DrivetrainState.TELEOP;
             cvMaster.detectTag();
         }
