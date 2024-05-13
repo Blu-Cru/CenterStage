@@ -41,17 +41,20 @@ public final class AprilTagPoseGetter {
         return new Pose2d(tagPose.vec().plus(tagToRobot), tagPose.getHeading() - detectionYawRad);
     }
 
-//    public static Pose2d getRobotPoseWithHeading(int tagId, double detectionX, double detectionY, double heading) {
-//        Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
-//        Vector2d globalTagToRobot =
-//    }
+    public static Pose2d getRobotPoseWithHeading(int tagId, double detectionX, double detectionY, double heading) {
+        Vector2d robotToTag = getRobotToTagVector(detectionX, detectionY);
+        Vector2d globalTagToRobot = robotToTag.rotated(heading).unaryMinus();
+        Pose2d tagPose = TAGS.get(tagId);
+
+        return new Pose2d(tagPose.vec().plus(globalTagToRobot), heading);
+    }
 
     public static Pose2d getRobotPose(AprilTagDetection detection) {
         return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
     }
 
-    public static Pose2d getRobotPose(AprilTagDetection detection, double heading) {
-        return getRobotPose(detection.id, detection.ftcPose.x, detection.ftcPose.y, Math.toRadians(detection.ftcPose.yaw));
+    public static Pose2d getRobotPoseWithHeading(AprilTagDetection detection, double heading) {
+        return getRobotPoseWithHeading(detection.id, detection.ftcPose.x, detection.ftcPose.y, heading);
     }
 
     public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections) {
@@ -92,11 +95,11 @@ public final class AprilTagPoseGetter {
                 }
             }
 
-            if(closestDistance > 25) {
+            if(closestDistance > 35) {
                 return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
             }
 
-            return getRobotPose(closestDetection);
+            return getRobotPoseWithHeading(closestDetection, heading);
         }
     }
 }
