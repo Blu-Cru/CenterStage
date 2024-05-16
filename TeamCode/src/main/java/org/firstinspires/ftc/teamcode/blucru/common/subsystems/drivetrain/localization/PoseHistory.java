@@ -26,7 +26,7 @@ public class PoseHistory {
      */
 
     public PoseHistory() {
-        // TODO: change to queu
+        // TODO: change to queue, remove until pose is found
         // initialize pose history
         poseList = new LinkedList<>();
     }

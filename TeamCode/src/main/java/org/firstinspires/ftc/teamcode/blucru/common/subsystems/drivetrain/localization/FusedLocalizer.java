@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class FusedLocalizer {
     Localizer deadWheels;
@@ -54,7 +56,7 @@ public class FusedLocalizer {
 
             ypr = imu.getRobotYawPitchRollAngles();
             Log.v("FusedLocalizer", "Updating IMU, correction = " + (ypr.getYaw(AngleUnit.RADIANS) + headingOffset - deadWheels.getPoseEstimate().getHeading()));
-            Pose2d currentPoseWithHeading = new Pose2d(currentPose.getX(), currentPose.getY(), ypr.getYaw(AngleUnit.RADIANS) + headingOffset);
+            Pose2d currentPoseWithHeading = new Pose2d(currentPose.getX(), currentPose.getY(), Angle.norm(ypr.getYaw(AngleUnit.RADIANS) + headingOffset));
             deadWheels.setPoseEstimate(currentPoseWithHeading);
         }
     }
@@ -62,15 +64,16 @@ public class FusedLocalizer {
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
         double heading = Angle.norm(deadWheels.getPoseEstimate().getHeading());
         Log.v("FusedLocalizer", "heading: " + heading);
-//        if(heading < Math.PI/2 || heading > 3*Math.PI/2) return; // dont update if robot is not facing tags
+        if(heading < Math.PI/2 || heading > 3*Math.PI/2) throw new IllegalArgumentException("Not in the right orientation to update tags");
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
-        if(detections.size() < 1) return; // dont update if no detections
-        // TODO: get tag pose using heading from past position
-        // save reference to tag pose
-        Pose2d tagPoseTimeOfFrame = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, deadWheels.getPoseEstimate().getHeading());
+        if(detections.size() < 1) throw new NoSuchElementException("No tags detected");
+
         // get odo pose at the time of the tag pose
         Pose2d odoPoseTimeOfFrame = poseHistory.getPoseAtTime(detections.get(0).frameAcquisitionNanoTime);
+
+        // save reference to tag pose
+        Pose2d tagPoseTimeOfFrame = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, odoPoseTimeOfFrame.getHeading());
 
         // calculate change from old odo pose to current pose
         Pose2d odoDeltaPoseFrameToNow = deadWheels.getPoseEstimate().minus(odoPoseTimeOfFrame);
@@ -99,6 +102,7 @@ public class FusedLocalizer {
     }
 
     public void resetHeading(double newHeading) {
+        newHeading = Angle.norm(newHeading);
         headingOffset = newHeading - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         deadWheels.setPoseEstimate(new Pose2d(deadWheels.getPoseEstimate().vec(), newHeading));
     }
