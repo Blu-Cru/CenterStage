@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.util.Angle;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
@@ -54,7 +57,7 @@ public final class AprilTagPoseGetter {
     }
 
     public static Pose2d getRobotPoseWithHeading(AprilTagDetection detection, double heading) {
-        return getRobotPoseWithHeading(detection.id, detection.ftcPose.x, detection.ftcPose.y, heading);
+        return getRobotPoseWithHeading(detection.id, detection.ftcPose.x, detection.ftcPose.y, Angle.norm(heading));
     }
 
     public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections) {
@@ -99,7 +102,10 @@ public final class AprilTagPoseGetter {
                 return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
             }
 
-            return getRobotPoseWithHeading(closestDetection, heading);
+            Pose2d poseWithHeading = getRobotPoseWithHeading(closestDetection, heading);
+
+            Log.v("TagPoseGetter", "got pose with heading: " + poseWithHeading);
+            return poseWithHeading;
         }
     }
 }

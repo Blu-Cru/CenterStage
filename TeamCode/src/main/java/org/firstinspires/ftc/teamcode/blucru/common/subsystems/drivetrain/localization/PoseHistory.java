@@ -55,10 +55,10 @@ public class PoseHistory {
 
         while(iterator.hasNext()) {
             if (poseMarker.nanoTime < targetNanoTime) {
-                Log.i("Pose marker", "found at time " + poseMarker.nanoTime);
+                Log.i("PoseHistory", "found: " + poseMarker.pose);
                 return poseMarker.pose;
             }
-            Log.v("Pose Marker", "Iterated at time " + poseMarker.nanoTime);
+            Log.v("PoseHistory", "iterated: " + poseMarker.pose);
             poseMarker = iterator.next();
         }
 
@@ -68,7 +68,7 @@ public class PoseHistory {
 
     public void offset(Pose2d poseDelta) {
         for (PoseMarker marker : poseList) {
-            marker.pose = marker.pose.plus(poseDelta);
+            marker.pose = new Pose2d(marker.pose.vec().plus(poseDelta.vec()), marker.pose.getHeading());
         }
     }
 }

@@ -63,8 +63,7 @@ public class AprilTagDriveTest extends BCLinearOpMode {
 
                 if(gamepad1.right_stick_button) drivetrain.resetHeading(Math.toRadians(180));
 
-
-                drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
+                drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections(), drivetrain.getHeading()));
                 break;
             case DRIVE_TO_POSITION:
                 break;

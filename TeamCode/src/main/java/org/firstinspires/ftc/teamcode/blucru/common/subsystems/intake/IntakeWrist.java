@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 @Config
 public class IntakeWrist implements Subsystem {
     public static double
-            PARALLEL_POS = 0.64,
+            PARALLEL_POS = 0.61,
             RADIUS = 4.7244,
 
             RETRACT_HEIGHT = 3.7, // inches

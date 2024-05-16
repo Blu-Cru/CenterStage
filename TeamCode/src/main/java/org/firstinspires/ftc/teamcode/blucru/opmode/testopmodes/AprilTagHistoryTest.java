@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -36,6 +38,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
 
                 if(gamepad1.a && !lastA) {
                     state = State.SCANNING;
+                    Log.i("TagHistoryTest", "started scanning");
                     cvMaster.detectTag();
                 }
                 lastA = gamepad1.a;

@@ -61,7 +61,8 @@ public class FusedLocalizer {
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
         double heading = Angle.norm(deadWheels.getPoseEstimate().getHeading());
-        if(heading < Math.PI/2 || heading > 3*Math.PI/2) return; // dont update if robot is not facing tags
+        Log.v("FusedLocalizer", "heading: " + heading);
+//        if(heading < Math.PI/2 || heading > 3*Math.PI/2) return; // dont update if robot is not facing tags
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
         if(detections.size() < 1) return; // dont update if no detections
@@ -74,8 +75,17 @@ public class FusedLocalizer {
         // calculate change from old odo pose to current pose
         Pose2d odoDeltaPoseFrameToNow = deadWheels.getPoseEstimate().minus(odoPoseTimeOfFrame);
 
+        Log.v("FusedLocalizer", "Updating pose. history odo pose: " + odoPoseTimeOfFrame.toString() + " tag pose: " + tagPoseTimeOfFrame);
+        Log.v("FusedLocalizer", "tag pose: " + tagPoseTimeOfFrame);
+        Log.v("FusedLocalizer", "delta pose: " + odoDeltaPoseFrameToNow);
+
+
+        Pose2d newPose = new Pose2d(tagPoseTimeOfFrame.vec().plus(odoDeltaPoseFrameToNow.vec()), deadWheels.getPoseEstimate().getHeading());
+        Log.v("FusedLocalizer", "new pose: " + newPose);
+
         // set pose estimate to tag pose + delta
-        deadWheels.setPoseEstimate(tagPoseTimeOfFrame.plus(odoDeltaPoseFrameToNow));
+        deadWheels.setPoseEstimate(newPose);
+//        deadWheels.setPoseEstimate(tagPoseTimeOfFrame.plus(odoDeltaPoseFrameToNow));
         // add tag - odo to pose history
         Pose2d odoPoseError = tagPoseTimeOfFrame.minus(odoPoseTimeOfFrame);
         poseHistory.offset(odoPoseError);
