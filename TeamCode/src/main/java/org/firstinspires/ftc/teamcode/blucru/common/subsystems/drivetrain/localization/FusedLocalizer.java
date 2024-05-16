@@ -66,7 +66,7 @@ public class FusedLocalizer {
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
         if(detections.size() < 1) return; // dont update if no detections
-
+        // TODO: get tag pose using heading from past position
         // save reference to tag pose
         Pose2d tagPoseTimeOfFrame = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, deadWheels.getPoseEstimate().getHeading());
         // get odo pose at the time of the tag pose

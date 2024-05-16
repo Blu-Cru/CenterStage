@@ -6,21 +6,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Queue;
 
 public class PoseHistory {
-    static double STORAGE_NANOSECONDS = 1.0 * Math.pow(10.0, 9.0);
-
-    static class PoseMarker {
-        long nanoTime;
-        Pose2d pose;
-
-        PoseMarker(Pose2d pose) {
-            nanoTime = System.nanoTime();
-            this.pose = pose;
-        }
-    }
+    static double STORAGE_NANOSECONDS = 1.0 * Math.pow(10.0, 9.0); // 1 second
 
     LinkedList<PoseMarker> poseList;
+
 
     /*
         Linked list of poses and their timestamps
@@ -34,6 +26,7 @@ public class PoseHistory {
      */
 
     public PoseHistory() {
+        // TODO: change to queu
         // initialize pose history
         poseList = new LinkedList<>();
     }
@@ -41,9 +34,8 @@ public class PoseHistory {
     public void add(Pose2d pose) {
         poseList.addFirst(new PoseMarker(pose)); // add current pose to front of list
 
-        long currentTime = System.nanoTime();
-
         // remove old poses
+        long currentTime = System.nanoTime();
         while (poseList.size() > 0 && currentTime - poseList.getLast().nanoTime > STORAGE_NANOSECONDS) {
             poseList.removeLast(); // remove oldest pose from back of list until we have less than STORAGE_NANOSECONDS of poses
         }
@@ -51,7 +43,7 @@ public class PoseHistory {
 
     public Pose2d getPoseAtTime(long targetNanoTime) {
         ListIterator<PoseMarker> iterator = poseList.listIterator();
-        PoseMarker poseMarker = iterator.next();
+        PoseMarker poseMarker = iterator.next(); // set to first element
 
         while(iterator.hasNext()) {
             if (poseMarker.nanoTime < targetNanoTime) {
@@ -70,5 +62,15 @@ public class PoseHistory {
         for (PoseMarker marker : poseList) {
             marker.pose = new Pose2d(marker.pose.vec().plus(poseDelta.vec()), marker.pose.getHeading());
         }
+    }
+}
+
+class PoseMarker {
+    long nanoTime;
+    Pose2d pose;
+
+    PoseMarker(Pose2d pose) {
+        nanoTime = System.nanoTime();
+        this.pose = pose;
     }
 }
