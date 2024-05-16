@@ -381,8 +381,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public boolean isAtTargetPose() {
         boolean translationAtTarget = pose.vec().distTo(targetPose.vec()) < TRANSLATION_TOLERANCE && Math.abs(heading - targetHeading) < HEADING_PID_TOLERANCE;
-        boolean velocityAtTarget = velocity.vec().norm() < 7.0;
-        return translationAtTarget && velocityAtTarget;
+        return translationAtTarget && isStopped();
     }
 
     public void updateAprilTags(AprilTagProcessor processor) {
@@ -408,7 +407,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public boolean isStopped() {
         Pose2d poseVelocity = getPoseVelocity();
         if(poseVelocity == null) return true;
-        else return poseVelocity.vec().norm() < 0.1 && Math.abs(poseVelocity.getHeading()) < 0.1;
+        else return poseVelocity.vec().norm() < 1 && Math.abs(poseVelocity.getHeading()) < 0.1;
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
