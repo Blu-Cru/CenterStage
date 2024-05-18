@@ -36,6 +36,7 @@ public class Outtake implements Subsystem {
     public Turret turret;
 
     State state;
+    State stateBeforeManual;
 
     public boolean wristRetracted;
 
@@ -89,8 +90,16 @@ public class Outtake implements Subsystem {
     }
 
     public void setManualSlidePower(double power) {
-        state = State.MANUAL;
+        if(state != State.MANUAL) {
+            stateBeforeManual = state;
+            state = State.MANUAL;
+        }
         lift.setManualPower(power);
+    }
+
+    public void stopManualSlide() {
+        state = stateBeforeManual;
+        lift.stopManual();
     }
 
     public void setTargetHeight(double targetHeight) {

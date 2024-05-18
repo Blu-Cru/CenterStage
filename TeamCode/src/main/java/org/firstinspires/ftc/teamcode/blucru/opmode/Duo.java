@@ -88,7 +88,8 @@ public class Duo extends BCLinearOpMode {
             lastA2 = false,
             lastRSUp2 = false,
             lastRSDown2 = false,
-            lastUp1 = false;
+            lastUp1 = false,
+            lastManualSliding = false;
 
     public void initialize() {
         robotState = RobotState.RETRACT;
@@ -165,11 +166,6 @@ public class Duo extends BCLinearOpMode {
                     outtake.lock();
                 } else {
                     intake.setIntakePower(0);
-                }
-
-                // MANUAL SLIDE
-                if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
-                    outtake.setManualSlidePower(-gamepad2.right_stick_y);
                 }
 
                 // RESET SLIDES
@@ -268,10 +264,7 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
                 else if (gamepad2.dpad_right) outtake.lock.unlockAll();
 
-                // MANUAL SLIDE
-                if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
-                    outtake.setManualSlidePower(-gamepad2.right_stick_y);
-                }
+
 
                 break;
             case OUTTAKE_WRIST_RETRACTED:
@@ -336,6 +329,15 @@ public class Duo extends BCLinearOpMode {
                 }
                 break;
         }
+
+        // MANUAL SLIDE
+        if(Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button) {
+            outtake.setManualSlidePower(-gamepad2.right_stick_y);
+        }
+        if(lastManualSliding && Math.abs(gamepad2.right_stick_y) < 0.1 && !gamepad2.right_stick_button) {
+            outtake.stopManualSlide();
+        }
+        lastManualSliding = Math.abs(gamepad2.right_stick_y) > 0.1 && gamepad2.right_stick_button;
 
         // MANUAL HANG
         if(Math.abs(gamepad2.left_stick_y) > 0.2)

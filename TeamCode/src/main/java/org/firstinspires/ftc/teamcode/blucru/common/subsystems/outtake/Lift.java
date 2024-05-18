@@ -183,6 +183,11 @@ public class Lift implements Subsystem {
         this.power = power;
     }
 
+    public void stopManual() {
+        state = State.PID;
+        this.power = 0;
+    }
+
     public int getDecelDelta() {
         return (int) (currentVelocity * currentVelocity / Math.signum(currentVelocity) * 2 * motionProfile.aMax);
     }
