@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.local
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -12,7 +13,6 @@ public class PoseHistory {
     static double STORAGE_NANOSECONDS = 1.0 * Math.pow(10.0, 9.0); // 1 second
 
     LinkedList<PoseMarker> poseList;
-
 
     /*
         Linked list of poses and their timestamps
@@ -50,7 +50,7 @@ public class PoseHistory {
                 Log.i("PoseHistory", "found: " + poseMarker.pose);
                 return poseMarker.pose;
             }
-            Log.v("PoseHistory", "iterated: " + poseMarker.pose);
+            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
             poseMarker = iterator.next();
         }
 
@@ -71,6 +71,7 @@ class PoseMarker {
 
     PoseMarker(Pose2d pose) {
         nanoTime = System.nanoTime();
-        this.pose = pose;
+        this.pose = new Pose2d(new Vector2d(pose.getX(), pose.getY()), pose.getHeading());
+        Log.v("PoseMarker", "Created new PoseMarker, pose hash code:" + this.pose.hashCode());
     }
 }

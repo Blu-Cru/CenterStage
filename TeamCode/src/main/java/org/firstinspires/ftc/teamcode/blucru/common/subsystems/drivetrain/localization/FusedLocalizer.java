@@ -49,7 +49,7 @@ public class FusedLocalizer {
         // make a copy of the current pose, so that the pose history doesn't get updated with the same object
         deadWheels.update();
         Pose2d currentPose = deadWheels.getPoseEstimate();
-        poseHistory.add(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
+        poseHistory.add(currentPose);
 
         if(System.currentTimeMillis() - lastImuUpdateMillis > 100 && usingIMU) {
             lastImuUpdateMillis = System.currentTimeMillis();
@@ -63,7 +63,7 @@ public class FusedLocalizer {
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
         double heading = Angle.norm(deadWheels.getPoseEstimate().getHeading());
-        Log.v("FusedLocalizer", "heading: " + heading);
+//        Log.v("FusedLocalizer", "heading: " + heading);
         if(heading < Math.PI/2 || heading > 3*Math.PI/2) throw new IllegalArgumentException("Not in the right orientation to update tags");
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();

@@ -15,8 +15,8 @@ public class IntakeWrist implements Subsystem {
             RADIUS = 4.7244,
 
             RETRACT_HEIGHT = 3.7, // inches
-            GROUND_HEIGHT = -3.5, // inches for intaking at ground level
-            STACK1_HEIGHT = -2.7, // inches for intaking at one pixel height level
+            GROUND_HEIGHT = -3.3, // inches for intaking at ground level
+            STACK1_HEIGHT = -2.5, // inches for intaking at one pixel height level
             AUTO_MID_HEIGHT = 2; // inches for position to be ready to auto stack
 
     Servo wrist;
