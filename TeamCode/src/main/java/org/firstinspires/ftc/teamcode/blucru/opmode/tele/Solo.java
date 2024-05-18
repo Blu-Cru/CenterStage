@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode;
+package org.firstinspires.ftc.teamcode.blucru.opmode.tele;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "Solo", group = "2")
 public class Solo extends BCLinearOpMode {

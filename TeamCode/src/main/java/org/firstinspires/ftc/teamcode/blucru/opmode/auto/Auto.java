@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
