@@ -131,7 +131,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         Vector2d initialVelocity = startVelocity.vec();
         // x = vi^2 / 2a
         double x = Math.pow(initialVelocity.norm(), 2) / (2 * modelSymmetricalDecel);
-        return startPose.plus(new Pose2d(x * Math.cos(startPose.getHeading()), x * Math.sin(startPose.getHeading()), drivetrain.calculateNewTargetHeading()));
+        return startPose.plus(new Pose2d(x * Math.cos(startPose.getHeading()), x * Math.sin(startPose.getHeading()), drivetrain.calculateHeadingDecel()));
     }
 
     public Pose2d getModelAsymmetricalStopPose() {
@@ -140,7 +140,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         double strafeCoast = Math.pow(initialVelocity.getY(), 2) / (2 * modelStrafeDecel) * Math.signum(initialVelocity.getY());
         double forwardCoast = Math.pow(initialVelocity.getX(), 2) / (2 * modelForwardDecel) * Math.signum(initialVelocity.getX());
         Vector2d coast = new Vector2d(forwardCoast, strafeCoast);
-        return new Pose2d(startPose.vec().plus(coast.rotated(-startPose.getHeading())), drivetrain.calculateNewTargetHeading());
+        return new Pose2d(startPose.vec().plus(coast.rotated(-startPose.getHeading())), drivetrain.calculateHeadingDecel());
     }
 
     public double getStrafeDeceleration() {

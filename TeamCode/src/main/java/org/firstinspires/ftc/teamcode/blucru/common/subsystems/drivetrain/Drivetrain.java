@@ -33,7 +33,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             MAX_ACCEL_DRIVE_DELTA = 3.5,
             MAX_DECEL_DRIVE_DELTA = 10.0, // magnitude per second at power 1 for slew rate limiter
 
-            HEADING_DECELERATION = 12, // radians per second squared, for calculating new target heading after turning
+            HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
 
@@ -141,7 +141,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(turning) // if driver is turning, drive with turning normally
             driveScaled(x, y, rotate);
         else if(wasJustTurning) // if driver just stopped turning, drive to new target heading
-            driveToHeadingScaled(x, y, calculateNewTargetHeading());
+            driveToHeadingScaled(x, y, calculateHeadingDecel());
         else if(stopped) // if drivetrain is stopped, drive to current heading
             driveToHeadingScaled(0, 0, heading);
         else // drive, turning to target heading
@@ -174,6 +174,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void driveToHeadingScaled(double x, double y, double targetHeading) {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotate(heading, targetHeading);
+
+        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+
+        Pose2d drivePose = new Pose2d(driveVector.times(drivePower), Range.clip(rotate, -drivePower, drivePower));
+        Pose2d staticDrivePose = processStaticFriction(drivePose);
+
+        setWeightedDrivePower(staticDrivePose);
+    }
+
+    public void driveToHeadingScaledDecel(double x, double y, double targetHeading) {
+        this.targetHeading = targetHeading;
+        double rotate = getPIDRotateDecel(targetHeading);
 
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 
@@ -272,7 +284,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return vector.rotated(angle); // rotate back
     }
 
-    public double calculateNewTargetHeading() {
+    public double calculateHeadingDecel() {
         // vf^2 = vi^2 + 2a(xf - xi)
         // 0 = velocity * velocity + 2 * -HEADING_DECELERATION * (targetHeading - heading)
         // velocity * velocity = 2 * HEADING_DECELERATION * (targetHeading - heading)
@@ -319,6 +331,11 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         if(Math.abs(heading - target) < HEADING_PID_TOLERANCE) return 0;
         else return Range.clip(headingPID.calculate(heading, target), -1, 1);
+    }
+
+    private double getPIDRotateDecel(double targetHeading) {
+        double headingDecel = calculateHeadingDecel();
+        return getPIDRotate(headingDecel, targetHeading);
     }
 
     public double getOdoHeading() {
