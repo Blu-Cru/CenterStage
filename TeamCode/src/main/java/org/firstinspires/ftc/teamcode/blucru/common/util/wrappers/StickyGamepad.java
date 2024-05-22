@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.util;
+package org.firstinspires.ftc.teamcode.blucru.common.util.wrappers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
