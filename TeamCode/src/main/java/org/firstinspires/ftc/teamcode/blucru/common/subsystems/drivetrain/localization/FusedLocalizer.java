@@ -72,7 +72,7 @@ public class FusedLocalizer {
         // get odo pose at the time of the tag pose
         long timeOfFrame = detections.get(0).frameAcquisitionNanoTime;
         Pose2d odoPoseTimeOfFrame = poseHistory.getPoseAtTime(timeOfFrame);
-        Log.v("FusedLocalizer", "time of frame: " + timeOfFrame + ", delta time = " + (System.nanoTime() - timeOfFrame));
+        Log.v("FusedLocalizer", "time of frame: " + timeOfFrame + ", from " + (System.nanoTime() - timeOfFrame) * 1E6 + " ms ago");
 
         // save reference to tag pose
         Pose2d tagPoseTimeOfFrame = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, odoPoseTimeOfFrame.getHeading());

@@ -41,19 +41,23 @@ public class PoseHistory {
         }
     }
 
+    public void addPoseMarker(PoseMarker poseMarker) {
+        poseList.addFirst(poseMarker);
+    }
+
     public Pose2d getPoseAtTime(long targetNanoTime) {
         ListIterator<PoseMarker> iterator = poseList.listIterator();
 
         while(iterator.hasNext()) {
             PoseMarker poseMarker = iterator.next();
             if (poseMarker.nanoTime < targetNanoTime) {
-                Log.i("PoseHistory", "found: " + poseMarker.pose);
+//                Log.i("PoseHistory", "found: " + poseMarker.pose);
                 return poseMarker.pose;
             }
-            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
+//            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
         }
 
-        Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
+//        Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
         return null;
     }
 
@@ -61,16 +65,5 @@ public class PoseHistory {
         for (PoseMarker marker : poseList) {
             marker.pose = new Pose2d(marker.pose.vec().plus(poseDelta.vec()), marker.pose.getHeading());
         }
-    }
-}
-
-class PoseMarker {
-    long nanoTime;
-    Pose2d pose;
-
-    PoseMarker(Pose2d pose) {
-        nanoTime = System.nanoTime();
-        this.pose = new Pose2d(new Vector2d(pose.getX(), pose.getY()), pose.getHeading());
-        Log.v("PoseMarker", "Created new PoseMarker at pose: " + this.pose + ", pose hash code:" + this.pose.hashCode());
     }
 }
