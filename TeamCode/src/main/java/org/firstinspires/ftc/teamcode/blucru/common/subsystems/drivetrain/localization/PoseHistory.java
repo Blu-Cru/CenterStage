@@ -41,10 +41,6 @@ public class PoseHistory {
         }
     }
 
-    public void addPoseMarker(PoseMarker poseMarker) {
-        poseList.addFirst(poseMarker);
-    }
-
     public Pose2d getPoseAtTime(long targetNanoTime) {
 //        ListIterator<PoseMarker> iterator = poseList.listIterator();
 //
