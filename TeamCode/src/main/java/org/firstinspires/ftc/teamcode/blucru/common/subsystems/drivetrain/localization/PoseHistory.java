@@ -46,15 +46,22 @@ public class PoseHistory {
     }
 
     public Pose2d getPoseAtTime(long targetNanoTime) {
-        ListIterator<PoseMarker> iterator = poseList.listIterator();
-
-        while(iterator.hasNext()) {
-            PoseMarker poseMarker = iterator.next();
+//        ListIterator<PoseMarker> iterator = poseList.listIterator();
+//
+//        while(iterator.hasNext()) {
+//            PoseMarker poseMarker = iterator.next();
+//            if (poseMarker.nanoTime < targetNanoTime) {
+////                Log.i("PoseHistory", "found: " + poseMarker.pose);
+//                return poseMarker.pose;
+//            }
+////            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
+//        }
+        for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
-//                Log.i("PoseHistory", "found: " + poseMarker.pose);
+                Log.i("PoseHistory", "found: " + poseMarker.pose);
                 return poseMarker.pose;
             }
-//            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
+            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
         }
 
 //        Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
