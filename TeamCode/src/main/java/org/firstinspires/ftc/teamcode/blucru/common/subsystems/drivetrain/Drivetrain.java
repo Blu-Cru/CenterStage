@@ -114,9 +114,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         lastPose = pose;
         pose = this.getPoseEstimate();
-        velocity = getPoseVelocity();
-//        velocity = getPoseVelocity();
         heading = getOdoHeading();
+        Pose2d botVelocity = getPoseVelocity();
+        velocity = new Pose2d(botVelocity.vec().rotated(heading), botVelocity.getHeading());
+//        velocity = getPoseVelocity();
     }
 
     public void write() {
@@ -292,6 +293,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         // use sign of velocity to determine to add or subtract
 
         return Angle.norm(heading + Math.signum(velocity.getHeading()) * 0.5 * velocity.getHeading() * velocity.getHeading() / HEADING_DECELERATION);
+    }
+
+    public double calculateHeadingDecel(double heading, double headingVel) {
+        return Angle.norm(heading + Math.signum(headingVel) * 0.5 * headingVel * headingVel / HEADING_DECELERATION);
     }
 
     public boolean followerIsWithinTolerance() {

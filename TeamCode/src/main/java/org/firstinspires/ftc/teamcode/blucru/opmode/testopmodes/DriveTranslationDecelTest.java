@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+import java.util.Vector;
+
 @TeleOp(name = "Drive Translational Decel test", group = "test")
 public class DriveTranslationDecelTest extends BCLinearOpMode {
     private enum State {
@@ -56,6 +58,9 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
                     startTimeSecs = currentSecs();
                     startPose = drivetrain.getPoseEstimate();
                     startVelocity = drivetrain.velocity;
+
+                    modelSymmetricalStopPose = getModelSymmetricalStopPose();
+                    modelAsymmetricalStopPose = getModelAsymmetricalStopPose();
                 }
 
                 drivetrain.teleOpDrive(horz, vert, rot);
@@ -117,30 +122,33 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     }
 
     public void calculate() {
-        robotVelocity = drivetrain.getPoseVelocity();
+        robotVelocity = new Pose2d(startVelocity.vec().rotated(-startPose.getHeading()), startVelocity.getHeading());
         deltaPose = endPose.minus(startPose);
         symmetricalDecel = getSymmetricalDeceleration();
         strafeDecel = getStrafeDeceleration();
         forwardDecel = getForwardDeceleration();
 
-        modelSymmetricalStopPose = getModelSymmetricalStopPose();
-        modelAsymmetricalStopPose = getModelAsymmetricalStopPose();
+//        modelSymmetricalStopPose = getModelSymmetricalStopPose();
+//        modelAsymmetricalStopPose = getModelAsymmetricalStopPose();
     }
 
     public Pose2d getModelSymmetricalStopPose() {
         Vector2d initialVelocity = startVelocity.vec();
         // x = vi^2 / 2a
-        double x = Math.pow(initialVelocity.norm(), 2) / (2 * modelSymmetricalDecel);
-        return startPose.plus(new Pose2d(x * Math.cos(startPose.getHeading()), x * Math.sin(startPose.getHeading()), drivetrain.calculateHeadingDecel()));
+        double strafeMagnitude = Math.pow(initialVelocity.norm(), 2) / (2 * modelSymmetricalDecel);
+        Vector2d stopVector = startPose.vec().plus(new Vector2d(strafeMagnitude * Math.cos(startVelocity.getHeading()), strafeMagnitude * Math.sin(startVelocity.getHeading())));
+        return new Pose2d(stopVector, drivetrain.calculateHeadingDecel());
     }
 
     public Pose2d getModelAsymmetricalStopPose() {
         Vector2d initialVelocity = robotVelocity.vec();
-        // x =
+        // vf^2 = vi^2 + 2a(xf-xi)
+        // 0 = vi^2 + 2a(xf-xi)
+        // xf-xi = vi^2/2a
         double strafeCoast = Math.pow(initialVelocity.getY(), 2) / (2 * modelStrafeDecel) * Math.signum(initialVelocity.getY());
         double forwardCoast = Math.pow(initialVelocity.getX(), 2) / (2 * modelForwardDecel) * Math.signum(initialVelocity.getX());
         Vector2d coast = new Vector2d(forwardCoast, strafeCoast);
-        return new Pose2d(startPose.vec().plus(coast.rotated(-startPose.getHeading())), drivetrain.calculateHeadingDecel());
+        return new Pose2d(startPose.vec().rotated(-startPose.getHeading()).plus(coast).rotated(startPose.getHeading()), drivetrain.calculateHeadingDecel());
     }
 
     public double getStrafeDeceleration() {
@@ -148,7 +156,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         // 0 = vi^2 + 2a(xf - xi)
         // -vi^2 = 2a(xf - xi)
         // -vi^2 / 2(xf - xi) = a
-        return Math.pow(robotVelocity.getY(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getY());
+        return Math.abs(Math.pow(robotVelocity.getY(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getY()));
     }
 
     public double getForwardDeceleration() {
@@ -156,7 +164,7 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
         // 0 = vi^2 + 2a(xf - xi)
         // -vi^2 = 2a(xf - xi)
         // -vi^2 / 2(xf - xi) = a
-        return Math.pow(robotVelocity.getX(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getX());
+        return Math.abs(Math.pow(robotVelocity.getX(), 2) / (2 * deltaPose.vec().rotated(-startPose.getHeading()).getX()));
     }
 
     public double getSymmetricalDeceleration() {
