@@ -67,7 +67,7 @@ public class Outtake implements Subsystem {
             case RETRACT:
                 break;
             case OUTTAKE:
-                lift.setTargetPos(lift.toTicks(targetHeight - turret.getTurretHeightDelta()));
+                lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta());
                 break;
             case MANUAL:
                 updateTargetHeight();

@@ -217,6 +217,10 @@ public class Lift implements Subsystem {
         targetPos = newTargetPos;
     }
 
+    public void setTargetHeight(double inches) {
+        setTargetPos(toTicks(inches));
+    }
+
     public double getFeedForward() {
         return kFprop * getCurrentPos();
     }
