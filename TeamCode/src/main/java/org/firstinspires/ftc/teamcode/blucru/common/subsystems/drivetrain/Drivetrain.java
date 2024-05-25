@@ -315,6 +315,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void lockTo(Pose2d pose) {
         fieldCentric = true;
         drivetrainState = DrivetrainState.DRIVE_TO_POSITION;
+        pose = new Pose2d(pose.getX(), pose.getY(), Angle.norm(pose.getHeading()));
         setTargetPose(pose);
     }
 

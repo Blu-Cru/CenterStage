@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -72,6 +73,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
             stickyG2.update();
             robot.read();
             periodic();
+            CommandScheduler.getInstance().run();
             robot.write();
 
             // calculate average loop time
