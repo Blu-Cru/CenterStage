@@ -70,55 +70,35 @@ public class IntakeColorSensors implements Subsystem {
     }
 
     public void read() {
-//        if(reading) {
-////            frontSensor.enableLed(true);
-////            backSensor.enableLed(true);
-////            frontRGBA = frontSensor.getNormalizedColors();
-////            backRGBA = backSensor.getNormalizedColors();
-//
-////            frontR = frontRGBA.red;
-////            frontG = frontRGBA.green;
-////            frontB = frontRGBA.blue;
-////            getHSV(frontRGBA, frontHSV); // sets frontHSV
-////            frontHue = frontHSV[0];
-////
-////            backR = backRGBA.red;
-////            backG = backRGBA.green;
-////            backB = backRGBA.blue;
-////            getHSV(backRGBA, backHSV); // sets backHSV
-////            backHue = backHSV[0];
-//
+        if(reading) {
             frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
-////            frontLightDetected = frontSensor.getLightDetected();
-////            backLightDetected = backSensor.getLightDetected();
+
+            if (frontDistance >= FRONT_DISTANCE_LOW && frontDistance <= FRONT_DISTANCE_HIGH) frontSlotState = SlotState.FULL;
+            else frontSlotState = SlotState.EMPTY;
+
+            if (backDistance >= BACK_DISTANCE_LOW && backDistance <= BACK_DISTANCE_HIGH) backSlotState = SlotState.FULL;
+            else backSlotState = SlotState.EMPTY;
+
+//            frontRGBA = frontSensor.getNormalizedColors();
+//            backRGBA = backSensor.getNormalizedColors();
 //
-            frontSlotState = calculateSlotState(frontDistance, SensorLocation.FRONT);
-            backSlotState = calculateSlotState(backDistance, SensorLocation.BACK);
-//        } else {
-//            frontSensor.enableLed(false);
-//            backSensor.enableLed(false);
-//        }
-//        frontSlotState = SlotState.EMPTY;
-//        backSlotState = SlotState.EMPTY;
+//            frontR = frontRGBA.red;
+//            frontG = frontRGBA.green;
+//            frontB = frontRGBA.blue;
+//            getHSV(frontRGBA, frontHSV); // sets frontHSV
+//            frontHue = frontHSV[0];
+//
+//            backR = backRGBA.red;
+//            backG = backRGBA.green;
+//            backB = backRGBA.blue;
+//            getHSV(backRGBA, backHSV); // sets backHSV
+//            backHue = backHSV[0];
+        }
     }
 
     public void write() {
 
-    }
-
-    public SlotState calculateSlotState(double distance, SensorLocation sensor) {
-        if(sensor == SensorLocation.FRONT) {
-            if(distance >= FRONT_DISTANCE_LOW && distance <= FRONT_DISTANCE_HIGH)
-                return SlotState.FULL;
-            else
-                return SlotState.EMPTY;
-        } else {
-            if(distance >= BACK_DISTANCE_LOW && distance <= BACK_DISTANCE_HIGH)
-                return SlotState.FULL;
-            else
-                return SlotState.EMPTY;
-        }
     }
 
     // scales the front RGB values to be between 0 and 255
