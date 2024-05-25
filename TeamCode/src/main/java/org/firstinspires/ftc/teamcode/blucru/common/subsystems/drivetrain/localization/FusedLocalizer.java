@@ -49,7 +49,7 @@ public class FusedLocalizer {
         // make a copy of the current pose, so that the pose history doesn't get updated with the same object
         deadWheels.update();
         Pose2d currentPose = deadWheels.getPoseEstimate();
-        poseHistory.add(currentPose);
+        poseHistory.add(currentPose, deadWheels.getPoseVelocity());
 
         if(System.currentTimeMillis() - lastImuUpdateMillis > 100 && usingIMU) {
             lastImuUpdateMillis = System.currentTimeMillis();

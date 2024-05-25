@@ -31,8 +31,8 @@ public class PoseHistory {
         poseList = new LinkedList<>();
     }
 
-    public void add(Pose2d pose) {
-        poseList.addFirst(new PoseMarker(pose)); // add current pose to front of list
+    public void add(Pose2d pose, Pose2d velocity) {
+        poseList.addFirst(new PoseMarker(pose, velocity)); // add current pose to front of list
 
         // remove old poses
         long currentTime = System.nanoTime();
@@ -52,9 +52,11 @@ public class PoseHistory {
 //            }
 ////            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
 //        }
+        Log.v("PoseHistory", "Searching for pose at time " + targetNanoTime);
         for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
                 poseMarker.log("PoseMarker found");
+                Log.i("", "******************************************************************************************");
                 return poseMarker.pose;
             }
             poseMarker.log("PoseMarker iterated");

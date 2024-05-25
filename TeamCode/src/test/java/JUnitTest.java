@@ -17,18 +17,20 @@ public class JUnitTest {
     @Test
     public void testPoseHistory() {
         PoseHistory poseHistory = new PoseHistory();
-        poseHistory.add(new Pose2d(0, 0, 0));
+        poseHistory.add(new Pose2d(0, 0, 0), new Pose2d(0, 0, 0));
         long time1 = System.nanoTime();
 
-        poseHistory.add(new Pose2d(1, 1, 1));
+        poseHistory.add(new Pose2d(1, 1, 1), new Pose2d(1, 1, 1));
         long time2 = System.nanoTime();
 
-        poseHistory.add(new Pose2d(2, 2, 2));
+        poseHistory.add(new Pose2d(2, 2, 2), new Pose2d(2, 2, 2));
         long time3 = System.nanoTime();
 
         poseHistory.offset(new Pose2d(1, 1, 1));
+        
+        long targetTime = (time1 + time2) / 2;
 
-        Assert.assertTrue(poseHistory.getPoseAtTime(time2).equals(new Pose2d(2, 2, 1)));
+        Assert.assertTrue(poseHistory.getPoseAtTime(targetTime).equals(new Pose2d(2, 2, 1)));
     }
 
     @Test

@@ -7,11 +7,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class PoseMarker {
     long nanoTime;
-    Pose2d pose;
+    Pose2d pose, velocity;
 
-    public PoseMarker(Pose2d pose) {
+    public PoseMarker(Pose2d pose, Pose2d velocity) {
+        Log.i("", "******************************************************************************************");
         nanoTime = System.nanoTime();
         this.pose = new Pose2d(new Vector2d(pose.getX(), pose.getY()), pose.getHeading());
+        this.velocity = new Pose2d(new Vector2d(velocity.getX(), velocity.getY()), velocity.getHeading());
         this.log("PoseMarker created");
     }
 
@@ -21,6 +23,10 @@ public class PoseMarker {
     }
 
     public void log(String tag) {
-        Log.v(tag,  "PoseMarker at pose: " + pose + ", Pose hash code:" + pose.hashCode() + ", Time: " + nanoTime);
+        Log.v(tag,  "PoseMarker at pose: " + pose + ", Pose hash code:" + pose.hashCode() + ", Velocity: " + velocity + ", Time: " + nanoTime);
+    }
+
+    public void logLine() {
+        Log.v("PoseMarker", "******************************************************************************************");
     }
 }
