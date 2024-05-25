@@ -49,6 +49,7 @@ public class FusedLocalizer {
         // make a copy of the current pose, so that the pose history doesn't get updated with the same object
         deadWheels.update();
         Pose2d currentPose = deadWheels.getPoseEstimate();
+        //Log.v("Marker Entry", "Pos" + currentPose);
         poseHistory.add(currentPose, deadWheels.getPoseVelocity());
 
         if(System.currentTimeMillis() - lastImuUpdateMillis > 100 && usingIMU) {
@@ -58,11 +59,13 @@ public class FusedLocalizer {
             Log.v("FusedLocalizer", "Updating IMU, correction = " + (ypr.getYaw(AngleUnit.RADIANS) + headingOffset - deadWheels.getPoseEstimate().getHeading()));
             Pose2d currentPoseWithHeading = new Pose2d(currentPose.getX(), currentPose.getY(), Angle.norm(ypr.getYaw(AngleUnit.RADIANS) + headingOffset));
             deadWheels.setPoseEstimate(currentPoseWithHeading);
+            deadWheels.update();
         }
     }
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
-        double heading = Angle.norm(deadWheels.getPoseEstimate().getHeading());
+        Pose2d currentPose = deadWheels.getPoseEstimate();
+        double heading = Angle.norm(currentPose.getHeading());
 //        Log.v("FusedLocalizer", "heading: " + heading);
         if(heading < Math.PI/2 || heading > 3*Math.PI/2) throw new IllegalArgumentException("Not in the right orientation to update tags");
 
@@ -71,30 +74,31 @@ public class FusedLocalizer {
 
         // get odo pose at the time of the tag pose
         long timeOfFrame = detections.get(0).frameAcquisitionNanoTime;
-        Pose2d odoPoseTimeOfFrame = poseHistory.getPoseAtTime(timeOfFrame);
+        Pose2d odoPoseAtFrame = poseHistory.getPoseAtTime(timeOfFrame);
 
         long timeSinceFrame = System.nanoTime() - timeOfFrame;
         Log.v("FusedLocalizer", "Time since frame:" + timeSinceFrame);
 
         // save reference to tag pose
-        Pose2d tagPoseTimeOfFrame = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, odoPoseTimeOfFrame.getHeading());
+        Pose2d tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, odoPoseAtFrame.getHeading());
 
         // calculate change from old odo pose to current pose
-        Pose2d odoDeltaPoseFrameToNow = deadWheels.getPoseEstimate().minus(odoPoseTimeOfFrame);
+        Pose2d odoDelta = currentPose.minus(odoPoseAtFrame);
 
-        Log.v("FusedLocalizer", "Updating pose. history odo pose: " + odoPoseTimeOfFrame.toString() + " tag pose: " + tagPoseTimeOfFrame);
-        Log.v("FusedLocalizer", "tag pose: " + tagPoseTimeOfFrame);
-        Log.v("FusedLocalizer", "delta pose: " + odoDeltaPoseFrameToNow);
+        Log.v("FusedLocalizer", "Updating pose. history odo pose: " + odoPoseAtFrame.toString() + " tag pose: " + tagPose);
+        Log.v("FusedLocalizer", "tag pose: " + tagPose);
+        Log.v("FusedLocalizer", "delta pose: " + odoDelta);
 
 
-        Pose2d newPose = new Pose2d(tagPoseTimeOfFrame.vec().plus(odoDeltaPoseFrameToNow.vec()), deadWheels.getPoseEstimate().getHeading());
+        Pose2d newPose = new Pose2d(tagPose.vec().plus(odoDelta.vec()), currentPose.getHeading());
         Log.v("FusedLocalizer", "new pose: " + newPose);
 
         // set pose estimate to tag pose + delta
         deadWheels.setPoseEstimate(newPose);
-//        deadWheels.setPoseEstimate(tagPoseTimeOfFrame.plus(odoDeltaPoseFrameToNow));
+        deadWheels.update();
         // add tag - odo to pose history
-        Pose2d odoPoseError = tagPoseTimeOfFrame.minus(odoPoseTimeOfFrame);
+        Pose2d odoPoseError = tagPose.minus(odoPoseAtFrame);
+        Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
         poseHistory.offset(odoPoseError);
     }
 
@@ -109,6 +113,7 @@ public class FusedLocalizer {
         newHeading = Angle.norm(newHeading);
         headingOffset = newHeading - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         deadWheels.setPoseEstimate(new Pose2d(deadWheels.getPoseEstimate().vec(), newHeading));
+        deadWheels.update();
     }
 
     public double getWeight() {

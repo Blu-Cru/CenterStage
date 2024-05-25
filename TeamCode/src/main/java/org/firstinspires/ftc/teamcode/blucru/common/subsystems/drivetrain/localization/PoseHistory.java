@@ -52,7 +52,8 @@ public class PoseHistory {
 //            }
 ////            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
 //        }
-        Log.v("PoseHistory", "Searching for pose at time " + targetNanoTime);
+        Log.v("PoseHistory", "Searching for pose at time " + targetNanoTime / Math.pow(10, 6));
+        Log.v("PoseHistory", "Length of poseList: " + poseList.size());
         for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
                 poseMarker.log("PoseMarker found");

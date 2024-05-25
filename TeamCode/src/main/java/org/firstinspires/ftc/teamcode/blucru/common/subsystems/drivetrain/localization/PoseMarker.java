@@ -23,7 +23,7 @@ public class PoseMarker {
     }
 
     public void log(String tag) {
-        Log.v(tag,  "PoseMarker at pose: " + pose + ", Pose hash code:" + pose.hashCode() + ", Velocity: " + velocity + ", Time: " + nanoTime);
+        Log.v(tag,  "PoseMarker at pose: " + pose + ", Pose hash code:" + pose.hashCode() + ", Velocity: " + velocity + ", Time: " + nanoTime / Math.pow(10.0, 6.0));
     }
 
     public void logLine() {

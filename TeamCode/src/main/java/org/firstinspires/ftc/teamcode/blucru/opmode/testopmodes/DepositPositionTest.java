@@ -97,6 +97,9 @@ public class DepositPositionTest extends BCLinearOpMode {
         depositY = Poses.DEPOSIT_CENTER_POSE.getY();
         depositHeading = Poses.DEPOSIT_CENTER_POSE.getHeading();
         updateDepositPose();
+
+        stateMachine.setState(State.GETTING_ANGLE);
+        stateMachine.start();
     }
 
     @Override
@@ -108,5 +111,10 @@ public class DepositPositionTest extends BCLinearOpMode {
 
     public void updateDepositPose() {
         depositPose = new Pose2d(depositX, depositY, depositHeading);
+    }
+
+    @Override
+    public void telemetry() {
+        telemetry.addData("state: ", stateMachine.getState());
     }
 }
