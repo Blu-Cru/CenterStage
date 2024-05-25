@@ -54,10 +54,10 @@ public class PoseHistory {
 //        }
         for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
-                Log.i("PoseHistory", "found: " + poseMarker.pose);
+//                Log.i("PoseHistory", "found: " + poseMarker.pose);
                 return poseMarker.pose;
             }
-            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
+//            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
         }
 
 //        Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
