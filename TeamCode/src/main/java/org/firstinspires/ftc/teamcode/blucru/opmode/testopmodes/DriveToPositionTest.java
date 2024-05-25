@@ -11,7 +11,8 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 @TeleOp(name="Drive To Position Test", group="test")
 public class DriveToPositionTest extends BCLinearOpMode {
     public static double p = 0, i = 0, d = 0;
-    public static double targetX = 0, targetY = 0, targetHeading = 0;
+    public static double targetX = 0, targetY = 0, targetHeading = Math.toRadians(90);
+    public static double power = 0.5;
 
     String mode = "driver control";
 
@@ -27,6 +28,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
 
     public void periodic() {
         drivetrain.translationPID.setPID(p, i, d);
+        drivetrain.drivePower = power;
 
         if(gamepad1.a) {
             mode = "driver control";
