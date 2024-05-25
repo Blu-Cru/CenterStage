@@ -32,6 +32,9 @@ repositories {
 
 dependencies {
     implementation project(':FtcRobotController')
+
+    testImplementation 'junit:junit:4.12'
+
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
     implementation "com.acmerobotics.dashboard:dashboard:0.4.13"
