@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -42,6 +43,7 @@ public class Outtake implements Subsystem {
 
     public double targetHeight; // inches
 
+    Vector2d targetPos; // (x, z) where x is sideways (turret) and z is up (lift and turret), in inches
 
     public Outtake(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -53,6 +55,8 @@ public class Outtake implements Subsystem {
         state = State.RETRACT;
 
         wristRetracted = true;
+
+        targetPos = new Vector2d(0, 0);
     }
 
     public void init() {
@@ -63,6 +67,12 @@ public class Outtake implements Subsystem {
     }
 
     public void read() {
+        lift.read();
+        lock.read();
+        turret.read();
+    }
+
+    public void write() {
         switch(state) {
             case RETRACT:
                 break;
@@ -70,16 +80,10 @@ public class Outtake implements Subsystem {
                 lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta());
                 break;
             case MANUAL:
-                updateTargetHeight();
+                updateTargetHeightDecel();
                 break;
         }
-
-        lift.read();
-        lock.read();
-        turret.read();
-    }
-
-    public void write() {
+        
         lift.write();
         lock.write();
         turret.write();
@@ -117,7 +121,7 @@ public class Outtake implements Subsystem {
         setTargetHeight(targetHeight + pixels * PIXEL_HEIGHT);
     }
 
-    public void updateTargetHeight() {
+    public void updateTargetHeightDecel() {
         this.targetHeight = lift.toInches(lift.getTargetPos() + lift.getDecelDelta()) - turret.getTurretHeightDelta();
     }
 
@@ -143,6 +147,7 @@ public class Outtake implements Subsystem {
     }
 
     public void setTurretX(double xInches) {
+        xInches = Range.clip(xInches, -MAX_TELEOP_TURRET_X, MAX_TELEOP_TURRET_X);
         setTurretAngle(Turret.xToAngle(xInches));
     }
 
@@ -155,12 +160,8 @@ public class Outtake implements Subsystem {
         return turret.targetAngle;
     }
 
-    public void toggleWrist() {
-        wristRetracted = !wristRetracted;
-    }
-
     public void retractWrist() {
-        wristRetracted = true;
+        if(turret.isCentered()) wristRetracted = true;
     }
 
     public void extendWrist() {
