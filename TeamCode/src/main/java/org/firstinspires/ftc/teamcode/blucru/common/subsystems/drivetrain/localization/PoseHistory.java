@@ -47,10 +47,10 @@ public class PoseHistory {
         while(iterator.hasNext()) {
             PoseMarker poseMarker = iterator.next();
             if (poseMarker.nanoTime < targetNanoTime) {
-                Log.i("PoseHistory", "found: " + poseMarker.pose);
+                poseMarker.log("PoseMarker found");
                 return poseMarker.pose;
             }
-            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
+            poseMarker.log("PoseMarker iterated");
         }
 
         Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
@@ -71,6 +71,10 @@ class PoseMarker {
     PoseMarker(Pose2d pose) {
         nanoTime = System.nanoTime();
         this.pose = new Pose2d(new Vector2d(pose.getX(), pose.getY()), pose.getHeading());
-        Log.v("PoseMarker", "Created new PoseMarker at pose: " + this.pose + ", pose hash code:" + this.pose.hashCode());
+        this.log("PoseMarker created");
+    }
+
+    public void log(String tag) {
+        Log.v(tag,  "PoseMarker at pose: " + pose + ", Pose hash code:" + pose.hashCode() + ", Time: " + nanoTime);
     }
 }
