@@ -24,6 +24,21 @@ public class PreloadDeposits {
         this.reflect = reflect;
     }
 
+    public TrajectorySequence rrTest(Robot robot) {
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
+                .setVelConstraint(Constraints.FAST_VEL)
+                .setTangent(Math.toRadians(90 * reflect))
+                .splineTo(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
+//                                .splineToSplineHeading(Poses.BACKDROP_PLACEMENT_FAR_POSE, Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(8, -40 * reflect, Math.toRadians(-45 * reflect)), Math.toRadians(135 * reflect))
+                .splineToSplineHeading(new Pose2d(10, -30 * reflect, Math.toRadians(20 * reflect)), Math.toRadians(30 * reflect))
+                // maybe stop trajectory here and PID to backboard?
+                .splineToSplineHeading(new Pose2d(45, -30 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(0 * reflect))
+                // release purple pixel
+//                                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
+                .build();
+    }
+
     public TrajectorySequence depositThroughCenterFromWingCenterFarStack(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(new Pose2d(Poses.STACK_SETUP_X, -12 * reflect, Math.toRadians(180)))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
