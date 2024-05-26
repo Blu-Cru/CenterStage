@@ -19,6 +19,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     }
 
     ArrayList<Pose2d> pidPoints = new ArrayList<>();
+    int pidIndex = 0;
     TrajectorySequence traj;
 
     StateMachine stateMachine = new StateMachineBuilder()
@@ -30,6 +31,18 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
                 drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
             })
+            .state(State.FOLLOWING_TRAJECTORY)
+            .transition(() -> !drivetrain.isBusy(), State.RESETTING)
+            .transition(() -> stickyG1.a, State.RESETTING, () -> drivetrain.breakFollowing())
+            .loop(() -> {
+                // follow trajectory
+                try {drivetrain.updateTrajectory();}
+                // if the trajectory is interrupted, stop the op mode
+                catch (Exception e) {requestOpModeStop();}
+            })
+            .state(State.FOLLOWING_PID)
+            .transition(() -> pidIndex == pidPoints.size(), State.RESETTING)
+            .transition(() -> stickyG1.a, State.RESETTING)
             .build();
 
 
