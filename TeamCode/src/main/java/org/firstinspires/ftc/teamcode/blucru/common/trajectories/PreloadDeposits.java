@@ -159,7 +159,7 @@ public class PreloadDeposits {
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
                 .splineToConstantHeading(Poses.DEPOSIT_CENTER_POSE.vec(), Math.toRadians(0))
-                .addTemporalMarker(() -> robot.drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE))
+                .addTemporalMarker(() -> robot.drivetrain.pidTo(Poses.DEPOSIT_CENTER_POSE))
                 // release
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> {
                     robot.outtake.unlock();

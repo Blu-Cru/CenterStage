@@ -71,7 +71,7 @@ public class DepositPositionTest extends BCLinearOpMode {
             .transitionTimed(1.0, State.DRIVING_TO_OUTTAKE, () -> gamepad1.rumble(200))
             .state(State.DRIVING_TO_OUTTAKE)
             .loop(() -> {
-                drivetrain.lockTo(depositPose);
+                drivetrain.pidTo(depositPose);
             })
             .transition(() -> stickyG1.a, State.DONE_OUTTAKING, () -> {
                 gamepad1.rumble(200);

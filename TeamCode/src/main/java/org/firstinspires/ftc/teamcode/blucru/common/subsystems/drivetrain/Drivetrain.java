@@ -312,7 +312,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         drivetrainState = DrivetrainState.TELEOP;
     }
 
-    public void lockTo(Pose2d pose) {
+    public void pidTo(Pose2d pose) {
         fieldCentric = true;
         drivetrainState = DrivetrainState.DRIVE_TO_POSITION;
         pose = new Pose2d(pose.getX(), pose.getY(), Angle.norm(pose.getHeading()));

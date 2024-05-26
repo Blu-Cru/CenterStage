@@ -85,7 +85,7 @@ public class IntakeTrajectories {
                     robot.intake.dropToStack(3);
                 })
                 .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
-                .addTemporalMarker(() -> robot.drivetrain.lockTo(endPose))
+                .addTemporalMarker(() -> robot.drivetrain.pidTo(endPose))
                 .waitSeconds(5)
                 .build();
     }

@@ -36,13 +36,14 @@ public class JUnitTest {
     @Test
     public void testAsymmetricDecel() {
         double tangentialDecel = 1;
-        double strafeDecel = 3;
-        double headingDecel = 10;
+        double strafeDecel = 2;
+        double headingDecel = 4;
 
         Pose2d startPose = new Pose2d(0, 0, 0);
-        Pose2d startVelocity = new Pose2d(4, 4, 3);
+        Pose2d startVelocity = new Pose2d(4, 4, 8);
+        Pose2d stopPose = getAssymetricStopPose(startPose, startVelocity, tangentialDecel, strafeDecel, headingDecel);
 
-
+        Assert.assertTrue(stopPose.equals(new Pose2d(8, 4, Angle.norm(8))));
     }
 
     public Pose2d getAssymetricStopPose(Pose2d startPose, Pose2d startVelocity, double tangentialDecel, double strafeDecel, double headingDecel) {

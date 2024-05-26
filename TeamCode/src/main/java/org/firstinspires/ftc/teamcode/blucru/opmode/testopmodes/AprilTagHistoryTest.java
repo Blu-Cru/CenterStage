@@ -57,7 +57,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                 if(gamepad1.a && !lastA) {
                     state = State.DEPOSIT;
                     cvMaster.stop();
-                    drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE);
+                    drivetrain.pidTo(Poses.DEPOSIT_CENTER_POSE);
                 }
                 lastA = gamepad1.a;
 
@@ -79,7 +79,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                 }
                 lastA = gamepad1.a;
 
-                drivetrain.lockTo(Poses.DEPOSIT_CENTER_POSE);
+                drivetrain.pidTo(Poses.DEPOSIT_CENTER_POSE);
                 break;
         }
 

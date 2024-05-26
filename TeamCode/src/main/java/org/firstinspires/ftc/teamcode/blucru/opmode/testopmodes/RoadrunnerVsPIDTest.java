@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -30,6 +30,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
             })
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
                 drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
+                pidIndex = 0;
             })
             .state(State.FOLLOWING_TRAJECTORY)
             .transition(() -> !drivetrain.isBusy(), State.RESETTING)
@@ -43,6 +44,12 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
             .state(State.FOLLOWING_PID)
             .transition(() -> pidIndex == pidPoints.size(), State.RESETTING)
             .transition(() -> stickyG1.a, State.RESETTING)
+            .loop(() -> {
+                drivetrain.ftcDashDrawCurrentPose();
+
+                drivetrain.pidTo(pidPoints.get(pidIndex));
+                if(drivetrain.isAtTargetPose()) pidIndex++;
+            })
             .build();
 
 
@@ -51,7 +58,12 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addDrivetrain(false);
         Poses.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 0.9;
+        stateMachine.setState(State.RESETTING);
+        stateMachine.start();
+    }
 
-
+    @Override
+    public void periodic() {
+        stateMachine.update();
     }
 }
