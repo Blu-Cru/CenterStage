@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 import java.util.Vector;
@@ -141,14 +143,23 @@ public class DriveTranslationDecelTest extends BCLinearOpMode {
     }
 
     public Pose2d getModelAsymmetricalStopPose() {
-        Vector2d initialVelocity = robotVelocity.vec();
-        // vf^2 = vi^2 + 2a(xf-xi)
-        // 0 = vi^2 + 2a(xf-xi)
-        // xf-xi = vi^2/2a
-        double strafeCoast = Math.pow(initialVelocity.getY(), 2) / (2 * modelStrafeDecel) * Math.signum(initialVelocity.getY());
-        double forwardCoast = Math.pow(initialVelocity.getX(), 2) / (2 * modelForwardDecel) * Math.signum(initialVelocity.getX());
-        Vector2d coast = new Vector2d(forwardCoast, strafeCoast);
-        return new Pose2d(startPose.vec().rotated(-startPose.getHeading()).plus(coast).rotated(startPose.getHeading()), drivetrain.calculateHeadingDecel());
+        return getAssymetricStopPose(startPose, startVelocity, forwardDecel, strafeDecel, Drivetrain.HEADING_DECELERATION);
+    }
+
+    public Pose2d getAssymetricStopPose(Pose2d startPose, Pose2d startVelocity, double tangentialDecel, double strafeDecel, double headingDecel) {
+        // vf^2 = vi^2 + 2ad
+        // d = (vf^2 - vi^2) / 2a
+        // d = vi^2 / 2a
+        Pose2d robotVel = new Pose2d(startVelocity.vec().rotated(-startPose.getHeading()), startVelocity.getHeading());
+        double strafeDist = Math.signum(robotVel.getY()) * robotVel.vec().getY() * robotVel.vec().getY() / (2 * strafeDecel);
+        double forwardDist = Math.signum(robotVel.getX()) * robotVel.vec().getX() * robotVel.vec().getX() / (2 * tangentialDecel);
+        double headingDist = Math.signum(robotVel.getHeading()) * robotVel.getHeading() * robotVel.getHeading() / (2 * headingDecel);
+
+        Vector2d globalDist = new Vector2d(forwardDist, strafeDist).rotated(startPose.getHeading());
+
+        Vector2d finalVec = startPose.vec().plus(globalDist);
+        double finalHeading = Angle.norm(startPose.getHeading() + headingDist);
+        return new Pose2d(finalVec, finalHeading);
     }
 
     public double getStrafeDeceleration() {
