@@ -59,6 +59,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public Pose2d pose;
     Pose2d lastPose;
     public Pose2d velocity;
+    Pose2d lastVelocity;
+    public Pose2d accel;
     double lastTime;
 
     public DrivetrainTranslationPID translationPID;
@@ -89,6 +91,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
+        lastVelocity = velocity;
+        accel = new Pose2d(0,0,0);
         fieldCentric = true;
         targetPose = pose;
         lastRotateInput = 0;
@@ -117,7 +121,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         pose = this.getPoseEstimate();
         heading = getOdoHeading();
         Pose2d botVelocity = getPoseVelocity();
+        lastVelocity = velocity;
         velocity = new Pose2d(botVelocity.vec().rotated(heading), botVelocity.getHeading());
+        accel = velocity.minus(lastVelocity).div(dt/1000);
 //        velocity = getPoseVelocity();
     }
 
@@ -484,6 +490,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("pose y", pose.getY());
         telemetry.addData("velocity x", velocity.getX());
         telemetry.addData("velocity y", velocity.getY());
+        telemetry.addData("accel", accel);
     }
 
     public void testTelemetry(Telemetry telemetry) {
@@ -492,6 +499,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         telemetry.addData("last drive vector magnitude", lastDriveVector.norm());
         telemetry.addData("odo heading", odoHeading);
         telemetry.addData("imu heading", imuHeading);
+        telemetry.addData("accel magnitude", accel.vec().norm());
 //        distanceSensors.telemetry(telemetry);
     }
 }
