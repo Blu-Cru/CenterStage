@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -82,6 +83,8 @@ public class FusedLocalizer {
         // save reference to tag pose
         Pose2d tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, odoPoseAtFrame.getHeading());
 
+        Pose2d weightedEstimateAtFrame = tagPose.minus(odoPoseAtFrame).times(getWeight()).plus(odoPoseAtFrame);
+
         // calculate change from old odo pose to current pose
         Pose2d odoDelta = currentPose.minus(odoPoseAtFrame);
 
@@ -90,14 +93,14 @@ public class FusedLocalizer {
         Log.v("FusedLocalizer", "delta pose: " + odoDelta);
 
 
-        Pose2d newPose = new Pose2d(tagPose.vec().plus(odoDelta.vec()), currentPose.getHeading());
+        Pose2d newPose = new Pose2d(weightedEstimateAtFrame.vec().plus(odoDelta.vec()), currentPose.getHeading());
         Log.v("FusedLocalizer", "new pose: " + newPose);
 
         // set pose estimate to tag pose + delta
         deadWheels.setPoseEstimate(newPose);
         deadWheels.update();
         // add tag - odo to pose history
-        Pose2d odoPoseError = tagPose.minus(odoPoseAtFrame);
+        Pose2d odoPoseError = weightedEstimateAtFrame.minus(odoPoseAtFrame);
         Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
         poseHistory.offset(odoPoseError);
     }
@@ -117,6 +120,10 @@ public class FusedLocalizer {
     }
 
     public double getWeight() {
-        return 1.0;
+        Pose2d vel = deadWheels.getPoseVelocity();
+        double velocity = vel.vec().norm();
+
+        double weight = Range.clip(-0.5*Math.atan(.3 * velocity-8.0), 0, 1);
+        return 1;
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -26,14 +27,14 @@ public class PreloadDeposits {
 
     public TrajectorySequence rrTest(Robot robot) {
         return robot.drivetrain.trajectorySequenceBuilder(Poses.BACKDROP_STARTING_POSE)
-                .setVelConstraint(Constraints.FAST_VEL)
+                .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .setTangent(Math.toRadians(90 * reflect))
-                .splineTo(new Vector2d(12, -50 * reflect), Math.toRadians(90 * reflect))
+                .splineToSplineHeading(new Pose2d(12, -50 * reflect, Math.toRadians(-45 * reflect)), Math.toRadians(90 * reflect))
 //                                .splineToSplineHeading(Poses.BACKDROP_PLACEMENT_FAR_POSE, Math.toRadians(90 * reflect))
-                .splineToSplineHeading(new Pose2d(8, -40 * reflect, Math.toRadians(-45 * reflect)), Math.toRadians(135 * reflect))
-                .splineToSplineHeading(new Pose2d(10, -30 * reflect, Math.toRadians(20 * reflect)), Math.toRadians(30 * reflect))
+                .splineToConstantHeading(new Pose2d(8, -40 * reflect, Math.toRadians(-45 * reflect)).vec(), Math.toRadians(135 * reflect))
+                .setTangent(Math.toRadians(-10*reflect))
                 // maybe stop trajectory here and PID to backboard?
-                .splineToSplineHeading(new Pose2d(45, -30 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(0 * reflect))
+                .splineToLinearHeading(new Pose2d(40, -30 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(0 * reflect))
                 // release purple pixel
 //                                .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME, () -> robot.purplePixelHolder.retractRight())
                 .build();

@@ -62,8 +62,10 @@ public abstract class BCLinearOpMode extends LinearOpMode {
             stickyG1.update();
             stickyG2.update();
             initLoop();
-            telemetry();
-            telemetry.update();
+            try {
+                telemetry();
+                telemetry.update();
+            } catch (Exception e) {}
         }
         waitForStart();
         onStart();

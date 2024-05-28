@@ -57,7 +57,7 @@ public class PoseHistory {
         for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
                 poseMarker.log("PoseMarker found");
-                Log.i("", "******************************************************************************************");
+//                Log.i("", "******************************************************************************************");
                 return poseMarker.pose;
             }
             poseMarker.log("PoseMarker iterated");

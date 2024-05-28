@@ -10,11 +10,11 @@ public class PoseMarker {
     Pose2d pose, velocity;
 
     public PoseMarker(Pose2d pose, Pose2d velocity) {
-        Log.i("", "******************************************************************************************");
+//        Log.i("", "******************************************************************************************");
         nanoTime = System.nanoTime();
         this.pose = new Pose2d(new Vector2d(pose.getX(), pose.getY()), pose.getHeading());
         this.velocity = new Pose2d(new Vector2d(velocity.getX(), velocity.getY()), velocity.getHeading());
-        this.log("PoseMarker created");
+//        this.log("PoseMarker created");
     }
 
     public PoseMarker(long nanoTime, Pose2d pose) {

@@ -30,22 +30,24 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
-            MAX_ACCEL_DRIVE_DELTA = 3.5,
-            MAX_DECEL_DRIVE_DELTA = 10.0, // magnitude per second at power 1 for slew rate limiter
+            MAX_ACCEL_DRIVE_DELTA = 5,
+            MAX_DECEL_DRIVE_DELTA = 20.0, // magnitude per second at power 1 for slew rate limiter
 
             HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
+            HEADING_AT_POSE_TOLERANCE = 0.1,
 
             DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04, // PID constants for distance sensors
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            TRANSLATION_P = 0.28, TRANSLATION_I = 0, TRANSLATION_D = 0.03, TRANSLATION_TOLERANCE = 0.2, // PID constants for translation
+            TRANSLATION_P = 0.24, TRANSLATION_I = 0, TRANSLATION_D = 0.02, TRANSLATION_PID_TOLERANCE = 0, // PID constants for translation
+            TRANSLATION_AT_POSE_TOLERANCE = 0.55,
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 25.0, // inches per second
             STATIC_HEADING_VELOCITY_TOLERANCE = Math.toRadians(100), // radians per second
-            STRAFE_kStatic = 0.08, FORWARD_kStatic = 0.05, // feedforward constants for static friction
+            STRAFE_kStatic = 0.05, FORWARD_kStatic = 0.02, // feedforward constants for static friction
 
             TRAJECTORY_FOLLOWER_ERROR_TOLERANCE = 12.0; // inches to shut down auto
 
@@ -81,13 +83,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
         headingPID.setTolerance(HEADING_PID_TOLERANCE);
 
-        translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_TOLERANCE);
+        translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_PID_TOLERANCE);
         fusedLocalizer = new FusedLocalizer(getLocalizer(), hardwareMap);
         pose = new Pose2d(0,0,0);
         lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
         velocity = new Pose2d(0,0,0);
         fieldCentric = true;
+        targetPose = pose;
         lastRotateInput = 0;
         drivetrainState = DrivetrainState.TELEOP;
     }
@@ -98,8 +101,6 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         if(isTeleOp) {
             initializePose();
-
-//            headingMotionProfile = new MotionProfile(heading, heading);
         }
 
         pose = this.getPoseEstimate();
@@ -164,12 +165,18 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveClip(double x, double y, double rotate) {
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+        Vector2d driveVector = new Vector2d(x, y);
+
+        if (fieldCentric)
+            driveVector = driveVector.rotated(-heading); // rotate input vector to match robot heading if field centric
+        else
+            driveVector = driveVector.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
+
 
         Pose2d drivePose = clipByDrivePower(new Pose2d(driveVector, rotate));
-//        Pose2d staticDrivePose = processStaticFriction(drivePose);
+        Pose2d staticDrivePose = processStaticFriction(drivePose);
 
-        setWeightedDrivePower(drivePose);
+        setWeightedDrivePower(staticDrivePose);
     }
 
     public void driveToHeadingScaled(double x, double y, double targetHeading) {
@@ -396,6 +403,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void initializePose() {
         setPoseEstimate(Globals.START_POSE);
         setExternalHeading(Globals.START_POSE.getHeading());
+        resetHeading(Globals.START_POSE.getHeading());
     }
 
     public void setTargetPose(Pose2d targetPose) {
@@ -404,9 +412,17 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public boolean isAtTargetPose() {
-        boolean translationAtTarget = pose.vec().distTo(targetPose.vec()) < TRANSLATION_TOLERANCE && Math.abs(heading - targetHeading) < HEADING_PID_TOLERANCE;
-        boolean velocityAtTarget = velocity.vec().norm() < 7.0;
-        return translationAtTarget && velocityAtTarget;
+        boolean translationAtTarget = pose.vec().distTo(targetPose.vec()) < TRANSLATION_AT_POSE_TOLERANCE;
+
+        double headingError = heading - targetHeading;
+        if(headingError < -Math.PI) headingError += 2*Math.PI;
+        else if(headingError > Math.PI) headingError -= 2 * Math.PI;
+
+        Log.i("Drivetrain", "Heading error: " + headingError);
+        boolean headingAtTarget = Math.abs(headingError) < HEADING_AT_POSE_TOLERANCE;
+
+        boolean velocityAtTarget = velocity.vec().norm() < 8.0;
+        return translationAtTarget && headingAtTarget && velocityAtTarget;
     }
 
     public void updateAprilTags(AprilTagProcessor processor) {
