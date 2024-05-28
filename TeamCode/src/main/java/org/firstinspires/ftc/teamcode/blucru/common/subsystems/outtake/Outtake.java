@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -15,6 +16,7 @@ public class Outtake implements Subsystem {
             WRIST_OUTTAKE = WRIST_RETRACT - 0.32,
 
             PIXEL_HEIGHT = 2.6, // inches
+            DUNK_HEIGHT = PIXEL_HEIGHT * 0.5,
             LOW_HEIGHT = 4.3, // inches
             MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2, // inches
             HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4,
@@ -41,6 +43,7 @@ public class Outtake implements Subsystem {
     public boolean wristRetracted;
 
     public double targetHeight; // inches
+    double dunkHeight;
 
 
     public Outtake(HardwareMap hardwareMap) {
@@ -53,6 +56,7 @@ public class Outtake implements Subsystem {
         state = State.RETRACT;
 
         wristRetracted = true;
+        dunkHeight = 0;
     }
 
     public void init() {
@@ -67,7 +71,7 @@ public class Outtake implements Subsystem {
             case RETRACT:
                 break;
             case OUTTAKE:
-                lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta());
+                lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta() - dunkHeight);
                 break;
             case MANUAL:
                 updateTargetHeight();
@@ -124,6 +128,7 @@ public class Outtake implements Subsystem {
     public void retractLift() {
         state = State.RETRACT;
         lift.setMotionProfileTargetPos(0);
+        dunkHeight = 0;
     }
 
     public boolean liftIntakeReady() {
@@ -149,6 +154,10 @@ public class Outtake implements Subsystem {
     public void teleOpTurnTurret(double x) {
         double xInches = x * MAX_TELEOP_TURRET_X;
         setTurretX(xInches);
+    }
+
+    public void setDunkHeight(double input) {
+        dunkHeight = DUNK_HEIGHT * input;
     }
 
     public double getTurretAngle() {
