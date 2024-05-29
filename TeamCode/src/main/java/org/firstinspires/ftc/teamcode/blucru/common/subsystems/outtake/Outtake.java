@@ -149,11 +149,11 @@ public class Outtake implements Subsystem {
     }
 
     public void setTurretGlobalY(double yInches) {
-        turret.setGlobalY(yInches);
+        if(turretSafe()) turret.setGlobalY(yInches);
     }
 
     public void setTurretX(double xInches) {
-        turret.setX(xInches);
+        if(turretSafe()) turret.setX(xInches);
     }
 
     public void teleOpTurnTurret(double x) { // from gamepad input
@@ -171,6 +171,10 @@ public class Outtake implements Subsystem {
 
     public void toggleWrist() {
         wristRetracted = !wristRetracted;
+    }
+
+    public boolean turretSafe() {
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 150;
     }
 
     public void retractWrist() {

@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Disabled
 @TeleOp(name = "imu drive test", group = "test")
 public class ImuUpdateTest extends BCLinearOpMode {
     @Override

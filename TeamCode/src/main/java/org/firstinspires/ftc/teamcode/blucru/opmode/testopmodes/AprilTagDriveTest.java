@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Disabled
 @TeleOp(name = "april tag drive test", group = "test")
 public class AprilTagDriveTest extends BCLinearOpMode {
     private enum State {

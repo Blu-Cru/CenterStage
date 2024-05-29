@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Ou
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Disabled
 @TeleOp(name = "Command test", group = "test")
 public class CommandTest extends BCLinearOpMode {
     boolean lastA = false,

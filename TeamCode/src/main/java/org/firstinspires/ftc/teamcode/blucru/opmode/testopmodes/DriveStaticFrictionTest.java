@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Disabled
 @TeleOp(name = "Drive static friction test", group = "test")
 public class DriveStaticFrictionTest extends BCLinearOpMode {
     boolean lastA = false;
