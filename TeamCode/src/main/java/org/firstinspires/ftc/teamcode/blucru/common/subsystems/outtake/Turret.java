@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
@@ -16,11 +17,12 @@ public class Turret implements Subsystem {
             BUCKET_LENGTH = 5.984,
             BUCKET_WIDTH = 1.733, // inches
             BUCKET_HYPOTENUSE = Math.sqrt(BUCKET_LENGTH * BUCKET_LENGTH + BUCKET_WIDTH * BUCKET_WIDTH);
-    public static double TURRET_CENTER = 0.485; // ticks of turret servo at 270 degrees, pointing straight down/forward
+    public static double TURRET_CENTER = 0.485, // ticks of turret servo at 270 degrees, pointing straight down/forward
+            MAX_TURRET_X = 5.3; // inches
 
     Servo turretServo;
 
-    public double targetAngle;
+    private double targetAngle;
     private double position;
 
     public Turret(HardwareMap hardwareMap) {
@@ -56,15 +58,34 @@ public class Turret implements Subsystem {
         return BUCKET_LENGTH * Math.sin(Math.toRadians(targetAngle)) - Math.abs(BUCKET_WIDTH * Math.cos(Math.toRadians(targetAngle)));
     }
 
+    public void setX(double x) {
+        x = Range.clip(x, -MAX_TURRET_X, MAX_TURRET_X);
+        targetAngle = xToAngle(x);
+    }
+
+    public void setAngle(double angle) {
+        targetAngle = angle;
+    }
+
+    public double getAngle() {
+        return targetAngle;
+    }
+
+    public void setGlobalY(double globalY) {
+        double dtY = Robot.getInstance().drivetrain.pose.getY();
+
+        setX(dtY - globalY);
+    }
+
     public boolean isCentered() {
-        return Math.abs(targetAngle - 270) < 2;
+        return Math.abs(targetAngle - 270) < 1;
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("turret angle", targetAngle);
     }
 
-    public static double xToAngle(double x) {
+    public static double xToAngle(double x) { // positive is counterclockwise in deposit position
         return Math.toDegrees(Math.asin(x / BUCKET_LENGTH)) + 270;
     }
 
