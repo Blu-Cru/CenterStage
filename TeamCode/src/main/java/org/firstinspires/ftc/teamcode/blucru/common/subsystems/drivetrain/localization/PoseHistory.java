@@ -42,29 +42,37 @@ public class PoseHistory {
     }
 
     public Pose2d getPoseAtTime(long targetNanoTime) {
-//        ListIterator<PoseMarker> iterator = poseList.listIterator();
-//
-//        while(iterator.hasNext()) {
-//            PoseMarker poseMarker = iterator.next();
-//            if (poseMarker.nanoTime < targetNanoTime) {
-////                Log.i("PoseHistory", "found: " + poseMarker.pose);
-//                return poseMarker.pose;
-//            }
-////            Log.v("PoseHistory", "iterated: " + poseMarker.pose + ", pose hash code = " + poseMarker.pose.hashCode());
-//        }
+        PoseMarker poseMarkerAfterTime = poseList.get(0);
+        PoseMarker poseMarkerBeforeTime = poseList.get(0);
         Log.v("PoseHistory", "Searching for pose at time " + targetNanoTime / Math.pow(10, 6));
         Log.v("PoseHistory", "Length of poseList: " + poseList.size());
         for(PoseMarker poseMarker : poseList) {
             if (poseMarker.nanoTime < targetNanoTime) {
                 poseMarker.log("PoseMarker found");
 //                Log.i("", "******************************************************************************************");
-                return poseMarker.pose;
+                poseMarkerBeforeTime = poseMarker;
+                break;
             }
+            else poseMarkerAfterTime = poseMarker;
             poseMarker.log("PoseMarker iterated");
         }
 
+        long timeBefore = targetNanoTime- poseMarkerBeforeTime.nanoTime;
+        long timeAfter = poseMarkerAfterTime.nanoTime - targetNanoTime;
+        long total = timeBefore + timeAfter;
+        Log.v("PoseHistory", "Time before: " + timeBefore / Math.pow(10, 6));
+        Log.v("PoseHistory", "Time after: " + timeAfter / Math.pow(10, 6));
+
+        long beforeMultiplier = timeBefore / total;
+        long afterMultiplier = timeAfter / total;
+
+        Pose2d beforePose = poseMarkerBeforeTime.pose;
+        Pose2d afterPose = poseMarkerAfterTime.pose;
+
+        Pose2d interpolatedPose = beforePose.times(beforeMultiplier).plus(afterPose.times(afterMultiplier)); // linear interpolation
+
         Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
-        return null;
+        return interpolatedPose;
     }
 
     public void offset(Pose2d poseDelta) {
