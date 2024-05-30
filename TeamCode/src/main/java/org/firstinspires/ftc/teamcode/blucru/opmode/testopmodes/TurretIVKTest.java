@@ -26,11 +26,21 @@ public class TurretIVKTest extends BCLinearOpMode {
 
     @Override
     public void periodic() {
+        double vert = -gamepad1.left_stick_y;
+        double horz = gamepad1.left_stick_x;
+        double rotate = -gamepad1.right_stick_x;
+
+        if(gamepad1.right_stick_button) {
+            drivetrain.resetHeading(Math.toRadians(90));
+            gamepad1.rumble(150);
+        }
         if(stickyG1.b) CommandScheduler.getInstance().schedule(new OuttakeExtendCommand(1));
         if(stickyG1.a) CommandScheduler.getInstance().schedule(new OuttakeRetractCommand());
 
-        turret.setGlobalY(TARGET_Y);
+        outtake.setTurretGlobalY(TARGET_Y);
 
         drivetrain.updateAprilTags(cvMaster.tagDetector);
+
+        drivetrain.driveScaled(horz, vert, rotate);
     }
 }

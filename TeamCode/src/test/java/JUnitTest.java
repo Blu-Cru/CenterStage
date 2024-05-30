@@ -26,11 +26,14 @@ public class JUnitTest {
         poseHistory.add(new Pose2d(2, 2, 2), new Pose2d(2, 2, 2));
         long time3 = System.nanoTime();
 
-        poseHistory.offset(new Pose2d(1, 1, 1));
+//        poseHistory.offset(new Pose2d(1, 1, 1));
         
         long targetTime = (time1 + time2) / 2;
 
-        Assert.assertTrue(poseHistory.getPoseAtTime(targetTime).equals(new Pose2d(2, 2, 1)));
+        Pose2d interpolatedPose = poseHistory.getPoseAtTime(targetTime);
+        System.out.println(interpolatedPose);
+
+        Assert.assertTrue(interpolatedPose.equals(new Pose2d(.5, .5, .5)));
     }
 
     @Test

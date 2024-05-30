@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Outtake implements Subsystem {
     public static double
             WRIST_RETRACT = 0.68,
-            WRIST_OUTTAKE = WRIST_RETRACT - 0.32,
+            WRIST_OUTTAKE = WRIST_RETRACT - 0.35,
 
             PIXEL_HEIGHT = 2.6, // inches
             DUNK_HEIGHT = PIXEL_HEIGHT * 0.5,
@@ -72,7 +72,7 @@ public class Outtake implements Subsystem {
                 break;
             case OUTTAKE:
                 lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta() - dunkHeight);
-                if(System.currentTimeMillis() - timeWristExtended < 150 || wristRetracted) centerTurret();
+                if(System.currentTimeMillis() - timeWristExtended < 250 || wristRetracted) centerTurret();
                 break;
             case MANUAL:
                 updateTargetHeight();
@@ -174,7 +174,7 @@ public class Outtake implements Subsystem {
     }
 
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 150;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 250;
     }
 
     public void retractWrist() {

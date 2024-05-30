@@ -60,6 +60,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     Pose2d lastPose;
     public Pose2d velocity;
     Pose2d lastVelocity;
+    double lastVelTime;
     public Pose2d accel;
     double lastTime;
 
@@ -90,9 +91,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         pose = new Pose2d(0,0,0);
         lastPose = Globals.START_POSE;
         lastDriveVector = new Vector2d(0,0);
+        lastVelTime = System.currentTimeMillis();
         velocity = new Pose2d(0,0,0);
-        lastVelocity = velocity;
-        accel = new Pose2d(0,0,0);
+
+        if(System.currentTimeMillis() - lastVelTime > 60) {
+            accel = velocity.minus(lastVelocity).div(System.currentTimeMillis()-lastVelTime/1000);
+            lastVelocity = velocity;
+            lastVelTime = System.currentTimeMillis();
+        }
+
         fieldCentric = true;
         targetPose = pose;
         lastRotateInput = 0;

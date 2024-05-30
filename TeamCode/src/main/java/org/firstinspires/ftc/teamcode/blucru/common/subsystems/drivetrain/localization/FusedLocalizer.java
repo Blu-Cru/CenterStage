@@ -29,6 +29,7 @@ public class FusedLocalizer {
     Localizer deadWheels;
     IMU imu;
     PoseHistory poseHistory;
+    long lastFrameTime;
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
             RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
@@ -44,6 +45,7 @@ public class FusedLocalizer {
         poseHistory = new PoseHistory();
 
         imu = hardwareMap.get(IMU.class, "e hub imu");
+        lastFrameTime = System.nanoTime();
     }
 
     public void update() {
@@ -67,7 +69,6 @@ public class FusedLocalizer {
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
         Pose2d currentPose = deadWheels.getPoseEstimate();
         double heading = Angle.norm(currentPose.getHeading());
-//        Log.v("FusedLocalizer", "heading: " + heading);
         if(heading < Math.PI/2 || heading > 3*Math.PI/2) throw new IllegalArgumentException("Not in the right orientation to update tags");
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
@@ -75,6 +76,10 @@ public class FusedLocalizer {
 
         // get odo pose at the time of the tag pose
         long timeOfFrame = detections.get(0).frameAcquisitionNanoTime;
+        if(timeOfFrame==lastFrameTime) {
+            Log.i("FusedLocalizer", "Already updated with this frame");
+            return;
+        }
         Pose2d odoPoseAtFrame = poseHistory.getPoseAtTime(timeOfFrame);
 
         long timeSinceFrame = System.nanoTime() - timeOfFrame;
@@ -88,10 +93,11 @@ public class FusedLocalizer {
         // calculate change from old odo pose to current pose
         Pose2d odoDelta = currentPose.minus(odoPoseAtFrame);
 
-        Log.v("FusedLocalizer", "Updating pose. history odo pose: " + odoPoseAtFrame.toString() + " tag pose: " + tagPose);
+        Log.i("FusedLocalizer", "Updating pose");
+        Log.v("FusedLocalizer", "History odo pose:" + odoPoseAtFrame);
         Log.v("FusedLocalizer", "tag pose: " + tagPose);
-        Log.v("FusedLocalizer", "delta pose: " + odoDelta);
-
+        Log.v("FusedLocalizer", "current pose: " + currentPose);
+        Log.v("FusedLocalizer", "delta: " + odoDelta);
 
         Pose2d newPose = new Pose2d(weightedEstimateAtFrame.vec().plus(odoDelta.vec()), currentPose.getHeading());
         Log.v("FusedLocalizer", "new pose: " + newPose);
@@ -103,6 +109,7 @@ public class FusedLocalizer {
         Pose2d odoPoseError = weightedEstimateAtFrame.minus(odoPoseAtFrame);
         Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
         poseHistory.offset(odoPoseError);
+        lastFrameTime = timeOfFrame;
     }
 
     public void init() {

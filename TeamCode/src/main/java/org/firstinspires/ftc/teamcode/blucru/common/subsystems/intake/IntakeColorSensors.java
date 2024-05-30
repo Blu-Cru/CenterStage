@@ -19,7 +19,7 @@ public class IntakeColorSensors implements Subsystem {
 
     public static double
             FRONT_DISTANCE_LOW = 0.05,
-            FRONT_DISTANCE_HIGH = 0.5, // inches
+            FRONT_DISTANCE_HIGH = 0.65, // inches
 
             BACK_DISTANCE_LOW = 0.1,
             BACK_DISTANCE_HIGH = 0.8; // inches
@@ -74,14 +74,14 @@ public class IntakeColorSensors implements Subsystem {
             frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
 
-//            if (frontDistance >= FRONT_DISTANCE_LOW && frontDistance <= FRONT_DISTANCE_HIGH) frontSlotState = SlotState.FULL;
-//            else frontSlotState = SlotState.EMPTY;
-//
-//            if (backDistance >= BACK_DISTANCE_LOW && backDistance <= BACK_DISTANCE_HIGH) backSlotState = SlotState.FULL;
-//            else backSlotState = SlotState.EMPTY;
+            if (frontDistance >= FRONT_DISTANCE_LOW && frontDistance <= FRONT_DISTANCE_HIGH) frontSlotState = SlotState.FULL;
+            else frontSlotState = SlotState.EMPTY;
 
-            frontSlotState = SlotState.EMPTY;
-            backSlotState = SlotState.EMPTY;
+            if (backDistance >= BACK_DISTANCE_LOW && backDistance <= BACK_DISTANCE_HIGH) backSlotState = SlotState.FULL;
+            else backSlotState = SlotState.EMPTY;
+
+//            frontSlotState = SlotState.EMPTY;
+//            backSlotState = SlotState.EMPTY;
 
 //            frontRGBA = frontSensor.getNormalizedColors();
 //            backRGBA = backSensor.getNormalizedColors();

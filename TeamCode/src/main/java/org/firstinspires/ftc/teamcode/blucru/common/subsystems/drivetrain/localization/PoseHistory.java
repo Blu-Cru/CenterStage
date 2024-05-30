@@ -57,21 +57,26 @@ public class PoseHistory {
             poseMarker.log("PoseMarker iterated");
         }
 
+        Pose2d poseBefore = poseMarkerBeforeTime.pose;
+        Pose2d poseAfter = poseMarkerAfterTime.pose;
+
         long timeBefore = targetNanoTime- poseMarkerBeforeTime.nanoTime;
+        System.out.println("before" + timeBefore);
         long timeAfter = poseMarkerAfterTime.nanoTime - targetNanoTime;
+        System.out.println("after" + timeAfter);
         long total = timeBefore + timeAfter;
-        Log.v("PoseHistory", "Time before: " + timeBefore / Math.pow(10, 6));
-        Log.v("PoseHistory", "Time after: " + timeAfter / Math.pow(10, 6));
+        System.out.println("total" + total);
+        Log.v("PoseHistory", "Before: " + poseBefore + " at time " + timeBefore / Math.pow(10, 6));
+        Log.v("PoseHistory", "After: " + poseAfter + " at time " + timeAfter / Math.pow(10, 6));
 
-        long beforeMultiplier = timeBefore / total;
-        long afterMultiplier = timeAfter / total;
+        double beforeMultiplier = (double) timeBefore / total;
+        System.out.println("before mult" + beforeMultiplier);
+        double afterMultiplier = (double) timeAfter / total;
+        System.out.println("after mult" + afterMultiplier);
 
-        Pose2d beforePose = poseMarkerBeforeTime.pose;
-        Pose2d afterPose = poseMarkerAfterTime.pose;
+        Pose2d interpolatedPose = poseBefore.times(beforeMultiplier).plus(poseAfter.times(afterMultiplier)); // linear interpolation
 
-        Pose2d interpolatedPose = beforePose.times(beforeMultiplier).plus(afterPose.times(afterMultiplier)); // linear interpolation
-
-        Log.e("PoseHistory", "No pose found at time " + targetNanoTime);
+        Log.v("PoseHistory", "Interpolated pose" + interpolatedPose);
         return interpolatedPose;
     }
 
