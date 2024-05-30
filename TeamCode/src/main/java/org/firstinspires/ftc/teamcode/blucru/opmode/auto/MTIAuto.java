@@ -24,9 +24,8 @@ public class MTIAuto extends BCLinearOpMode {
                 if(stickyG1.y) Globals.parkType = Globals.parkType.cycle();
             })
             .transition(() -> stickyG1.right_stick_button, State.BUILD, () -> {
-                config = Globals.getConfig();
-                config.initialize();
             })
+            .build();
 
     @Override
     public void initialize() {

@@ -36,7 +36,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
-            HEADING_AT_POSE_TOLERANCE = 0.1,
+            HEADING_AT_POSE_TOLERANCE = 0.15,
 
             DISTANCE_P = 0.15, DISTANCE_I = 0, DISTANCE_D = 0.04, // PID constants for distance sensors
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
@@ -330,6 +330,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     public void idle() {
         drivetrainState = DrivetrainState.TELEOP;
+        lastDriveVector = new Vector2d(0,0);
     }
 
     public void pidTo(Pose2d pose) {
@@ -431,11 +432,23 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(headingError < -Math.PI) headingError += 2*Math.PI;
         else if(headingError > Math.PI) headingError -= 2 * Math.PI;
 
-        Log.i("Drivetrain", "Heading error: " + headingError);
+//        Log.i("Drivetrain", "Heading error: " + headingError);
         boolean headingAtTarget = Math.abs(headingError) < HEADING_AT_POSE_TOLERANCE;
 
         boolean velocityAtTarget = velocity.vec().norm() < 8.0;
         return translationAtTarget && headingAtTarget && velocityAtTarget;
+    }
+
+    public boolean inRange(Pose2d targetPose, double translationTolerance) {
+        boolean translationAtTarget = pose.vec().distTo(targetPose.vec()) < translationTolerance;
+
+        double headingError = heading - targetPose.getHeading();
+        if(headingError < -Math.PI) headingError += 2*Math.PI;
+        else if(headingError > Math.PI) headingError -= 2 * Math.PI;
+
+        boolean headingAtTarget = Math.abs(headingError) < HEADING_AT_POSE_TOLERANCE;
+
+        return translationAtTarget && headingAtTarget;
     }
 
     public void updateAprilTags(AprilTagProcessor processor) {
