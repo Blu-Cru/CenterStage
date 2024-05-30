@@ -89,6 +89,6 @@ public class DevAuto extends BCLinearOpMode {
     }
 
     public void end() {
-        Globals.START_POSE = drivetrain.getPoseEstimate();
+        Globals.startPose = drivetrain.getPoseEstimate();
     }
 }

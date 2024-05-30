@@ -90,6 +90,6 @@ public class RedFarCenterStrafingAuto extends BCLinearOpMode {
     }
 
     public void end() {
-        Globals.START_POSE = drivetrain.getPoseEstimate();
+        Globals.startPose = drivetrain.getPoseEstimate();
     }
 }

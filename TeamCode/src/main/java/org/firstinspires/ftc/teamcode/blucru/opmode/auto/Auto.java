@@ -74,7 +74,7 @@ public class Auto extends LinearOpMode {
                 case INIT:
                     if(gamepad1.x && !lastX) {
                         alliance = alliance.flip();
-                        Globals.ALLIANCE = alliance;
+                        Globals.alliance = alliance;
                     }
                     lastX = gamepad1.x;
                     if(gamepad1.b && !lastB) side = side.flip();
@@ -233,6 +233,6 @@ public class Auto extends LinearOpMode {
         } else {
             pose = new Pose2d(0, 0, drivetrain.getPoseEstimate().getHeading() + Math.PI);
         }
-        Globals.START_POSE = pose;
+        Globals.startPose = pose;
     }
 }

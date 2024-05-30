@@ -51,7 +51,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     boolean telemetryOptimized = false;
 
     public final void runOpMode() throws InterruptedException {
-        alliance = Globals.ALLIANCE;
+        alliance = Globals.alliance;
         stickyG1 = new StickyGamepad(gamepad1);
         stickyG2 = new StickyGamepad(gamepad2);
         robot = Robot.getInstance();
@@ -137,7 +137,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
 
-    public void addCVMaster() {cvMaster = robot.addCVMaster(Globals.ALLIANCE);}
+    public void addCVMaster() {cvMaster = robot.addCVMaster(Globals.alliance);}
 
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 

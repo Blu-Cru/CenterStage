@@ -89,7 +89,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         translationPID = new DrivetrainTranslationPID(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D, TRANSLATION_PID_TOLERANCE);
         fusedLocalizer = new FusedLocalizer(getLocalizer(), hardwareMap);
         pose = new Pose2d(0,0,0);
-        lastPose = Globals.START_POSE;
+        lastPose = Globals.startPose;
         lastDriveVector = new Vector2d(0,0);
         lastVelTime = System.currentTimeMillis();
         velocity = new Pose2d(0,0,0);
@@ -414,9 +414,9 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // set initial pose from auto
     public void initializePose() {
-        setPoseEstimate(Globals.START_POSE);
-        setExternalHeading(Globals.START_POSE.getHeading());
-        resetHeading(Globals.START_POSE.getHeading());
+        setPoseEstimate(Globals.startPose);
+        setExternalHeading(Globals.startPose.getHeading());
+        resetHeading(Globals.startPose.getHeading());
     }
 
     public void setTargetPose(Pose2d targetPose) {
