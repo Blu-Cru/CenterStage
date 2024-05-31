@@ -21,6 +21,11 @@ public class PIDPathBuilder {
         return this;
     }
 
+    public PIDPathBuilder addPoint(Pose2d pose) {
+        points.add(new PIDPoint(pose));
+        return this;
+    }
+
     public PIDPath build() {
         return new PIDPath(points);
     }

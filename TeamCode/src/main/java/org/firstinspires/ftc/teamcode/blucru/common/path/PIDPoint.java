@@ -5,8 +5,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 public class PIDPoint {
+    static double FAIL_TIME = 1000;
+
     Pose2d pose;
     double translationTolerance;
+    double startTime;
 
     public PIDPoint(Pose2d pose, double translationTolerance) {
         this.pose = pose;
@@ -31,6 +34,14 @@ public class PIDPoint {
 
     public void setPose(Pose2d pose) {
         this.pose = pose;
+    }
+
+    public void start() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public boolean failed() {
+        return System.currentTimeMillis() - startTime > FAIL_TIME && Robot.getInstance().drivetrain.isStopped();
     }
 
     public void setTranslationTolerance(double translationTolerance) {

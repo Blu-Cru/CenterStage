@@ -10,13 +10,13 @@ public class TrajectorySequencePath implements Path {
     }
 
     @Override
-    public void init() {
+    public void start() {
         Robot.getInstance().drivetrain.followTrajectorySequenceAsync(this.sequence);
         Robot.getInstance().drivetrain.idle();
     }
 
     @Override
-    public void follow() {
+    public void run() {
         Robot.getInstance().drivetrain.updateTrajectory();
     }
 

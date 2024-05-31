@@ -1,18 +1,17 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
+import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-
-import java.util.ArrayList;
 
 @TeleOp(name = "RR vs PID test", group = "test")
 public class RoadrunnerVsPIDTest extends BCLinearOpMode {
@@ -22,8 +21,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         FOLLOWING_PID
     }
 
-    ArrayList<Pose2d> pidPoints = new ArrayList<>();
-    int pidIndex = 0;
+    PIDPath pidPath;
 
     PreloadDeposits preloadDeposits;
     TrajectorySequence traj;
@@ -42,9 +40,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
                 drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
                 drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
-                drivetrain.pidTo(pidPoints.get(0));
-                pidIndex = 0;
-                pidStartTime = System.currentTimeMillis();
+                pidPath.start();
             })
             .loop(() -> {
                 drivetrain.idle();
@@ -63,21 +59,18 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 catch (Exception e) {requestOpModeStop();}
             })
             .state(State.FOLLOWING_PID)
-            .transition(() -> pidIndex == pidPoints.size(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
+            .transition(() -> pidPath.isDone() || pidPath.failed(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
             .transition(() -> stickyG1.a, State.RESETTING, ()-> {
                 drivetrain.idle();
+                pidPath.breakPath();
                 drivetrain.driveScaled(0,0,0);
             })
             .loop(() -> {
                 drivetrain.ftcDashDrawCurrentPose();
 
                 try {
-                    drivetrain.pidTo(pidPoints.get(pidIndex));
+                    pidPath.run();
                 } catch (Exception e) {}
-
-                if(drivetrain.isAtTargetPose()) {
-                    pidIndex++;
-                }
             })
             .build();
 
@@ -88,10 +81,17 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         Poses.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
 
-        pidPoints.add(new Pose2d(12, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)));
-        pidPoints.add(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)));
-//        pidPoints.add(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)));
-        pidPoints.add(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)));
+        pidPath = new PIDPathBuilder()
+                .addPoint(new Pose2d(14, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)), 2)
+                .addPoint(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(0 * Poses.reflect)))
+//                .addPoint(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)))
+                .addPoint(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)))
+                .build();
+
+//        pidPoints.add(new Pose2d(12, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)));
+//        pidPoints.add(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)));
+////        pidPoints.add(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)));
+//        pidPoints.add(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)));
 
         preloadDeposits = new PreloadDeposits(-1);
         traj = preloadDeposits.rrTest(robot);
@@ -110,7 +110,6 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         telemetry.addData("state:", stateMachine.getState());
         telemetry.addData("rr total time: ", rrTotalTime);
         telemetry.addData("pid total time: ", pidTotalTime);
-        telemetry.addData("pid", "to point " + (pidIndex + 1) + " out of " + pidPoints.size());
         telemetry.addData("dt", " is at target pose: " + drivetrain.isAtTargetPose());
     }
 }

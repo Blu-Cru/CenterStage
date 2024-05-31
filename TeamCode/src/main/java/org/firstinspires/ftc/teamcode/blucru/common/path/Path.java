@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.blucru.common.path;
 
 public interface Path {
     // interface for both PID path following and RoadRunner path following
-    void init();
+    void start();
 
-    void follow();
+    void run();
 
     void breakPath();
 

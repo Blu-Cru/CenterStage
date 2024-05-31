@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.path;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 import java.util.ArrayList;
@@ -16,15 +17,22 @@ public class PIDPath implements Path {
     }
 
     @Override
-    public void init() {
+    public void start() {
+        poseList.get(0).start();
         index = 0;
     }
 
-    public void follow() {
+    public void run() {
+        if(done) return;
         Robot.getInstance().drivetrain.pidTo(poseList.get(index).pose);
 
         if(poseList.get(index).atTarget()) {
-            index++;
+            if(index + 1 == poseList.size()) {
+                done = true;
+                return;
+            } else index++;
+
+            poseList.get(index).start();
         }
     }
 
@@ -33,7 +41,15 @@ public class PIDPath implements Path {
         done = true;
     }
 
+    public boolean failed() {
+        return poseList.get(index).failed();
+    }
+
     public boolean isDone() {
         return index >= poseList.size() || done;
+    }
+
+    public void telemetry(Telemetry tele) {
+        tele.addData("Path index", index);
     }
 }
