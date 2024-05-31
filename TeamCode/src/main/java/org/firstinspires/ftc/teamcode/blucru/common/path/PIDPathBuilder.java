@@ -1,0 +1,27 @@
+package org.firstinspires.ftc.teamcode.blucru.common.path;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
+import java.util.ArrayList;
+
+public class PIDPathBuilder {
+    private final ArrayList<PIDPoint> points;
+
+    public PIDPathBuilder() {
+        points = new ArrayList<PIDPoint>();
+    }
+
+    public PIDPathBuilder addPoint(PIDPoint point) {
+        points.add(point);
+        return this;
+    }
+
+    public PIDPathBuilder addPoint(Pose2d pose, double translationTolerance) {
+        points.add(new PIDPoint(pose, translationTolerance));
+        return this;
+    }
+
+    public PIDPath build() {
+        return new PIDPath(points);
+    }
+}

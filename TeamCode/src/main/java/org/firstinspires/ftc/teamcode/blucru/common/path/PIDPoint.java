@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.paths;
+package org.firstinspires.ftc.teamcode.blucru.common.path;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
