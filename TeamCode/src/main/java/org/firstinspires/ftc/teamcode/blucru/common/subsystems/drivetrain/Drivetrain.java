@@ -272,7 +272,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else {
             // limit to the maximum change in the drive vector per second at the drive power
             double newMagnitude = Math.min(Math.min(input.norm(), lastDriveVector.norm() + MAX_ACCEL_PID_DELTA * dt / 1000.0), 1);
-            return input.div(input.norm()).times(newMagnitude);
+
+            Vector2d driveVector = input.div(input.norm()).times(newMagnitude);
+            lastDriveVector = driveVector;
+            return driveVector;
         }
     }
 
