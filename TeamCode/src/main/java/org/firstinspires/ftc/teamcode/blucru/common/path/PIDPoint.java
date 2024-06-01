@@ -10,18 +10,26 @@ public class PIDPoint {
     Pose2d pose;
     double translationTolerance;
     double startTime;
+    boolean stopRequiredToEnd;
 
-    public PIDPoint(Pose2d pose, double translationTolerance) {
+    public PIDPoint(Pose2d pose, double translationTolerance, boolean stopRequiredToEnd) {
         this.pose = pose;
         this.translationTolerance = translationTolerance;
+        this.stopRequiredToEnd = stopRequiredToEnd;
     }
 
+    public PIDPoint(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, true);}
+
+    public PIDPoint(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1, stopRequiredToEnd);}
+
     public PIDPoint(Pose2d pose) {
-        this(pose, 1);
+        this(pose, 1, true);
     }
 
     public boolean atTarget() {
-        return Robot.getInstance().drivetrain.inRange(pose, translationTolerance);
+        boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 8.0;
+//        boolean velSatisfied = true;
+        return Robot.getInstance().drivetrain.inRange(pose, translationTolerance) && velSatisfied;
     }
 
     public Pose2d getPose() {

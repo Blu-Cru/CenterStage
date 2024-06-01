@@ -194,7 +194,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else
             driveVector = driveVector.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
 
-        driveVector = limitPIDDriveVector(driveVector);
+//        driveVector = limitPIDDriveVector(driveVector);
 
         Pose2d drivePose = clipByDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);

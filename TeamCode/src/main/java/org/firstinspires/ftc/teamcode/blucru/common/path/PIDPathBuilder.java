@@ -26,6 +26,16 @@ public class PIDPathBuilder {
         return this;
     }
 
+    public PIDPathBuilder addPoint(Pose2d pose, boolean stopRequired) {
+        points.add(new PIDPoint(pose, stopRequired));
+        return this;
+    }
+
+    public PIDPathBuilder addPoint(Pose2d pose, double translationTolerance, boolean stopRequired) {
+        points.add(new PIDPoint(pose, translationTolerance, stopRequired));
+        return this;
+    }
+
     public PIDPath build() {
         return new PIDPath(points);
     }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 @TeleOp(name = "Turret ivk test", group = "test")
 public class TurretIVKTest extends BCLinearOpMode {
     public static double TARGET_Y = 36;
+    boolean retracted;
     @Override
     public void initialize() {
         addDrivetrain(true);
@@ -34,10 +35,16 @@ public class TurretIVKTest extends BCLinearOpMode {
             drivetrain.resetHeading(Math.toRadians(90));
             gamepad1.rumble(150);
         }
-        if(stickyG1.b) CommandScheduler.getInstance().schedule(new OuttakeExtendCommand(1));
-        if(stickyG1.a) CommandScheduler.getInstance().schedule(new OuttakeRetractCommand());
+        if(stickyG1.b) {
+            retracted = false;
+            CommandScheduler.getInstance().schedule(new OuttakeExtendCommand(1));
+        }
+        if(stickyG1.a) {
+            retracted = true;
+            CommandScheduler.getInstance().schedule(new OuttakeRetractCommand());
+        }
 
-        outtake.setTurretGlobalY(TARGET_Y);
+        if(!retracted) outtake.setTurretGlobalY(TARGET_Y);
 
         drivetrain.updateAprilTags(cvMaster.tagDetector);
 

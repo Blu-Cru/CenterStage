@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Utils;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -41,6 +42,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
                 drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
                 pidPath.start();
+                pidStartTime = System.currentTimeMillis();
             })
             .loop(() -> {
                 drivetrain.idle();
@@ -59,7 +61,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 catch (Exception e) {requestOpModeStop();}
             })
             .state(State.FOLLOWING_PID)
-            .transition(() -> pidPath.isDone() || pidPath.failed(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
+//            .transition(() -> pidPath.isDone(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
             .transition(() -> stickyG1.a, State.RESETTING, ()-> {
                 drivetrain.idle();
                 pidPath.breakPath();
@@ -71,6 +73,8 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 try {
                     pidPath.run();
                 } catch (Exception e) {}
+
+                drivetrain.updateAprilTags(cvMaster.tagDetector);
             })
             .build();
 
@@ -78,15 +82,26 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(false);
+        addIntake();
+        addCVMaster();
         Poses.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
 
         pidPath = new PIDPathBuilder()
-                .addPoint(new Pose2d(14, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)), 2)
-                .addPoint(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(0 * Poses.reflect)))
-//                .addPoint(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)))
-                .addPoint(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)))
+                .addPoint(Utils.mapPose(14, -45, Math.toRadians(-60)), 8, false)
+                .addPoint(Utils.mapPose(8, -39, Math.toRadians(-30)))
+                .addPoint(Utils.mapPose(40, -30, Math.toRadians(180)))
+                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
+                .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
+                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
+                .addPoint(Utils.mapPose(50, -24, 2.7))
+
                 .build();
+//                .addPoint(new Pose2d(14, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)), 8, false)
+//                .addPoint(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)), true)
+////                .addPoint(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)))
+//                .addPoint(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)), true)
+//                .build();
 
 //        pidPoints.add(new Pose2d(12, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)));
 //        pidPoints.add(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)));
@@ -98,6 +113,8 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
         stateMachine.setState(State.RESETTING);
         stateMachine.start();
+
+        cvMaster.detectTag();
     }
 
     @Override

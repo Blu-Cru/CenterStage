@@ -86,21 +86,25 @@ public class FusedLocalizer {
         Log.v("FusedLocalizer", "Time since frame:" + timeSinceFrame);
 
         // save reference to tag pose
-        Pose2d tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, poseAtFrame.getHeading());
-
+        Pose2d tagPose;
+        try {
+            tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, poseAtFrame.getHeading());
+        } catch(Exception e) {
+            Log.v("FusedLocalizer", "No tag pose found");
+            return;
+        }
         Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(getWeight(velocityAtFrame)).plus(poseAtFrame);
 
         // calculate change from old odo pose to current pose
         Pose2d odoDelta = currentPose.minus(poseAtFrame);
 
-        Log.i("FusedLocalizer", "Updating pose");
         Log.v("FusedLocalizer", "History odo pose:" + poseMarkerAtFrame);
         Log.v("FusedLocalizer", "tag pose: " + tagPose);
         Log.v("FusedLocalizer", "current pose: " + currentPose);
         Log.v("FusedLocalizer", "delta: " + odoDelta);
 
         Pose2d newPose = new Pose2d(weightedEstimateAtFrame.vec().plus(odoDelta.vec()), currentPose.getHeading());
-        Log.v("FusedLocalizer", "new pose: " + newPose);
+        Log.i("FusedLocalizer", "Updated pose to: " + newPose);
 
         // set pose estimate to tag pose + delta
         deadWheels.setPoseEstimate(newPose);
@@ -132,6 +136,6 @@ public class FusedLocalizer {
 
         double weight = Range.clip(-0.5*Math.atan(.3 * vel-8.0), 0, 1);
         // TODO: tune this function
-        return 1;
+        return weight;
     }
 }

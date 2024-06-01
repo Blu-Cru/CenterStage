@@ -18,21 +18,21 @@ public class PIDPath implements Path {
 
     @Override
     public void start() {
+        done = false;
         poseList.get(0).start();
         index = 0;
     }
 
     public void run() {
-        if(done) return;
         Robot.getInstance().drivetrain.pidTo(poseList.get(index).pose);
 
-        if(poseList.get(index).atTarget()) {
+        if(poseList.get(index).atTarget() && !done) {
             if(index + 1 == poseList.size()) {
                 done = true;
-                return;
-            } else index++;
-
-            poseList.get(index).start();
+            } else {
+                index++;
+                poseList.get(index).start();
+            }
         }
     }
 

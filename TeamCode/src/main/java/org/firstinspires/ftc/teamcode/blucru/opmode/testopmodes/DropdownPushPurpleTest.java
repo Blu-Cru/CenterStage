@@ -9,7 +9,7 @@ public class DropdownPushPurpleTest extends BCLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(true);
-        addIntakeWrist();
+        addIntake();
     }
 
     @Override
@@ -22,11 +22,15 @@ public class DropdownPushPurpleTest extends BCLinearOpMode {
         }
 
         if(stickyG1.a) {
-            intakeWrist.dropToPurpleHeight();
+            intake.intakeWrist.dropToPurpleHeight();
         }
 
         if(stickyG1.b) {
-            intakeWrist.retract();
+            intake.intakeWrist.retract();
         }
+
+        if(gamepad1.right_trigger > 0.1) intake.setIntakePower(gamepad1.right_trigger);
+        else if(gamepad1.left_trigger > 0.1) intake.setIntakePower(-gamepad1.left_trigger);
+        else intake.setIntakePower(0);
     }
 }

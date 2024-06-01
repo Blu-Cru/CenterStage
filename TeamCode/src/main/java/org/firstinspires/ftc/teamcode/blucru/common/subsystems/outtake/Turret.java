@@ -12,6 +12,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 @Config
 public class Turret implements Subsystem {
     // TODO: make inverse kinematics for turret in autonomous
+    enum State {
+        IDLE,
+        IVK
+    }
 
     public static final double
             BUCKET_LENGTH = 5.984,

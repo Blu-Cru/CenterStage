@@ -15,7 +15,9 @@ import java.util.List;
 
 public final class AprilTagPoseGetter {
     public static Vector2d CAMERA_POS = new Vector2d(-6.61, 3.78); // position of the camera relative to the center of the robot in inches
-    public static double TAG_X = Poses.DEPOSIT_X + 12; // x position of the tags in inches
+    public static double
+            TAG_X = Poses.DEPOSIT_X + 12,
+            MAX_UPDATE_DISTANCE = 30; // maximum update distance
     public static HashMap<Integer, Pose2d> TAGS = new HashMap<Integer, Pose2d>() {{
         put(1, new Pose2d(TAG_X, 42, Math.toRadians(180))); // tag 1 (red right)
         put(2, new Pose2d(TAG_X, 36, Math.toRadians(180))); // tag 2 (red center)
@@ -62,7 +64,7 @@ public final class AprilTagPoseGetter {
 
     public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections) {
         if(detections.size() == 0) {
-            return Robot.getInstance().drivetrain.pose;
+            throw new NullPointerException("No tags found");
         } else {
             AprilTagDetection closestDetection = detections.get(0);
             double closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);
@@ -75,8 +77,8 @@ public final class AprilTagPoseGetter {
                 }
             }
 
-            if(closestDistance > 25) {
-                return Robot.getInstance().drivetrain.pose; // dont update pose if the closest tag is too far away
+            if(closestDistance > MAX_UPDATE_DISTANCE) {
+                throw new IllegalStateException("Too far away to update tags");
             }
 
             return getRobotPose(closestDetection);
