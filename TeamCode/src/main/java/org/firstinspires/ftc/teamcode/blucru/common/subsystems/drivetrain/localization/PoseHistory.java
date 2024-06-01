@@ -41,7 +41,7 @@ public class PoseHistory {
         }
     }
 
-    public Pose2d getPoseAtTime(long targetNanoTime) {
+    public PoseMarker getPoseAtTime(long targetNanoTime) {
         PoseMarker poseMarkerAfterTime = poseList.get(0);
         PoseMarker poseMarkerBeforeTime = poseList.get(0);
         Log.v("PoseHistory", "Searching for pose at time " + targetNanoTime / Math.pow(10, 6));
@@ -77,7 +77,7 @@ public class PoseHistory {
         Pose2d interpolatedPose = poseBefore.times(beforeMultiplier).plus(poseAfter.times(afterMultiplier)); // linear interpolation
 
         Log.v("PoseHistory", "Interpolated pose" + interpolatedPose);
-        return interpolatedPose;
+        return new PoseMarker(interpolatedPose, poseMarkerBeforeTime.velocity);
     }
 
     public void offset(Pose2d poseDelta) {

@@ -169,6 +169,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         lastRotateInput = rotate;
     }
 
+    public void teleOpDrive(Gamepad g1) {
+        double x = g1.left_stick_x;
+        double y = -g1.left_stick_y;
+        double rotate = -g1.right_stick_x;
+
+        teleOpDrive(x, y, rotate);
+    }
+
     public void driveScaled(double x, double y, double rotate) {
         Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
 

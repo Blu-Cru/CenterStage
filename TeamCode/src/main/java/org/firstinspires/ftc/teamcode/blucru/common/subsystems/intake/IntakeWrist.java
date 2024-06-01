@@ -16,7 +16,8 @@ public class IntakeWrist implements Subsystem {
 
             RETRACT_HEIGHT = 3.7, // inches
             GROUND_HEIGHT = -2.8, // inches for intaking at ground level
-            STACK1_HEIGHT = -2.5, // inches for intaking at one pixel height level
+            STACK1_HEIGHT = -2.2, // inches for intaking at one pixel height level
+            AUTO_PURPLE_HEIGHT = -3.3, // inches for pushing the purple pixel at the start
             AUTO_MID_HEIGHT = 2; // inches for position to be ready to auto stack
 
     Servo wrist;
@@ -74,6 +75,10 @@ public class IntakeWrist implements Subsystem {
 
     public void dropToGround() {
         targetAngleDeg = toDeg(GROUND_HEIGHT);
+    }
+
+    public void dropToPurpleHeight() {
+        targetAngleDeg = toDeg(AUTO_PURPLE_HEIGHT);
     }
 
     public void retract() {
