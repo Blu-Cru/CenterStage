@@ -30,8 +30,9 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
-            MAX_ACCEL_DRIVE_DELTA = 5,
+            MAX_ACCEL_DRIVE_DELTA = 4,
             MAX_DECEL_DRIVE_DELTA = 20.0, // magnitude per second at power 1 for slew rate limiter
+            MAX_ACCEL_PID_DELTA = 5, // magnitude per second at power 1 for PID
 
             HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
@@ -177,7 +178,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         setWeightedDrivePower(staticDrivePose);
     }
 
-    public void driveClip(double x, double y, double rotate) {
+    public void drivePIDClip(double x, double y, double rotate) {
         Vector2d driveVector = new Vector2d(x, y);
 
         if (fieldCentric)
@@ -185,6 +186,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else
             driveVector = driveVector.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
 
+        driveVector = limitPIDDriveVector(driveVector);
 
         Pose2d drivePose = clipByDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
@@ -220,7 +222,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotate(heading, targetHeading);
         
-        driveClip(x, y, rotate);
+        drivePIDClip(x, y, rotate);
     }
 
     // apply slew rate limiter to drive vector
@@ -265,6 +267,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return driveVector; // return the new drive vector
     }
 
+    private Vector2d limitPIDDriveVector(Vector2d input) {
+        if(input.norm() <= lastDriveVector.norm() || input.norm() == 0) return input;
+        else {
+            // limit to the maximum change in the drive vector per second at the drive power
+            double newMagnitude = Math.min(Math.min(input.norm(), lastDriveVector.norm() + MAX_ACCEL_PID_DELTA * dt / 1000.0), 1);
+            return input.div(input.norm()).times(newMagnitude);
+        }
+    }
+
     private Pose2d processStaticFriction(Pose2d drivePose) {
         Vector2d driveVector = drivePose.vec();
         boolean robotStopped = velocity.vec().norm() < STATIC_TRANSLATION_VELOCITY_TOLERANCE && Math.abs(velocity.getHeading()) < STATIC_HEADING_VELOCITY_TOLERANCE;
@@ -274,7 +285,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             double staticMinMagnitude =
                     STRAFE_kStatic * FORWARD_kStatic
                             /
-                    Math.sqrt(STRAFE_kStatic * Math.cos(angle) * STRAFE_kStatic * Math.cos(angle) + FORWARD_kStatic * Math.sin(angle) * FORWARD_kStatic * Math.sin(angle));
+                    Math.hypot(STRAFE_kStatic * Math.cos(angle), FORWARD_kStatic * Math.sin(angle));
             double newDriveMagnitude = staticMinMagnitude + (1-staticMinMagnitude) * driveVector.norm();
             return new Pose2d(driveVector.div(driveVector.norm()).times(newDriveMagnitude), drivePose.getHeading());
         } else return drivePose;

@@ -24,7 +24,7 @@ public class RRandATagTest extends BCLinearOpMode {
             .state(State.IDLE)
             .loop(() -> {
                 drivetrain.idle();
-                drivetrain.driveClip(0,0,0);
+                drivetrain.drivePIDClip(0,0,0);
             })
             .transition(() -> stickyG1.a, State.RUNNING, () -> {
                 drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
