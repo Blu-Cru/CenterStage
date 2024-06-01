@@ -23,7 +23,9 @@ public class MTIAuto extends BCLinearOpMode {
                 if(stickyG1.x) Globals.autoType = Globals.autoType.cycle();
                 if(stickyG1.y) Globals.parkType = Globals.parkType.cycle();
             })
-            .transition(() -> stickyG1.right_stick_button, State.BUILD, () -> {
+            .transition(() -> stickyG1.right_stick_button, State.DETECTION, () -> {
+                telemetry.addLine("Building Paths . . .");
+                telemetry.update();
             })
             .build();
 
@@ -38,6 +40,10 @@ public class MTIAuto extends BCLinearOpMode {
 
     @Override
     public void initLoop() {
+
+    }
+
+    public void buildConfig() {
 
     }
 }

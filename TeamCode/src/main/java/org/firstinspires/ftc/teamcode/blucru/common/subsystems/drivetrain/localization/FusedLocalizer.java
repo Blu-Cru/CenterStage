@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization;
 
-import android.content.res.Resources;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
@@ -16,13 +12,10 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class FusedLocalizer {
@@ -31,7 +24,7 @@ public class FusedLocalizer {
     IMU imu;
     PoseHistory poseHistory;
     long lastFrameTime;
-    double lastUpdateTime;
+    double lastTagUpdateMillis;
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
             RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
@@ -48,7 +41,7 @@ public class FusedLocalizer {
 
         imu = hardwareMap.get(IMU.class, "e hub imu");
         lastFrameTime = System.nanoTime();
-        lastUpdateTime = System.currentTimeMillis();
+        lastTagUpdateMillis = System.currentTimeMillis();
     }
 
     public void update() {
@@ -70,7 +63,7 @@ public class FusedLocalizer {
     }
 
     public void updateAprilTags(AprilTagProcessor tagProcessor) {
-        if(System.currentTimeMillis() - lastUpdateTime < TAG_UPDATE_DELAY) return; // only update every TAG_UPDATE_DELAY ms
+        if(System.currentTimeMillis() - lastTagUpdateMillis < TAG_UPDATE_DELAY) return; // only update every TAG_UPDATE_DELAY ms
 
         Pose2d currentPose = deadWheels.getPoseEstimate();
         double heading = Angle.norm(currentPose.getHeading());
@@ -112,7 +105,7 @@ public class FusedLocalizer {
         // set pose estimate to tag pose + delta
         deadWheels.setPoseEstimate(newPose);
         deadWheels.update();
-        lastUpdateTime = System.currentTimeMillis();
+        lastTagUpdateMillis = System.currentTimeMillis();
         // add tag - odo to pose history
         Pose2d odoPoseError = weightedEstimateAtFrame.minus(poseAtFrame);
         Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
