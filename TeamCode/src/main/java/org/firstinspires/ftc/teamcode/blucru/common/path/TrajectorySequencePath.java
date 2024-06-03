@@ -21,7 +21,7 @@ public class TrajectorySequencePath implements Path {
     }
 
     @Override
-    public boolean isDone() {
+    public boolean isPathDone() {
         return !Robot.getInstance().drivetrain.isBusy();
     }
 

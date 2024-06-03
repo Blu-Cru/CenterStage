@@ -1,52 +1,65 @@
 package org.firstinspires.ftc.teamcode.blucru.common.path;
 
+import com.arcrobotics.ftclib.command.Command;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PIDPath implements Path {
-    ArrayList<PIDPoint> poseList;
+    ArrayList<PathSegment> segmentList;
+    HashMap<Integer, ArrayList<Command>> commands;
     int index;
-    boolean done;
+    boolean pathDone;
 
-    public PIDPath(ArrayList<PIDPoint> poseList) {
-        this.poseList = poseList;
+    public PIDPath(ArrayList<PathSegment> segmentList, HashMap<Integer, ArrayList<Command>> commands) {
+        this.segmentList = segmentList;
+        this.commands = commands;
         index = 0;
-        done = false;
+        pathDone = false;
     }
 
     @Override
     public void start() {
-        done = false;
-        poseList.get(0).start();
+        pathDone = false;
+        segmentList.get(0).start();
         index = 0;
     }
 
     public void run() {
-        Robot.getInstance().drivetrain.pidTo(poseList.get(index).pose);
+        Robot.getInstance().drivetrain.pidTo(segmentList.get(index).getPose());
 
-        if(poseList.get(index).atTarget() && !done) {
-            if(index + 1 == poseList.size()) {
-                done = true;
+        if(segmentList.get(index).isDone() && !pathDone) {
+            if(index + 1 == segmentList.size()) {
+                pathDone = true;
             } else {
                 index++;
-                poseList.get(index).start();
+
+                // run the commands associated with the next point
+                try {
+                    for(Command c : commands.get(index)) {
+                        c.schedule();
+                    }
+                } catch (NullPointerException ignored) {}
+
+                segmentList.get(index).start();
             }
         }
     }
 
     public void breakPath() {
         Robot.getInstance().drivetrain.idle();
-        done = true;
+        pathDone = true;
     }
 
     public boolean failed() {
-        return poseList.get(index).failed();
+        return segmentList.get(index).failed();
     }
 
-    public boolean isDone() {
-        return index >= poseList.size() || done;
+    public boolean isPathDone() {
+        return index >= segmentList.size() || pathDone;
     }
 
     public void telemetry(Telemetry tele) {

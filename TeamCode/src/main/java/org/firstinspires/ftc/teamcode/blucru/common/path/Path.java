@@ -8,5 +8,5 @@ public interface Path {
 
     void breakPath();
 
-    boolean isDone();
+    boolean isPathDone();
 }

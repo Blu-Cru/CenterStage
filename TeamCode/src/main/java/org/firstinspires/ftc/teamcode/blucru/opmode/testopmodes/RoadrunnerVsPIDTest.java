@@ -93,20 +93,10 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 .addPoint(Utils.mapPose(40, -30, Math.toRadians(180)))
                 .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
                 .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
-                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
+                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)))
                 .addPoint(Utils.mapPose(50, -24, 2.7))
 
                 .build();
-//                .addPoint(new Pose2d(14, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)), 8, false)
-//                .addPoint(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)), true)
-////                .addPoint(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)))
-//                .addPoint(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)), true)
-//                .build();
-
-//        pidPoints.add(new Pose2d(12, -45 * Poses.reflect, Math.toRadians(-60 * Poses.reflect)));
-//        pidPoints.add(new Pose2d(8, -39 * Poses.reflect, Math.toRadians(-30 * Poses.reflect)));
-////        pidPoints.add(new Pose2d(12, -41 * Poses.reflect, Math.toRadians(-45 * Poses.reflect)));
-//        pidPoints.add(new Pose2d(40, -30 * Poses.reflect, Math.toRadians(180)));
 
         preloadDeposits = new PreloadDeposits(-1);
         traj = preloadDeposits.rrTest(robot);

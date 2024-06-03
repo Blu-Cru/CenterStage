@@ -9,14 +9,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 
-public class AutoConfig {
-    AutoType autoType;
-    ParkType parkType;
-    Pose2d startPose;
-
-    public AutoConfig(AutoType autoType, ParkType parkType) {
-        this.autoType = autoType;
-        this.parkType = parkType;
-        Poses.setAlliance(Globals.alliance);
-    }
+public abstract class AutoConfig {
+    public abstract void run();
 }

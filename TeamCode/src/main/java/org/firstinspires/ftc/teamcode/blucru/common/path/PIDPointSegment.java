@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-public class PIDPoint {
+public class PIDPointSegment implements PathSegment{
     static double FAIL_TIME = 1000;
 
     Pose2d pose;
@@ -12,17 +12,17 @@ public class PIDPoint {
     double startTime;
     boolean stopRequiredToEnd;
 
-    public PIDPoint(Pose2d pose, double translationTolerance, boolean stopRequiredToEnd) {
+    public PIDPointSegment(Pose2d pose, double translationTolerance, boolean stopRequiredToEnd) {
         this.pose = pose;
         this.translationTolerance = translationTolerance;
         this.stopRequiredToEnd = stopRequiredToEnd;
     }
 
-    public PIDPoint(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, true);}
+    public PIDPointSegment(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, true);}
 
-    public PIDPoint(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1, stopRequiredToEnd);}
+    public PIDPointSegment(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1, stopRequiredToEnd);}
 
-    public PIDPoint(Pose2d pose) {
+    public PIDPointSegment(Pose2d pose) {
         this(pose, 1, true);
     }
 
@@ -30,6 +30,10 @@ public class PIDPoint {
         boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 8.0;
 //        boolean velSatisfied = true;
         return Robot.getInstance().drivetrain.inRange(pose, translationTolerance) && velSatisfied;
+    }
+
+    public boolean isDone() {
+        return atTarget();
     }
 
     public Pose2d getPose() {
