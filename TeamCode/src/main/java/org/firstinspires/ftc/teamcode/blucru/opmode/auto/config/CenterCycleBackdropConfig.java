@@ -37,6 +37,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
     }
 
+    public void build() {
+
+    }
+
     public void run() {
 
     }

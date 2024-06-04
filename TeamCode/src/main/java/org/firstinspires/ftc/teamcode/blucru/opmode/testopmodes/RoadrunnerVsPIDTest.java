@@ -102,6 +102,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                         )
                 )
                 .addPoint(Utils.mapPose(8, -39, Math.toRadians(-30)))
+                .setPower(0.4)
                 .waitMillis(500)
                 .addPoint(Utils.mapPose(40, -30, Math.toRadians(180)))
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
