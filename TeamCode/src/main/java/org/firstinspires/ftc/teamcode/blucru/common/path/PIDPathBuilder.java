@@ -54,8 +54,8 @@ public class PIDPathBuilder {
         }));
     }
 
-    public PIDPathBuilder wait(double seconds) {
-        segments.add(new WaitSegment(segments.get(segments.size() - 1).getPose(), seconds));
+    public PIDPathBuilder waitMillis(double milliseconds) {
+        segments.add(new WaitSegment(segments.get(segments.size() - 1).getPose(), milliseconds));
         return this;
     }
 
