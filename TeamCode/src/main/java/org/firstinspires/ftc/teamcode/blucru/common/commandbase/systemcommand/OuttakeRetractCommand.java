@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -12,6 +13,11 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 public class OuttakeRetractCommand extends SequentialCommandGroup {
     public OuttakeRetractCommand() {
         super(
+                new InstantCommand(
+                        () -> {
+                            Robot.getInstance().intake.startReadingColor();
+                        }
+                ),
                 new ConditionalCommand(
                         new LiftRetractCommand(),
                         new SequentialCommandGroup(

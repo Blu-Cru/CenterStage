@@ -136,7 +136,7 @@ public class Duo extends BCLinearOpMode {
                 }
                 if (gamepad2.y) {
                     robotState = RobotState.LIFTING;
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                    outtake.setTargetHeight(Outtake.MID_HEIGHT);
                     intake.stopReadingColor();
 
                 }
@@ -205,7 +205,7 @@ public class Duo extends BCLinearOpMode {
                 }
 
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 if(gamepad2.a && !lastA2) {
@@ -237,7 +237,7 @@ public class Duo extends BCLinearOpMode {
 
                 // Change height
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
@@ -288,7 +288,7 @@ public class Duo extends BCLinearOpMode {
 
                 // Change height
                 if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad2.y) outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel

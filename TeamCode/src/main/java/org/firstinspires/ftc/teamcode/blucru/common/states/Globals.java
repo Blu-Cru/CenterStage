@@ -10,4 +10,6 @@ public class Globals {
 
     // default alliance is red, but will be changed before auto starts
     public static Alliance ALLIANCE = Alliance.RED;
+
+    public static double scoringHeading = Math.toRadians(180);
 }

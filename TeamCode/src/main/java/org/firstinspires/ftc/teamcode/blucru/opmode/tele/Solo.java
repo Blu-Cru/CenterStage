@@ -71,7 +71,7 @@ public class Solo extends BCLinearOpMode {
                 }
                 if(gamepad1.y) {
                     robotState = RobotState.LIFTING;
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                    outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 }
                 if(gamepad1.b) {
                     robotState = RobotState.LIFTING;
@@ -90,7 +90,7 @@ public class Solo extends BCLinearOpMode {
                 }
 
                 if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad1.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad1.y) outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
 // reverse intake
@@ -121,7 +121,7 @@ public class Solo extends BCLinearOpMode {
 
                 // Change height
                 if(gamepad1.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad1.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(gamepad1.y) outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
 // reverse intake
@@ -166,7 +166,7 @@ public class Solo extends BCLinearOpMode {
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                 }
                 if(gamepad1.y) {
-                    outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                    outtake.setTargetHeight(Outtake.MID_HEIGHT);
                 }
                 if(gamepad1.b) {
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);

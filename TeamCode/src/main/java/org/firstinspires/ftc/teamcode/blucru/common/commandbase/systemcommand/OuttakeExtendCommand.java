@@ -13,6 +13,7 @@ public class OuttakeExtendCommand extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                         new InstantCommand(
                                 () -> {
+                                    Robot.getInstance().intake.stopReadingColor();
                                     Robot.getInstance().outtake.setTargetPixelHeight(pixelHeight);
                                 }),
                         new WaitCommand(150),
