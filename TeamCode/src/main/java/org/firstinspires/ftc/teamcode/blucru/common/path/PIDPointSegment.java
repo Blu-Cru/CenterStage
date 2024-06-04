@@ -27,7 +27,7 @@ public class PIDPointSegment implements PathSegment{
     }
 
     public boolean atTarget() {
-        boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 8.0;
+        boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 5.0;
 //        boolean velSatisfied = true;
         return Robot.getInstance().drivetrain.inRange(pose, translationTolerance) && velSatisfied;
     }

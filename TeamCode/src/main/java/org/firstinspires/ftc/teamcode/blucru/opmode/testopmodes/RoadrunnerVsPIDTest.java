@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.St
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Utils;
@@ -88,11 +89,11 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addDrivetrain(false);
         addIntake();
         addCVMaster();
-        Poses.setAlliance(Alliance.BLUE);
+        Globals.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
 
         pidPath = new PIDPathBuilder()
-                .addPoint(Utils.mapPose(14, -45, Math.toRadians(-60)), 8, false)
+                .addPoint(Globals.mapPose(14, 45, 60), 8, false)
                 .schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(0),
@@ -101,10 +102,10 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                                 new StopIntakeCommand()
                         )
                 )
-                .addPoint(Utils.mapPose(8, -39, Math.toRadians(-30)))
+                .addPoint(Globals.mapPose(8, 39, 30))
                 .setPower(0.4)
                 .waitMillis(500)
-                .addPoint(Utils.mapPose(40, -30, Math.toRadians(180)))
+                .addPoint(Globals.mapPose(40, 30, 180))
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
 //                .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)))
