@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-
-import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
-import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
-import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.CenterCycleBackdropConfig;
 
 public abstract class AutoConfig {
+    public static int position = 0;
+
+    public abstract void start();
     public abstract void run();
+
+    public AutoConfig config() {
+        return new CenterCycleBackdropConfig();
+    }
 }

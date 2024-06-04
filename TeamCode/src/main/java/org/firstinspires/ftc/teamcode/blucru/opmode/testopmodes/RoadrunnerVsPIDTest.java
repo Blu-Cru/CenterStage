@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -89,6 +93,14 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
         pidPath = new PIDPathBuilder()
                 .addPoint(Utils.mapPose(14, -45, Math.toRadians(-60)), 8, false)
+                .schedule(
+                        new SequentialCommandGroup(
+                                new WaitCommand(0),
+                                new IntakePowerCommand(-0.4),
+                                new WaitCommand(1000),
+                                new StopIntakeCommand()
+                        )
+                )
                 .addPoint(Utils.mapPose(8, -39, Math.toRadians(-30)))
                 .addPoint(Utils.mapPose(40, -30, Math.toRadians(180)))
                 .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
