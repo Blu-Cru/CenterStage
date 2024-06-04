@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.vision.VisionProcessor;
@@ -209,5 +210,12 @@ public class PropDetectionProcessor implements VisionProcessor {
 
         Rect subMatRect = new Rect(subMatRectX, subMatRectY, subMatRectWidth, subMatRectHeight);
         return subMatRect;
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("average 0", average0);
+        telemetry.addData("average 1", average1);
+        telemetry.addData("average 2", average2);
+        telemetry.addData("POSITION", position);
     }
 }

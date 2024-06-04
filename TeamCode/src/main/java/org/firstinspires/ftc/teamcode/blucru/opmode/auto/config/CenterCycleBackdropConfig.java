@@ -1,12 +1,17 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.teamcode.blucru.common.path.Path;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
+import org.firstinspires.ftc.teamcode.blucru.common.util.Utils;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
 
 public class CenterCycleBackdropConfig extends AutoConfig {
+    static final Pose2d START_POSE = Utils.mapPose(12, 61, Math.toRadians(90));
+
     enum State {
         PLACING_PRELOADS,
         TO_STACK,

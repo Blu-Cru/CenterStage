@@ -9,7 +9,7 @@ public abstract class AutoConfig {
     public abstract void start();
     public abstract void run();
 
-    public AutoConfig config() {
+    public static AutoConfig config() {
         return new CenterCycleBackdropConfig();
     }
 }
