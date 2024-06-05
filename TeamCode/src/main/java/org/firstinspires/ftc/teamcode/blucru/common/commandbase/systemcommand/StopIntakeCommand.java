@@ -13,7 +13,10 @@ public class StopIntakeCommand extends SequentialCommandGroup {
     public StopIntakeCommand() {
         super(
                 new ConditionalCommand(
-                        new IntakePowerCommand(0), // if intake is already stopped or reversing, do nothing
+                        new SequentialCommandGroup(
+                                new IntakePowerCommand(0),
+                                new DropdownFullRetractCommand()
+                        ),
                         new SequentialCommandGroup( // if intake was intaking, reverse it and retract the dropdown
                                 new DropdownPartialRetractCommand(),
                                 new IntakePowerCommand(-1),

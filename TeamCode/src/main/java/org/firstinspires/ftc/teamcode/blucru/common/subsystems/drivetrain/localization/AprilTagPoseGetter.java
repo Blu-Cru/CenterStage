@@ -17,7 +17,7 @@ public final class AprilTagPoseGetter {
     public static Vector2d CAMERA_POS = new Vector2d(-6.61, 3.78); // position of the camera relative to the center of the robot in inches
     public static double
             TAG_X = 62,
-            MAX_UPDATE_DISTANCE = 35; // maximum update distance
+            MAX_UPDATE_DISTANCE = 60; // maximum update distance
     public static HashMap<Integer, Pose2d> TAGS = new HashMap<Integer, Pose2d>() {{
         put(1, new Pose2d(TAG_X, 42, Math.toRadians(180))); // tag 1 (red right)
         put(2, new Pose2d(TAG_X, 36, Math.toRadians(180))); // tag 2 (red center)
@@ -87,6 +87,7 @@ public final class AprilTagPoseGetter {
 
     public static Pose2d getRobotPoseAtTimeOfFrame(List<AprilTagDetection> detections, double heading) {
         if(detections.size() == 0) {
+            Log.e("TagPoseGetter", "No tags found");
             return null;
         } else {
             AprilTagDetection closestDetection = detections.get(0);
@@ -101,6 +102,7 @@ public final class AprilTagPoseGetter {
             }
 
             if(closestDistance > MAX_UPDATE_DISTANCE) {
+                Log.e("TagPoseGetter", "Too far away to update tags");
                 return null;
             }
 

@@ -476,9 +476,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void updateAprilTags(AprilTagProcessor processor) {
         try {
             fusedLocalizer.updateAprilTags(processor);
-
         } catch (Exception e) {
-            Log.e("Drivetrain", "Error updating April tags: " + e.getMessage());
+            return;
         }
     }
 

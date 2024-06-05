@@ -67,10 +67,16 @@ public class FusedLocalizer {
 
         Pose2d currentPose = deadWheels.getPoseEstimate();
         double heading = Angle.norm(currentPose.getHeading());
-        if(heading < Math.PI/2 || heading > 3*Math.PI/2) throw new IllegalArgumentException("Not in the right orientation to update tags");
+        if(heading < Math.PI/2 || heading > 3*Math.PI/2) {
+            Log.e("FusedLocalizer", "Not updating tags, robot is facing the wrong way");
+            return;
+        }
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
-        if(detections.size() < 1) throw new NoSuchElementException("No tags detected");
+        if(detections.size() < 1) {
+            Log.e("FusedLocalizer", "No tags found");
+            return;
+        }
 
         // get odo pose at the time of the tag pose
         long timeOfFrame = detections.get(0).frameAcquisitionNanoTime;
@@ -90,10 +96,12 @@ public class FusedLocalizer {
         try {
             tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, poseAtFrame.getHeading());
         } catch(Exception e) {
-            Log.v("FusedLocalizer", "No tag pose found");
             return;
         }
-        Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(getWeight(velocityAtFrame)).plus(poseAtFrame);
+
+        double weight = getWeight(velocityAtFrame);
+        Log.v("FusedLocalizer", "Weight: " + weight);
+        Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(weight).plus(poseAtFrame);
 
         // calculate change from old odo pose to current pose
         Pose2d odoDelta = currentPose.minus(poseAtFrame);
