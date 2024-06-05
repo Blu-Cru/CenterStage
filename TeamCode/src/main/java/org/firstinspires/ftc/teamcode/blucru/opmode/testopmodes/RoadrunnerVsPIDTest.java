@@ -9,6 +9,10 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockReleaseCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretGlobalYCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
@@ -89,6 +93,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     public void initialize() {
         addDrivetrain(false);
         addIntake();
+        addOuttake();
         addCVMaster();
         Globals.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
@@ -106,10 +111,24 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                         )
                 )
                 .addPoint(Globals.mapPose(10, 39, 180))
-                .setPower(0.5)
+                .setPower(0.4)
                 .waitMillis(300)
+                .schedule(
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                new OuttakeExtendCommand(0),
+                                new TurretGlobalYCommand(26)
+                        )
+                )
                 .addPoint(Globals.mapPose(40, 32, 180), false)
-                .addPoint(Globals.mapPose(48, 32, 180))
+                .addPoint(Globals.mapPose(47.5, 32, 180))
+                .schedule(
+                        new SequentialCommandGroup(
+                                new LockReleaseCommand(2),
+                                new WaitCommand(300),
+                                new OuttakeRetractCommand()
+                        )
+                )
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
 //                .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)))

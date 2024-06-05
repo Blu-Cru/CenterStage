@@ -32,7 +32,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
             MAX_ACCEL_DRIVE_DELTA = 4,
             MAX_DECEL_DRIVE_DELTA = 20.0, // magnitude per second at power 1 for slew rate limiter
-            MAX_ACCEL_PID_DELTA = 5, // magnitude per second at power 1 for PID
+            MAX_ACCEL_PID_DELTA = 2, // magnitude per second at power 1 for PID
 
             HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
             HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
@@ -194,7 +194,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else
             driveVector = driveVector.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
 
-//        driveVector = limitPIDDriveVector(driveVector);
+        driveVector = limitPIDDriveVector(driveVector);
 
         Pose2d drivePose = clipByDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);

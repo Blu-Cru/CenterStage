@@ -217,6 +217,11 @@ public class Outtake implements Subsystem {
         lock.unlockAll();
     }
 
+    public void unlock(int numReleased) {
+        if(numReleased == 1) unlockFrontLockBack();
+        else unlock();
+    }
+
     public void unlockFrontLockBack() {
         lock.unlockFrontLockBack();
     }
