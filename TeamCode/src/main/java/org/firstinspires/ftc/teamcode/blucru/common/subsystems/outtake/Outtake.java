@@ -40,9 +40,12 @@ public class Outtake implements Subsystem {
     State stateBeforeManual;
 
     public boolean wristRetracted;
+    boolean turretIsIVK = false;
 
     public double targetHeight; // inches
     double dunkHeight;
+
+    double turretGlobalY;
 
     double timeWristExtended;
 
@@ -57,6 +60,7 @@ public class Outtake implements Subsystem {
 
         wristRetracted = true;
         dunkHeight = 0;
+        turretGlobalY = 0;
     }
 
     public void init() {
@@ -85,6 +89,10 @@ public class Outtake implements Subsystem {
     }
 
     public void write() {
+        if(turretIsIVK && turretSafe()) {
+            turret.setGlobalY(turretGlobalY);
+        }
+
         lift.write();
         lock.write();
         turret.write();
@@ -146,13 +154,20 @@ public class Outtake implements Subsystem {
 
     public void setTurretAngle(double angleDeg) {
         turret.setAngle(angleDeg);
+        turretIsIVK = false;
     }
 
     public void setTurretGlobalY(double yInches) {
-        if(turretSafe()) turret.setGlobalY(yInches);
+        turretIsIVK = true;
+
+        if(turretSafe()) {
+            turretGlobalY = yInches;
+            turret.setGlobalY(yInches);
+        }
     }
 
     public void setTurretX(double xInches) {
+        turretIsIVK = false;
         if(turretSafe()) turret.setX(xInches);
     }
 
@@ -174,7 +189,7 @@ public class Outtake implements Subsystem {
     }
 
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 250;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 250 && !wristRetracted;
     }
 
     public void retractWrist() {

@@ -101,6 +101,12 @@ public class FusedLocalizer {
 
         double weight = getWeight(velocityAtFrame);
         Log.v("FusedLocalizer", "Weight: " + weight);
+
+        if(weight == 0) {
+            Log.e("FusedLocalizer", "Weight is 0, not updating");
+            return;
+        }
+
         Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(weight).plus(poseAtFrame);
 
         // calculate change from old odo pose to current pose
@@ -145,8 +151,7 @@ public class FusedLocalizer {
 
         double totalVel = Math.hypot(vel, angVel * 25);
 
-        double weight = Range.clip(-0.7*Math.atan(.3 * totalVel-8.0), 0, 1);
         // TODO: tune this function
-        return weight;
+        return Range.clip(-0.6*Math.atan(.08 * totalVel-5), 0, 1);
     }
 }
