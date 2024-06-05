@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class FusedLocalizer {
-    public static double TAG_UPDATE_DELAY = 250; // ms between tag updates
+    public static double TAG_UPDATE_DELAY = 200; // ms between tag updates
     Localizer deadWheels;
     IMU imu;
     PoseHistory poseHistory;
@@ -102,6 +102,7 @@ public class FusedLocalizer {
         Log.v("FusedLocalizer", "tag pose: " + tagPose);
         Log.v("FusedLocalizer", "current pose: " + currentPose);
         Log.v("FusedLocalizer", "delta: " + odoDelta);
+        Pose2d odoPoseError = weightedEstimateAtFrame.minus(poseAtFrame);
 
         Pose2d newPose = new Pose2d(weightedEstimateAtFrame.vec().plus(odoDelta.vec()), currentPose.getHeading());
         Log.i("FusedLocalizer", "Updated pose to: " + newPose);
@@ -111,7 +112,6 @@ public class FusedLocalizer {
         deadWheels.update();
         lastTagUpdateMillis = System.currentTimeMillis();
         // add tag - odo to pose history
-        Pose2d odoPoseError = weightedEstimateAtFrame.minus(poseAtFrame);
         Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
         poseHistory.offset(odoPoseError);
         lastFrameTime = timeOfFrame;
@@ -132,9 +132,12 @@ public class FusedLocalizer {
     }
 
     public double getWeight(Pose2d velocity) {
+        double angVel = velocity.getHeading();
         double vel = velocity.vec().norm();
 
-        double weight = Range.clip(-0.5*Math.atan(.3 * vel-8.0), 0, 1);
+        double totalVel = Math.hypot(vel, angVel * 25);
+
+        double weight = Range.clip(-0.7*Math.atan(.3 * totalVel-8.0), 0, 1);
         // TODO: tune this function
         return weight;
     }

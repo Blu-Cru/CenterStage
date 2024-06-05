@@ -15,6 +15,7 @@ public class PIDPathBuilder {
 
     public PIDPathBuilder() {
         segments = new ArrayList<PathSegment>();
+        commands = new HashMap<>();
     }
 
     public PIDPathBuilder addPoint(PIDPointSegment point) {

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
@@ -93,18 +94,20 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         drivetrain.drivePower = 1;
 
         pidPath = new PIDPathBuilder()
-                .addPoint(Globals.mapPose(14, 45, 60), 8, false)
+                .setPower(0.7)
+                .addPoint(Globals.mapPose(14, 45, 120), 8, false)
                 .schedule(
                         new SequentialCommandGroup(
-                                new WaitCommand(0),
-                                new IntakePowerCommand(-0.4),
+                                new DropdownPartialRetractCommand(),
+                                new WaitCommand(300),
+                                new IntakePowerCommand(-0.5),
                                 new WaitCommand(1000),
                                 new StopIntakeCommand()
                         )
                 )
-                .addPoint(Globals.mapPose(8, 39, 30))
-                .setPower(0.4)
-                .waitMillis(500)
+                .addPoint(Globals.mapPose(10, 39, 180))
+                .setPower(0.5)
+                .waitMillis(300)
                 .addPoint(Globals.mapPose(40, 30, 180))
 //                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
 //                .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
