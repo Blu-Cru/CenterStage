@@ -7,7 +7,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 public class OuttakeWristCommand extends InstantCommand {
     public OuttakeWristCommand(boolean retracted) {
         super(
-                () -> Robot.getInstance().outtake.extendWrist()
+                () -> {
+                    if(retracted) Robot.getInstance().outtake.retractWrist();
+                    else Robot.getInstance().outtake.extendWrist();
+                }
         );
     }
 }
