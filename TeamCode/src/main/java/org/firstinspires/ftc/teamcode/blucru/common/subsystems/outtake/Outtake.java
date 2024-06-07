@@ -189,7 +189,7 @@ public class Outtake implements Subsystem {
     }
 
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 250 && !wristRetracted;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 1000 && !wristRetracted;
     }
 
     public void retractWrist() {
@@ -197,8 +197,8 @@ public class Outtake implements Subsystem {
     }
 
     public void extendWrist() {
-        wristRetracted = false;
         timeWristExtended = System.currentTimeMillis();
+        wristRetracted = false;
     }
 
     public Lift getLift() {

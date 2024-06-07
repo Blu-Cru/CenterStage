@@ -110,6 +110,7 @@ public class FusedLocalizer {
         Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(weight).plus(poseAtFrame);
 
         // calculate change from old odo pose to current pose
+        currentPose = deadWheels.getPoseEstimate();
         Pose2d odoDelta = currentPose.minus(poseAtFrame);
 
         Log.v("FusedLocalizer", "History odo pose:" + poseMarkerAtFrame);
@@ -152,6 +153,6 @@ public class FusedLocalizer {
         double totalVel = Math.hypot(vel, angVel * 25);
 
         // TODO: tune this function
-        return Range.clip(-0.6*Math.atan(.08 * totalVel-5), 0, 1);
+        return Range.clip(-0.7*Math.atan(.2 * totalVel-8), 0, 1);
     }
 }
