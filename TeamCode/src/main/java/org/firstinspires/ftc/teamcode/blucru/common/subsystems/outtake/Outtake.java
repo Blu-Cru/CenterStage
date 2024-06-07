@@ -159,9 +159,9 @@ public class Outtake implements Subsystem {
 
     public void setTurretGlobalY(double yInches) {
         turretIsIVK = true;
+        turretGlobalY = yInches;
 
         if(turretSafe()) {
-            turretGlobalY = yInches;
             turret.setGlobalY(yInches);
         }
     }

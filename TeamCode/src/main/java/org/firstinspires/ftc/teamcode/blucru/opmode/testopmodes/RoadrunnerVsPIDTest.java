@@ -129,10 +129,6 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                                 new OuttakeRetractCommand()
                         )
                 )
-//                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)), false)
-//                .addPoint(Utils.mapPose(-30, -14, Math.toRadians(180)))
-//                .addPoint(Utils.mapPose(30, -12, Math.toRadians(180)))
-//                .addPoint(Utils.mapPose(50, -24, 2.7))
 
                 .build();
 
