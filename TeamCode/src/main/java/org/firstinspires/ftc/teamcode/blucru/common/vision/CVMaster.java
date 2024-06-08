@@ -26,7 +26,7 @@ public class CVMaster implements Subsystem {
     public static double cx = 625.979;
     public static double cy = 362.585;
     public static int GAIN = 10;
-    public static long EXPOSURE = 4; // ms
+    public static long EXPOSURE = 8; // ms
     public static double FOCUS = 1;
 
     ExposureControl exposureControl;

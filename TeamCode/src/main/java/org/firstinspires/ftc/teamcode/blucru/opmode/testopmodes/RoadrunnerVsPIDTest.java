@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -11,7 +10,6 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockReleaseCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeIncrementCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
@@ -22,12 +20,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
-import org.firstinspires.ftc.teamcode.blucru.common.util.Utils;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.BackdropFarPreload;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@TeleOp(name = "RR vs PID test", group = "test")
+@TeleOp(name = "RR vs PID test", group = "2")
 public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     private enum State {
         RESETTING,
@@ -103,7 +99,42 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         Globals.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
 
-        pidPath = new BackdropFarPreload()
+        pidPath = new PIDPathBuilder()
+                .setPower(0.8)
+                .addMappedPoint(22, 55, 120, 6)
+                .addMappedPoint(33, 45, 135,4)
+                .schedule(
+                        new SequentialCommandGroup(
+                                new DropdownPartialRetractCommand(),
+                                new WaitCommand(300),
+                                new IntakePowerCommand(-0.45),
+                                new WaitCommand(1000),
+                                new StopIntakeCommand()
+                        )
+                )
+                .addMappedPoint(30.5, 37, 190)
+                .schedule(
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new OuttakeExtendCommand(-1),
+                                new TurretGlobalYCommand(42)
+                        )
+                )
+                .waitMillis(200)
+                .setPower(0.35)
+                .addMappedPoint(48.5, 40, 180, 2.5)
+                .schedule(
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new LockReleaseCommand(2),
+                                new WaitCommand(300),
+                                new OuttakeRetractCommand(2)
+                        )
+                )
+                .setPower(0.7)
+                .waitMillis(500)
+                .addMappedPoint(40, 12, 180)
+
                 .build();
 
         preloadDeposits = new PreloadDeposits(-1);

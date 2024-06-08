@@ -32,9 +32,9 @@ public class AprilTagTest extends BCLinearOpMode {
     }
 
     public void initLoop() {
-//        cvMaster.setCameraExposure(CAMERA_EXPOSURE);
-//        cvMaster.setCameraGain(CAMERA_GAIN);
-//        cvMaster.setCameraFocus(CAMERA_FOCUS);
+        cvMaster.setCameraExposure(CAMERA_EXPOSURE);
+        cvMaster.setCameraGain(CAMERA_GAIN);
+        cvMaster.setCameraFocus(CAMERA_FOCUS);
 
         if (gamepad1.a && !lastA) {
             cvMaster.detectTag();

@@ -43,7 +43,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            TRANSLATION_P = 0.2, TRANSLATION_I = 0, TRANSLATION_D = 0.022, TRANSLATION_PID_TOLERANCE = 0, // PID constants for translation
+            TRANSLATION_P = 0.18, TRANSLATION_I = 0, TRANSLATION_D = 0.027, TRANSLATION_PID_TOLERANCE = 0, // PID constants for translation
             TRANSLATION_AT_POSE_TOLERANCE = 0.55,
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 25.0, // inches per second

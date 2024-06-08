@@ -103,7 +103,8 @@ public class FusedLocalizer {
         }
 
         double weight = getWeight(velocityAtFrame);
-        Log.v("FusedLocalizer", "Weight: " + weight);
+        Log.d("FusedLocalizer", "Velocity at frame: " + velocityAtFrame);
+        Log.d("FusedLocalizer", "Weight: " + weight);
 
         if(weight == 0) {
             Log.e("FusedLocalizer", "Weight is 0, not updating");
@@ -112,18 +113,19 @@ public class FusedLocalizer {
 
         // calculate change from old odo pose to current pose
         currentPose = deadWheels.getPoseEstimate();
-        Pose2d odoDelta = currentPose.minus(poseAtFrame);
 
         // TODO: i removed the weight for testing, put it back
         Pose2d odoPoseError = tagPose.minus(poseAtFrame);
+        Pose2d weightedCorrection = odoPoseError.times(weight);
 
-        Log.v("FusedLocalizer", "Tag pose: " + tagPose);
-        Log.v("FusedLocalizer", "Pose at frame:" + poseAtFrame);
-        Log.v("FusedLocalizer", "Current pose: " + currentPose);
-        Log.v("FusedLocalizer", "Correction: " + odoPoseError);
+        Log.d("FusedLocalizer", "Tag pose: " + tagPose);
+        Log.d("FusedLocalizer", "Pose at frame:" + poseAtFrame);
+        Log.d("FusedLocalizer", "Current pose: " + currentPose);
+        Log.d("FusedLocalizer", "Raw correction: " + odoPoseError);
+        Log.d("FusedLocalizer", "Weighted correction: " + weightedCorrection);
 
 
-        Pose2d newPose = new Pose2d(tagPose.vec().plus(odoDelta.vec()), currentPose.getHeading());
+        Pose2d newPose = new Pose2d(currentPose.vec().plus(weightedCorrection.vec()), currentPose.getHeading());
         Log.i("FusedLocalizer", "Updated pose to: " + newPose);
 
         // set pose estimate to tag pose + delta
@@ -131,8 +133,7 @@ public class FusedLocalizer {
         deadWheels.update();
         lastTagUpdateMillis = System.currentTimeMillis();
         // add tag - odo to pose history
-        Log.v("FusedLocalizer", "odoPoseError: " + odoPoseError);
-        poseHistory.offset(odoPoseError);
+        poseHistory.offset(weightedCorrection);
         lastFrameTime = timeOfFrame;
     }
 
@@ -154,9 +155,9 @@ public class FusedLocalizer {
         double angVel = velocity.getHeading();
         double vel = velocity.vec().norm();
 
-        double totalVel = Math.hypot(vel, angVel * 10);
+        double totalVel = Math.hypot(vel, angVel * 12);
 
         // TODO: tune this function
-        return Range.clip(-0.3*Math.atan(.12 * totalVel-4), 0, 1);
+        return Range.clip(-0.8*Math.atan(.07 * totalVel-5), 0, 1);
     }
 }

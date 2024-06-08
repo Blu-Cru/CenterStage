@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 import java.util.ArrayList;
@@ -28,8 +29,18 @@ public class PIDPathBuilder {
         return this;
     }
 
+    public PIDPathBuilder addMappedPoint(double x, double y, double headingDeg, double translationTolerance) {
+        this.addPoint(Globals.mapPose(x, y, headingDeg), translationTolerance);
+        return this;
+    }
+
     public PIDPathBuilder addPoint(Pose2d pose) {
         segments.add(new PIDPointSegment(pose));
+        return this;
+    }
+
+    public PIDPathBuilder addMappedPoint(double x, double y, double headingDeg) {
+        this.addPoint(Globals.mapPose(x, y, headingDeg));
         return this;
     }
 

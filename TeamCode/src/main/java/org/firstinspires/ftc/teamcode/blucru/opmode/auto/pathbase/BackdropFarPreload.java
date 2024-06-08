@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -30,25 +30,26 @@ public class BackdropFarPreload extends PIDPathBuilder {
                         )
                 )
                 .addPoint(Globals.mapPose(10, 39, 180), false)
-                .setPower(0.4)
+                .setPower(0.35)
                 .waitMillis(300)
                 .schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(500),
                                 new OuttakeExtendCommand(-1),
-                                new TurretGlobalYCommand(29.5)
+                                new TurretGlobalYCommand(30)
                         )
                 )
-                .addPoint(Globals.mapPose(48.5, 32, 180))
+                .addPoint(Globals.mapPose(48.5, 32, 180), 2.5)
                 .schedule(
                         new SequentialCommandGroup(
+                                new WaitCommand(200),
                                 new LockReleaseCommand(2),
                                 new WaitCommand(300),
                                 new OuttakeRetractCommand(2)
                         )
                 )
                 .setPower(0.7)
-                .waitMillis(300)
+                .waitMillis(500)
                 .addPoint(Globals.mapPose(40, 12, 180));
     }
 }

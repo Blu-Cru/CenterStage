@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LiftRetractCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockResetCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeIncrementCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeWristCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretTurnCommand;
@@ -26,7 +27,8 @@ public class OuttakeRetractCommand extends SequentialCommandGroup {
                                 new WaitCommand(200),
                                 new OuttakeWristCommand(true),
                                 new WaitCommand(300),
-                                new LiftRetractCommand()
+                                new LiftRetractCommand(),
+                                new LockResetCommand()
                         ),
                         () -> Robot.getInstance().outtake.wristRetracted
                 )
