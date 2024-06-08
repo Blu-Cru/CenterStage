@@ -114,7 +114,8 @@ public class FusedLocalizer {
         currentPose = deadWheels.getPoseEstimate();
         Pose2d odoDelta = currentPose.minus(poseAtFrame);
 
-        Pose2d odoPoseError = tagPose.minus(poseAtFrame).times(weight);
+        // TODO: i removed the weight for testing, put it back
+        Pose2d odoPoseError = tagPose.minus(poseAtFrame);
 
         Log.v("FusedLocalizer", "Tag pose: " + tagPose);
         Log.v("FusedLocalizer", "Pose at frame:" + poseAtFrame);
