@@ -18,7 +18,7 @@ public class PIDPointSegment implements PathSegment{
         this.stopRequiredToEnd = stopRequiredToEnd;
     }
 
-    public PIDPointSegment(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, true);}
+    public PIDPointSegment(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, false);}
 
     public PIDPointSegment(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1, stopRequiredToEnd);}
 

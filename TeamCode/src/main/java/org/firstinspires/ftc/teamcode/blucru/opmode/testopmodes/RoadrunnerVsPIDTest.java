@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,6 +11,7 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockReleaseCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeIncrementCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
@@ -22,6 +24,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Utils;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.BackdropFarPreload;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @TeleOp(name = "RR vs PID test", group = "test")
@@ -55,8 +58,9 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 pidStartTime = System.currentTimeMillis();
             })
             .loop(() -> {
-                drivetrain.idle();
-                drivetrain.driveScaled(0,0,0);
+                drivetrain.teleOpDrive(gamepad1);
+
+                intake.intakeWrist.targetAngleDeg = 90;
             })
             .state(State.FOLLOWING_TRAJECTORY)
             .transition(() -> !drivetrain.isBusy(), State.RESETTING, () -> rrTotalTime = System.currentTimeMillis() - rrStartTime)
@@ -76,6 +80,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 drivetrain.idle();
                 pidPath.breakPath();
                 drivetrain.driveScaled(0,0,0);
+                CommandScheduler.getInstance().schedule(new OuttakeRetractCommand());
             })
             .loop(() -> {
                 drivetrain.ftcDashDrawCurrentPose();
@@ -98,38 +103,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         Globals.setAlliance(Alliance.BLUE);
         drivetrain.drivePower = 1;
 
-        pidPath = new PIDPathBuilder()
-                .setPower(0.7)
-                .addPoint(Globals.mapPose(14, 45, 120), 8, false)
-                .schedule(
-                        new SequentialCommandGroup(
-                                new DropdownPartialRetractCommand(),
-                                new WaitCommand(300),
-                                new IntakePowerCommand(-0.5),
-                                new WaitCommand(1000),
-                                new StopIntakeCommand()
-                        )
-                )
-                .addPoint(Globals.mapPose(10, 39, 180))
-                .setPower(0.4)
-                .waitMillis(300)
-                .schedule(
-                        new SequentialCommandGroup(
-                                new WaitCommand(500),
-                                new OuttakeExtendCommand(0),
-                                new TurretGlobalYCommand(26)
-                        )
-                )
-                .addPoint(Globals.mapPose(40, 32, 180), false)
-                .addPoint(Globals.mapPose(47.5, 32, 180))
-                .schedule(
-                        new SequentialCommandGroup(
-                                new LockReleaseCommand(2),
-                                new WaitCommand(300),
-                                new OuttakeRetractCommand()
-                        )
-                )
-
+        pidPath = new BackdropFarPreload()
                 .build();
 
         preloadDeposits = new PreloadDeposits(-1);

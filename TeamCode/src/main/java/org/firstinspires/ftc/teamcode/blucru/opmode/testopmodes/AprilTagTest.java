@@ -32,9 +32,9 @@ public class AprilTagTest extends BCLinearOpMode {
     }
 
     public void initLoop() {
-        cvMaster.setCameraExposure(CAMERA_EXPOSURE);
-        cvMaster.setCameraGain(CAMERA_GAIN);
-        cvMaster.setCameraFocus(CAMERA_FOCUS);
+//        cvMaster.setCameraExposure(CAMERA_EXPOSURE);
+//        cvMaster.setCameraGain(CAMERA_GAIN);
+//        cvMaster.setCameraFocus(CAMERA_FOCUS);
 
         if (gamepad1.a && !lastA) {
             cvMaster.detectTag();
@@ -50,7 +50,11 @@ public class AprilTagTest extends BCLinearOpMode {
         }
         lastX = gamepad1.x;
 
-        drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
+        try {
+            drivetrain.setPoseEstimate(AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(cvMaster.tagDetector.getDetections()));
+        } catch (Exception e) {
+
+        }
         drivetrain.ftcDashDrawCurrentPose();
     }
 

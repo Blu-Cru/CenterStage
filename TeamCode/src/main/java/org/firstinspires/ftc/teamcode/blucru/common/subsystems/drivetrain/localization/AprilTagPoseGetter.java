@@ -19,12 +19,12 @@ public final class AprilTagPoseGetter {
             TAG_X = 62,
             MAX_UPDATE_DISTANCE = 60; // maximum update distance
     public static HashMap<Integer, Pose2d> TAGS = new HashMap<Integer, Pose2d>() {{
-        put(1, new Pose2d(TAG_X, 42, Math.toRadians(180))); // tag 1 (red right)
+        put(1, new Pose2d(TAG_X, 41.5, Math.toRadians(180))); // tag 1 (red right)
         put(2, new Pose2d(TAG_X, 36, Math.toRadians(180))); // tag 2 (red center)
-        put(3, new Pose2d(TAG_X, 30, Math.toRadians(180))); // tag 3 (red left)
-        put(4, new Pose2d(TAG_X, -30, Math.toRadians(180))); // tag 4 (blue right)
+        put(3, new Pose2d(TAG_X, 30.5, Math.toRadians(180))); // tag 3 (red left)
+        put(4, new Pose2d(TAG_X, -30.5, Math.toRadians(180))); // tag 4 (blue right)
         put(5, new Pose2d(TAG_X, -36, Math.toRadians(180))); // tag 5 (blue center)
-        put(6, new Pose2d(TAG_X, -42, Math.toRadians(180))); // tag 6 (blue left)
+        put(6, new Pose2d(TAG_X, -41.5, Math.toRadians(180))); // tag 6 (blue left)
     }};
 
     public static Vector2d getRobotToTagVector(double detectionX, double detectionY) {
@@ -108,7 +108,7 @@ public final class AprilTagPoseGetter {
 
             Pose2d poseWithHeading = getRobotPoseWithHeading(closestDetection, heading);
 
-            Log.v("TagPoseGetter", "got pose with heading: " + poseWithHeading);
+            Log.i("TagPoseGetter", "got pose: " + poseWithHeading + " using tag # " + closestDetection.id);
             return poseWithHeading;
         }
     }

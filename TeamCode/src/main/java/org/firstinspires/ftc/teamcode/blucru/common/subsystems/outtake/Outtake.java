@@ -76,7 +76,6 @@ public class Outtake implements Subsystem {
                 break;
             case OUTTAKE:
                 lift.setTargetHeight(targetHeight - turret.getTurretHeightDelta() - dunkHeight);
-                if(System.currentTimeMillis() - timeWristExtended < 250 || wristRetracted) centerTurret();
                 break;
             case MANUAL:
                 updateTargetHeight();
@@ -189,7 +188,7 @@ public class Outtake implements Subsystem {
     }
 
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 1000 && !wristRetracted;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && !wristRetracted;
     }
 
     public void retractWrist() {
@@ -241,6 +240,8 @@ public class Outtake implements Subsystem {
         telemetry.addData("outtake state:", state);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
+        telemetry.addData("turret is IVK", turretIsIVK);
+        telemetry.addData("turret safe", turretSafe());
     }
 
     public void testTelemetry(Telemetry telemetry) {

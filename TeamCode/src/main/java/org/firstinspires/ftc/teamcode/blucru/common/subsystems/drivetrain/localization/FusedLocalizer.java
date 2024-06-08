@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class FusedLocalizer {
-    public static double TAG_UPDATE_DELAY = 200; // ms between tag updates
+    public static double TAG_UPDATE_DELAY = 100; // ms between tag updates
     Localizer deadWheels;
     IMU imu;
     PoseHistory poseHistory;
@@ -88,6 +88,9 @@ public class FusedLocalizer {
         Pose2d poseAtFrame = poseMarkerAtFrame.pose;
         Pose2d velocityAtFrame = poseMarkerAtFrame.velocity;
 
+
+
+
         long timeSinceFrame = System.nanoTime() - timeOfFrame;
         Log.v("FusedLocalizer", "Time since frame:" + timeSinceFrame);
 
@@ -107,19 +110,19 @@ public class FusedLocalizer {
             return;
         }
 
-        Pose2d weightedEstimateAtFrame = tagPose.minus(poseAtFrame).times(weight).plus(poseAtFrame);
-
         // calculate change from old odo pose to current pose
         currentPose = deadWheels.getPoseEstimate();
         Pose2d odoDelta = currentPose.minus(poseAtFrame);
 
-        Log.v("FusedLocalizer", "History odo pose:" + poseMarkerAtFrame);
-        Log.v("FusedLocalizer", "tag pose: " + tagPose);
-        Log.v("FusedLocalizer", "current pose: " + currentPose);
-        Log.v("FusedLocalizer", "delta: " + odoDelta);
-        Pose2d odoPoseError = weightedEstimateAtFrame.minus(poseAtFrame);
+        Pose2d odoPoseError = tagPose.minus(poseAtFrame).times(weight);
 
-        Pose2d newPose = new Pose2d(weightedEstimateAtFrame.vec().plus(odoDelta.vec()), currentPose.getHeading());
+        Log.v("FusedLocalizer", "Tag pose: " + tagPose);
+        Log.v("FusedLocalizer", "Pose at frame:" + poseAtFrame);
+        Log.v("FusedLocalizer", "Current pose: " + currentPose);
+        Log.v("FusedLocalizer", "Correction: " + odoPoseError);
+
+
+        Pose2d newPose = new Pose2d(tagPose.vec().plus(odoDelta.vec()), currentPose.getHeading());
         Log.i("FusedLocalizer", "Updated pose to: " + newPose);
 
         // set pose estimate to tag pose + delta
@@ -150,9 +153,9 @@ public class FusedLocalizer {
         double angVel = velocity.getHeading();
         double vel = velocity.vec().norm();
 
-        double totalVel = Math.hypot(vel, angVel * 25);
+        double totalVel = Math.hypot(vel, angVel * 10);
 
         // TODO: tune this function
-        return Range.clip(-0.7*Math.atan(.15 * totalVel-4), 0, 1);
+        return Range.clip(-0.3*Math.atan(.12 * totalVel-4), 0, 1);
     }
 }

@@ -75,6 +75,7 @@ public class PoseHistory {
 //        System.out.println("after mult" + afterMultiplier);
 
         Pose2d interpolatedPose = poseBefore.times(beforeMultiplier).plus(poseAfter.times(afterMultiplier)); // linear interpolation
+//        Pose2d interpolatedPose = poseAfter;
 
         Log.v("PoseHistory", "Interpolated pose" + interpolatedPose);
         return new PoseMarker(interpolatedPose, poseMarkerBeforeTime.velocity);

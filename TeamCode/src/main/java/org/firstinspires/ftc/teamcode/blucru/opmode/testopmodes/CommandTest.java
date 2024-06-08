@@ -23,9 +23,17 @@ public class CommandTest extends BCLinearOpMode {
     public void initialize() {
         addOuttake();
         addIntake();
+        addDrivetrain(true);
+        drivetrain.fieldCentric = false;
     }
 
     public void periodic() {
+
+        drivetrain.teleOpDrive(gamepad1);
+
+        if(gamepad1.right_stick_button) {
+            drivetrain.resetHeading(Math.toRadians(90));
+        }
         if(gamepad1.a && !lastA) {
             CommandScheduler.getInstance().schedule(new IntakeCommand(0, 1));
         }
