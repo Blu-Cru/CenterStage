@@ -31,7 +31,7 @@ public class Outtake implements Subsystem {
         MANUAL
     }
 
-    Servo wrist;
+    Wrist wrist;
     public Lift lift;
     public Lock lock;
     public Turret turret;
@@ -39,7 +39,6 @@ public class Outtake implements Subsystem {
     State state;
     State stateBeforeManual;
 
-    public boolean wristRetracted;
     boolean turretIsIVK = false;
 
     public double targetHeight; // inches
@@ -50,15 +49,13 @@ public class Outtake implements Subsystem {
     double timeWristExtended;
 
     public Outtake(HardwareMap hardwareMap) {
-        wrist = hardwareMap.get(Servo.class, "wrist");
-
+        wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap);
         lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
 
         state = State.RETRACT;
 
-        wristRetracted = true;
         dunkHeight = 0;
         turretGlobalY = 0;
     }
@@ -67,7 +64,7 @@ public class Outtake implements Subsystem {
         lift.init();
         lock.init();
         turret.init();
-        wrist.setPosition(WRIST_RETRACT);
+        wrist.init();
     }
 
     public void read() {
@@ -95,10 +92,7 @@ public class Outtake implements Subsystem {
         lift.write();
         lock.write();
         turret.write();
-
-        // write wrist position
-        if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
-        else if(!wristRetracted && wrist.getPosition() != WRIST_OUTTAKE) wrist.setPosition(WRIST_OUTTAKE);
+        wrist.write();
     }
 
     public void setManualSlidePower(double power) {
@@ -183,21 +177,17 @@ public class Outtake implements Subsystem {
         return turret.getAngle();
     }
 
-    public void toggleWrist() {
-        wristRetracted = !wristRetracted;
-    }
-
     public boolean turretSafe() {
         return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && !wristRetracted;
     }
 
     public void retractWrist() {
-        wristRetracted = true;
+        wrist.retract();
     }
 
     public void extendWrist() {
         timeWristExtended = System.currentTimeMillis();
-        wristRetracted = false;
+        wrist.extend();
     }
 
     public Lift getLift() {
@@ -237,8 +227,8 @@ public class Outtake implements Subsystem {
         lift.telemetry(telemetry);
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
+        wrist.telemetry(telemetry);
         telemetry.addData("outtake state:", state);
-        telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
         telemetry.addData("turret is IVK", turretIsIVK);
         telemetry.addData("turret safe", turretSafe());
@@ -246,6 +236,5 @@ public class Outtake implements Subsystem {
 
     public void testTelemetry(Telemetry telemetry) {
         lift.testTelemetry(telemetry);
-        telemetry.addData("wrist pos", wrist.getPosition());
     }
 }
