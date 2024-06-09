@@ -20,21 +20,20 @@ public class Globals {
 
     public static ElapsedTime runtime;
 
+    public static double voltage = 13.0;
+
     public static void startTimer() {
         runtime = new ElapsedTime();
         runtime.reset();
     }
 
-    public static void autoConfigTelemetry(Telemetry telemetry) {
-        telemetry.addData("□ to cycle ALLIANCE:", alliance);
-        telemetry.addData("△ to cycle SIDE:", side);
-        telemetry.addData("⨉ to cycle AUTO TYPE:", autoType);
-        telemetry.addData("◯ to cycle PARK:", parkType);
-        telemetry.addLine("Right stick button to build");
+    public static void setStartPose(Pose2d pose) {
+        startPose = mapPose(pose.getX(), pose.getY(), pose.getHeading());
     }
 
-    public static void setStartPose(Pose2d pose) {
-        startPose = alliance == Alliance.RED ? pose : new Pose2d(pose.getX(), -pose.getY(), pose.getHeading() + Math.PI);
+    public static void setAutoStartPose() {
+        if(side == Side.AUDIENCE) setStartPose(new Pose2d(-36, 62, Math.toRadians(90)));
+        else setStartPose(new Pose2d(12, 62, Math.toRadians(90)));
     }
 
     public static void setAlliance(Alliance alliance) {
@@ -45,5 +44,28 @@ public class Globals {
 
     public static Pose2d mapPose(double x, double y, double headingDegrees) {
         return new Pose2d(x, y * reflect, Math.toRadians(headingDegrees * reflect));
+    }
+
+    public static void setVoltage(double voltage) {
+        Globals.voltage = voltage;
+    }
+
+    public static double correctPower(double power) {
+        return power * 13.0 / Globals.voltage;
+    }
+
+    public static void autoConfigTelemetry(Telemetry telemetry) {
+        telemetry.addData("□ to cycle ALLIANCE:", alliance);
+        telemetry.addData("△ to cycle SIDE:", side);
+        telemetry.addData("⨉ to cycle AUTO TYPE:", autoType);
+        telemetry.addData("◯ to cycle PARK:", parkType);
+        telemetry.addLine("Right stick button to build");
+    }
+
+    public static void autoConfigStatus(Telemetry telemetry) {
+        telemetry.addData("Alliance:", alliance);
+        telemetry.addData("Side:", side);
+        telemetry.addData("Auto Type:", autoType);
+        telemetry.addData("Park Type:", parkType);
     }
 }

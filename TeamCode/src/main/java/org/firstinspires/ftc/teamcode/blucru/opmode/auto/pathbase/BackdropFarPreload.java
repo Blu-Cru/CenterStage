@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretGlobalYCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
@@ -21,13 +22,8 @@ public class BackdropFarPreload extends PIDPathBuilder {
         this.setPower(0.7)
                 .addPoint(Globals.mapPose(14, 45, 120), 8, false)
                 .schedule(
-                        new SequentialCommandGroup(
-                                new DropdownPartialRetractCommand(),
-                                new WaitCommand(300),
-                                new IntakePowerCommand(-0.45),
-                                new WaitCommand(1000),
-                                new StopIntakeCommand()
-                        )
+                        new AutoReleasePurpleIntakeCommand(300)
+
                 )
                 .addPoint(Globals.mapPose(10, 39, 180), false)
                 .setPower(0.35)
@@ -42,14 +38,14 @@ public class BackdropFarPreload extends PIDPathBuilder {
                 .addPoint(Globals.mapPose(48.5, 32, 180), 2.5)
                 .schedule(
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
+                                new WaitCommand(300),
                                 new LockReleaseCommand(2),
                                 new WaitCommand(300),
                                 new OuttakeRetractCommand(2)
                         )
                 )
+                .waitMillis(600)
                 .setPower(0.7)
-                .waitMillis(500)
                 .addPoint(Globals.mapPose(40, 12, 180));
     }
 }

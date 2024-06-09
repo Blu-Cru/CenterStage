@@ -27,7 +27,7 @@ public final class Poses {
     public static double STACK_SETUP_X = -55.5 + FIELD_OFFSET_X;
 
     public static Pose2d BACKDROP_STARTING_POSE;
-    public static Pose2d WING_STARTING_POSE;
+    public static Pose2d AUDIENCE_STARTING_POSE;
 
     public static Pose2d BACKDROP_PLACEMENT_FAR_POSE;
     public static Pose2d BACKDROP_PLACEMENT_CLOSE_POSE;
@@ -64,7 +64,7 @@ public final class Poses {
         BACKDROP_PLACEMENT_CLOSE_POSE = new Pose2d(23.5, -35 * reflect, Math.toRadians(-90 * reflect));
         BACKDROP_PLACEMENT_CENTER_POSE = new Pose2d(15, -31 * reflect, Math.toRadians(-90 * reflect));
 
-        WING_STARTING_POSE = new Pose2d(-36 + FIELD_OFFSET_X, START_Y * reflect, Math.toRadians(-90 * reflect));
+        AUDIENCE_STARTING_POSE = new Pose2d(-36 + FIELD_OFFSET_X, START_Y * reflect, Math.toRadians(-90 * reflect));
         WING_PLACEMENT_FAR_FOR_PERIM_POSE = new Pose2d(-55 + FIELD_OFFSET_X, -36 * reflect, Math.toRadians(180));
         WING_PLACEMENT_FAR_FOR_CENTER_POSE = new Pose2d(-52 + FIELD_OFFSET_X, -23 * reflect, Math.toRadians(140 * reflect));
         WING_PLACEMENT_CLOSE_FOR_CENTER_POSE = new Pose2d(-31 + FIELD_OFFSET_X, -34 * reflect, Math.toRadians(180));

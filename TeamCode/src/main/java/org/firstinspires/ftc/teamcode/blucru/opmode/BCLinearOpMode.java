@@ -56,6 +56,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         stickyG2 = new StickyGamepad(gamepad2);
         robot = Robot.getInstance();
         robot.create(hardwareMap);
+        Globals.setVoltage(robot.getVoltage());
         initialize();
         robot.init();
         while(opModeInInit()) {
