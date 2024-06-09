@@ -38,7 +38,7 @@ public class DevAuto extends BCLinearOpMode {
         addIntake();
         addPurplePixelHolder();
 
-        trajectories = new Trajectories(Alliance.RED, Side.FAR, AutoType.PRELOAD, ParkType.NONE);
+        trajectories = new Trajectories(Alliance.RED, Side.AUDIENCE, AutoType.PRELOAD, ParkType.NONE);
 
         Poses.setAlliance(Alliance.RED);
         intakeTrajectories = new IntakeTrajectories(1);

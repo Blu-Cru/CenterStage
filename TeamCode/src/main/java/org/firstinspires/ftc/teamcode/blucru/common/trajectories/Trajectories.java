@@ -85,7 +85,7 @@ public class Trajectories {
     public ArrayList<TrajectorySequence> buildTrajectoriesFar(Robot robot) {
         trajectoriesFar.clear();
 
-        if(side == Side.CLOSE) {
+        if(side == Side.BACKDROP) {
             // placement and deposit preload
             trajectoriesFar.add(placements.placementBackdropFar(robot));
             trajectoriesFar.add(preloadDeposits.depositFromBackdropFar(robot));
@@ -146,7 +146,7 @@ public class Trajectories {
     public ArrayList<TrajectorySequence> buildTrajectoriesCenter(Robot robot) {
         trajectoriesCenter.clear();
 
-        if(side == Side.CLOSE) {
+        if(side == Side.BACKDROP) {
             // placement and deposit preload
 
 
@@ -213,7 +213,7 @@ public class Trajectories {
     public ArrayList<TrajectorySequence> buildTrajectoriesClose(Robot robot) {
         trajectoriesClose.clear();
 
-        if(side == Side.CLOSE) {
+        if(side == Side.BACKDROP) {
             // placement and deposit preload
             trajectoriesClose.add(placements.placementBackdropClose(robot));
             trajectoriesClose.add(preloadDeposits.depositFromBackdropClose(robot));
@@ -272,9 +272,9 @@ public class Trajectories {
 
     public Pose2d getStartPose() {
         switch (side) {
-            case CLOSE:
+            case BACKDROP:
                 return Poses.BACKDROP_STARTING_POSE;
-            case FAR:
+            case AUDIENCE:
                 return Poses.WING_STARTING_POSE;
         }
         return null;

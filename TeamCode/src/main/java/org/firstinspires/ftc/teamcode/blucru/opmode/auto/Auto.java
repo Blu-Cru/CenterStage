@@ -38,7 +38,7 @@ public class Auto extends LinearOpMode {
     PurplePixelHolder purplePixelHolder;
 
     private Alliance alliance = Alliance.RED;
-    private Side side = Side.CLOSE;
+    private Side side = Side.BACKDROP;
     private AutoType autoType = AutoType.CENTER_CYCLE;
     private ParkType parkType = ParkType.CENTER;
     private Trajectories trajectories;

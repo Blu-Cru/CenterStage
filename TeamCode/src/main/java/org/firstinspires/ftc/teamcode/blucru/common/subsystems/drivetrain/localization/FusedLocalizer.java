@@ -158,6 +158,6 @@ public class FusedLocalizer {
         double totalVel = Math.hypot(vel, angVel * 12);
 
         // TODO: tune this function
-        return Range.clip(-0.8*Math.atan(.07 * totalVel-5), 0, 1);
+        return Range.clip(-0.75*Math.atan(.07 * totalVel-5), 0, 1);
     }
 }

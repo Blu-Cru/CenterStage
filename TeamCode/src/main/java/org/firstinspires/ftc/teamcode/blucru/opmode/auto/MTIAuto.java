@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Autonomous(name = "MTI Auto", group = "1")
 public class MTIAuto extends BCLinearOpMode {
     private enum State {
         CONFIG,
@@ -31,13 +33,16 @@ public class MTIAuto extends BCLinearOpMode {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 telemetry.addLine("Building Paths . . .");
+                telemetry.update();
                 config = AutoConfig.config();
+                config.build();
                 addCVMaster();
                 cvMaster.detectProp();
             })
             .state(State.DETECTION)
             .loop(() -> {
                 propPosition = cvMaster.propDetector.position;
+                telemetry.addLine("Left stick button to go back to config");
                 cvMaster.propDetector.telemetry(telemetry);
             })
             .transition(() -> stickyG1.left_stick_button, State.CONFIG, () -> {
@@ -49,6 +54,7 @@ public class MTIAuto extends BCLinearOpMode {
             .transition(this::opModeIsActive, State.RUNNING, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
+                drivetrain.initializePose();
                 config.start();
                 Globals.startTimer();
             })
@@ -69,6 +75,11 @@ public class MTIAuto extends BCLinearOpMode {
     }
 
     @Override
+    public void onStart() {
+        drivetrain.initializePose();
+    }
+
+    @Override
     public void initLoop() {
         stateMachine.update();
     }
@@ -81,5 +92,10 @@ public class MTIAuto extends BCLinearOpMode {
     @Override
     public void end() {
         Globals.setStartPose(drivetrain.getPoseEstimate());
+    }
+
+    @Override
+    public void telemetry() {
+        telemetry.addData("State: ", stateMachine.getState());
     }
 }

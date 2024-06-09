@@ -2,16 +2,16 @@ package org.firstinspires.ftc.teamcode.blucru.common.states;
 
 // starting side for the robot in auto
 public enum Side {
-    CLOSE,
-    FAR;
+    BACKDROP,
+    AUDIENCE;
 
 
     // flip the starting side
     public Side flip() {
-        if(this == CLOSE) {
-            return FAR;
+        if(this == BACKDROP) {
+            return AUDIENCE;
         } else {
-            return CLOSE;
+            return BACKDROP;
         }
     }
 }

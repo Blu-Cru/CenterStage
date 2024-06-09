@@ -14,9 +14,9 @@ public class Globals {
 
     // default alliance is red, but will be changed before auto starts
     public static Alliance alliance = Alliance.RED;
-    public static Side side = Side.CLOSE;
-    public static AutoType autoType = AutoType.CENTER_CYCLE;
-    public static ParkType parkType = ParkType.CENTER;
+    public static Side side = Side.AUDIENCE;
+    public static AutoType autoType = AutoType.PRELOAD;
+    public static ParkType parkType = ParkType.NONE;
 
     public static ElapsedTime runtime;
 
@@ -30,6 +30,7 @@ public class Globals {
         telemetry.addData("△ to cycle SIDE:", side);
         telemetry.addData("⨉ to cycle AUTO TYPE:", autoType);
         telemetry.addData("◯ to cycle PARK:", parkType);
+        telemetry.addLine("Right stick button to build");
     }
 
     public static void setStartPose(Pose2d pose) {
