@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.FusedLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
@@ -382,6 +383,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         else return Range.clip(headingPID.calculate(heading, target), -1, 1);
     }
 
+    public double getAbsHeadingError(double target) {
+        double error = heading - target;
+        if(error < -Math.PI) error += 2*Math.PI;
+        else if(error > Math.PI) error -= 2*Math.PI;
+        return Math.abs(error);
+    }
+
     private double getPIDRotateDecel(double targetHeading) {
         double headingDecel = calculateHeadingDecel();
         return getPIDRotate(headingDecel, targetHeading);
@@ -476,6 +484,14 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public void updateAprilTags(AprilTagProcessor processor) {
         try {
             fusedLocalizer.updateAprilTags(processor);
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    public void updateAprilTags() {
+        try {
+            fusedLocalizer.updateAprilTags(Robot.getInstance().cvMaster.tagDetector);
         } catch (Exception e) {
             return;
         }

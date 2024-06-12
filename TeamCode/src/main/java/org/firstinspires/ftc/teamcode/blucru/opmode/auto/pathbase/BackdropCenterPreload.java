@@ -33,13 +33,9 @@ public class BackdropCenterPreload extends PIDPathBuilder {
                 .schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(300),
-                                new LockReleaseCommand(2),
-                                new WaitCommand(300),
-                                new OuttakeRetractCommand(2)
+                                new LockReleaseCommand(2)
                         )
                 )
-                .waitMillis(600)
-                .setPower(0.7)
-                .addMappedPoint(40, 12, 180);
+                .waitMillis(600);
     }
 }

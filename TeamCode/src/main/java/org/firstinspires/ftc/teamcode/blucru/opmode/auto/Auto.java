@@ -103,5 +103,6 @@ public class Auto extends BCLinearOpMode {
     @Override
     public void telemetry() {
         telemetry.addData("State: ", stateMachine.getState());
+        Globals.runtimeTelemetry(telemetry);
     }
 }

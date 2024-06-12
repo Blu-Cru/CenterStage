@@ -34,6 +34,11 @@ public class PIDPathBuilder {
         return this;
     }
 
+    public PIDPathBuilder addMappedPoint(double x, double y, double headingDeg, boolean stopRequired) {
+        this.addPoint(Globals.mapPose(x, y, headingDeg), stopRequired);
+        return this;
+    }
+
     public PIDPathBuilder addPoint(Pose2d pose) {
         segments.add(new PIDPointSegment(pose));
         return this;

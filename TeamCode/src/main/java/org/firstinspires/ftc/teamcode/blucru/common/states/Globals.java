@@ -23,8 +23,8 @@ public class Globals {
     public static double voltage = 13.0;
 
     public static void startTimer() {
-        runtime = new ElapsedTime();
-        runtime.reset();
+        Globals.runtime = new ElapsedTime();
+        Globals.runtime.reset();
     }
 
     public static void setAutoStartPose() {
@@ -75,5 +75,9 @@ public class Globals {
         telemetry.addData("Side:", side);
         telemetry.addData("Auto Type:", autoType);
         telemetry.addData("Park Type:", parkType);
+    }
+
+    public static void runtimeTelemetry(Telemetry telemetry) {
+        telemetry.addData("Runtime", runtime.seconds());
     }
 }
