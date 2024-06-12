@@ -29,7 +29,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath, crashTrussMiddleFailsafePath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
 
-    int closeStackPixels = 0;
+    int closeStackPixels = 5;
+    int centerStackPixels = 5;
+    int farStackPixels = 5;
 
     Drivetrain dt;
 
@@ -67,11 +69,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 currentPath = backdropToStackPath.start();
             })
 
-            // BACKDROP DRIVING TO STACK
+            // DRIVING TO STACK
 
             .state(State.TO_STACK)
             .loop(() -> {
-                currentPath.run();
                 dt.updateAprilTags();
             })
             // TODO: Transition to intake path
