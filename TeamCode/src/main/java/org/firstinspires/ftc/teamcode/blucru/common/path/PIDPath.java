@@ -22,10 +22,12 @@ public class PIDPath implements Path {
     }
 
     @Override
-    public void start() {
+    public Path start() {
         pathDone = false;
         segmentList.get(0).start();
         index = 0;
+
+        return this;
     }
 
     public void run() {

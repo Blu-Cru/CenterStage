@@ -24,11 +24,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     static final double TRUSS_HEADING_FAILSAFE_TOLERANCE = Math.toRadians(40);
 
     Path farPreloadPath, centerPreloadPath, closePreloadPath;
-    Path preloadPath;
     Path backdropToStackPath, stackToBackdropPath;
     Path backdropFailsafePath, stackFailsafePath;
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath, crashTrussMiddleFailsafePath;
-    Path currentFailsafePath;
+    Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
+
+    int closeStackPixels = 0;
 
     Drivetrain dt;
 
@@ -49,10 +50,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
         // Failsafe states
         DEPOSIT_FAILSAFE,
-        CRASH_FAILSAFE,
+        CRASH_TO_STACK_FAILSAFE,
         INTAKE_FAILSAFE,
     }
-
 
     Path currentPath;
 
@@ -61,24 +61,35 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
             .state(State.PLACING_PRELOADS)
             .loop(() -> {
-                preloadPath.run();
                 dt.updateAprilTags();
             })
-            .transition(() -> preloadPath.isDone(), State.TO_STACK, () -> {
-                backdropToStackPath.start();
+            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+                currentPath = backdropToStackPath.start();
             })
 
             // BACKDROP DRIVING TO STACK
 
             .state(State.TO_STACK)
             .loop(() -> {
-                backdropToStackPath.run();
+                currentPath.run();
                 dt.updateAprilTags();
             })
-            .transition(() -> backdropToStackPath.isDone(), State.INTAKING, () -> {
+            // TODO: Transition to intake path
+            .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
 //                dt.intake.start();
             })
-            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE, State.CRASH_FAILSAFE)
+            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE, State.CRASH_TO_STACK_FAILSAFE, () -> {
+                if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
+                else currentPath = crashTrussMiddleFailsafePath.start();
+            })
+
+            // CRASH FAILSAFE STATE
+
+            .state(State.CRASH_TO_STACK_FAILSAFE)
+            .transition(currentPath::isDone, State.TO_STACK, () -> {
+                currentPath = crashToStackRecoveryPath.start();
+            })
+
             .build();
 
     public CenterCycleBackdropConfig() {
@@ -92,19 +103,25 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
         backdropToStackPath = new BackdropThroughTrussCenter().build();
 
+
+
         crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
         crashTrussMiddleFailsafePath = new PIDPathBuilder().addMappedPoint(-12, 12, 180).build();
+
+        crashToStackRecoveryPath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
+        crashToBackdropRecoveryPath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
 
         dt = Robot.getInstance().drivetrain;
     }
 
     public void run() {
         stateMachine.update();
+        currentPath.run();
     }
 
     public void start(Randomization randomization) {
-        preloadPath = preloadPaths.get(randomization);
+        currentPath = preloadPaths.get(randomization);
         stateMachine.setState(State.PLACING_PRELOADS);
         stateMachine.start();
     }

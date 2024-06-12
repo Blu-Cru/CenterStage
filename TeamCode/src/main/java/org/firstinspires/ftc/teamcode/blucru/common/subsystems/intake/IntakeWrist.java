@@ -65,10 +65,10 @@ public class IntakeWrist implements Subsystem {
     }
 
     public static double getTargetHeight(int stackHeight) {
-        if(stackHeight == 0) {
+        if(stackHeight <= 0) {
             return GROUND_HEIGHT; // drop to ground
         } else {
-            stackHeight = Math.max(0, Math.min(4, stackHeight));
+            stackHeight = Math.min(4, stackHeight);
             return STACK1_HEIGHT + (stackHeight - 1) * 0.5;
         }
     }
