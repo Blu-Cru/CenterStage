@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
-@Autonomous(name ="CHS Auto", group = "Auto")
+@Autonomous(name ="CHS Auto", group = "2")
 public class CHSAuto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;
     ArrayList<TrajectorySequence> trajectoriesFar;

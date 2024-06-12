@@ -58,7 +58,7 @@ public class PIDPath implements Path {
         return segmentList.get(index).failed();
     }
 
-    public boolean isPathDone() {
+    public boolean isDone() {
         return index >= segmentList.size() || pathDone;
     }
 

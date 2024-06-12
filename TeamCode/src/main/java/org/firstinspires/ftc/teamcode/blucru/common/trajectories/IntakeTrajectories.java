@@ -64,7 +64,7 @@ public class IntakeTrajectories {
     public TrajectorySequence placePurpleIntakeFromWingCenter(Robot robot) {
         Pose2d endPose = new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect));
 
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE  )
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setTangent(Math.toRadians(90 * reflect))
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -58 * reflect), Math.toRadians(90 * reflect))

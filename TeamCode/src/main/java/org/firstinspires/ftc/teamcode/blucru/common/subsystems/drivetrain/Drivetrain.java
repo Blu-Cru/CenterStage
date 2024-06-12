@@ -430,15 +430,15 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
     // resets heading
     public void resetHeading(double heading) {
-//        resetIMU(heading);
         fusedLocalizer.resetHeading(heading);
         Log.i("Drivetrain", "Reset heading to " + heading);
     }
 
     // set initial pose from auto
     public void initializePose() {
+        Log.i("Drivetrain", "Initialized pose to: " + Globals.startPose);
+        pose = Globals.startPose;
         setPoseEstimate(Globals.startPose);
-        setExternalHeading(Globals.startPose.getHeading());
         resetHeading(Globals.startPose.getHeading());
     }
 

@@ -27,13 +27,9 @@ public class Globals {
         runtime.reset();
     }
 
-    public static void setStartPose(Pose2d pose) {
-        startPose = mapPose(pose.getX(), pose.getY(), pose.getHeading());
-    }
-
     public static void setAutoStartPose() {
-        if(side == Side.AUDIENCE) setStartPose(new Pose2d(-36, 62, Math.toRadians(90)));
-        else setStartPose(new Pose2d(12, 62, Math.toRadians(90)));
+        if(side == Side.AUDIENCE) Globals.startPose = Globals.mapPose(-36, 62, 90);
+        else Globals.startPose = Globals.mapPose(12, 62, 90);
     }
 
     public static void setAlliance(Alliance alliance) {
@@ -52,6 +48,18 @@ public class Globals {
 
     public static double correctPower(double power) {
         return power * 13.0 / Globals.voltage;
+    }
+
+    public static Randomization getRandomization(int propPosition) {
+        if(Globals.alliance == Alliance.RED) {
+            if(propPosition == 0) return Randomization.FAR;
+            else if(propPosition == 1) return Randomization.CENTER;
+            else return Randomization.CLOSE;
+        } else {
+            if(propPosition == 0) return Randomization.CLOSE;
+            else if(propPosition == 1) return Randomization.CENTER;
+            else return Randomization.FAR;
+        }
     }
 
     public static void autoConfigTelemetry(Telemetry telemetry) {

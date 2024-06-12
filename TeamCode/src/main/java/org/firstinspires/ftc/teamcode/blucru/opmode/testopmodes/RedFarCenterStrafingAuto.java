@@ -54,7 +54,7 @@ public class RedFarCenterStrafingAuto extends BCLinearOpMode {
     }
 
     public void onStart() {
-        drivetrain.setPoseEstimate(Poses.WING_STARTING_POSE);
+        drivetrain.setPoseEstimate(Poses.AUDIENCE_STARTING_POSE);
     }
 
     public void periodic() {

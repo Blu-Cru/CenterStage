@@ -5,6 +5,7 @@ import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @Autonomous(name = "Auto", group = "1")
@@ -37,6 +38,8 @@ public class Auto extends BCLinearOpMode {
                 telemetry.update();
                 config = AutoConfig.config();
                 config.build();
+                Globals.setAutoStartPose();
+                if(Globals.side == Side.AUDIENCE) addPurplePixelHolder();
                 addCVMaster();
                 cvMaster.detectProp();
             })
@@ -56,9 +59,8 @@ public class Auto extends BCLinearOpMode {
             .transition(this::opModeIsActive, State.RUNNING, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
-                Globals.setAutoStartPose();
                 drivetrain.initializePose();
-                config.start();
+                config.start(Globals.getRandomization(propPosition));
                 Globals.startTimer();
             })
             .state(State.RUNNING)
@@ -73,6 +75,7 @@ public class Auto extends BCLinearOpMode {
         addIntake();
         addOuttake();
         addPurplePixelHolder();
+        optimizeTelemetry();
         stateMachine.setState(State.CONFIG);
         stateMachine.start();
     }
@@ -94,7 +97,7 @@ public class Auto extends BCLinearOpMode {
 
     @Override
     public void end() {
-        Globals.setStartPose(drivetrain.getPoseEstimate());
+        Globals.startPose = drivetrain.pose;
     }
 
     @Override

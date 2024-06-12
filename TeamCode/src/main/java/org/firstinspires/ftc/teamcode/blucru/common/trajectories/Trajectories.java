@@ -275,7 +275,7 @@ public class Trajectories {
             case BACKDROP:
                 return Poses.BACKDROP_STARTING_POSE;
             case AUDIENCE:
-                return Poses.WING_STARTING_POSE;
+                return Poses.AUDIENCE_STARTING_POSE;
         }
         return null;
     }

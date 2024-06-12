@@ -55,7 +55,7 @@ public class Placements {
     }
 
     public TrajectorySequence placementWingCloseForCenter(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
@@ -69,7 +69,7 @@ public class Placements {
     }
 
     public TrajectorySequence placementWingCloseForPerimeter(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
@@ -83,7 +83,7 @@ public class Placements {
     }
 
     public TrajectorySequence placementWingCenter(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
@@ -97,7 +97,7 @@ public class Placements {
     }
 
     public TrajectorySequence placementWingFarForPerimeter(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 // placement
                 .setTangent(Math.toRadians(90 * reflect))
@@ -114,7 +114,7 @@ public class Placements {
     }
 
     public TrajectorySequence placementWingFarForCenter(Robot robot) {
-        return robot.drivetrain.trajectorySequenceBuilder(Poses.WING_STARTING_POSE)
+        return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 // placement
                 .setTangent(Math.toRadians(130 * reflect))

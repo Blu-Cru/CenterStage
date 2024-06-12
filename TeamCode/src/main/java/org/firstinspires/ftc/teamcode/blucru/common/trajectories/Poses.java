@@ -13,7 +13,7 @@ public final class Poses {
     APPLY ONLY TO WING SIDE COORDINATES
     HIGHER = CLOSER
     */
-    public static double START_Y = -62;
+    public static double START_Y = -61;
     public static double DEPOSIT_X = 51;
     public static double BACKDROP_SETUP_X = 44;
     public static double BACKDROP_Y_DELTA = 3.5;

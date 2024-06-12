@@ -42,15 +42,15 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.RESETTING)
-            .transition(() -> stickyG1.a, State.FOLLOWING_TRAJECTORY, () -> {
-                drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
-                drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
-                drivetrain.followTrajectorySequenceAsync(traj);
-                rrStartTime = System.currentTimeMillis();
-            })
+//            .transition(() -> stickyG1.a, State.FOLLOWING_TRAJECTORY, () -> {
+//                drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
+//                drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
+//                drivetrain.followTrajectorySequenceAsync(traj);
+//                rrStartTime = System.currentTimeMillis();
+//            })
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
-                drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
-                drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
+                drivetrain.setPoseEstimate(Poses.AUDIENCE_STARTING_POSE);
+                drivetrain.resetHeading(Poses.AUDIENCE_STARTING_POSE.getHeading());
                 pidPath.start();
                 pidStartTime = System.currentTimeMillis();
             })
@@ -59,18 +59,18 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
                 intake.intakeWrist.targetAngleDeg = 90;
             })
-            .state(State.FOLLOWING_TRAJECTORY)
-            .transition(() -> !drivetrain.isBusy(), State.RESETTING, () -> rrTotalTime = System.currentTimeMillis() - rrStartTime)
-            .transition(() -> stickyG1.a, State.RESETTING, () -> {
-                drivetrain.breakFollowing();
-                drivetrain.driveScaled(0,0,0);
-            })
-            .loop(() -> {
-                // follow trajectory
-                try {drivetrain.updateTrajectory();}
-                // if the trajectory is interrupted, stop the op mode
-                catch (Exception e) {requestOpModeStop();}
-            })
+//            .state(State.FOLLOWING_TRAJECTORY)
+//            .transition(() -> !drivetrain.isBusy(), State.RESETTING, () -> rrTotalTime = System.currentTimeMillis() - rrStartTime)
+//            .transition(() -> stickyG1.a, State.RESETTING, () -> {
+//                drivetrain.breakFollowing();
+//                drivetrain.driveScaled(0,0,0);
+//            })
+//            .loop(() -> {
+//                // follow trajectory
+//                try {drivetrain.updateTrajectory();}
+//                // if the trajectory is interrupted, stop the op mode
+//                catch (Exception e) {requestOpModeStop();}
+//            })
             .state(State.FOLLOWING_PID)
 //            .transition(() -> pidPath.isDone(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
             .transition(() -> stickyG1.a, State.RESETTING, ()-> {
@@ -86,7 +86,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                     pidPath.run();
                 } catch (Exception e) {}
 
-                drivetrain.updateAprilTags(cvMaster.tagDetector);
+//                drivetrain.updateAprilTags(cvMaster.tagDetector);
             })
             .build();
 
@@ -97,48 +97,21 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addIntake();
         addOuttake();
         addCVMaster();
-        Globals.setAlliance(Alliance.BLUE);
+        Globals.setAlliance(Alliance.RED);
         drivetrain.drivePower = 1;
 
         pidPath = new PIDPathBuilder()
                 .setPower(0.8)
-                .addMappedPoint(24, 48, 120, 6)
-                .schedule(
-                        new SequentialCommandGroup(
-                                new DropdownPartialRetractCommand(),
-                                new WaitCommand(600),
-                                new IntakePowerCommand(-0.45),
-                                new WaitCommand(1000),
-                                new StopIntakeCommand()
-                        )
-                )
-                .addMappedPoint(28, 30,190)
-
-                .schedule(
-                        new SequentialCommandGroup(
-                                new WaitCommand(250),
-                                new OuttakeExtendCommand(-1),
-                                new TurretGlobalYCommand(36)
-                        )
-                )
-
+                .addMappedPoint(-38, 45, 120,6)
+                .addMappedPoint(-33, 36, 180, 2)
                 .waitMillis(200)
-                .addMappedPoint(48.5, 36, 180, 2.5)
-                .schedule(
-                        new SequentialCommandGroup(
-                                new WaitCommand(200),
-                                new LockReleaseCommand(2),
-                                new WaitCommand(300),
-                                new OuttakeRetractCommand(2)
-                        )
-                )
-                .setPower(0.7)
-                .waitMillis(500)
-                .addMappedPoint(40, 12, 180)
+                .addMappedPoint(-44, 30, 180, 6)
+                .addMappedPoint(-58, 24, 180)
+                .waitMillis(1000)
+                .addMappedPoint(-45, 24,180)
                 .build();
 
-        preloadDeposits = new PreloadDeposits(-1);
-        traj = preloadDeposits.rrTest(robot);
+//        traj = preloadDeposits.rrTest(robot);
 
         stateMachine.setState(State.RESETTING);
         stateMachine.start();
