@@ -14,7 +14,7 @@ public class IntakeWrist implements Subsystem {
             PARALLEL_POS = 0.61,
             RADIUS = 4.7244,
 
-            RETRACT_HEIGHT = 3.7, // inches
+            RETRACT_HEIGHT = 4.2, // inches
             GROUND_HEIGHT = -2.8, // inches for intaking at ground level
             STACK1_HEIGHT = -2.2, // inches for intaking at one pixel height level
             AUTO_PURPLE_HEIGHT = -3.3, // inches for pushing the purple pixel at the start

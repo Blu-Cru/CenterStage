@@ -14,7 +14,7 @@ public class AutoReleasePurpleIntakeCommand extends SequentialCommandGroup {
                 new WaitCommand((long) waitMillis),
                 new IntakePowerCommand(Globals.correctPower(-0.45)),
                 new WaitCommand(1000),
-                new StopIntakeCommand()
+                new IntakeStopCommand()
         );
     }
 }

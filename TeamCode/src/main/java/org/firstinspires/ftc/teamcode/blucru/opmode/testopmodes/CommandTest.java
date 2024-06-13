@@ -2,14 +2,13 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.StopIntakeCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 //@Disabled
@@ -40,7 +39,7 @@ public class CommandTest extends BCLinearOpMode {
         lastA = gamepad1.a;
 
         if(gamepad1.b && !lastB) {
-            CommandScheduler.getInstance().schedule(new StopIntakeCommand());
+            CommandScheduler.getInstance().schedule(new IntakeStopCommand());
         }
         lastB = gamepad1.b;
 

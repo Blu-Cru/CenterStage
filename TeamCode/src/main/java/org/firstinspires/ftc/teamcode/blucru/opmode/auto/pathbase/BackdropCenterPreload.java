@@ -29,6 +29,7 @@ public class BackdropCenterPreload extends PIDPathBuilder {
                 )
 
                 .waitMillis(200)
+                .setPower(0.35)
                 .addMappedPoint(48.5, 36, 180, 2.5)
                 .schedule(
                         new SequentialCommandGroup(

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-public class StopIntakeCommand extends SequentialCommandGroup {
-    public StopIntakeCommand() {
+public class IntakeStopCommand extends SequentialCommandGroup {
+    public IntakeStopCommand() {
         super(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
