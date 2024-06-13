@@ -64,9 +64,9 @@ public class Globals {
 
     public static void autoConfigTelemetry(Telemetry telemetry) {
         telemetry.addData("□ to cycle ALLIANCE:", alliance);
-        telemetry.addData("△ to cycle SIDE:", side);
+        telemetry.addData("◯ to cycle SIDE:", side);
         telemetry.addData("⨉ to cycle AUTO TYPE:", autoType);
-        telemetry.addData("◯ to cycle PARK:", parkType);
+        if(autoType == AutoType.PRELOAD) telemetry.addData("△ to cycle PARK:", parkType);
         telemetry.addLine("Right stick button to build");
     }
 
@@ -78,6 +78,6 @@ public class Globals {
     }
 
     public static void runtimeTelemetry(Telemetry telemetry) {
-        telemetry.addData("Runtime", runtime.seconds());
+        telemetry.addData("Runtime", Globals.runtime.seconds());
     }
 }

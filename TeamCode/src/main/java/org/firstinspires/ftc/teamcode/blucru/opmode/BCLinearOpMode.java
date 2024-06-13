@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -62,6 +63,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         while(opModeInInit()) {
             stickyG1.update();
             stickyG2.update();
+            CommandScheduler.getInstance().run();
             initLoop();
             try {
                 telemetry();

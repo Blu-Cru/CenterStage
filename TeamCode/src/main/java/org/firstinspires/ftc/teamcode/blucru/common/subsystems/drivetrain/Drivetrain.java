@@ -83,7 +83,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public Drivetrain(HardwareMap hardwareMap, boolean isTeleOp) {
         super(hardwareMap);
         this.drivetrainState = DrivetrainState.TELEOP;
-        this.isTeleOp = isTeleOp;
+
         this.intakingInAuto = false;
         headingPID = new PIDController(HEADING_P, HEADING_I, HEADING_D);
         headingPID.setTolerance(HEADING_PID_TOLERANCE);
@@ -115,6 +115,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         if(isTeleOp) {
             initializePose();
         }
+
+        this.drivetrainState = DrivetrainState.TELEOP;
 
         pose = this.getPoseEstimate();
         fusedLocalizer.init();

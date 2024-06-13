@@ -60,9 +60,9 @@ public class Auto extends BCLinearOpMode {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 drivetrain.initializePose();
+                Globals.startTimer();
                 config.start(Globals.getRandomization(propPosition));
                 cvMaster.detectTag();
-                Globals.startTimer();
             })
             .state(State.RUNNING)
             .loop(() -> {
@@ -103,7 +103,7 @@ public class Auto extends BCLinearOpMode {
 
     @Override
     public void telemetry() {
-//        telemetry.addData("State: ", stateMachine.getState());
-//        Globals.runtimeTelemetry(telemetry);
+        telemetry.addData("Auto state: ", stateMachine.getState());
+        config.telemetry(telemetry);
     }
 }

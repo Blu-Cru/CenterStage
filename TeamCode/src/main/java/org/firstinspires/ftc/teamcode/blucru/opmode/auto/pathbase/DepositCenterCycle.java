@@ -18,6 +18,11 @@ public class DepositCenterCycle extends PIDPathBuilder {
                         new TurretTurnCommand(270 + turretAngle * Globals.reflect)
                     )
                 )
-                .addMappedPoint(-49, 12, 205);
+                .addMappedPoint(-49, 12, 205)
+                .waitMillis(1000);
+    }
+
+    public DepositCenterCycle() {
+        this(2.5, 0);
     }
 }

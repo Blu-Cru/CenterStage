@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.path.Path;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
@@ -31,12 +33,14 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
     Path intakePath;
     Path depositPath;
+    Path parkPath;
 
     int closeStackPixels = 5;
     int centerStackPixels = 5;
     int farStackPixels = 5;
 
     Drivetrain dt;
+    ElapsedTime runtime;
 
     HashMap<Randomization, Path> preloadPaths = new HashMap<Randomization, Path>() {{
         put(Randomization.FAR, farPreloadPath);
@@ -104,8 +108,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             // DEPOSITING STATE
 
             .state(State.DEPOSITING)
-            .transition(() -> currentPath.isDone(), State.DONE, () -> {
+            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
                 new OuttakeRetractCommand().schedule();
+                currentPath = backdropToStackPath.start();
             })
 
 
@@ -120,12 +125,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             .build();
 
     public CenterCycleBackdropConfig() {
-
+        dt = Robot.getInstance().drivetrain;
     }
 
     public void build() {
-        dt = Robot.getInstance().drivetrain;
-
         preloadPaths.put(Randomization.FAR, new BackdropFarPreload().build());
         preloadPaths.put(Randomization.CENTER, new BackdropCenterPreload().build());
         preloadPaths.put(Randomization.CLOSE, new BackdropClosePreload().build());
@@ -152,10 +155,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         currentPath = preloadPaths.get(randomization);
         stateMachine.start();
         stateMachine.setState(State.PLACING_PRELOADS);
+        runtime = Globals.runtime;
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addLine("Backdrop Center Cycle");
         telemetry.addData("State", stateMachine.getState());
+        telemetry.addData("Runtime: ", runtime.seconds());
     }
 }

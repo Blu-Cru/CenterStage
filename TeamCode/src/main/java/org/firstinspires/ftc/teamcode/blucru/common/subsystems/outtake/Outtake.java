@@ -64,6 +64,7 @@ public class Outtake implements Subsystem {
     }
 
     public void init() {
+        // TODO: init turret before wrist to prevent getting stuck
         lift.init();
         lock.init();
         turret.init();
