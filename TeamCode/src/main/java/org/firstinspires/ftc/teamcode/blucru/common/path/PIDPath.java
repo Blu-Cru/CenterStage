@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PIDPath implements Path {
-    ArrayList<PathSegment> segmentList;
-    HashMap<Integer, ArrayList<Command>> commands;
+    ArrayList<PathSegment> segmentList; // Path is made of a list of segments
+    HashMap<Integer, ArrayList<Command>> commands; // each segment has a list of commands to run when started
     int index;
     boolean pathDone;
 
@@ -26,6 +26,13 @@ public class PIDPath implements Path {
         pathDone = false;
         segmentList.get(0).start();
         index = 0;
+
+        // run the commands associated with the first point
+        try {
+            for(Command c : commands.get(index)) {
+                c.schedule();
+            }
+        } catch (NullPointerException ignored) {}
 
         return this;
     }
