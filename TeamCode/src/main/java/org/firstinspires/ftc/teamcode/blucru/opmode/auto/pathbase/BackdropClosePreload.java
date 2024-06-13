@@ -23,7 +23,7 @@ public class BackdropClosePreload extends PIDPathBuilder {
                         new AutoReleasePurpleIntakeCommand(300)
 
                 )
-                .addMappedPoint(30.5, 37, 190)
+                .addMappedPoint(33.5, 37, 190)
                 .schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(200),
@@ -37,7 +37,9 @@ public class BackdropClosePreload extends PIDPathBuilder {
                 .schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(300),
-                                new LockReleaseCommand(2)
+                                new LockReleaseCommand(2),
+                                new WaitCommand(700),
+                                new OuttakeRetractCommand(2)
                         )
                 )
                 .waitMillis(600);

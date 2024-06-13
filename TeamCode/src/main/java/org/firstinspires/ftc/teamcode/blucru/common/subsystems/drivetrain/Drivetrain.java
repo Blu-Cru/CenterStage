@@ -533,6 +533,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         ftcDashDrawPose(pose);
     }
 
+    public void logPose() {
+        Log.i("Drivetrain", "logged pose: " + pose);
+    }
+
     public void telemetry(Telemetry telemetry) {
         if(isTeleOp) {
             telemetry.addData("drive power", drivePower);

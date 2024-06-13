@@ -65,8 +65,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
             initLoop();
             try {
                 telemetry();
-                telemetry.update();
             } catch (Exception e) {}
+            telemetry.update();
         }
         waitForStart();
         onStart();

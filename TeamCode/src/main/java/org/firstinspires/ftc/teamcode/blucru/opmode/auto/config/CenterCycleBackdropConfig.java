@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
@@ -63,6 +65,8 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
             .state(State.PLACING_PRELOADS)
             .loop(() -> {
+                Log.i("CenterCycleConfig", "looped");
+                dt.logPose();
                 dt.updateAprilTags();
             })
             .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
@@ -87,9 +91,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             // CRASH FAILSAFE STATE
 
             .state(State.CRASH_TO_STACK_FAILSAFE)
-            .transition(currentPath::isDone, State.TO_STACK, () -> {
-                currentPath = crashToStackRecoveryPath.start();
-            })
+//            .transition(currentPath::isDone, State.TO_STACK, () -> {
+//                currentPath = crashToStackRecoveryPath.start();
+//            })
 
             .build();
 
@@ -98,13 +102,13 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     }
 
     public void build() {
+        dt = Robot.getInstance().drivetrain;
+
         preloadPaths.put(Randomization.FAR, new BackdropFarPreload().build());
         preloadPaths.put(Randomization.CENTER, new BackdropCenterPreload().build());
         preloadPaths.put(Randomization.CLOSE, new BackdropClosePreload().build());
 
         backdropToStackPath = new BackdropThroughTrussCenter().build();
-
-
 
         crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
@@ -112,8 +116,6 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
         crashToStackRecoveryPath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
         crashToBackdropRecoveryPath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
-
-        dt = Robot.getInstance().drivetrain;
     }
 
     public void run() {
@@ -123,8 +125,8 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
     public void start(Randomization randomization) {
         currentPath = preloadPaths.get(randomization);
-        stateMachine.setState(State.PLACING_PRELOADS);
         stateMachine.start();
+        stateMachine.setState(State.PLACING_PRELOADS);
     }
 
     public void telemetry(Telemetry telemetry) {

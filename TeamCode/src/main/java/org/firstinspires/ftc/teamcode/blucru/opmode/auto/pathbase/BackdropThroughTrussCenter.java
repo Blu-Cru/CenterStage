@@ -10,10 +10,6 @@ public class BackdropThroughTrussCenter extends PIDPathBuilder {
     public BackdropThroughTrussCenter () {
         super();
         this.setPower(0.8)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(150),
-                        new OuttakeRetractCommand(2)
-                ))
                 .addMappedPoint(35, 12, 180, 6)
                 .addMappedPoint(-33, 12, 180, 6);
     }
