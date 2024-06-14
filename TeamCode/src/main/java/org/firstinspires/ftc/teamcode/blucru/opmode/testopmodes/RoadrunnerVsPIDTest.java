@@ -1,14 +1,22 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.PurplePixelRetractCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
@@ -68,6 +76,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 drivetrain.idle();
                 pidPath.breakPath();
                 drivetrain.driveScaled(0,0,0);
+                intake.setIntakePower(0);
                 CommandScheduler.getInstance().schedule(new OuttakeRetractCommand());
             })
             .loop(() -> {
@@ -88,17 +97,27 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addIntake();
         addOuttake();
         addCVMaster();
+        addPurplePixelHolder();
         Globals.setAlliance(Alliance.RED);
 
         pidPath = new PIDPathBuilder()
                 .setPower(0.45)
-                .addMappedPoint(-38, 45, 120,6)
-                .addMappedPoint(-33, 36, 160, false)
+                .addMappedPoint(-40, 30, 135,6)
+                .addMappedPoint(-45, 28, 135, 2)
+                .schedule(new SequentialCommandGroup(
+                        new PurplePixelRetractCommand(),
+                        new DropdownPartialRetractCommand()
+                ))
                 .waitMillis(200)
-                .addMappedPoint(-44, 30, 180, 6)
-                .addMappedPoint(-58, 24, 180)
+                .schedule(new IntakeCommand(4, 1))
+                .addMappedPoint(Field.INTAKE_X, 36, 180, 3)
+                .schedule(new SequentialCommandGroup(
+                        new WaitCommand(300),
+                        new DropdownCommand(3),
+                        new WaitCommand(400),
+                        new DropdownCommand(0)
+                ))
                 .waitMillis(1000)
-                .addMappedPoint(24, 24,180)
                 .build();
 
 //        pidPath = new PIDPathBuilder()
@@ -119,6 +138,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     @Override
     public void periodic() {
         stateMachine.update();
+        drivetrain.ftcDashDrawCurrentPose();
     }
 
     @Override

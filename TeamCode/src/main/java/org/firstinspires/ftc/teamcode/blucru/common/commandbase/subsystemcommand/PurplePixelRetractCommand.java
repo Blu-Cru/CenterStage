@@ -12,4 +12,8 @@ public class PurplePixelRetractCommand extends InstantCommand {
             else Robot.getInstance().purplePixelHolder.release(Globals.reflect);
         });
     }
+
+    public PurplePixelRetractCommand() {
+        this(true);
+    }
 }

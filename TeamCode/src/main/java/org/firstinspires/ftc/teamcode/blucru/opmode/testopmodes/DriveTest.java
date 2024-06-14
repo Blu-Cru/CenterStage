@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "Drive test", group = "test")
@@ -21,6 +23,7 @@ public class DriveTest extends BCLinearOpMode {
         drivetrain.drivePower = 0.8;
         addIntakeWrist();
         enableFTCDashboard();
+        Poses.setAlliance(Alliance.RED);
     }
 
     @Override
@@ -30,7 +33,8 @@ public class DriveTest extends BCLinearOpMode {
         rotate = -gamepad1.right_stick_x;
 
         if(gamepad1.right_stick_button) {
-            drivetrain.resetHeading(Math.toRadians(90));
+            drivetrain.setPoseEstimate(Poses.AUDIENCE_STARTING_POSE);
+            drivetrain.resetHeading(Poses.AUDIENCE_STARTING_POSE.getHeading());
             gamepad1.rumble(150);
         }
 
@@ -49,6 +53,7 @@ public class DriveTest extends BCLinearOpMode {
         } else {
             drivetrain.teleOpDrive(horz, vert, rotate);
         }
+        drivetrain.ftcDashDrawCurrentPose();
     }
 
     @Override

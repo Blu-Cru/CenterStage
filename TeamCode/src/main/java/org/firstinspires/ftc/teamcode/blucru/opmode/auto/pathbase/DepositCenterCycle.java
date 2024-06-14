@@ -13,7 +13,7 @@ public class DepositCenterCycle extends PIDPathBuilder {
     public DepositCenterCycle(double pixelHeight, double turretAngle) {
         super();
         this.setPower(0.35)
-                .addMappedPoint(35, 12, 220, 4)
+                .addMappedPoint(35, 12, 205, 4)
                 .schedule(new SequentialCommandGroup(
                         new OuttakeExtendCommand(pixelHeight),
                         new WaitCommand(500),
