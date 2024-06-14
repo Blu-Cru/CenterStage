@@ -89,18 +89,24 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addOuttake();
         addCVMaster();
         Globals.setAlliance(Alliance.RED);
-        drivetrain.drivePower = 1;
 
         pidPath = new PIDPathBuilder()
-                .setPower(0.8)
+                .setPower(0.45)
                 .addMappedPoint(-38, 45, 120,6)
                 .addMappedPoint(-33, 36, 160, false)
                 .waitMillis(200)
                 .addMappedPoint(-44, 30, 180, 6)
                 .addMappedPoint(-58, 24, 180)
                 .waitMillis(1000)
-                .addMappedPoint(-45, 24,180)
+                .addMappedPoint(24, 24,180)
                 .build();
+
+//        pidPath = new PIDPathBuilder()
+//                .setPower(0.45)
+//                .addMappedPoint(48, 0, 0)
+//                .waitMillis(5000)
+//                .addMappedPoint(48, -48, 0)
+//                .build();
 
 //        traj = preloadDeposits.rrTest(robot);
 

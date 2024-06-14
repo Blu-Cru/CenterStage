@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -32,7 +34,8 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Path farPreloadPath, centerPreloadPath, closePreloadPath;
     Path backdropToStackPath, stackToBackdropPath;
     Path backdropFailsafePath, stackFailsafePath;
-    Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath, crashTrussMiddleFailsafePath;
+    Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
+            crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
     Path intakePath;
     Path depositPath;
@@ -51,7 +54,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         put(Randomization.CLOSE, closePreloadPath);
     }};
 
-    enum State {
+    private enum State {
         PLACING_PRELOADS,
         TO_STACK,
         INTAKING,
@@ -73,6 +76,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             // PRELOADS
 
             .state(State.PLACING_PRELOADS)
+            .onEnter(() -> {
+                logTransitionTo(State.PLACING_PRELOADS);
+            })
             .loop(() -> {
                 dt.updateAprilTags();
             })
@@ -80,11 +86,14 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 currentPath = backdropToStackPath.start();
             })
 
-            // DRIVING TO STACK
+            // TO STACK STATE
 
             .state(State.TO_STACK)
+            .onEnter(() -> {
+                logTransitionTo(State.TO_STACK);
+            })
             .loop(() -> {
-                dt.updateAprilTags();
+//                dt.updateAprilTags();
             })
             .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
                 currentPath = intakePath.start();
@@ -92,18 +101,23 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
                                 && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_STACK_FAILSAFE, () -> {
                 if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
-                else currentPath = crashTrussMiddleFailsafePath.start();
+                else currentPath = crashTrussMiddleFailsafeToIntakePath.start();
 
                 if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
-                    dt.correctY(CRASH_CORRECTION_Y);
-                } else {
                     dt.correctY(-CRASH_CORRECTION_Y);
+                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
+                } else {
+                    dt.correctY(CRASH_CORRECTION_Y);
+                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
                 }
             })
 
             // INTAKING STATE
 
             .state(State.INTAKING)
+            .onEnter(() -> {
+                logTransitionTo(State.INTAKING);
+            })
             .transition(() -> currentPath.isDone(), State.TO_BACKDROP, () -> {
                 currentPath = stackToBackdropPath.start();
             })
@@ -111,24 +125,34 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             // TO BACKDROP STATE
 
             .state(State.TO_BACKDROP)
+            .onEnter(() -> {
+                logTransitionTo(State.TO_BACKDROP);
+            })
             .transition(() -> currentPath.isDone(), State.DEPOSITING, () -> {
                 currentPath = depositPath.start();
             })
             .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
                     && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_BACKDROP_FAILSAFE, () -> {
-                if(dt.pose.getX() > -16) currentPath = crashTrussMiddleFailsafePath.start();
+                if(dt.pose.getX() > -16) currentPath = crashTrussMiddleFailsafeToBackdropPath.start();
                 else currentPath = crashTrussStackFailsafePath.start();
 
+                // CORRECT FOR CRASH
                 if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
-                    dt.correctY(-CRASH_CORRECTION_Y);
-                } else {
                     dt.correctY(CRASH_CORRECTION_Y);
+                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
+                } else {
+                    dt.correctY(-CRASH_CORRECTION_Y);
+                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
+
                 }
             })
 
             // DEPOSITING STATE
 
             .state(State.DEPOSITING)
+            .onEnter(() -> {
+                logTransitionTo(State.DEPOSITING);
+            })
             .loop(() -> {
                 dt.updateAprilTags();
             })
@@ -145,19 +169,31 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             // CRASH FAILSAFE STATE
 
             .state(State.CRASH_TO_STACK_FAILSAFE)
-            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+            .onEnter(() -> {
+                logTransitionTo(State.CRASH_TO_STACK_FAILSAFE);
+            })
+            .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_STACK, () -> {
                 currentPath = crashToStackRecoveryPath.start();
             })
 
             .state(State.CRASH_TO_BACKDROP_FAILSAFE)
-            .transition(() -> currentPath.isDone(), State.TO_BACKDROP, () -> {
+            .onEnter(() -> {
+                logTransitionTo(State.CRASH_TO_BACKDROP_FAILSAFE);
+            })
+            .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_BACKDROP, () -> {
                 currentPath = crashToBackdropRecoveryPath.start();
             })
 
             .state(State.PARKING)
+            .onEnter(() -> {
+                logTransitionTo(State.PARKING);
+            })
             .transition(() -> currentPath.isDone(), State.DONE)
 
             .state(State.DONE)
+            .onEnter(() -> {
+                logTransitionTo(State.DONE);
+            })
             .build();
 
     public CenterCycleBackdropConfig() {
@@ -175,9 +211,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         depositPath = new DepositCenterCycle(2, 0).build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 180).build();
 
-        crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
-        crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
-        crashTrussMiddleFailsafePath = new PIDPathBuilder().addMappedPoint(-10, 12, 180).build();
+        crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(6, 12, 180).build();
+        crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-38, 12, 180).build();
+        crashTrussMiddleFailsafeToIntakePath = new PIDPathBuilder().addMappedPoint(-10, 12, 210)
+                .addMappedPoint(-10, 12, 180).build();
+        crashTrussMiddleFailsafeToBackdropPath = new PIDPathBuilder().addMappedPoint(-10, 12, 150)
+                .addMappedPoint(-10, 12, 180).build();
 
         crashToStackRecoveryPath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
         crashToBackdropRecoveryPath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
@@ -199,5 +238,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         telemetry.addLine("Backdrop Center Cycle");
         telemetry.addData("State", stateMachine.getState());
         telemetry.addData("Runtime: ", runtime.seconds());
+    }
+
+    public void logTransitionTo(Enum to) {
+        Log.i("CenterCycleBackdropConfig", "Transitioning to " + to);
     }
 }

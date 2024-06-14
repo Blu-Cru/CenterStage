@@ -392,6 +392,10 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         return Math.abs(error);
     }
 
+    public double getAbsHeadingError() {
+        return getAbsHeadingError(targetHeading);
+    }
+
     private double getPIDRotateDecel(double targetHeading) {
         double headingDecel = calculateHeadingDecel();
         return getPIDRotate(headingDecel, targetHeading);
