@@ -508,6 +508,12 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 //        readingDistance = false;
 //    }
 
+    public void correctY(double correction) {
+        Pose2d newPose = new Pose2d(pose.getX(), pose.getY() + correction, pose.getHeading());
+        setPoseEstimate(newPose);
+        pose = newPose;
+    }
+
     public double getHeading() {return heading;}
 
     public boolean isStopped() {

@@ -22,10 +22,10 @@ public class Auto extends BCLinearOpMode {
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.CONFIG)
             .loop(() -> {
-                if(stickyG1.x) Globals.setAlliance(Globals.alliance.flip());
-                if(stickyG1.y) Globals.side = Globals.side.flip();
+                if(stickyG1.y) Globals.setAlliance(Globals.alliance.flip());
+                if(stickyG1.b) Globals.side = Globals.side.flip();
                 if(stickyG1.a) Globals.autoType = Globals.autoType.cycle();
-                if(stickyG1.b) Globals.parkType = Globals.parkType.cycle();
+                if(stickyG1.x) Globals.parkType = Globals.parkType.cycle();
 
                 if(opModeIsActive()) requestOpModeStop();
 

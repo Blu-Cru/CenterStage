@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
@@ -24,7 +26,8 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdro
 import java.util.HashMap;
 
 public class CenterCycleBackdropConfig extends AutoConfig {
-    static final double TRUSS_HEADING_FAILSAFE_TOLERANCE = Math.toRadians(40);
+    static final double TRUSS_HEADING_FAILSAFE_TOLERANCE = Math.toRadians(15);
+    static final double CRASH_CORRECTION_Y = 2;
 
     Path farPreloadPath, centerPreloadPath, closePreloadPath;
     Path backdropToStackPath, stackToBackdropPath;
@@ -60,6 +63,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         // Failsafe states
         DEPOSIT_FAILSAFE,
         CRASH_TO_STACK_FAILSAFE,
+        CRASH_TO_BACKDROP_FAILSAFE,
         INTAKE_FAILSAFE,
     }
 
@@ -82,14 +86,20 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             .loop(() -> {
                 dt.updateAprilTags();
             })
-            // TODO: Transition to intake path
             .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
                 currentPath = intakePath.start();
             })
-            //            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE, State.CRASH_TO_STACK_FAILSAFE, () -> {
-//                if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
-//                else currentPath = crashTrussMiddleFailsafePath.start();
-//            })
+            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
+                                && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_STACK_FAILSAFE, () -> {
+                if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
+                else currentPath = crashTrussMiddleFailsafePath.start();
+
+                if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
+                    dt.correctY(CRASH_CORRECTION_Y);
+                } else {
+                    dt.correctY(-CRASH_CORRECTION_Y);
+                }
+            })
 
             // INTAKING STATE
 
@@ -104,22 +114,48 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             .transition(() -> currentPath.isDone(), State.DEPOSITING, () -> {
                 currentPath = depositPath.start();
             })
+            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
+                    && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_BACKDROP_FAILSAFE, () -> {
+                if(dt.pose.getX() > -16) currentPath = crashTrussMiddleFailsafePath.start();
+                else currentPath = crashTrussStackFailsafePath.start();
+
+                if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
+                    dt.correctY(-CRASH_CORRECTION_Y);
+                } else {
+                    dt.correctY(CRASH_CORRECTION_Y);
+                }
+            })
 
             // DEPOSITING STATE
 
             .state(State.DEPOSITING)
-            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+            .loop(() -> {
+                dt.updateAprilTags();
+            })
+            .transition(() -> currentPath.isDone() && runtime.seconds() < 24, State.TO_STACK, () -> {
                 new OuttakeRetractCommand().schedule();
                 currentPath = backdropToStackPath.start();
+            })
+            .transition(() -> currentPath.isDone() && runtime.seconds() >= 24, State.PARKING, () -> {
+                new OuttakeRetractCommand().schedule();
+                currentPath = parkPath.start();
             })
 
 
             // CRASH FAILSAFE STATE
 
-//            .state(State.CRASH_TO_STACK_FAILSAFE)
-////            .transition(currentPath::isDone, State.TO_STACK, () -> {
-////                currentPath = crashToStackRecoveryPath.start();
-////            })
+            .state(State.CRASH_TO_STACK_FAILSAFE)
+            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+                currentPath = crashToStackRecoveryPath.start();
+            })
+
+            .state(State.CRASH_TO_BACKDROP_FAILSAFE)
+            .transition(() -> currentPath.isDone(), State.TO_BACKDROP, () -> {
+                currentPath = crashToBackdropRecoveryPath.start();
+            })
+
+            .state(State.PARKING)
+            .transition(() -> currentPath.isDone(), State.DONE)
 
             .state(State.DONE)
             .build();
@@ -137,10 +173,11 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         stackToBackdropPath = new StackToBackdropCenter().build();
         intakePath = new IntakeFarStack(4).build();
         depositPath = new DepositCenterCycle(2, 0).build();
+        parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 180).build();
 
         crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
-        crashTrussMiddleFailsafePath = new PIDPathBuilder().addMappedPoint(-12, 12, 180).build();
+        crashTrussMiddleFailsafePath = new PIDPathBuilder().addMappedPoint(-10, 12, 180).build();
 
         crashToStackRecoveryPath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
         crashToBackdropRecoveryPath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();

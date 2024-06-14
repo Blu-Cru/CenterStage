@@ -63,10 +63,10 @@ public class Globals {
     }
 
     public static void autoConfigTelemetry(Telemetry telemetry) {
-        telemetry.addData("□ to cycle ALLIANCE:", alliance);
+        telemetry.addData("△ to cycle ALLIANCE:", alliance);
         telemetry.addData("◯ to cycle SIDE:", side);
         telemetry.addData("⨉ to cycle AUTO TYPE:", autoType);
-        if(autoType == AutoType.PRELOAD) telemetry.addData("△ to cycle PARK:", parkType);
+        if(autoType == AutoType.PRELOAD) telemetry.addData("□ to cycle PARK:", parkType);
         telemetry.addLine("Right stick button to build");
     }
 

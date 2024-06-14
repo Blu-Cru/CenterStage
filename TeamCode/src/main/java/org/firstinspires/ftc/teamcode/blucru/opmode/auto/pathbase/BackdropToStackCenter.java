@@ -5,8 +5,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 public class BackdropToStackCenter extends PIDPathBuilder {
     public BackdropToStackCenter() {
         super();
-        this.setPower(0.8)
+        this.setPower(0.5)
                 .addMappedPoint(38, 12, 180, 6)
+//                .setPower(0.55)
                 .addMappedPoint(-33, 12, 180, 6);
     }
 }

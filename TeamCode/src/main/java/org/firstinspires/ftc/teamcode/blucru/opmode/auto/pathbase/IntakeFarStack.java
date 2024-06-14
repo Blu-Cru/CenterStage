@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 public class IntakeFarStack extends PIDPathBuilder {
     public IntakeFarStack(int initialHeight, double xIncrement, double yIncrement) {
         super();
-        this.setPower(0.6)
+        this.setPower(0.5)
                 .schedule(new IntakeCommand(initialHeight, 1))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 160, 2)
                 .setPower(0.35)
