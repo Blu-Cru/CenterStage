@@ -76,11 +76,6 @@ public class Robot {
         for(Subsystem subsystem : subsystems) {
             subsystem.read();
         }
-
-        if(intakingInAuto && intake.isFull()) {
-            drivetrain.breakFollowing();
-            intakingInAuto = false;
-        }
     }
 
     public void write() {
