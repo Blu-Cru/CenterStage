@@ -103,7 +103,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         pidPath = new PIDPathBuilder()
                 .setPower(0.45)
                 .addMappedPoint(-40, 30, 135,6)
-                .addMappedPoint(-45, 28, 135, 2)
+                .addMappedPoint(-44, 31.5, 135, 2)
                 .schedule(new SequentialCommandGroup(
                         new PurplePixelRetractCommand(),
                         new DropdownPartialRetractCommand()
