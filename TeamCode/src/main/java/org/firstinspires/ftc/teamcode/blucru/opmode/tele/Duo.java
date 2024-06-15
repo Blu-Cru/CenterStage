@@ -85,11 +85,9 @@ public class Duo extends BCLinearOpMode {
             startIntakeTime = 0;
 
     // gamepad states
-    boolean lastDown2 = false,
-            lastA2 = false,
+    boolean
             lastRSUp2 = false,
             lastRSDown2 = false,
-            lastUp1 = false,
             lastManualSliding = false;
 
     public void initialize() {
@@ -129,18 +127,18 @@ public class Duo extends BCLinearOpMode {
         switch(robotState) {
             case RETRACT:
                 // LIFT
-                if (gamepad2.x) {
+                if (stickyG2.x) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.LOW_HEIGHT);
                     intake.stopReadingColor();
                 }
-                if (gamepad2.y) {
+                if (stickyG2.y) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.MED_HEIGHT);
                     intake.stopReadingColor();
 
                 }
-                if (gamepad2.b) {
+                if (stickyG2.b) {
                     robotState = RobotState.LIFTING;
                     outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
                     intake.stopReadingColor();
@@ -204,16 +202,15 @@ public class Duo extends BCLinearOpMode {
                     outtakeTime = currentTime();
                 }
 
-                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                if(stickyG2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(stickyG2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(stickyG2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
-                if(gamepad2.a && !lastA2) {
+                if(stickyG2.a) {
                     robotState = RobotState.RETRACT;
                     outtake.retractLift();
                     intake.startReadingColor();
                 }
-                lastA2 = gamepad2.a;
 
                 // reverse intake
                 if(gamepad2.right_bumper) {
@@ -229,16 +226,15 @@ public class Duo extends BCLinearOpMode {
                 } else outtake.setTurretAngle(270);
 
                 // retract wrist
-                if(outtake.turret.isCentered() && gamepad2.dpad_down && !lastDown2) {
+                if(outtake.turret.isCentered() && stickyG2.dpad_down) {
                     outtake.retractWrist();
                     robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
-                lastDown2 = gamepad2.dpad_down;
 
                 // Change height
-                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                if(stickyG2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(stickyG2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(stickyG2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
                 if(gamepad2.right_stick_y < -0.5 && !lastRSUp2 && !gamepad2.right_stick_button) outtake.incrementTargetHeight(1);
@@ -248,7 +244,7 @@ public class Duo extends BCLinearOpMode {
                 lastRSDown2 = gamepad2.right_stick_y > 0.5;
 
                 // retract
-                if(gamepad2.a && !lastA2) {
+                if(stickyG2.a) {
                     retractTime = currentTime();
                     outtake.retractWrist();
                     outtake.centerTurret();
@@ -256,7 +252,6 @@ public class Duo extends BCLinearOpMode {
                     intake.startReadingColor();
                     robotState = RobotState.RETRACTING;
                 }
-                lastA2 = gamepad2.a;
 
                 // reverse intake
                 if(gamepad2.right_bumper) intake.setIntakePower(-1);
@@ -265,31 +260,28 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
                 else if (gamepad2.dpad_right) outtake.lock.unlockAll();
 
-
-
+                outtake.setDunkHeight(gamepad2.left_trigger);
                 break;
             case OUTTAKE_WRIST_RETRACTED:
                 // retract
-                if(gamepad2.a && !lastA2) {
+                if(stickyG2.a) {
                     robotState = RobotState.RETRACT;
                     outtake.retractLift();
                     outtake.resetLock();
                     intake.startReadingColor();
                 }
-                lastA2 = gamepad2.a;
 
                 // extend wrist
-                if(gamepad2.dpad_down && !lastDown2) {
+                if(stickyG2.dpad_down) {
                     outtake.extendWrist();
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
-                lastDown2 = gamepad2.dpad_down;
 
                 // Change height
-                if(gamepad2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
-                if(gamepad2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
-                if(gamepad2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
+                if(stickyG2.x) outtake.setTargetHeight(Outtake.LOW_HEIGHT);
+                if(stickyG2.y) outtake.setTargetHeight(Outtake.MED_HEIGHT);
+                if(stickyG2.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
                 // increment height by one pixel
                 if(gamepad2.right_stick_y < -0.5 && !lastRSUp2 && !gamepad2.right_stick_button) {
@@ -307,6 +299,8 @@ public class Duo extends BCLinearOpMode {
                 } else {
                     intake.setIntakePower(0);
                 }
+
+                outtake.setDunkHeight(gamepad2.left_trigger);
                 break;
             case RETRACTING:
                 // retract wrist
@@ -347,9 +341,8 @@ public class Duo extends BCLinearOpMode {
             hanger.setPower(0);
 
         // PLANE
-        if(gamepad1.dpad_up && !lastUp1)
-            plane.togglePlane();
-        lastUp1 = gamepad1.dpad_up;
+        if(stickyG1.dpad_up)
+            plane.toggle();
     }
 
     public void telemetry() {

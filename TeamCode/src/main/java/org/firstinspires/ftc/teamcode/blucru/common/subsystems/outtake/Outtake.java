@@ -235,18 +235,19 @@ public class Outtake implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Outtake state:", state);
         lift.telemetry(telemetry);
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
-        telemetry.addData("outtake state:", state);
         telemetry.addData("wrist retracted", wristRetracted);
         telemetry.addData("target height", targetHeight);
+        telemetry.addData("dunk height", dunkHeight);
         telemetry.addData("turret is IVK", turretIsIVK);
-        telemetry.addData("turret safe", turretSafe());
     }
 
     public void testTelemetry(Telemetry telemetry) {
         lift.testTelemetry(telemetry);
         telemetry.addData("wrist pos", wrist.getPosition());
+        telemetry.addData("turret safe", turretSafe());
     }
 }

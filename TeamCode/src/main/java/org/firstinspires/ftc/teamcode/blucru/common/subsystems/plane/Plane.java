@@ -39,7 +39,7 @@ public class Plane implements Subsystem {
         }
     }
 
-    public void togglePlane() {
+    public void toggle() {
         released = !released;
     }
 

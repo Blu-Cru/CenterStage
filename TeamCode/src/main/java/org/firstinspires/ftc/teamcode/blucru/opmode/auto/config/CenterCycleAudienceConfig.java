@@ -4,7 +4,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.path.Path;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadIntake;
+
+import java.util.HashMap;
 
 public class CenterCycleAudienceConfig extends AutoConfig {
     enum State{
@@ -24,16 +27,20 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         INTAKE_FAILSAFE,
     }
     Path preloadIntakeFar, preloadIntakeCenter, preloadIntakeClose;
-    public CenterCycleAudienceConfig() {
 
+    HashMap<Randomization, Path> preloadPaths;
+    public CenterCycleAudienceConfig() {
+        preloadPaths = new HashMap<>();
     }
 
     public void build() {
-        preloadIntakeFar = new AudienceClosePreloadIntake().build();
+        preloadPaths.put(Randomization.CLOSE, new AudienceClosePreloadIntake().build());
+        preloadPaths.put(Randomization.CENTER, new AudienceCenterPreloadIntakeForCenter().build());
+
+        preloadIntakeClose = new AudienceClosePreloadIntake().build();
     }
 
     public void start(Randomization randomization) {
-        preloadIntakeFar.start();
     }
 
     public void run() {

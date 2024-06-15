@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
 import android.util.Log;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
@@ -31,9 +30,8 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     static final double TRUSS_HEADING_FAILSAFE_TOLERANCE = Math.toRadians(15);
     static final double CRASH_CORRECTION_Y = 2;
 
-    Path farPreloadPath, centerPreloadPath, closePreloadPath;
     Path backdropToStackPath, stackToBackdropPath;
-    Path backdropFailsafePath, stackFailsafePath;
+    Path depositFailsafePath, intakeFailsafePath;
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
             crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
@@ -48,11 +46,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Drivetrain dt;
     ElapsedTime runtime;
 
-    HashMap<Randomization, Path> preloadPaths = new HashMap<Randomization, Path>() {{
-        put(Randomization.FAR, farPreloadPath);
-        put(Randomization.CENTER, centerPreloadPath);
-        put(Randomization.CLOSE, closePreloadPath);
-    }};
+    HashMap<Randomization, Path> preloadPaths;
 
     private enum State {
         PLACING_PRELOADS,
@@ -198,6 +192,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
     public CenterCycleBackdropConfig() {
         dt = Robot.getInstance().drivetrain;
+        preloadPaths = new HashMap<>();
     }
 
     public void build() {
@@ -209,7 +204,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         stackToBackdropPath = new StackToBackdropCenter().build();
         intakePath = new IntakeFarStack(4).build();
         depositPath = new DepositCenterCycle(2, 0).build();
-        parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 180).build();
+        parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
 
         crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(6, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-38, 12, 180).build();

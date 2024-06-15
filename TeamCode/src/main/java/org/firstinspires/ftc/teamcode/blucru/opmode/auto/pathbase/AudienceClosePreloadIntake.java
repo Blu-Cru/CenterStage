@@ -28,10 +28,6 @@ public class AudienceClosePreloadIntake extends PIDPathBuilder {
                         new WaitCommand(200),
                         new DropdownCommand(3)
                 ))
-                .waitMillis(1000)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(200),
-                        new IntakeStopCommand()
-                ));
+                .waitMillis(1000);
     }
 }
