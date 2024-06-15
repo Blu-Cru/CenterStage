@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.blucru.common.util.BCPDController;
+import org.firstinspires.ftc.teamcode.blucru.common.util.PDController;
 import org.firstinspires.ftc.teamcode.blucru.common.util.MotionProfile;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
@@ -23,11 +23,10 @@ public class Lift implements Subsystem {
             TICKS_PER_REV = 384.5, // ticks
             PULLEY_CIRCUMFERENCE = 4.40945, // inches
 
-            fastVelocity = 12000.0, fastAccel = 13000.0, // ticks per second, ticks per second squared
+            fastVelocity = 14000.0, fastAccel = 13000.0, // ticks per second, ticks per second squared
             MAX_UP_POWER = 0.9, MAX_DOWN_POWER = -1;
 
     public static int
-            YELLOW_POS = 750, CLEAR_POS = 1100, CYCLE_POS = 1250, // ticks
             MIN_POS = 0, MAX_POS = 2500,
             PID_TOLERANCE = 2, // ticks
             WRIST_CLEAR_POS = 500,
@@ -40,7 +39,7 @@ public class Lift implements Subsystem {
     State state;
     DcMotorEx liftMotor;
     DcMotorEx liftMotor2;
-    BCPDController liftPID;
+    PDController liftPID;
 
     double PID;
 
@@ -73,7 +72,7 @@ public class Lift implements Subsystem {
 
     public void init() {
         setTargetPos(0);
-        liftPID = new BCPDController(kP, kD);
+        liftPID = new PDController(kP, kD);
 
         //set all motors to zero power
         liftMotor.setPower(0);

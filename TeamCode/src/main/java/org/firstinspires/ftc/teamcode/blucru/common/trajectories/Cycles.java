@@ -81,7 +81,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -146,7 +146,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -213,7 +213,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -280,7 +280,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -350,7 +350,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -420,7 +420,7 @@ public class Cycles {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CYCLE_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {

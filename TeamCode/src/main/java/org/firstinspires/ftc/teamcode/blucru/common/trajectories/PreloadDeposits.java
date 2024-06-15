@@ -114,7 +114,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -134,7 +134,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                     robot.outtake.centerTurret();
                 })
 
@@ -151,7 +151,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -167,7 +167,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
                 .addTemporalMarker(() -> robot.drivetrain.idle())
@@ -185,7 +185,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -205,7 +205,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_CLOSE_DEPOSIT_TIME)
                 .build();
@@ -268,7 +268,7 @@ public class PreloadDeposits {
                     robot.outtake.unlock();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -347,7 +347,7 @@ public class PreloadDeposits {
                     robot.outtake.unlock();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -391,7 +391,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -418,7 +418,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -457,7 +457,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -484,7 +484,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.3, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -522,7 +522,7 @@ public class PreloadDeposits {
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, Poses.DEPOSIT_CLOSE_Y * reflect), Math.toRadians(0))
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -549,7 +549,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -586,7 +586,7 @@ public class PreloadDeposits {
                 .splineToConstantHeading(new Vector2d(Poses.BACKDROP_SETUP_X, -36 * reflect), Math.toRadians(0))
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -612,7 +612,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(1.4, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                 })
                 .waitSeconds(TOTAL_FAR_DEPOSIT_TIME)
                 .build();
@@ -627,7 +627,7 @@ public class PreloadDeposits {
 
                 // lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.YELLOW_POS);
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
@@ -647,7 +647,7 @@ public class PreloadDeposits {
                 })
                 // lift clear
                 .UNSTABLE_addTemporalMarkerOffset(RELEASE_TIME + LIFT_CLEAR_AFTER_RELEASE_TIME, () -> {
-                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
+//                    robot.outtake.lift.setMotionProfileTargetPos(Lift.CLEAR_POS);
                     robot.outtake.centerTurret();
                 })
 
