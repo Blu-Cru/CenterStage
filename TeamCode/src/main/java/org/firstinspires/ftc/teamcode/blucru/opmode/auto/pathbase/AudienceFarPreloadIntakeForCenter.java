@@ -10,19 +10,22 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.In
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 
-public class AudienceCenterPreloadIntakeForPerimeter extends PIDPathBuilder {
-    public AudienceCenterPreloadIntakeForPerimeter() {
+public class AudienceFarPreloadIntakeForCenter extends PIDPathBuilder {
+    public AudienceFarPreloadIntakeForCenter() {
         super();
         this.setPower(0.45)
-                .addMappedPoint(-40, 30, 135,6)
-                .addMappedPoint(-46, 31, 135, 3)
+                .addMappedPoint(-55, 42, 135,6)
+                .addMappedPoint(-58, 30, 180, 3)
                 .schedule(new SequentialCommandGroup(
+                        new WaitCommand(400),
                         new PurplePixelRetractCommand(),
                         new DropdownPartialRetractCommand()
                 ))
+                .addMappedPoint(-53, 21, 220,2)
+
                 .waitMillis(350)
                 .schedule(new IntakeCommand(4, 1))
-                .addMappedPoint(Field.INTAKE_X, 36, 180, 3)
+                .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new DropdownCommand(3),

@@ -72,6 +72,8 @@ public class PIDPath implements Path {
     }
 
     public void telemetry(Telemetry tele) {
+        tele.addData("Path done: ", isDone());
+        tele.addData("Path failed:", failed());
         tele.addData("Path index", index);
     }
 }

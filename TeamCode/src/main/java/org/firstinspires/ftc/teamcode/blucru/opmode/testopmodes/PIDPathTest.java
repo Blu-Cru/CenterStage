@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.PurplePixelRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
@@ -23,8 +22,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@TeleOp(name = "RR vs PID test", group = "2")
-public class RoadrunnerVsPIDTest extends BCLinearOpMode {
+@TeleOp(name = "PID Path test", group = "2")
+public class PIDPathTest extends BCLinearOpMode {
     private enum State {
         RESETTING,
         FOLLOWING_TRAJECTORY,
@@ -33,20 +32,10 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
     PIDPath pidPath;
 
-    PreloadDeposits preloadDeposits;
-    TrajectorySequence traj;
-
-    double rrStartTime, rrTotalTime,
-            pidStartTime, pidTotalTime;
+    double pidStartTime, pidTotalTime;
 
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.RESETTING)
-//            .transition(() -> stickyG1.a, State.FOLLOWING_TRAJECTORY, () -> {
-//                drivetrain.setPoseEstimate(Poses.BACKDROP_STARTING_POSE);
-//                drivetrain.resetHeading(Poses.BACKDROP_STARTING_POSE.getHeading());
-//                drivetrain.followTrajectorySequenceAsync(traj);
-//                rrStartTime = System.currentTimeMillis();
-//            })
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
                 drivetrain.setPoseEstimate(Poses.AUDIENCE_STARTING_POSE);
                 drivetrain.resetHeading(Poses.AUDIENCE_STARTING_POSE.getHeading());
@@ -58,20 +47,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
 
                 intake.intakeWrist.targetAngleDeg = 90;
             })
-//            .state(State.FOLLOWING_TRAJECTORY)
-//            .transition(() -> !drivetrain.isBusy(), State.RESETTING, () -> rrTotalTime = System.currentTimeMillis() - rrStartTime)
-//            .transition(() -> stickyG1.a, State.RESETTING, () -> {
-//                drivetrain.breakFollowing();
-//                drivetrain.driveScaled(0,0,0);
-//            })
-//            .loop(() -> {
-//                // follow trajectory
-//                try {drivetrain.updateTrajectory();}
-//                // if the trajectory is interrupted, stop the op mode
-//                catch (Exception e) {requestOpModeStop();}
-//            })
             .state(State.FOLLOWING_PID)
-//            .transition(() -> pidPath.isDone(), State.RESETTING, () -> pidTotalTime = System.currentTimeMillis() - pidStartTime)
             .transition(() -> stickyG1.a, State.RESETTING, ()-> {
                 drivetrain.idle();
                 pidPath.breakPath();
@@ -98,19 +74,22 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
         addOuttake();
         addCVMaster();
         addPurplePixelHolder();
-        Globals.setAlliance(Alliance.RED);
+        Globals.setAlliance(Alliance.BLUE);
 
         pidPath = new PIDPathBuilder()
                 .setPower(0.45)
-                .addMappedPoint(-40, 30, 135,6)
-                .addMappedPoint(-44, 31.5, 135, 2)
+                .addMappedPoint(-55, 42, 135,6)
+                .addMappedPoint(-58, 30, 180, 3)
                 .schedule(new SequentialCommandGroup(
+                        new WaitCommand(400),
                         new PurplePixelRetractCommand(),
                         new DropdownPartialRetractCommand()
                 ))
-                .waitMillis(200)
+                .addMappedPoint(-53, 21, 220,2)
+
+                .waitMillis(350)
                 .schedule(new IntakeCommand(4, 1))
-                .addMappedPoint(Field.INTAKE_X, 36, 180, 3)
+                .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new DropdownCommand(3),
@@ -119,15 +98,6 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
                 ))
                 .waitMillis(1000)
                 .build();
-
-//        pidPath = new PIDPathBuilder()
-//                .setPower(0.45)
-//                .addMappedPoint(48, 0, 0)
-//                .waitMillis(5000)
-//                .addMappedPoint(48, -48, 0)
-//                .build();
-
-//        traj = preloadDeposits.rrTest(robot);
 
         stateMachine.setState(State.RESETTING);
         stateMachine.start();
@@ -144,8 +114,7 @@ public class RoadrunnerVsPIDTest extends BCLinearOpMode {
     @Override
     public void telemetry() {
         telemetry.addData("state:", stateMachine.getState());
-        telemetry.addData("rr total time: ", rrTotalTime);
         telemetry.addData("pid total time: ", pidTotalTime);
-        telemetry.addData("dt", " is at target pose: " + drivetrain.isAtTargetPose());
+        pidPath.telemetry(telemetry);
     }
 }
