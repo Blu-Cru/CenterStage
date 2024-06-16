@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.blinkin.Blinkin;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeColorSensors;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang.Hanger;
@@ -39,6 +40,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public PurplePixelHolder purplePixelHolder;
     public Lock lock;
     public CVMaster cvMaster;
+    public Blinkin blinkin;
 
     public StickyGamepad stickyG1;
     public StickyGamepad stickyG2;
@@ -141,6 +143,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public void addPurplePixelHolder() {purplePixelHolder = robot.addPurplePixelHolder();}
 
     public void addCVMaster() {cvMaster = robot.addCVMaster(Globals.alliance);}
+
+    public void addBlinkin() {blinkin = robot.addBlinkin();}
 
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 

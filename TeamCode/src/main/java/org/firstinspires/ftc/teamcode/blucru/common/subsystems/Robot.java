@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.blinkin.Blinkin;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
@@ -150,8 +151,14 @@ public class Robot {
         return cvMaster;
     }
 
+    public Blinkin addBlinkin() {
+        Blinkin blinkin = new Blinkin(hardwareMap);
+        subsystems.add(blinkin);
+        return blinkin;
+    }
+
     public double getVoltage() {
-        double result = Double.POSITIVE_INFINITY;
+        double result = 13;
         for (VoltageSensor sensor : hardwareMap.voltageSensor) {
             double voltage = sensor.getVoltage();
             if (voltage > 0) {
