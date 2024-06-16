@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LiftRetractCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.LockResetCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeIncrementCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.OuttakeWristCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.TurretTurnCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LiftRetractCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockResetCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.OuttakeIncrementCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.OuttakeWristCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretTurnCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 public class OuttakeRetractCommand extends SequentialCommandGroup {

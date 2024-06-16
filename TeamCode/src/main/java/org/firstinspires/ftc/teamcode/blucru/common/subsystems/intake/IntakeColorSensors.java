@@ -8,32 +8,36 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.blucru.common.states.SlotState;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
+import java.util.HashMap;
+
 public class IntakeColorSensors implements Subsystem {
-    enum SensorLocation {
+    private enum SensorLocation {
         FRONT,
         BACK
     }
 
-    public static double
-            FRONT_DISTANCE_LOW = 0.05,
-            FRONT_DISTANCE_HIGH = 0.65, // inches
+    private enum SlotState {
+        EMPTY,
+        FULL,
+        WHITE,
+        YELLOW,
+        PURPLE,
+        GREEN
+    }
 
-            BACK_DISTANCE_LOW = 0.1,
-            BACK_DISTANCE_HIGH = 0.8; // inches
+    static double[]
+            FRONT_DISTANCE_RANGE = {0.05, 0.65}, // inches
+            BACK_DISTANCE_RANGE = {0.1, 0.8}; // inches
 
-    public static double BLUE_LOW_H = 80;
-    public static double BLUE_HIGH_H = 140;
-    public static double PURPLE_LOW_H = 250;
-    public static double PURPLE_HIGH_H = 300;
-    public static double YELLOW_LOW_H = 40;
-    public static double YELLOW_HIGH_H = 60;
-    public static double GREEN_LOW_H = 100;
-    public static double GREEN_HIGH_H = 140;
+    static double HUE_GREEN_HIGH_YELLOW_LOW = 270,
+        HUE_PURPLE_HIGH_GREEN_LOW = 150,
+        SATURATION_WHITE_HIGH = 0.3;
 
-    public SlotState frontSlotState, backSlotState;
+    HashMap<SensorLocation, double[]> ranges;
+
+    SlotState frontSlotState, backSlotState;
     RevColorSensorV3 frontSensor, backSensor;
     NormalizedRGBA frontRGBA, backRGBA;
     double frontR, backR;
@@ -49,6 +53,11 @@ public class IntakeColorSensors implements Subsystem {
     public IntakeColorSensors(HardwareMap hardwareMap) {
         frontSensor = hardwareMap.get(RevColorSensorV3.class, "front color");
         backSensor = hardwareMap.get(RevColorSensorV3.class, "back color");
+
+        ranges= new HashMap<SensorLocation, double[]>() {{
+            put(SensorLocation.FRONT, FRONT_DISTANCE_RANGE);
+            put(SensorLocation.BACK, BACK_DISTANCE_RANGE);
+        }};
 
         frontSlotState = SlotState.EMPTY;
         backSlotState = SlotState.EMPTY;
@@ -74,34 +83,44 @@ public class IntakeColorSensors implements Subsystem {
             frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
 
-            if (frontDistance >= FRONT_DISTANCE_LOW && frontDistance <= FRONT_DISTANCE_HIGH) frontSlotState = SlotState.FULL;
-            else frontSlotState = SlotState.EMPTY;
+            frontRGBA = frontSensor.getNormalizedColors();
+            backRGBA = backSensor.getNormalizedColors();
 
-            if (backDistance >= BACK_DISTANCE_LOW && backDistance <= BACK_DISTANCE_HIGH) backSlotState = SlotState.FULL;
-            else backSlotState = SlotState.EMPTY;
+            frontR = frontRGBA.red;
+            frontG = frontRGBA.green;
+            frontB = frontRGBA.blue;
+            getHSV(frontRGBA, frontHSV); // sets frontHSV
+            frontHue = frontHSV[0];
 
-//            frontSlotState = SlotState.EMPTY;
-//            backSlotState = SlotState.EMPTY;
+            backR = backRGBA.red;
+            backG = backRGBA.green;
+            backB = backRGBA.blue;
+            getHSV(backRGBA, backHSV); // sets backHSV
+            backHue = backHSV[0];
 
-//            frontRGBA = frontSensor.getNormalizedColors();
-//            backRGBA = backSensor.getNormalizedColors();
-//
-//            frontR = frontRGBA.red;
-//            frontG = frontRGBA.green;
-//            frontB = frontRGBA.blue;
-//            getHSV(frontRGBA, frontHSV); // sets frontHSV
-//            frontHue = frontHSV[0];
-//
-//            backR = backRGBA.red;
-//            backG = backRGBA.green;
-//            backB = backRGBA.blue;
-//            getHSV(backRGBA, backHSV); // sets backHSV
-//            backHue = backHSV[0];
+            frontSlotState = getSlotState(frontDistance, SensorLocation.FRONT, frontHSV);
+            backSlotState = getSlotState(backDistance, SensorLocation.BACK, backHSV);
         }
     }
 
     public void write() {
 
+    }
+
+    public SlotState getSlotState(double distance, SensorLocation sensorLocation, float[] hsv) {
+        if(!inRange(distance, ranges.get(sensorLocation))) {
+            return SlotState.EMPTY;
+        } else {
+            if(hsv[1] < SATURATION_WHITE_HIGH) {
+                return SlotState.WHITE;
+            } else if(hsv[0] >= HUE_GREEN_HIGH_YELLOW_LOW) {
+                return SlotState.YELLOW;
+            } else if(hsv[0] < HUE_PURPLE_HIGH_GREEN_LOW) {
+                return SlotState.PURPLE;
+            } else {
+                return SlotState.GREEN;
+            }
+        }
     }
 
     // scales the front RGB values to be between 0 and 255
@@ -120,32 +139,8 @@ public class IntakeColorSensors implements Subsystem {
         backB = backB / max;
     }
 
-//    public double getHue(NormalizedRGBA color) {
-//        return getHue(color.red, color.green, color.blue);
-//    }
-
     public void getHSV(NormalizedRGBA color, float[] hsv) {
         Color.RGBToHSV((int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255), hsv);
-    }
-
-    // calculates hue in degrees (0-360)
-    public double getHue(double r, double g, double b) {
-        double max = Math.max(Math.max(r, b), g);
-        double min = Math.min(Math.min(r, b), g);
-        double delta = max - min;
-        if(delta == 0) return 0;
-        if(max == r) return 60 * (((g - b) / delta) % 6);
-        if(max == g) return 60 * (((b - r) / delta) + 2);
-        if(max == b) return 60 * (((r - g) / delta) + 4);
-        return 0;
-    }
-
-    public double getSaturation(double r, double g, double b) {
-        double max = Math.max(Math.max(r, b), g);
-        double min = Math.min(Math.min(r, b), g);
-        double delta = max - min;
-        if(max == 0) return 0;
-        return delta / max;
     }
 
     public float[] getFrontHSV() {
@@ -165,11 +160,11 @@ public class IntakeColorSensors implements Subsystem {
     }
 
     public boolean isFull() {
-        return frontSlotState == SlotState.FULL && backSlotState == SlotState.FULL;
+        return frontSlotState != SlotState.EMPTY && backSlotState != SlotState.EMPTY;
     }
 
-    public void toggleReading() {
-        reading = !reading;
+    private boolean inRange(double value, double[] range) {
+        return value >= range[0] && value <= range[1];
     }
 
     public void reset() {
@@ -188,12 +183,14 @@ public class IntakeColorSensors implements Subsystem {
         telemetry.addData("front R", frontR);
         telemetry.addData("front G", frontG);
         telemetry.addData("front B", frontB);
-        telemetry.addData("front hue", frontHue);
+//        telemetry.addData("front hue", frontHue);
+        telemetry.addData("front HSV: ", frontHSV);
         telemetry.addData("back R", backR);
         telemetry.addData("back G", backG);
         telemetry.addData("back B", backB);
-        telemetry.addData("back hue", backHue);
-        telemetry.addData("front light detected", frontLightDetected);
-        telemetry.addData("back light detected", backLightDetected);
+//        telemetry.addData("back hue", backHue);
+        telemetry.addData("back HSV: ", backHSV);
+//        telemetry.addData("front light detected", frontLightDetected);
+//        telemetry.addData("back light detected", backLightDetected);
     }
 }

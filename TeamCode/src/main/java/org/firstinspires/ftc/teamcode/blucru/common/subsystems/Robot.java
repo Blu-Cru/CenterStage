@@ -36,6 +36,7 @@ public class Robot {
     public Plane plane;
     public PurplePixelHolder purplePixelHolder;
     public CVMaster cvMaster;
+    public Blinkin blinkin;
 
     public boolean intakingInAuto = false;
 
@@ -152,7 +153,7 @@ public class Robot {
     }
 
     public Blinkin addBlinkin() {
-        Blinkin blinkin = new Blinkin(hardwareMap);
+        blinkin = new Blinkin(hardwareMap);
         subsystems.add(blinkin);
         return blinkin;
     }

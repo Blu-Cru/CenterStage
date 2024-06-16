@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand;
+package org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 

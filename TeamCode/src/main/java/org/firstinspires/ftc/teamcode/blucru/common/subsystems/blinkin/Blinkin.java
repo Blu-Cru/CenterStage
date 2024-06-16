@@ -8,13 +8,26 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 public class Blinkin implements Subsystem {
+    static final BlinkinPattern IDLE_PATTERN = BlinkinPattern.BREATH_BLUE;
+    static final BlinkinPattern ENDGAME_PATTERN = BlinkinPattern.HEARTBEAT_RED;
+
+    private enum State {
+        IDLE,
+        INTAKE_FULL,
+        INTAKING,
+        OUTTAKING,
+        ENDGAME
+    }
     RevBlinkinLedDriver driver;
+    State state;
+
     public Blinkin(HardwareMap hardwareMap) {
         driver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     }
 
     public void init() {
-
+        state = State.IDLE;
+        driver.setPattern(IDLE_PATTERN);
     }
 
     public void read() {
