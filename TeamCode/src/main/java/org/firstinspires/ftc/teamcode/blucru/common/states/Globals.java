@@ -18,13 +18,20 @@ public class Globals {
     public static AutoType autoType = AutoType.PRELOAD;
     public static ParkType parkType = ParkType.NONE;
 
+    public static int stackCenterPixels = 5;
+    public static int stackClosePixels = 5;
+    public static int stackFarPixels = 5;
+
     public static ElapsedTime runtime;
 
     public static double voltage = 13.0;
 
-    public static void startTimer() {
+    public static void startAuto() {
         Globals.runtime = new ElapsedTime();
         Globals.runtime.reset();
+        Globals.stackCenterPixels = 5;
+        Globals.stackClosePixels = 5;
+        Globals.stackFarPixels = 5;
     }
 
     public static void setAutoStartPose() {

@@ -7,6 +7,9 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadIntake;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceFarPreloadIntakeForCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.IntakeFarStack;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
 
 import java.util.HashMap;
 
@@ -48,7 +51,8 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         preloadPaths.put(Randomization.CENTER, new AudienceCenterPreloadIntakeForCenter().build());
         preloadPaths.put(Randomization.FAR, new AudienceFarPreloadIntakeForCenter().build());
 
-
+        backdropToStackPath = new BackdropToStackCenter().build();
+        stackToBackdropPath = new StackToBackdropCenter().build();
     }
 
     public void start(Randomization randomization) {

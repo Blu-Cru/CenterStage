@@ -60,7 +60,7 @@ public class Auto extends BCLinearOpMode {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 drivetrain.initializePose();
-                Globals.startTimer();
+                Globals.startAuto();
                 config.start(Globals.getRandomization(propPosition));
                 cvMaster.detectTag();
             })
