@@ -93,7 +93,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 currentPath = intakePath.start();
             })
             .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
-                                && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_STACK_FAILSAFE, () -> {
+                                && dt.pose.getX() < 12 && dt.pose.getX() > -25, State.CRASH_TO_STACK_FAILSAFE, () -> {
                 if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
                 else currentPath = crashTrussMiddleFailsafeToIntakePath.start();
 

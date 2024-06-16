@@ -28,6 +28,15 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         INTAKE_FAILSAFE,
     }
 
+    Path backdropToStackPath, stackToBackdropPath;
+    Path depositFailsafePath, intakeFailsafePath;
+    Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
+            crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
+    Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
+    Path intakePath;
+    Path depositPath;
+    Path parkPath;
+
     HashMap<Randomization, Path> preloadPaths;
     Path currentPath;
     public CenterCycleAudienceConfig() {
@@ -38,6 +47,8 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         preloadPaths.put(Randomization.CLOSE, new AudienceClosePreloadIntake().build());
         preloadPaths.put(Randomization.CENTER, new AudienceCenterPreloadIntakeForCenter().build());
         preloadPaths.put(Randomization.FAR, new AudienceFarPreloadIntakeForCenter().build());
+
+
     }
 
     public void start(Randomization randomization) {
