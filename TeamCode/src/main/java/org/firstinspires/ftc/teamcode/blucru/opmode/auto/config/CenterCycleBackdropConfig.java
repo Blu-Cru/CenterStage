@@ -30,6 +30,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     static final double TRUSS_HEADING_FAILSAFE_TOLERANCE = Math.toRadians(15);
     static final double CRASH_CORRECTION_Y = 2;
 
+    HashMap<Randomization, Path> preloadPaths;
     Path backdropToStackPath, stackToBackdropPath;
     Path depositFailsafePath, intakeFailsafePath;
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
@@ -45,8 +46,6 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
     Drivetrain dt;
     ElapsedTime runtime;
-
-    HashMap<Randomization, Path> preloadPaths;
 
     private enum State {
         PLACING_PRELOADS,
@@ -65,134 +64,135 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     }
 
     Path currentPath;
-
-    StateMachine stateMachine = new StateMachineBuilder()
-            // PRELOADS
-
-            .state(State.PLACING_PRELOADS)
-            .onEnter(() -> {
-                logTransitionTo(State.PLACING_PRELOADS);
-            })
-            .loop(() -> {
-                dt.updateAprilTags();
-            })
-            .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
-                currentPath = backdropToStackPath.start();
-            })
-
-            // TO STACK STATE
-
-            .state(State.TO_STACK)
-            .onEnter(() -> {
-                logTransitionTo(State.TO_STACK);
-            })
-            .loop(() -> {
-//                dt.updateAprilTags();
-            })
-            .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
-                currentPath = intakePath.start();
-            })
-            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
-                                && dt.pose.getX() < 12 && dt.pose.getX() > -25, State.CRASH_TO_STACK_FAILSAFE, () -> {
-                if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
-                else currentPath = crashTrussMiddleFailsafeToIntakePath.start();
-
-                if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
-                    dt.correctY(-CRASH_CORRECTION_Y);
-                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
-                } else {
-                    dt.correctY(CRASH_CORRECTION_Y);
-                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
-                }
-            })
-
-            // INTAKING STATE
-
-            .state(State.INTAKING)
-            .onEnter(() -> {
-                logTransitionTo(State.INTAKING);
-            })
-            .transition(() -> currentPath.isDone(), State.TO_BACKDROP, () -> {
-                currentPath = stackToBackdropPath.start();
-            })
-
-            // TO BACKDROP STATE
-
-            .state(State.TO_BACKDROP)
-            .onEnter(() -> {
-                logTransitionTo(State.TO_BACKDROP);
-            })
-            .transition(() -> currentPath.isDone(), State.DEPOSITING, () -> {
-                currentPath = depositPath.start();
-            })
-            .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
-                    && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_BACKDROP_FAILSAFE, () -> {
-                if(dt.pose.getX() > -16) currentPath = crashTrussMiddleFailsafeToBackdropPath.start();
-                else currentPath = crashTrussStackFailsafePath.start();
-
-                // CORRECT FOR CRASH
-                if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
-                    dt.correctY(CRASH_CORRECTION_Y);
-                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
-                } else {
-                    dt.correctY(-CRASH_CORRECTION_Y);
-                    Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
-
-                }
-            })
-
-            // DEPOSITING STATE
-
-            .state(State.DEPOSITING)
-            .onEnter(() -> {
-                logTransitionTo(State.DEPOSITING);
-            })
-            .loop(() -> {
-                dt.updateAprilTags();
-            })
-            .transition(() -> currentPath.isDone() && runtime.seconds() < 24, State.TO_STACK, () -> {
-                new OuttakeRetractCommand().schedule();
-                currentPath = backdropToStackPath.start();
-            })
-            .transition(() -> currentPath.isDone() && runtime.seconds() >= 24, State.PARKING, () -> {
-                new OuttakeRetractCommand().schedule();
-                currentPath = parkPath.start();
-            })
-
-
-            // CRASH FAILSAFE STATE
-
-            .state(State.CRASH_TO_STACK_FAILSAFE)
-            .onEnter(() -> {
-                logTransitionTo(State.CRASH_TO_STACK_FAILSAFE);
-            })
-            .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_STACK, () -> {
-                currentPath = crashToStackRecoveryPath.start();
-            })
-
-            .state(State.CRASH_TO_BACKDROP_FAILSAFE)
-            .onEnter(() -> {
-                logTransitionTo(State.CRASH_TO_BACKDROP_FAILSAFE);
-            })
-            .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_BACKDROP, () -> {
-                currentPath = crashToBackdropRecoveryPath.start();
-            })
-
-            .state(State.PARKING)
-            .onEnter(() -> {
-                logTransitionTo(State.PARKING);
-            })
-            .transition(() -> currentPath.isDone(), State.DONE)
-
-            .state(State.DONE)
-            .onEnter(() -> {
-                logTransitionTo(State.DONE);
-            })
-            .build();
+    StateMachine stateMachine;
 
     public CenterCycleBackdropConfig() {
         dt = Robot.getInstance().drivetrain;
         preloadPaths = new HashMap<>();
+
+        stateMachine = new StateMachineBuilder()
+                // PRELOADS
+
+                .state(State.PLACING_PRELOADS)
+                .onEnter(() -> {
+                    logTransitionTo(State.PLACING_PRELOADS);
+                })
+                .loop(() -> {
+                    dt.updateAprilTags();
+                })
+                .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+                    currentPath = backdropToStackPath.start();
+                })
+
+                // TO STACK STATE
+
+                .state(State.TO_STACK)
+                .onEnter(() -> {
+                    logTransitionTo(State.TO_STACK);
+                })
+                .loop(() -> {
+//                dt.updateAprilTags();
+                })
+                .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
+                    currentPath = intakePath.start();
+                })
+                .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
+                        && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_STACK_FAILSAFE, () -> {
+                    if(dt.pose.getX() > -8) currentPath = crashTrussBackdropFailsafePath.start();
+                    else currentPath = crashTrussMiddleFailsafeToIntakePath.start();
+
+                    if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
+                        dt.correctY(-CRASH_CORRECTION_Y);
+                        Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
+                    } else {
+                        dt.correctY(CRASH_CORRECTION_Y);
+                        Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
+                    }
+                })
+
+                // INTAKING STATE
+
+                .state(State.INTAKING)
+                .onEnter(() -> {
+                    logTransitionTo(State.INTAKING);
+                })
+                .transition(() -> currentPath.isDone(), State.TO_BACKDROP, () -> {
+                    currentPath = stackToBackdropPath.start();
+                })
+
+                // TO BACKDROP STATE
+
+                .state(State.TO_BACKDROP)
+                .onEnter(() -> {
+                    logTransitionTo(State.TO_BACKDROP);
+                })
+                .transition(() -> currentPath.isDone(), State.DEPOSITING, () -> {
+                    currentPath = depositPath.start();
+                })
+                .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
+                        && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_BACKDROP_FAILSAFE, () -> {
+                    if(dt.pose.getX() > -16) currentPath = crashTrussMiddleFailsafeToBackdropPath.start();
+                    else currentPath = crashTrussStackFailsafePath.start();
+
+                    // CORRECT FOR CRASH
+                    if(Angle.normDelta(dt.pose.getHeading() - Math.PI) > 0) {
+                        dt.correctY(CRASH_CORRECTION_Y);
+                        Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + CRASH_CORRECTION_Y);
+                    } else {
+                        dt.correctY(-CRASH_CORRECTION_Y);
+                        Log.i("CenterCycleBackdropConfig", "Correcting Y by: " + -CRASH_CORRECTION_Y);
+
+                    }
+                })
+
+                // DEPOSITING STATE
+
+                .state(State.DEPOSITING)
+                .onEnter(() -> {
+                    logTransitionTo(State.DEPOSITING);
+                })
+                .loop(() -> {
+                    dt.updateAprilTags();
+                })
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 24, State.TO_STACK, () -> {
+                    new OuttakeRetractCommand().schedule();
+                    currentPath = backdropToStackPath.start();
+                })
+                .transition(() -> currentPath.isDone() && runtime.seconds() >= 24, State.PARKING, () -> {
+                    new OuttakeRetractCommand().schedule();
+                    currentPath = parkPath.start();
+                })
+
+
+                // CRASH FAILSAFE STATE
+
+                .state(State.CRASH_TO_STACK_FAILSAFE)
+                .onEnter(() -> {
+                    logTransitionTo(State.CRASH_TO_STACK_FAILSAFE);
+                })
+                .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_STACK, () -> {
+                    currentPath = crashToStackRecoveryPath.start();
+                })
+
+                .state(State.CRASH_TO_BACKDROP_FAILSAFE)
+                .onEnter(() -> {
+                    logTransitionTo(State.CRASH_TO_BACKDROP_FAILSAFE);
+                })
+                .transition(() -> currentPath.isDone() && dt.getAbsHeadingError() < TRUSS_HEADING_FAILSAFE_TOLERANCE, State.TO_BACKDROP, () -> {
+                    currentPath = crashToBackdropRecoveryPath.start();
+                })
+
+                .state(State.PARKING)
+                .onEnter(() -> {
+                    logTransitionTo(State.PARKING);
+                })
+                .transition(() -> currentPath.isDone(), State.DONE)
+
+                .state(State.DONE)
+                .onEnter(() -> {
+                    logTransitionTo(State.DONE);
+                })
+                .build();
     }
 
     public void build() {

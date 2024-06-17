@@ -13,7 +13,8 @@ public class IntakeFarStack extends PIDPathBuilder {
         super();
         this.setPower(0.5)
                 .schedule(new IntakeCommand(initialHeight, 1))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 9, 160, 2)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 10, 180, 2)
+                .waitMillis(300)
                 .setPower(0.35)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),

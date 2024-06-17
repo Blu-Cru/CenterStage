@@ -20,14 +20,14 @@ public class PIDPointSegment implements PathSegment{
 
     public PIDPointSegment(Pose2d pose, double translationTolerance) {this(pose, translationTolerance, false);}
 
-    public PIDPointSegment(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1, stopRequiredToEnd);}
+    public PIDPointSegment(Pose2d pose, boolean stopRequiredToEnd) {this(pose, 1.5, stopRequiredToEnd);}
 
     public PIDPointSegment(Pose2d pose) {
-        this(pose, 1, true);
+        this(pose, 1.5, true);
     }
 
     public boolean atTarget() {
-        boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 5.0;
+        boolean velSatisfied = !stopRequiredToEnd || Robot.getInstance().drivetrain.velocity.vec().norm() < 4.0;
 //        boolean velSatisfied = true;
         return Robot.getInstance().drivetrain.inRange(pose, translationTolerance) && velSatisfied;
     }
