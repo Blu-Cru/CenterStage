@@ -20,10 +20,21 @@ public abstract class AutoConfig {
         if(Globals.side == Side.AUDIENCE) {
             if(Globals.autoType == AutoType.CENTER_CYCLE)
                 return new CenterCycleAudienceConfig();
+            else if(Globals.autoType == AutoType.PERIMETER_CYCLE){
+//                return new PerimeterCycleAudienceConfig();
+            }
+            else if(Globals.autoType == AutoType.PRELOAD) {
+//                return new PreloadAudienceConfig();
+            }
         }
         else if(Globals.side == Side.BACKDROP) {
             if(Globals.autoType == AutoType.CENTER_CYCLE)
                 return new CenterCycleBackdropConfig();
+            else if(Globals.autoType == AutoType.PERIMETER_CYCLE){
+//                return new PerimeterCycleBackdropConfig();
+            } else if(Globals.autoType == AutoType.PRELOAD) {
+//                return new PreloadBackdropConfig();
+            }
         }
         return null;
     }

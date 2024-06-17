@@ -8,6 +8,12 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 public class OuttakeExtendCommand extends SequentialCommandGroup {
+    /*
+    PIXEL HEIGHT:
+    0 leaves enough room for one pixel under the bucket
+    -1 is the lowest possible height for the backdrop
+    each increment is 1 pixel height up the board
+     */
     public OuttakeExtendCommand(double pixelHeight) {
         super(
                 new SequentialCommandGroup(
