@@ -76,18 +76,16 @@ public class PIDPathTest extends BCLinearOpMode {
 
         pidPath = new PIDPathBuilder()
                 .setPower(0.45)
-                .addMappedPoint(-55, 42, 135,6)
-                .addMappedPoint(-58, 30, 180, 3)
+                .addMappedPoint(-55, 42, 150,6)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(400),
                         new PurplePixelRetractCommand(),
                         new DropdownPartialRetractCommand()
                 ))
-                .addMappedPoint(-53, 21, 220,2)
-
                 .waitMillis(350)
                 .schedule(new IntakeCommand(4, 1))
-                .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
+                .addMappedPoint(-58, 30, 200, 3)
+                .addMappedPoint(Field.INTAKE_X, 24, 180, 3)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new DropdownCommand(3),
