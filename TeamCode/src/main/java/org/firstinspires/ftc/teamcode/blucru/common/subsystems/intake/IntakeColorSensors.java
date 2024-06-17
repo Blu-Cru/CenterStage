@@ -89,13 +89,13 @@ public class IntakeColorSensors implements Subsystem {
             frontR = frontRGBA.red;
             frontG = frontRGBA.green;
             frontB = frontRGBA.blue;
-            getHSV(frontRGBA, frontHSV); // sets frontHSV
+            frontHSV = getHSV(frontRGBA); // sets frontHSV
             frontHue = frontHSV[0];
 
             backR = backRGBA.red;
             backG = backRGBA.green;
             backB = backRGBA.blue;
-            getHSV(backRGBA, backHSV); // sets backHSV
+            backHSV = getHSV(backRGBA); // sets backHSV
             backHue = backHSV[0];
 
             frontSlotState = getSlotState(frontDistance, SensorLocation.FRONT, frontHSV);
@@ -111,11 +111,11 @@ public class IntakeColorSensors implements Subsystem {
         if(!inRange(distance, ranges.get(sensorLocation))) {
             return SlotState.EMPTY;
         } else {
-            if(hsv[1] < SATURATION_WHITE_HIGH) {
+            if(hsv[2] > 0.022) {
                 return SlotState.WHITE;
-            } else if(hsv[0] >= HUE_GREEN_HIGH_YELLOW_LOW) {
+            } else if(hsv[0] <= 115) {
                 return SlotState.YELLOW;
-            } else if(hsv[0] < HUE_PURPLE_HIGH_GREEN_LOW) {
+            } else if(hsv[0] > 155) {
                 return SlotState.PURPLE;
             } else {
                 return SlotState.GREEN;
@@ -139,16 +139,12 @@ public class IntakeColorSensors implements Subsystem {
         backB = backB / max;
     }
 
-    public void getHSV(NormalizedRGBA color, float[] hsv) {
-        Color.RGBToHSV((int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255), hsv);
-    }
-
-    public float[] getFrontHSV() {
-        return frontHSV;
-    }
-
-    public float[] getBackHSV() {
-        return backHSV;
+    public float[] getHSV(NormalizedRGBA color) {
+        float[] hsv = new float[3];
+        int colorInt = Color.argb((int)(color.alpha * 255), (int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255));
+        Color.colorToHSV(colorInt, hsv);
+//        Color.RGBToHSV((int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255), hsv);
+        return hsv;
     }
 
     public void startReading() {
@@ -187,13 +183,15 @@ public class IntakeColorSensors implements Subsystem {
         telemetry.addData("front R", frontR);
         telemetry.addData("front G", frontG);
         telemetry.addData("front B", frontB);
-//        telemetry.addData("front hue", frontHue);
-        telemetry.addData("front HSV: ", frontHSV);
+        telemetry.addData("front H:: ", frontHSV[0]);
+        telemetry.addData("front S:: ", frontHSV[1]);
+        telemetry.addData("front V:: ", frontHSV[2]);
         telemetry.addData("back R", backR);
         telemetry.addData("back G", backG);
         telemetry.addData("back B", backB);
-//        telemetry.addData("back hue", backHue);
-        telemetry.addData("back HSV: ", backHSV);
+        telemetry.addData("back H: ", backHSV[0]);
+        telemetry.addData("back S: ", backHSV[1]);
+        telemetry.addData("back V: ", backHSV[2]);
 //        telemetry.addData("front light detected", frontLightDetected);
 //        telemetry.addData("back light detected", backLightDetected);
     }
