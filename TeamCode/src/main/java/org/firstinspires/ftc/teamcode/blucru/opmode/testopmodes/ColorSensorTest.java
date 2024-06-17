@@ -7,35 +7,22 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "color sensor test", group = "test")
 public class ColorSensorTest extends BCLinearOpMode {
-    boolean lastA = false;
-
-    View relativeLayout;
     public void periodic() {
-        if(gamepad1.a && !lastA) {
-            intakeColorSensors.toggleReading();
+        if(stickyG1.a) {
+            if(intakeColorSensors.isReading()) {
+                intakeColorSensors.stopReading();
+            } else {
+                intakeColorSensors.startReading();
+            }
         }
-        lastA = gamepad1.a;
-
-//        relativeLayout.post(new Runnable() {
-//            public void run() {
-//                relativeLayout.setBackgroundColor(Color.HSVToColor(intakeColorSensors.getFrontHSV()));
-//            }
-//        });
     }
 
     public void initialize() {
         addIntakeColorSensors();
         intakeColorSensors.startReading();
-
-//        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-//        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
     }
 
     public void telemetry() {
         intakeColorSensors.testTelemetry(telemetry);
-    }
-
-    public void end() {
-//        relativeLayout.setBackgroundColor(Color.CYAN);
     }
 }

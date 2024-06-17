@@ -159,6 +159,10 @@ public class IntakeColorSensors implements Subsystem {
         reading = false;
     }
 
+    public boolean isReading() {
+        return reading;
+    }
+
     public boolean isFull() {
         return frontSlotState != SlotState.EMPTY && backSlotState != SlotState.EMPTY;
     }
