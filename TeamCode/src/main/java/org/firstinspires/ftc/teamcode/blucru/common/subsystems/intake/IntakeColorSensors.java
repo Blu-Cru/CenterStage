@@ -18,7 +18,7 @@ public class IntakeColorSensors implements Subsystem {
         BACK
     }
 
-    private enum SlotState {
+    public enum SlotState {
         EMPTY,
         FULL,
         WHITE,
@@ -37,7 +37,7 @@ public class IntakeColorSensors implements Subsystem {
 
     HashMap<SensorLocation, double[]> ranges;
 
-    SlotState frontSlotState, backSlotState;
+    public SlotState frontSlotState, backSlotState;
     RevColorSensorV3 frontSensor, backSensor;
     NormalizedRGBA frontRGBA, backRGBA;
     double frontR, backR;
