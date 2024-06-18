@@ -54,6 +54,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     boolean telemetryOptimized = false;
 
     public final void runOpMode() throws InterruptedException {
+        Globals.runtime = new ElapsedTime();
         alliance = Globals.alliance;
         stickyG1 = new StickyGamepad(gamepad1);
         stickyG2 = new StickyGamepad(gamepad2);
@@ -74,7 +75,9 @@ public abstract class BCLinearOpMode extends LinearOpMode {
         }
         waitForStart();
         onStart();
+        Globals.runtime.reset();
         runtime = new ElapsedTime(); // start timer
+        runtime.reset();
         while (!isStopRequested() && opModeIsActive()) {
             stickyG1.update();
             stickyG2.update();

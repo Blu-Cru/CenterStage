@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@TeleOp(name = "Blinkin test", group = "test")
 public class BlinkinTest extends BCLinearOpMode {
     int patternIndex = 0;
     @Override
@@ -22,10 +24,22 @@ public class BlinkinTest extends BCLinearOpMode {
             patternIndex--;
             blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.fromNumber(patternIndex));
         }
+
+        if(stickyG1.a) {
+            blinkin.startEndgame();
+        }
+
+        if(stickyG1.right_stick_button) {
+            blinkin.idle();
+        }
+
+        if(stickyG1.b) {
+            blinkin.startIntakeFull();
+        }
     }
 
     public void telemetry() {
         telemetry.addData("Pattern Index", patternIndex);
-        telemetry.addData("Pattern", RevBlinkinLedDriver.BlinkinPattern.fromNumber(patternIndex));
+        telemetry.addData("Test pattern", RevBlinkinLedDriver.BlinkinPattern.fromNumber(patternIndex));
     }
 }
