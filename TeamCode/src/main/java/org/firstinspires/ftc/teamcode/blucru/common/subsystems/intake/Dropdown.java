@@ -17,6 +17,7 @@ public class Dropdown implements Subsystem {
             P2toP3 = 96,
             P3axial = 48,
             P3tangential = 12,
+            DROPDOWN_LENGTH = 144,
             P3toOrigin = Math.hypot(P3axial, P3tangential), // origin is the axle where the dropdown rotates about
             THETA3 = Math.atan(P3tangential/P3axial);
 
@@ -41,28 +42,12 @@ public class Dropdown implements Subsystem {
         }
     }
 
-    public double toTicks(double angle) {
-        double rawTicks = ((angle - Math.PI/2) / Math.toRadians(270)) + VERTICAL_POS;
-        return Range.clip(rawTicks, 0.0, 1.0);
+    private double getDropdownAngle(double targetHeight) {
+        return Math.asin(targetHeight / DROPDOWN_LENGTH);
     }
 
-    public static double toDeg(double height) {
-        return -1;
-    }
-
-    public static double toX(int stackHeight) {
-        return -1;
-    }
-
-    public void dropToStack(int stackHeight) {
-    }
-
-    public static double getTargetHeight(int stackHeight) {
-        return -1;
-    }
-
-    private Point2d getP3(double targetAngle) {
-        return Point2d.polar(P3toOrigin, Math.PI - THETA3 - targetAngle);
+    private Point2d getP3(double dropdownAngle) {
+        return Point2d.polar(P3toOrigin, Math.PI - THETA3 - dropdownAngle);
     }
 
     public void dropToGround() {}
@@ -72,6 +57,11 @@ public class Dropdown implements Subsystem {
     public void retract() {}
 
     public void dropToAutoMidPos() {}
+
+    private double toTicks(double angle) {
+        double rawTicks = ((angle - Math.PI/2) / Math.toRadians(270)) + VERTICAL_POS;
+        return Range.clip(rawTicks, 0.0, 1.0);
+    }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("intake wrist pos", position);
