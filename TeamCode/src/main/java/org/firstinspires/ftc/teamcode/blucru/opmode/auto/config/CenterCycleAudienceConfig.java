@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterToBackdropPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadDeposit;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadIntake;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceFarPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
@@ -88,6 +89,9 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         preloadIntakePaths.put(Randomization.FAR, new AudienceFarPreloadIntakeForCenter().build());
 
         toBackdropPreloadPath = new AudienceCenterToBackdropPreload().build();
+
+        preloadDepositPaths.put(Randomization.CLOSE, new AudienceClosePreloadDeposit().build());
+//        preloadDepositPaths.put(Randomization.CENTER, )
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
