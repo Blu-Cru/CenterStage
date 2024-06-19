@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
 @Disabled
@@ -13,13 +13,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 public class DriveMaintainHeadingTest extends LinearOpMode {
     Robot robot;
     Drivetrain drivetrain;
-    IntakeWrist intakeWrist;
+    Dropdown dropdown;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = Robot.getInstance();
         drivetrain = robot.addDrivetrain(true);
-        intakeWrist = robot.addIntakeWrist();
+        dropdown = robot.addIntakeWrist();
         robot.init();
         waitForStart();
         while(opModeIsActive()) {

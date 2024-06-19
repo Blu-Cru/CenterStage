@@ -23,11 +23,11 @@ public class DropdownTest extends BCLinearOpMode {
         }
 
         if(stickyG1.a) {
-            intake.intakeWrist.dropToStack(stackHeight);
+            intake.dropdown.dropToStack(stackHeight);
         }
 
         if(stickyG1.b) {
-            intake.intakeWrist.retract();
+            intake.dropdown.retract();
         }
 
         if(stickyG1.dpad_up) stackHeight = Math.min(5, stackHeight + 1);
@@ -40,6 +40,6 @@ public class DropdownTest extends BCLinearOpMode {
 
     public void telemetry() {
         telemetry.addData("Stack Height", stackHeight);
-        telemetry.addData("Wrist Angle", intake.intakeWrist.targetAngleDeg);
+        telemetry.addData("Wrist Angle", intake.dropdown.targetAngleDeg);
     }
 }

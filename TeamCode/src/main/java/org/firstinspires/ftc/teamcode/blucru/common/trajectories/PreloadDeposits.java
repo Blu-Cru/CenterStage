@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.robotcore.external.Const;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -46,7 +44,7 @@ public class PreloadDeposits {
                 .setTangent(Math.toRadians(0 * reflect))
                 // reverse intake, lock
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                     robot.intake.setIntakePower(-1);
                     robot.outtake.lock();
                     robot.intake.stopReadingColor();
@@ -227,7 +225,7 @@ public class PreloadDeposits {
                 // lock and start outtake
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
@@ -294,7 +292,7 @@ public class PreloadDeposits {
                 // lock and start outtaking
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                     robot.intake.setIntakePower(-0.7);
                 })
                 // stop outtake
@@ -374,7 +372,7 @@ public class PreloadDeposits {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.setIntakePower(-0.7);
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                 })
                 // stop outtake
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {

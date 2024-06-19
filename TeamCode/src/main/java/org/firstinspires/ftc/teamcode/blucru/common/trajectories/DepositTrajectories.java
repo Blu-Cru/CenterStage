@@ -28,7 +28,7 @@ public class DepositTrajectories {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
                     robot.intake.setIntakePower(-1);
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                     robot.outtake.lock();
                 })
 

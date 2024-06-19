@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivet
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeColorSensors;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lock;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
@@ -30,7 +30,7 @@ public class Robot {
     public Outtake outtake;
     public Lift lift;
     public Intake intake;
-    public IntakeWrist intakeWrist;
+    public Dropdown dropdown;
     public Drivetrain drivetrain;
     public Hanger hanger;
     public Plane plane;
@@ -104,10 +104,10 @@ public class Robot {
         return intake;
     }
 
-    public IntakeWrist addIntakeWrist() {
-        intakeWrist = new IntakeWrist(hardwareMap);
-        subsystems.add(intakeWrist);
-        return intakeWrist;
+    public Dropdown addIntakeWrist() {
+        dropdown = new Dropdown(hardwareMap);
+        subsystems.add(dropdown);
+        return dropdown;
     }
 
     public IntakeColorSensors addIntakeColorSensors() {

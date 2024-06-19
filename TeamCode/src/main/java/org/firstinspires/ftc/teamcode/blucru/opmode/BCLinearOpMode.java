@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeColo
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang.Hanger;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lock;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
@@ -33,7 +32,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
     public Lift lift;
     public Turret turret;
     public Intake intake;
-    public IntakeWrist intakeWrist;
+    public Dropdown dropdown;
     public IntakeColorSensors intakeColorSensors;
     public Plane plane;
     public Hanger hanger;
@@ -135,7 +134,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addIntake() {intake = robot.addIntake();}
 
-    public void addIntakeWrist() {intakeWrist = robot.addIntakeWrist();}
+    public void addIntakeWrist() {
+        dropdown = robot.addIntakeWrist();}
 
     public void addIntakeColorSensors() {intakeColorSensors = robot.addIntakeColorSensors();}
 

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 
 // poses for trajectories
 public final class Poses {
@@ -82,6 +82,6 @@ public final class Poses {
     }
 
     public static double calculateStackX(int stackHeight) {
-        return Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(stackHeight);
+        return Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight);
     }
 }

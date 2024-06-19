@@ -59,7 +59,7 @@ public class Placements {
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
-                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.dropdown.dropToAutoMidPos())
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -52 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_CENTER_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
@@ -73,7 +73,7 @@ public class Placements {
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
-                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.dropdown.dropToAutoMidPos())
                 .splineToConstantHeading(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -50 * reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CLOSE_FOR_PERIM_POSE, Math.toRadians(45 * reflect))
                 // release purple pixel
@@ -87,7 +87,7 @@ public class Placements {
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
-                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.dropdown.dropToAutoMidPos())
                 .splineToConstantHeading(new Vector2d(-45 + Poses.FIELD_OFFSET_X, -40*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_CENTER_POSE, Math.toRadians(135 * reflect))
                 // release purple pixel
@@ -102,7 +102,7 @@ public class Placements {
                 // placement
                 .setTangent(Math.toRadians(90 * reflect))
                 // drop down ready
-                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.dropdown.dropToAutoMidPos())
                 .splineTo(new Vector2d(-36 + Poses.FIELD_OFFSET_X, -55*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_PERIM_POSE, Math.toRadians(180))
                 // release purple pixel
@@ -119,7 +119,7 @@ public class Placements {
                 // placement
                 .setTangent(Math.toRadians(130 * reflect))
                 // drop down ready
-                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.intakeWrist.dropToAutoMidPos())
+                .UNSTABLE_addTemporalMarkerOffset(DROP_TIME, () -> robot.intake.dropdown.dropToAutoMidPos())
                 .splineToConstantHeading(new Vector2d(-50 + Poses.FIELD_OFFSET_X, -50*reflect), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(new Pose2d(-54.5 + Poses.FIELD_OFFSET_X, -35 * reflect, Math.toRadians(180 * reflect)), Math.toRadians(90 * reflect))
                 .splineToSplineHeading(Poses.WING_PLACEMENT_FAR_FOR_CENTER_POSE, Math.toRadians(70 * reflect))
