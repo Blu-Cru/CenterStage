@@ -25,4 +25,6 @@ public class ColorSensorTest extends BCLinearOpMode {
     public void telemetry() {
         intakeColorSensors.testTelemetry(telemetry);
     }
+    
+
 }
