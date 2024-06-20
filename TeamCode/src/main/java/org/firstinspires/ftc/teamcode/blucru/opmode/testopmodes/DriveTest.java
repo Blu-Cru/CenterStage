@@ -1,15 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
@@ -21,7 +14,7 @@ public class DriveTest extends BCLinearOpMode {
     public void initialize() {
         addDrivetrain(true);
         drivetrain.drivePower = 0.8;
-        addIntakeWrist();
+        addDropdown();
         enableFTCDashboard();
         Poses.setAlliance(Alliance.RED);
     }

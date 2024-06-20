@@ -89,7 +89,7 @@ public class DepositPositionTest extends BCLinearOpMode {
     public void initialize() {
         addDrivetrain(false);
         addOuttake();
-        addIntakeWrist();
+        addDropdown();
         addCVMaster();
 
         Poses.setAlliance(Alliance.BLUE);

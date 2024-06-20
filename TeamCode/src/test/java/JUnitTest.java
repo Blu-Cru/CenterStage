@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Assert;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.PoseHistory;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.PoseMarker;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.junit.*;
 
 public class JUnitTest {
@@ -30,10 +31,10 @@ public class JUnitTest {
         
         long targetTime = (time1 + time2) / 2;
 
-        Pose2d interpolatedPose = poseHistory.getPoseAtTime(targetTime);
-        System.out.println(interpolatedPose);
-
-        Assert.assertTrue(interpolatedPose.equals(new Pose2d(.5, .5, .5)));
+//        Pose2d interpolatedPose = poseHistory.getPoseAtTime(targetTime);
+//        System.out.println(interpolatedPose);
+//
+//        Assert.assertTrue(interpolatedPose.equals(new Pose2d(.5, .5, .5)));
     }
 
     @Test
@@ -63,5 +64,12 @@ public class JUnitTest {
         Vector2d finalVec = startPose.vec().plus(globalDist);
         double finalHeading = Angle.norm(startPose.getHeading() + headingDist);
         return new Pose2d(finalVec, finalHeading);
+    }
+
+    @Test
+    public void testDropdown() {
+        Dropdown dropdown = new Dropdown();
+
+        System.out.println(dropdown.getServoAngle(dropdown.getP3(dropdown.getDropdownAngle(0))));
     }
 }

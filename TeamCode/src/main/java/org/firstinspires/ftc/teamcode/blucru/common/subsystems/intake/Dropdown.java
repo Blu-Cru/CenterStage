@@ -12,24 +12,38 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 @Config
 public class Dropdown implements Subsystem {
     public static double
-            VERTICAL_POS = 0.5,
-            P1toP2 = 40,
-            P2toP3 = 96,
+            VERTICAL_POS = 0.24,
+            L1 = 40,
+            L2 = 96,
             P3axial = 48,
             P3tangential = 12,
             DROPDOWN_LENGTH = 144,
             P3toOrigin = Math.hypot(P3axial, P3tangential), // origin is the axle where the dropdown rotates about
-            THETA3 = Math.atan(P3tangential/P3axial);
+            THETA3 = Math.atan(P3tangential/P3axial),
+
+            PIXEL_HEIGHT = 12.7,
+            STACK_1_HEIGHT = 40,
+            RETRACT_HEIGHT = 100,
+
+            GROUND_HEIGHT = 10;
+
+    static Point2d P1 = new Point2d(79.95, 50);
 
     Servo wrist;
     private double position;
 
     public Dropdown(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "intake wrist");
+        wrist.setDirection(Servo.Direction.REVERSE);
+        position = VERTICAL_POS;
+    }
+
+    public Dropdown() {
+
     }
 
     public void init() {
-        wrist.setPosition(position);
+
     }
 
     public void read() {
@@ -42,19 +56,46 @@ public class Dropdown implements Subsystem {
         }
     }
 
-    private double getDropdownAngle(double targetHeight) {
+    public void setTargetHeight(double targetHeight) {
+        position = toTicks(getServoAngle(getP3(getDropdownAngle(targetHeight))));
+    }
+
+    public double getDropdownAngle(double targetHeight) {
         return Math.asin(targetHeight / DROPDOWN_LENGTH);
     }
 
-    private Point2d getP3(double dropdownAngle) {
+    public Point2d getP3(double dropdownAngle) {
         return Point2d.polar(P3toOrigin, Math.PI - THETA3 - dropdownAngle);
+    }
+
+    public double getServoAngle(Point2d p3) {
+        double distance = p3.distance(P1);
+        double interiorAngle = Math.acos((-L2 * L2 + distance * distance + L1 * L1)/(2 * distance * L1));
+        double deltaAngle = Math.atan((P1.y - p3.y)/(P1.x - p3.x));
+        return Math.PI + deltaAngle - interiorAngle;
+    }
+
+    public void dropToStack(int stackHeight) {
+        setTargetHeight(getTargetHeight(stackHeight));
+    }
+
+    private double getTargetHeight(int stackHeight) {
+        if(stackHeight <= 0) {
+            return GROUND_HEIGHT;
+        }
+        else {
+            stackHeight = Range.clip(stackHeight, 1, 4);
+            return STACK_1_HEIGHT + PIXEL_HEIGHT * (stackHeight-1);
+        }
     }
 
     public void dropToGround() {}
 
     public void dropToPurpleHeight() {}
 
-    public void retract() {}
+    public void retract() {
+        setTargetHeight(RETRACT_HEIGHT);
+    }
 
     public void dropToAutoMidPos() {}
 

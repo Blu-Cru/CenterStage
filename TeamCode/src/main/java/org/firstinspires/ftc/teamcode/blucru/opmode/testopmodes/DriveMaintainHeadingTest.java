@@ -19,7 +19,7 @@ public class DriveMaintainHeadingTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = Robot.getInstance();
         drivetrain = robot.addDrivetrain(true);
-        dropdown = robot.addIntakeWrist();
+        dropdown = robot.addDropdown();
         robot.init();
         waitForStart();
         while(opModeIsActive()) {

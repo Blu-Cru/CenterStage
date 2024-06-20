@@ -243,7 +243,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
+//                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.dropdown.dropToAutoMidPos();
@@ -313,7 +313,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
+//                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.dropdown.dropToAutoMidPos();
@@ -383,7 +383,7 @@ public class Cycles {
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect), Math.toRadians(180))
                 .setVelConstraint(Constraints.NORMAL_VEL)
-                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
+//                .splineToConstantHeading(new Vector2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight), -12 * reflect), Math.toRadians(180))
                 // intake ready
                 .UNSTABLE_addTemporalMarkerOffset(INTAKE_READY_TIME, () -> {
                     robot.intake.dropdown.dropToAutoMidPos();

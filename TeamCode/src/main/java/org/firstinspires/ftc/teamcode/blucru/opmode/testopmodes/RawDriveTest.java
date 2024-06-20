@@ -10,7 +10,7 @@ public class RawDriveTest extends BCLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(true);
-        addIntakeWrist();
+        addDropdown();
     }
 
     @Override

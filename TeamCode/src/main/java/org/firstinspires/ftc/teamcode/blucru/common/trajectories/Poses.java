@@ -81,7 +81,7 @@ public final class Poses {
         STACK_CLOSE_POSE = new Pose2d(STACK_X + FIELD_OFFSET_X + 1, -42 * reflect, Math.toRadians(150 * reflect));
     }
 
-    public static double calculateStackX(int stackHeight) {
-        return Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight);
-    }
+//    public static double calculateStackX(int stackHeight) {
+//        return Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(stackHeight);
+//    }
 }

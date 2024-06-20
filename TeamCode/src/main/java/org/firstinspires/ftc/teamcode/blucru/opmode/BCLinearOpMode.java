@@ -134,8 +134,8 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addIntake() {intake = robot.addIntake();}
 
-    public void addIntakeWrist() {
-        dropdown = robot.addIntakeWrist();}
+    public void addDropdown() {
+        dropdown = robot.addDropdown();}
 
     public void addIntakeColorSensors() {intakeColorSensors = robot.addIntakeColorSensors();}
 

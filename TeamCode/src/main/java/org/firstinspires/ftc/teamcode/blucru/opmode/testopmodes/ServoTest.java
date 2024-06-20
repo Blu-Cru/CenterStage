@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 public class ServoTest extends LinearOpMode {
     public static double position = 0.5;
     public static String name = "wrist";
+    public static boolean reversed = false;
     @Override
     public void runOpMode() throws InterruptedException {
         ServoImplEx test = hardwareMap.get(ServoImplEx.class, name);
@@ -21,6 +22,7 @@ public class ServoTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             test = hardwareMap.get(ServoImplEx.class, name);
+            if(reversed) test.setDirection(Servo.Direction.REVERSE);
             test.setPwmRange(new PwmControl.PwmRange(500, 2500));
             controller = (ServoControllerEx) test.getController();
 

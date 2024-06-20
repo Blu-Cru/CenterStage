@@ -104,7 +104,7 @@ public class Robot {
         return intake;
     }
 
-    public Dropdown addIntakeWrist() {
+    public Dropdown addDropdown() {
         dropdown = new Dropdown(hardwareMap);
         subsystems.add(dropdown);
         return dropdown;

@@ -43,7 +43,7 @@ public class PIDPathTest extends BCLinearOpMode {
             .loop(() -> {
                 drivetrain.teleOpDrive(gamepad1);
 
-                intake.dropdown.targetAngleDeg = 90;
+//                intake.dropdown.targetAngleDeg = 90;
             })
             .state(State.FOLLOWING_PID)
             .transition(() -> stickyG1.a, State.RESETTING, ()-> {
