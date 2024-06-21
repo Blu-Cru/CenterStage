@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCloseP
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadIntake;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceFarPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterDepositFailsafe;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.IntakeFarStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
@@ -95,9 +97,12 @@ public class CenterCycleAudienceConfig extends AutoConfig {
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
-        intakePath = new IntakeFarStack(4).build();
+        intakePath = new IntakeFarStack().build();
         depositPath = new DepositCenterCycle().build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
+
+        intakeFailsafePath = new CenterIntakeFailsafe().build();
+        depositFailsafePath = new CenterDepositFailsafe().build();
     }
 
     public void start(Randomization randomization) {
@@ -114,6 +119,6 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     }
 
     public void logTransitionTo(Enum to) {
-        Log.i("CenterCycleAudienceConfig", "Transitioning to " + to);
+        Log.i("CenterCycleAudienceConfig", "State transitioning to " + to);
     }
 }

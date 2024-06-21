@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 public class DropdownFullRetractCommand extends InstantCommand {
     public DropdownFullRetractCommand() {
         super(
-                () -> Robot.getInstance().intake.intakeWrist.retract()
+                () -> Robot.getInstance().intake.dropdown.retract()
         );
     }
 }

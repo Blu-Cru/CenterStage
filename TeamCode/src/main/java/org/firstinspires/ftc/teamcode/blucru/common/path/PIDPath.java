@@ -11,13 +11,13 @@ import java.util.HashMap;
 public class PIDPath implements Path {
     ArrayList<PathSegment> segmentList; // Path is made of a list of segments
     HashMap<Integer, ArrayList<Command>> commands; // each segment has a list of commands to run when started
-    int index;
+    int segmentIndex;
     boolean pathDone;
 
     public PIDPath(ArrayList<PathSegment> segmentList, HashMap<Integer, ArrayList<Command>> commands) {
         this.segmentList = segmentList;
         this.commands = commands;
-        index = 0;
+        segmentIndex = 0;
         pathDone = false;
     }
 
@@ -25,11 +25,11 @@ public class PIDPath implements Path {
     public Path start() {
         pathDone = false;
         segmentList.get(0).start();
-        index = 0;
+        segmentIndex = 0;
 
         // run the commands associated with the first point
         try {
-            for(Command c : commands.get(index)) {
+            for(Command c : commands.get(segmentIndex)) {
                 c.schedule();
             }
         } catch (NullPointerException ignored) {}
@@ -38,22 +38,22 @@ public class PIDPath implements Path {
     }
 
     public void run() {
-        Robot.getInstance().drivetrain.pidTo(segmentList.get(index).getPose());
+        Robot.getInstance().drivetrain.pidTo(segmentList.get(segmentIndex).getPose());
 
-        if(segmentList.get(index).isDone() && !pathDone) {
-            if(index + 1 == segmentList.size()) {
+        if(segmentList.get(segmentIndex).isDone() && !pathDone) {
+            if(segmentIndex + 1 == segmentList.size()) {
                 pathDone = true;
             } else {
-                index++;
+                segmentIndex++;
 
                 // run the commands associated with the next point
                 try {
-                    for(Command c : commands.get(index)) {
+                    for(Command c : commands.get(segmentIndex)) {
                         c.schedule();
                     }
                 } catch (NullPointerException ignored) {}
 
-                segmentList.get(index).start();
+                segmentList.get(segmentIndex).start();
             }
         }
     }
@@ -64,16 +64,16 @@ public class PIDPath implements Path {
     }
 
     public boolean failed() {
-        return segmentList.get(index).failed();
+        return segmentList.get(segmentIndex).failed();
     }
 
     public boolean isDone() {
-        return index >= segmentList.size() || pathDone;
+        return segmentIndex >= segmentList.size() || pathDone;
     }
 
     public void telemetry(Telemetry tele) {
         tele.addData("Path done: ", isDone());
         tele.addData("Path failed:", failed());
-        tele.addData("Path index", index);
+        tele.addData("Path index", segmentIndex);
     }
 }

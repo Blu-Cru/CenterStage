@@ -7,18 +7,19 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class IntakeFarStack extends PIDPathBuilder {
-    public IntakeFarStack(int initialHeight, double xIncrement, double yIncrement) {
+    public IntakeFarStack(double xIncrement, double yIncrement) {
         super();
         this.setPower(0.5)
-                .schedule(new IntakeCommand(initialHeight, 1))
+                .schedule(new IntakeCommand(Globals.stackCenterPixels, 1))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 10, 180, 2)
-                .waitMillis(300)
+                .waitMillis(400)
                 .setPower(0.35)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
-                        new DropdownCommand(initialHeight-1),
+                        new DropdownCommand(Globals.stackCenterPixels-1),
                         new WaitCommand(400),
                         new DropdownCommand(0)
                     )
@@ -27,7 +28,7 @@ public class IntakeFarStack extends PIDPathBuilder {
                 .waitMillis(700);
     }
 
-    public IntakeFarStack(int initialHeight) {
-        this(initialHeight, 0, 0);
+    public IntakeFarStack() {
+        this(0, 0);
     }
 }

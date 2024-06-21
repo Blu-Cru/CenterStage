@@ -23,7 +23,7 @@ public class Intake implements Subsystem {
 
     DcMotorEx intakeMotor;
     CRServo intakeRoller;
-    public IntakeWrist intakeWrist;
+    public Dropdown dropdown;
     public IntakeColorSensors intakeColorSensors;
 
     IntakeState intakeState;
@@ -41,13 +41,13 @@ public class Intake implements Subsystem {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake motor");
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-        intakeWrist = new IntakeWrist(hardwareMap); // instantiate intake wrist
+        dropdown = new Dropdown(hardwareMap); // instantiate intake wrist
         intakeColorSensors = new IntakeColorSensors(hardwareMap); // instantiate intake color sensors
         intakeState = IntakeState.IDLE;
     }
 
     public void init() {
-        intakeWrist.init();
+        dropdown.init();
         intakeColorSensors.init();
         //set all motors to zero power
         intakeRoller.setPower(0);
@@ -55,7 +55,7 @@ public class Intake implements Subsystem {
     }
 
     public void read() {
-        intakeWrist.read();
+        dropdown.read();
         intakeColorSensors.read();
 
 //        if (intakePower > 0.5 || intakeState == IntakeState.UNJAMMING) {
@@ -74,7 +74,7 @@ public class Intake implements Subsystem {
     }
 
     public void write() {
-        intakeWrist.write();
+        dropdown.write();
         intakeColorSensors.write();
 
 //        if(intakeState == IntakeState.UNJAMMING) {
@@ -94,15 +94,15 @@ public class Intake implements Subsystem {
     }
 
     public void retractIntakeWrist() {
-        intakeWrist.retract();
+        dropdown.retract();
     }
 
     public void dropToGround() {
-        intakeWrist.dropToGround();
+        dropdown.dropToGround();
     }
 
     public void dropToStack(int stackHeight) {
-        intakeWrist.dropToStack(stackHeight);
+        dropdown.dropToStack(stackHeight);
     }
 
     public void setIntakePower(double power) {
@@ -132,8 +132,8 @@ public class Intake implements Subsystem {
         return intakeRoller.getPower();
     }
 
-    public IntakeWrist getIntakeWrist() {
-        return intakeWrist;
+    public Dropdown getIntakeWrist() {
+        return dropdown;
     }
 
     public void startReadingColor() {

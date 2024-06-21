@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropCenter
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropClosePreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropFarPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.IntakeFarStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
@@ -36,7 +37,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
             crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
-    Path intakePath;
+    Path intakePath, intakeAfterFailed1Path;
     Path depositPath;
     Path parkPath;
 
@@ -202,9 +203,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
-        intakePath = new IntakeFarStack(4).build();
+        intakePath = new IntakeFarStack().build();
+        intakeAfterFailed1Path = new IntakeFarStack(1,2).build();
         depositPath = new DepositCenterCycle(2, 0).build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
+
+        intakeFailsafePath = new CenterIntakeFailsafe().build();
 
         crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(6, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-38, 12, 180).build();

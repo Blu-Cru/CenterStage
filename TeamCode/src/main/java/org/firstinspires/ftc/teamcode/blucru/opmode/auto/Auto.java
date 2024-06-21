@@ -38,6 +38,8 @@ public class Auto extends BCLinearOpMode {
                 telemetry.update();
                 config = AutoConfig.config();
                 config.build();
+                telemetry.addData("Initializing CV . . .", "");
+                telemetry.update();
                 Globals.setAutoStartPose();
                 if(Globals.side == Side.AUDIENCE) addPurplePixelHolder();
                 addCVMaster();

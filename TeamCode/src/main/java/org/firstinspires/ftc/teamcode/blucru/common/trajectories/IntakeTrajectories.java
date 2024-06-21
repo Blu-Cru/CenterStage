@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.IntakeWrist;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -38,7 +38,7 @@ public class IntakeTrajectories {
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> {
                     robot.outtake.retractLift();
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                 })
 
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
@@ -62,7 +62,7 @@ public class IntakeTrajectories {
     }
 
     public TrajectorySequence placePurpleIntakeFromWingCenter(Robot robot) {
-        Pose2d endPose = new Pose2d(Poses.STACK_X - IntakeWrist.RADIUS + IntakeWrist.toX(4), -12 * reflect, Math.toRadians(180*reflect));
+//        Pose2d endPose = new Pose2d(Poses.STACK_X - Dropdown.RADIUS + Dropdown.toX(4), -12 * reflect, Math.toRadians(180*reflect));
 
         return robot.drivetrain.trajectorySequenceBuilder(Poses.AUDIENCE_STARTING_POSE)
                 .setTangent(Math.toRadians(90 * reflect))
@@ -84,8 +84,8 @@ public class IntakeTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     robot.intake.dropToStack(3);
                 })
-                .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
-                .addTemporalMarker(() -> robot.drivetrain.pidTo(endPose))
+//                .splineToConstantHeading(endPose.vec(), Math.toRadians(130*reflect))
+//                .addTemporalMarker(() -> robot.drivetrain.pidTo(endPose))
                 .waitSeconds(5)
                 .build();
     }
@@ -102,7 +102,7 @@ public class IntakeTrajectories {
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> {
                     robot.outtake.retractLift();
-                    robot.intake.intakeWrist.dropToAutoMidPos();
+                    robot.intake.dropdown.dropToAutoMidPos();
                 })
 
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
@@ -121,7 +121,7 @@ public class IntakeTrajectories {
                     robot.intake.dropToGround();
                 })
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
-                .splineToConstantHeading(new Vector2d(Poses.calculateStackX(stackHeight), -12 * reflect), Math.toRadians(180 * reflect))
+//                .splineToConstantHeading(new Vector2d(Poses.calculateStackX(stackHeight), -12 * reflect), Math.toRadians(180 * reflect))
                 .waitSeconds(3)
                 .build();
     }

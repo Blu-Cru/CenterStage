@@ -18,7 +18,7 @@ public class DriveToPositionTest extends BCLinearOpMode {
 
     public void initialize() {
         addDrivetrain(true);
-        addIntakeWrist();
+        addDropdown();
         enableFTCDashboard();
 
         targetX = drivetrain.getPoseEstimate().getX();
