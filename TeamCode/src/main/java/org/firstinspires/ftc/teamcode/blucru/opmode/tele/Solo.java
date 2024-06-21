@@ -114,7 +114,7 @@ public class Solo extends BCLinearOpMode {
 
                 // retract wrist
                 if(outtake.turret.isCentered() && gamepad1.dpad_down && !lastDown1) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastDown1 = gamepad1.dpad_down;
@@ -155,7 +155,7 @@ public class Solo extends BCLinearOpMode {
 
                 // extend wrist
                 if(gamepad1.dpad_down && !lastDown1) {
-                    outtake.extendWrist();
+                    outtake.wristExtend();
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
@@ -179,7 +179,7 @@ public class Solo extends BCLinearOpMode {
 
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30 && !outtake.wristRetracted) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     retractWristTime = currentTime();
                 }
 

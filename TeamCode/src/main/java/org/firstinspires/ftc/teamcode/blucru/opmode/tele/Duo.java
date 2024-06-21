@@ -230,7 +230,7 @@ public class Duo extends BCLinearOpMode {
 
                 // retract wrist
                 if(outtake.turret.isCentered() && gamepad2.dpad_down && !lastDown2) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
                 lastDown2 = gamepad2.dpad_down;
@@ -250,7 +250,7 @@ public class Duo extends BCLinearOpMode {
                 // retract
                 if(gamepad2.a && !lastA2) {
                     retractTime = currentTime();
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     outtake.centerTurret();
                     outtake.incrementTargetHeight(1);
                     intake.startReadingColor();
@@ -280,7 +280,7 @@ public class Duo extends BCLinearOpMode {
 
                 // extend wrist
                 if(gamepad2.dpad_down && !lastDown2) {
-                    outtake.extendWrist();
+                    outtake.wristExtend();
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
@@ -311,7 +311,7 @@ public class Duo extends BCLinearOpMode {
             case RETRACTING:
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     outtake.lock();
                 }
 

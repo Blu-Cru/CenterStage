@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Lift;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -69,7 +68,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -118,7 +117,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -155,7 +154,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -189,7 +188,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -247,7 +246,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
                     robot.outtake.setTurretAngle(270 - 50 * reflect);
@@ -316,7 +315,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -395,7 +394,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -461,7 +460,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -526,7 +525,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -590,7 +589,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {
@@ -631,7 +630,7 @@ public class PreloadDeposits {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_TURN_TIME, () -> {

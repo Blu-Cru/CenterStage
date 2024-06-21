@@ -45,7 +45,7 @@ public class DepositTrajectories {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 // turn turret
                 .UNSTABLE_addTemporalMarkerOffset(TURN_TURRET_TIME, () -> {

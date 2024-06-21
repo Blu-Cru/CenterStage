@@ -34,7 +34,7 @@ public class IntakeTrajectories {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> {
                     robot.outtake.retractLift();
@@ -98,7 +98,7 @@ public class IntakeTrajectories {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> {
                     robot.outtake.retractLift();
@@ -133,7 +133,7 @@ public class IntakeTrajectories {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 

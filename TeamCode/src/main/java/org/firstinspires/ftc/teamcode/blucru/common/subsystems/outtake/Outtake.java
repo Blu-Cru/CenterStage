@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -178,16 +177,21 @@ public class Outtake implements Subsystem {
     }
 
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && !wristRetracted;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && wrist.state != Wrist.State.RETRACT;
     }
 
-    public void retractWrist() {
+    public void wristRetract() {
         wrist.retract();
     }
 
-    public void extendWrist() {
+    public void wristExtend() {
         timeWristExtended = System.currentTimeMillis();
         wrist.extend();
+    }
+
+    public void wristBackstage() {
+        timeWristExtended = System.currentTimeMillis();
+        wrist.backstage();
     }
 
     public Lift getLift() {

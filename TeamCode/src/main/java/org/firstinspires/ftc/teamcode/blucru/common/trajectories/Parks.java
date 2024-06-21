@@ -25,7 +25,7 @@ public class Parks {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
                 .splineToConstantHeading(Poses.PARK_CLOSE_POSE.vec(), Math.toRadians(-90 * reflect))
@@ -39,7 +39,7 @@ public class Parks {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
                 .splineToConstantHeading(Poses.PARK_FAR_POSE.vec(), Math.toRadians(90 * reflect))
@@ -51,7 +51,7 @@ public class Parks {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(TURRET_RETRACT_DELAY, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_DELAY, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_DELAY, () -> robot.outtake.retractLift())
 

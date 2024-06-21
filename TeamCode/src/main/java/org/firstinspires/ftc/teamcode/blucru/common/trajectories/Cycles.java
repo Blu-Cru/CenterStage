@@ -41,7 +41,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
@@ -85,7 +85,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 .setVelConstraint(Constraints.NORMAL_VEL)
                 .splineToConstantHeading(new Vector2d(Poses.DEPOSIT_X, Poses.DEPOSIT_FAR_Y * reflect), Math.toRadians(0))
@@ -106,7 +106,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
@@ -150,7 +150,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -172,7 +172,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
@@ -217,7 +217,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -238,7 +238,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
                 .splineToConstantHeading(new Vector2d(30, -12 * reflect), Math.toRadians(180))
@@ -284,7 +284,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -307,7 +307,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
@@ -354,7 +354,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
 
                 .setConstraints(Constraints.SLOW_VEL, Constraints.SLOW_ACCEL)
@@ -377,7 +377,7 @@ public class Cycles {
                 // retract turret
                 .UNSTABLE_addTemporalMarkerOffset(CENTER_TURRET_TIME, () -> robot.outtake.centerTurret())
                 // retract wrist
-                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.retractWrist())
+                .UNSTABLE_addTemporalMarkerOffset(WRIST_RETRACT_TIME, () -> robot.outtake.wristRetract())
                 // retract lift
                 .UNSTABLE_addTemporalMarkerOffset(LIFT_RETRACT_TIME, () -> robot.outtake.lift.setMotionProfileTargetPos(0))
 
@@ -424,7 +424,7 @@ public class Cycles {
                 })
                 // wrist back
                 .UNSTABLE_addTemporalMarkerOffset(WRIST_EXTEND_TIME, () -> {
-                    robot.outtake.extendWrist();
+                    robot.outtake.wristExtend();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(TURN_TURRET_TIME, () -> {
                     robot.outtake.setTurretAngle(270 + turretAngle * reflect);
