@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class BucketLimitSwitch implements Subsystem {
     DigitalChannel limitSwitch;
     boolean reading;
-    boolean isPressed;
+    public boolean isPressed;
 
     public BucketLimitSwitch(HardwareMap hardwareMap) {
         limitSwitch = hardwareMap.get(DigitalChannel.class, "bucket switch");
@@ -24,9 +24,7 @@ public class BucketLimitSwitch implements Subsystem {
 
     @Override
     public void read() {
-        if(reading) {
-            isPressed = !limitSwitch.getState();
-        }
+        isPressed = !limitSwitch.getState();
     }
 
     @Override

@@ -35,6 +35,7 @@ public class Outtake implements Subsystem {
     public Lift lift;
     public Lock lock;
     public Turret turret;
+    BucketLimitSwitch limitSwitch;
 
     State state;
     State stateBeforeManual;
@@ -55,6 +56,7 @@ public class Outtake implements Subsystem {
         lift = new Lift(hardwareMap);
         lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
+        limitSwitch = new BucketLimitSwitch(hardwareMap);
 
         state = State.RETRACT;
 
@@ -68,6 +70,7 @@ public class Outtake implements Subsystem {
         lift.init();
         lock.init();
         turret.init();
+        limitSwitch.init();
         wrist.setPosition(WRIST_RETRACT);
     }
 
@@ -86,6 +89,7 @@ public class Outtake implements Subsystem {
         lift.read();
         lock.read();
         turret.read();
+        limitSwitch.read();
     }
 
     public void write() {
@@ -96,6 +100,7 @@ public class Outtake implements Subsystem {
         lift.write();
         lock.write();
         turret.write();
+        limitSwitch.write();
 
         // write wrist position
         if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
@@ -199,6 +204,10 @@ public class Outtake implements Subsystem {
     public void extendWrist() {
         timeWristExtended = System.currentTimeMillis();
         wristRetracted = false;
+    }
+
+    public boolean limitSwitchPressed() {
+        return limitSwitch.isPressed();
     }
 
     public Lift getLift() {

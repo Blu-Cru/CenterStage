@@ -48,7 +48,7 @@ public class Auto extends BCLinearOpMode {
             .state(State.DETECTION)
             .loop(() -> {
                 propPosition = cvMaster.propDetector.position;
-                telemetry.addLine("Left stick button to go back to config");
+                telemetry.addLine("Left stick button: back to config");
                 cvMaster.propDetector.telemetry(telemetry);
                 Globals.autoConfigStatus(telemetry);
             })
