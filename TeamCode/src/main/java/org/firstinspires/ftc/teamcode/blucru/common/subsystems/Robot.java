@@ -38,8 +38,6 @@ public class Robot {
     public CVMaster cvMaster;
     public Blinkin blinkin;
 
-    public boolean intakingInAuto = false;
-
     // list of all subsystems
     ArrayList<Subsystem> subsystems;
 
@@ -173,8 +171,6 @@ public class Robot {
         for(Subsystem subsystem : subsystems) {
             subsystem.telemetry(telemetry);
         }
-
-        telemetry.addData("intaking in auto: ", intakingInAuto);
     }
 
     // call this after every op mode

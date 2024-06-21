@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Lift implements Subsystem {
     public static double
             kP = 0.0031, kI = 0, kD = 0.0001, kF = 0.03, // PID values
-            kFprop = 0.000001, // proportional feedfowrad/?/??/
+            kFprop = 0.000001, // not used
 
             stallCurrent = 20, resetCurrent = 1, // amps
 
