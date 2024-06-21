@@ -23,7 +23,7 @@ public class Dropdown implements Subsystem {
 
             PIXEL_HEIGHT = 12.7,
             STACK_1_HEIGHT = 40,
-            RETRACT_HEIGHT = 100,
+            RETRACT_HEIGHT = 130,
 
             GROUND_HEIGHT = 10;
 
