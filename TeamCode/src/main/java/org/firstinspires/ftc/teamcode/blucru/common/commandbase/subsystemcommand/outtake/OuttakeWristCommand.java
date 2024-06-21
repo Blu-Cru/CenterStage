@@ -8,8 +8,8 @@ public class OuttakeWristCommand extends InstantCommand {
     public OuttakeWristCommand(boolean retracted) {
         super(
                 () -> {
-                    if(retracted) Robot.getInstance().outtake.retractWrist();
-                    else Robot.getInstance().outtake.extendWrist();
+                    if(retracted) Robot.getInstance().outtake.wristRetract();
+                    else Robot.getInstance().outtake.wristExtend();
                 }
         );
     }

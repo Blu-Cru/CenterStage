@@ -197,7 +197,7 @@ public class Duo extends BCLinearOpMode {
                 break;
             case LIFTING:
                 if(outtake.liftWristClear()) {
-                    outtake.wristRetracted = false;
+                    outtake.wristExtend();
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
@@ -221,13 +221,13 @@ public class Duo extends BCLinearOpMode {
                 break;
             case OUTTAKING:
                 // TURRET CONTROL
-                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted && Math.abs(gamepad2.right_stick_x) > 0.05) {
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted() && Math.abs(gamepad2.right_stick_x) > 0.05) {
                     outtake.teleOpTurnTurret(gamepad2.right_stick_x);
                 } else outtake.setTurretAngle(270);
 
                 // retract wrist
                 if(outtake.turret.isCentered() && stickyG2.dpad_down) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     robotState = RobotState.OUTTAKE_WRIST_RETRACTED;
                 }
 
@@ -246,7 +246,7 @@ public class Duo extends BCLinearOpMode {
                 // retract
                 if(stickyG2.a) {
                     retractTime = currentTime();
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     outtake.centerTurret();
                     outtake.incrementTargetHeight(1);
                     intake.startReadingColor();
@@ -273,7 +273,7 @@ public class Duo extends BCLinearOpMode {
 
                 // extend wrist
                 if(stickyG2.dpad_down) {
-                    outtake.extendWrist();
+                    outtake.wristExtend();
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
@@ -305,7 +305,7 @@ public class Duo extends BCLinearOpMode {
             case RETRACTING:
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY) {
-                    outtake.retractWrist();
+                    outtake.wristRetract();
                     outtake.lock();
                 }
 

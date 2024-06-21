@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -31,7 +30,7 @@ public class Outtake implements Subsystem {
         MANUAL
     }
 
-    Servo wrist;
+    Wrist wrist;
     public Lift lift;
     public Lock lock;
     public Turret turret;
@@ -40,7 +39,6 @@ public class Outtake implements Subsystem {
     State state;
     State stateBeforeManual;
 
-    public boolean wristRetracted;
     boolean turretIsIVK = false;
 
     public double targetHeight; // inches
@@ -51,8 +49,7 @@ public class Outtake implements Subsystem {
     double timeWristExtended;
 
     public Outtake(HardwareMap hardwareMap) {
-        wrist = hardwareMap.get(Servo.class, "wrist");
-
+        wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap);
         lock = new Lock(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -60,7 +57,6 @@ public class Outtake implements Subsystem {
 
         state = State.RETRACT;
 
-        wristRetracted = true;
         dunkHeight = 0;
         turretGlobalY = 0;
     }
@@ -71,7 +67,7 @@ public class Outtake implements Subsystem {
         lock.init();
         turret.init();
         limitSwitch.init();
-        wrist.setPosition(WRIST_RETRACT);
+        wrist.init();
     }
 
     public void read() {
@@ -101,10 +97,7 @@ public class Outtake implements Subsystem {
         lock.write();
         turret.write();
         limitSwitch.write();
-
-        // write wrist position
-        if(wristRetracted && wrist.getPosition() != WRIST_RETRACT) wrist.setPosition(WRIST_RETRACT);
-        else if(!wristRetracted && wrist.getPosition() != WRIST_OUTTAKE) wrist.setPosition(WRIST_OUTTAKE);
+        wrist.write();
     }
 
     public void setManualSlidePower(double power) {
@@ -189,21 +182,26 @@ public class Outtake implements Subsystem {
         return turret.getAngle();
     }
 
-    public void toggleWrist() {
-        wristRetracted = !wristRetracted;
-    }
-
     public boolean turretSafe() {
-        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && !wristRetracted;
+        return state == State.OUTTAKE && System.currentTimeMillis() - timeWristExtended > 300 && wrist.state != Wrist.State.RETRACT;
     }
 
-    public void retractWrist() {
-        wristRetracted = true;
+    public boolean wristRetracted() {
+        return wrist.state == Wrist.State.RETRACT;
     }
 
-    public void extendWrist() {
+    public void wristRetract() {
+        wrist.retract();
+    }
+
+    public void wristExtend() {
         timeWristExtended = System.currentTimeMillis();
-        wristRetracted = false;
+        wrist.extend();
+    }
+
+    public void wristBackstage() {
+        timeWristExtended = System.currentTimeMillis();
+        wrist.backstage();
     }
 
     public boolean limitSwitchPressed() {
@@ -248,7 +246,8 @@ public class Outtake implements Subsystem {
         lift.telemetry(telemetry);
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
-        telemetry.addData("wrist retracted", wristRetracted);
+        wrist.telemetry(telemetry);
+        telemetry.addData("outtake state:", state);
         telemetry.addData("target height", targetHeight);
         telemetry.addData("dunk height", dunkHeight);
         telemetry.addData("turret is IVK", turretIsIVK);
@@ -256,7 +255,5 @@ public class Outtake implements Subsystem {
 
     public void testTelemetry(Telemetry telemetry) {
         lift.testTelemetry(telemetry);
-        telemetry.addData("wrist pos", wrist.getPosition());
-        telemetry.addData("turret safe", turretSafe());
     }
 }
