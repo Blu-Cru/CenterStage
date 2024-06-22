@@ -22,10 +22,12 @@ public class Dropdown implements Subsystem {
             THETA3 = Math.atan(P3tangential/P3axial),
 
             PIXEL_HEIGHT = 12.7,
-            STACK_1_HEIGHT = 40,
+            STACK_1_HEIGHT = 27,
             RETRACT_HEIGHT = 130,
 
-            GROUND_HEIGHT = 10;
+            AUTO_MID_HEIGHT = 110,
+
+            GROUND_HEIGHT = 20;
 
     static Point2d P1 = new Point2d(79.95, 50);
 
@@ -33,7 +35,7 @@ public class Dropdown implements Subsystem {
     private double position;
 
     public Dropdown(HardwareMap hardwareMap) {
-        wrist = hardwareMap.get(Servo.class, "intake wrist");
+        wrist = hardwareMap.get(Servo.class, "dropdown");
         wrist.setDirection(Servo.Direction.REVERSE);
         position = VERTICAL_POS;
     }
@@ -43,7 +45,8 @@ public class Dropdown implements Subsystem {
     }
 
     public void init() {
-
+        setTargetHeight(DROPDOWN_LENGTH);
+        wrist.setPosition(position);
     }
 
     public void read() {
@@ -89,15 +92,17 @@ public class Dropdown implements Subsystem {
         }
     }
 
-    public void dropToGround() {}
-
-    public void dropToPurpleHeight() {}
+    public void dropToGround() {
+        dropToStack(0);
+    }
 
     public void retract() {
         setTargetHeight(RETRACT_HEIGHT);
     }
 
-    public void dropToAutoMidPos() {}
+    public void dropToAutoMidPos() {
+        setTargetHeight(AUTO_MID_HEIGHT);
+    }
 
     private double toTicks(double angle) {
         double rawTicks = ((angle - Math.PI/2) / Math.toRadians(270)) + VERTICAL_POS;

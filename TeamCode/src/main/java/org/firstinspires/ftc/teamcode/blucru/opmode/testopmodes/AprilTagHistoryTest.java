@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
-@TeleOp(name = "april tag history", group = "test")
+@TeleOp(name = "April tag history test", group = "test")
 public class AprilTagHistoryTest extends BCLinearOpMode {
     private enum State {
         IDLE,

@@ -201,7 +201,7 @@ public class CHSAuto extends LinearOpMode {
             // stop
             if(runtime.seconds() > 29.3) {
                 autoState = AutoState.STOP;
-                robot.outtake.retractWrist();
+//                robot.outtake.retractWrist();
             }
 
             robot.write();

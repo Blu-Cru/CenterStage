@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -61,7 +62,7 @@ public class Lift implements Subsystem {
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
+        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         state = State.PID;
 

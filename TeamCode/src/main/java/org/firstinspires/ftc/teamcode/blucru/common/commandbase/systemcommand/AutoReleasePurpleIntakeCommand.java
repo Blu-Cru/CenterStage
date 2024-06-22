@@ -12,8 +12,8 @@ public class AutoReleasePurpleIntakeCommand extends SequentialCommandGroup {
         super(
                 new DropdownPartialRetractCommand(),
                 new WaitCommand((long) waitMillis),
-                new IntakePowerCommand(Globals.correctPower(-0.45)),
-                new WaitCommand(1000),
+                new IntakePowerCommand(Globals.correctPower(-0.8)),
+                new WaitCommand(120),
                 new IntakeStopCommand()
         );
     }

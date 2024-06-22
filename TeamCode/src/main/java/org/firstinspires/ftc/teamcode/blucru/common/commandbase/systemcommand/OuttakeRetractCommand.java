@@ -30,7 +30,7 @@ public class OuttakeRetractCommand extends SequentialCommandGroup {
                                 new LiftRetractCommand(),
                                 new LockResetCommand()
                         ),
-                        () -> Robot.getInstance().outtake.wristRetracted
+                        () -> Robot.getInstance().outtake.wristRetracted()
                 )
         );
     }

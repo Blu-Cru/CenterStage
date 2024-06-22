@@ -26,7 +26,7 @@ public class Lock implements Subsystem {
     double lockPos;
 
     public Lock(HardwareMap hardwareMap) {
-        lock = hardwareMap.get(ServoImplEx.class, "front lock");
+        lock = hardwareMap.get(ServoImplEx.class, "lock");
         lock.setPwmRange(new PwmControl.PwmRange(500, 2500)); // make the range its max range of 300 degrees
 
         lockState = LockState.LOCKED_FRONT;

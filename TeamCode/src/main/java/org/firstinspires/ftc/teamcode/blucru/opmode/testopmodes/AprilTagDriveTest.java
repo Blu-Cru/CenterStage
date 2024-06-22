@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.locali
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @Disabled
-@TeleOp(name = "april tag drive test", group = "test")
+@TeleOp(name = "April tag drive test", group = "test")
 public class AprilTagDriveTest extends BCLinearOpMode {
     private enum State {
         DRIVER_CONTROL,

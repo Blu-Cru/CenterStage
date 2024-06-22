@@ -27,7 +27,7 @@ public class FusedLocalizer {
     double lastTagUpdateMillis;
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP));
 
     double headingOffset = 0;
     double lastImuUpdateMillis = 0;

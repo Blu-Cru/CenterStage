@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
@@ -7,7 +8,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Disabled
 @TeleOp(name = "Solo", group = "2")
+// this doesnt wrok
 public class Solo extends BCLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double REVERSE_INTAKE_TIME = 1000;
@@ -84,7 +87,7 @@ public class Solo extends BCLinearOpMode {
                 intake.setIntakePower(0);
 
                 if(outtake.liftWristClear()) {
-                    outtake.wristRetracted = false;
+//                    outtake.wristRetracted = false;
                     robotState = RobotState.OUTTAKING;
                     outtakeTime = currentTime();
                 }
@@ -106,7 +109,7 @@ public class Solo extends BCLinearOpMode {
                 break;
             case OUTTAKING:
                 // TURRET CONTROL
-                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY && !outtake.wristRetracted) {
+                if(timeSince(outtakeTime) > OUTTAKE_TURN_TURRET_DELAY) {
                     if (gamepad1.left_trigger > 0.1) outtake.setTurretAngle(-gamepad1.left_trigger * 60 + 270);
                     else if (gamepad1.right_trigger > 0.1) outtake.setTurretAngle(gamepad1.right_trigger * 60 + 270);
                     else outtake.centerTurret();
@@ -178,7 +181,7 @@ public class Solo extends BCLinearOpMode {
                 intake.setIntakePower(0);
 
                 // retract wrist
-                if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30 && !outtake.wristRetracted) {
+                if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30) {
                     outtake.wristRetract();
                     retractWristTime = currentTime();
                 }

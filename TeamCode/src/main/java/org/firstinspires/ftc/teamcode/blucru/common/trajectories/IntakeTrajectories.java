@@ -50,7 +50,6 @@ public class IntakeTrajectories {
                     robot.intake.dropToStack(stackHeight);
                     robot.intake.intake();
                     robot.outtake.unlock();
-                    robot.intakingInAuto = true;
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.8, () -> {
                     robot.intake.dropToGround();
@@ -78,7 +77,6 @@ public class IntakeTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     robot.outtake.unlock();
                     robot.intake.intake();
-                    robot.intakingInAuto = true;
                     robot.intake.dropToStack(4);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
@@ -112,7 +110,6 @@ public class IntakeTrajectories {
                     robot.intake.dropToStack(stackHeight + 1);
                     robot.intake.intake();
                     robot.outtake.unlock();
-                    robot.intakingInAuto = true;
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.dropToStack(stackHeight);

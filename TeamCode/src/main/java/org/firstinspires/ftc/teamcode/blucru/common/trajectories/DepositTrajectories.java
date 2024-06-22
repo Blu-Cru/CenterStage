@@ -23,7 +23,6 @@ public class DepositTrajectories {
                 .setTangent(0)
                 .setConstraints(Constraints.FAST_VEL, Constraints.FAST_ACCEL)
                 .addTemporalMarker(() -> {
-                    robot.intakingInAuto = false;
                     robot.intake.stopReadingColor();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {

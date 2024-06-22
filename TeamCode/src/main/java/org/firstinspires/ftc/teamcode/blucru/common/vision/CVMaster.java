@@ -58,7 +58,7 @@ public class CVMaster implements Subsystem {
                 .build();
 
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(propDetector)
