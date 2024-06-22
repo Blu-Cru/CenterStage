@@ -11,7 +11,7 @@ public class LimitSwitchTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        limitSwitch = hardwareMap.get(DigitalChannelImpl.class, "limit switch");
+        limitSwitch = hardwareMap.get(DigitalChannelImpl.class, "bucket switch");
 //        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
 
         waitForStart();
