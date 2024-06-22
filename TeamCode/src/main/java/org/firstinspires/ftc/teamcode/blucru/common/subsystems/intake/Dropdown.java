@@ -87,7 +87,7 @@ public class Dropdown implements Subsystem {
             return GROUND_HEIGHT;
         }
         else {
-            stackHeight = Range.clip(stackHeight, 1, 4);
+            stackHeight = Range.clip(stackHeight, 1, 5);
             return STACK_1_HEIGHT + PIXEL_HEIGHT * (stackHeight-1);
         }
     }

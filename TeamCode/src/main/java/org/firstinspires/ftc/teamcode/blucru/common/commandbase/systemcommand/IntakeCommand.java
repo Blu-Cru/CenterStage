@@ -16,4 +16,8 @@ public class IntakeCommand extends SequentialCommandGroup {
                 )
         );
     }
+
+    public IntakeCommand(int stackHeight) {
+        this(stackHeight, 1);
+    }
 }

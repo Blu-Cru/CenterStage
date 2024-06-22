@@ -9,26 +9,29 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
+import java.lang.annotation.IncompleteAnnotationException;
+
 public class IntakeFarStack extends PIDPathBuilder {
-    public IntakeFarStack(double xIncrement, double yIncrement) {
+    public IntakeFarStack(int stackHeight, double xIncrement, double yIncrement) {
         super();
         this.setPower(0.5)
-                .schedule(new IntakeCommand(Globals.stackCenterPixels, 1))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 10, 180, 2)
-                .waitMillis(400)
+                .schedule(new IntakeCommand(stackHeight, 1))
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 2)
+                .schedule(new SequentialCommandGroup(
+                        new WaitCommand(300),
+                        new IntakeCommand(stackHeight-1)
+                ))
+                .waitMillis(800)
                 .setPower(0.35)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
-                        new DropdownCommand(Globals.stackCenterPixels-1),
-                        new WaitCommand(400),
-                        new DropdownCommand(0)
-                    )
-                )
+                        new IntakeCommand(0)
+                ))
                 .addMappedPoint(Field.INTAKE_X, 20 + yIncrement, 160, 2.5)
-                .waitMillis(700);
+                .waitMillis(400);
     }
 
     public IntakeFarStack() {
-        this(0, 0);
+        this(Globals.stackCenterPixels, 0, 0);
     }
 }
