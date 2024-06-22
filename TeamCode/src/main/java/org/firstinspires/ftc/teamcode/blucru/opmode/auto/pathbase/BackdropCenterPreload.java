@@ -15,9 +15,6 @@ public class BackdropCenterPreload extends PIDPathBuilder {
         super();
         this.setPower(0.8)
                 .addMappedPoint(24, 48, 120, 6)
-                .schedule(
-                        new AutoReleasePurpleIntakeCommand(600)
-                )
                 .addMappedPoint(28, 30,190)
 
                 .schedule(

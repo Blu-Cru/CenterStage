@@ -12,23 +12,27 @@ public class CenterIntakeStack extends PIDPathBuilder {
     public CenterIntakeStack(int stackHeight, double xIncrement, double yIncrement) {
         super();
         this.setPower(0.5)
-                .schedule(new IntakeCommand(stackHeight, 1))
+//                .schedule(new IntakeCommand(stackHeight, 1))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 2)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
-                        new IntakeCommand(stackHeight-1)
-                ))
+//                .schedule(new SequentialCommandGroup(
+//                        new WaitCommand(300),
+//                        new IntakeCommand(stackHeight-1)
+//                ))
                 .waitMillis(800)
                 .setPower(0.35)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
-                        new IntakeCommand(0)
-                ))
+//                .schedule(new SequentialCommandGroup(
+//                        new WaitCommand(300),
+//                        new IntakeCommand(0)
+//                ))
                 .addMappedPoint(Field.INTAKE_X, 20 + yIncrement, 160, 2.5)
                 .waitMillis(400);
     }
 
     public CenterIntakeStack() {
         this(Globals.stackCenterPixels, 0, 0);
+    }
+
+    public CenterIntakeStack(double xIncrement, double yIncrement) {
+        this(Globals.stackCenterPixels, xIncrement, yIncrement);
     }
 }

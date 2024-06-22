@@ -23,7 +23,7 @@ public class Hanger implements Subsystem {
     public int targetPos;
 
     public Hanger(HardwareMap hardwareMap) {
-        hangerMotor = hardwareMap.get(DcMotorEx.class, "hanger");
+        hangerMotor = hardwareMap.get(DcMotorEx.class, "hang");
 
         hangerMotor.setDirection(DcMotorEx.Direction.REVERSE);
     }
