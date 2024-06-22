@@ -66,11 +66,11 @@ public class Lock implements Subsystem {
     }
 
     public void unlockAll() {
-        if(lockState == LockState.LOCKED_BACK || lockState == LockState.PUSH) {
-            lockState = LockState.PUSH;
-        } else {
+//        if(lockState == LockState.LOCKED_BACK || lockState == LockState.PUSH) {
+//            lockState = LockState.PUSH;
+//        } else {
             lockState = LockState.UNLOCKED;
-        }
+//        }
     }
 
     public void lockFront() {
