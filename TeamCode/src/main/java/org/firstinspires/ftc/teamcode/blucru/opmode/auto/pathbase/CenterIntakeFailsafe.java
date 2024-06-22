@@ -16,10 +16,6 @@ public class CenterIntakeFailsafe extends PIDPathBuilder {
                         new WaitCommand(200),
                         new IntakeStopCommand()
                 ))
-                .addMappedPoint(-52, 12, 180,4)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(200),
-                        new IntakeCommand(Globals.stackCenterPixels, 1)
-                ));
+                .addMappedPoint(-45, 12, 180,4);
     }
 }

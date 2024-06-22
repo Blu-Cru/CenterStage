@@ -16,12 +16,9 @@ public class BackdropFarPreload extends PIDPathBuilder {
         super();
         this.setPower(0.7)
                 .addPoint(Globals.mapPose(14, 45, 120), 8, false)
-                .schedule(
-                        new AutoReleasePurpleIntakeCommand(300)
-
-                )
-                .addPoint(Globals.mapPose(10, 39, 180), false)
+                .addPoint(Globals.mapPose(10, 39, 180))
                 .setPower(0.35)
+                .schedule(new AutoReleasePurpleIntakeCommand())
                 .waitMillis(300)
                 .schedule(
                         new SequentialCommandGroup(

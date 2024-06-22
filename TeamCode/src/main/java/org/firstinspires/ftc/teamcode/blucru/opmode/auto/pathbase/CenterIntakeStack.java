@@ -3,16 +3,13 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-import java.lang.annotation.IncompleteAnnotationException;
-
-public class IntakeFarStack extends PIDPathBuilder {
-    public IntakeFarStack(int stackHeight, double xIncrement, double yIncrement) {
+public class CenterIntakeStack extends PIDPathBuilder {
+    public CenterIntakeStack(int stackHeight, double xIncrement, double yIncrement) {
         super();
         this.setPower(0.5)
                 .schedule(new IntakeCommand(stackHeight, 1))
@@ -31,7 +28,7 @@ public class IntakeFarStack extends PIDPathBuilder {
                 .waitMillis(400);
     }
 
-    public IntakeFarStack() {
+    public CenterIntakeStack() {
         this(Globals.stackCenterPixels, 0, 0);
     }
 }

@@ -17,4 +17,8 @@ public class AutoReleasePurpleIntakeCommand extends SequentialCommandGroup {
                 new IntakeStopCommand()
         );
     }
+
+    public AutoReleasePurpleIntakeCommand() {
+        this(0);
+    }
 }

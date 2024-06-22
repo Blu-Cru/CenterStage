@@ -22,6 +22,7 @@ public class BackdropCenterPreload extends PIDPathBuilder {
 
                 .schedule(
                         new SequentialCommandGroup(
+                                new AutoReleasePurpleIntakeCommand(),
                                 new WaitCommand(250),
                                 new OuttakeExtendCommand(-1),
                                 new TurretGlobalYCommand(36)
