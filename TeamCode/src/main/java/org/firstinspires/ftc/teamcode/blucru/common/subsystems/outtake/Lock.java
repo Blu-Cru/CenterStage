@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 public class Lock implements Subsystem {
     public static double
-            FLAT = 0.1,
-            LOCKED_FRONT = FLAT - toTicks(20),
+            FLAT = 0.5,
+            LOCKED_FRONT = FLAT - toTicks(40),
             LOCK_BACK_POS = FLAT + toTicks(20),
             PUSH_POS = FLAT + toTicks(150);
 
@@ -54,6 +54,7 @@ public class Lock implements Subsystem {
                 break;
             case PUSH:
                 lockPos = PUSH_POS;
+                break;
         }
 
         if(lock.getPosition() != lockPos) {

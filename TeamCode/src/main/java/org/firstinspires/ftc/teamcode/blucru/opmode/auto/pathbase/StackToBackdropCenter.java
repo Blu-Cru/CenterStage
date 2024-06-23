@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 public class StackToBackdropCenter extends PIDPathBuilder {
     public StackToBackdropCenter() {
         super();
-        this.setPower(0.7)
+        this.setPower(0.5)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(100),
                         new IntakeStopCommand()

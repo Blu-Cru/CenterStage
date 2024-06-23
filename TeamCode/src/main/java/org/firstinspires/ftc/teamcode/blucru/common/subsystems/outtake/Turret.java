@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
 public class Turret implements Subsystem {
-    // TODO: make inverse kinematics for turret in autonomous
     enum State {
         IDLE,
         IVK
@@ -21,7 +20,7 @@ public class Turret implements Subsystem {
             BUCKET_LENGTH = 5.984,
             BUCKET_WIDTH = 1.733, // inches
             BUCKET_HYPOTENUSE = Math.sqrt(BUCKET_LENGTH * BUCKET_LENGTH + BUCKET_WIDTH * BUCKET_WIDTH);
-    public static double TURRET_CENTER = 0.485, // ticks of turret servo at 270 degrees, pointing straight down/forward
+    public static double TURRET_CENTER = 0.57, // ticks of turret servo at 270 degrees, pointing straight down/forward
             MAX_TURRET_X = 5.3; // inches
 
     Servo turretServo;

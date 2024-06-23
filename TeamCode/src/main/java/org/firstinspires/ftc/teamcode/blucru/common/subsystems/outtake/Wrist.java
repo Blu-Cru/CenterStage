@@ -15,9 +15,9 @@ public class Wrist implements Subsystem {
         BACKSTAGE
     }
 
-    public static double WRIST_RETRACT = 0.68,
-            WRIST_OUTTAKE = WRIST_RETRACT - 0.35,
-            WRIST_BACKSTAGE = WRIST_RETRACT - 0.5;
+    public static double WRIST_RETRACT = 0.31,
+            WRIST_OUTTAKE = WRIST_RETRACT + 0.44,
+            WRIST_BACKSTAGE = WRIST_RETRACT + 0.6;
 
     Servo wrist;
     State state;

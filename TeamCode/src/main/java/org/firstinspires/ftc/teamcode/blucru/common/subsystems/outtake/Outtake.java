@@ -247,6 +247,7 @@ public class Outtake implements Subsystem {
         lock.telemetry(telemetry);
         turret.telemetry(telemetry);
         wrist.telemetry(telemetry);
+        limitSwitch.telemetry(telemetry);
         telemetry.addData("outtake state:", state);
         telemetry.addData("target height", targetHeight);
         telemetry.addData("dunk height", dunkHeight);
