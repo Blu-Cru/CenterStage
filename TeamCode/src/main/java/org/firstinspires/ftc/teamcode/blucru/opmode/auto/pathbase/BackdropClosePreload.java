@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Au
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 
 public class BackdropClosePreload extends PIDPathBuilder {
     public BackdropClosePreload() {
@@ -27,12 +28,12 @@ public class BackdropClosePreload extends PIDPathBuilder {
                 )
                 .waitMillis(200)
                 .setPower(0.35)
-                .addMappedPoint(48.5, 40, 180, 2.5)
+                .addMappedPoint(Field.DEPOSIT_X, 40, 180, 2.5)
                 .schedule(
                         new SequentialCommandGroup(
-                                new WaitCommand(100),
+                                new WaitCommand(250),
                                 new LockReleaseCommand(2),
-                                new WaitCommand(700),
+                                new WaitCommand(300),
                                 new OuttakeRetractCommand(2)
                         )
                 )

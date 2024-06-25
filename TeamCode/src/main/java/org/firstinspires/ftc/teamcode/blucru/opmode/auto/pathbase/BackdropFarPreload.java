@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Au
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class BackdropFarPreload extends PIDPathBuilder {
@@ -27,12 +28,12 @@ public class BackdropFarPreload extends PIDPathBuilder {
                                 new TurretGlobalYCommand(30)
                         )
                 )
-                .addPoint(Globals.mapPose(48.5, 32, 180), 2.5)
+                .addPoint(Globals.mapPose(Field.DEPOSIT_X, 32, 180), 2.5)
                 .schedule(
                         new SequentialCommandGroup(
-                                new WaitCommand(100),
+                                new WaitCommand(250),
                                 new LockReleaseCommand(2),
-                                new WaitCommand(700),
+                                new WaitCommand(300),
                                 new OuttakeRetractCommand(2)
                         )
                 )
