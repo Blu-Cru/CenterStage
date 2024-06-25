@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
@@ -12,8 +14,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.In
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 //@Disabled
+@Config
 @TeleOp(name = "Command test", group = "test")
 public class CommandTest extends BCLinearOpMode {
+    public static double intakeTime = 150;
     boolean lastA = false,
             lastB = false,
             lastY = false,
@@ -34,7 +38,7 @@ public class CommandTest extends BCLinearOpMode {
             drivetrain.resetHeading(Math.toRadians(90));
         }
         if(gamepad1.a && !lastA) {
-            CommandScheduler.getInstance().schedule(new IntakeCommand(0, 1));
+            new AutoReleasePurpleIntakeCommand(300, (long) intakeTime).schedule();
         }
         lastA = gamepad1.a;
 

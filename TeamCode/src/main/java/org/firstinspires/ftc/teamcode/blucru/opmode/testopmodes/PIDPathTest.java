@@ -17,8 +17,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropClosePreload;
 
 @TeleOp(name = "PID Path test", group = "2")
 public class PIDPathTest extends BCLinearOpMode {
@@ -35,8 +37,8 @@ public class PIDPathTest extends BCLinearOpMode {
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.RESETTING)
             .transition(() -> stickyG1.b, State.FOLLOWING_PID, () -> {
-                drivetrain.setPoseEstimate(Poses.AUDIENCE_STARTING_POSE);
-                drivetrain.resetHeading(Poses.AUDIENCE_STARTING_POSE.getHeading());
+                drivetrain.setPoseEstimate(Globals.startPose);
+                drivetrain.resetHeading(Globals.startPose.getHeading());
                 pidPath.start();
                 pidStartTime = System.currentTimeMillis();
             })
@@ -60,7 +62,7 @@ public class PIDPathTest extends BCLinearOpMode {
                     pidPath.run();
                 } catch (Exception e) {}
 
-//                drivetrain.updateAprilTags(cvMaster.tagDetector);
+                drivetrain.updateAprilTags(cvMaster.tagDetector);
             })
             .build();
 
@@ -73,27 +75,9 @@ public class PIDPathTest extends BCLinearOpMode {
         addCVMaster();
         addPurplePixelHolder();
         Globals.setAlliance(Alliance.BLUE);
+        Globals.side = Side.BACKDROP;
 
-        pidPath = new PIDPathBuilder()
-                .setPower(0.45)
-                .addMappedPoint(-55, 42, 150,6)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(400),
-                        new PurplePixelRetractCommand(),
-                        new DropdownPartialRetractCommand()
-                ))
-                .waitMillis(350)
-                .schedule(new IntakeCommand(4, 1))
-                .addMappedPoint(-58, 30, 200, 3)
-                .addMappedPoint(Field.INTAKE_X, 24, 180, 3)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
-                        new DropdownCommand(3),
-                        new WaitCommand(400),
-                        new DropdownCommand(0)
-                ))
-                .waitMillis(1000)
-                .build();
+        pidPath = new BackdropClosePreload().build();
 
         stateMachine.setState(State.RESETTING);
         stateMachine.start();

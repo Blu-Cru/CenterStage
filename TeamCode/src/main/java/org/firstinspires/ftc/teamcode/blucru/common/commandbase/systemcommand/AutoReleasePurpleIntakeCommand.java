@@ -8,14 +8,18 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class AutoReleasePurpleIntakeCommand extends SequentialCommandGroup {
-    public AutoReleasePurpleIntakeCommand(double waitMillis) {
+    public AutoReleasePurpleIntakeCommand(double waitMillis, long outtakeTime) {
         super(
                 new DropdownPartialRetractCommand(),
                 new WaitCommand((long) waitMillis),
                 new IntakePowerCommand(Globals.correctPower(-0.8)),
-                new WaitCommand(120),
-                new IntakeStopCommand()
+                new WaitCommand(outtakeTime),
+                new IntakePowerCommand(0)
         );
+    }
+
+    public AutoReleasePurpleIntakeCommand(double waitMillis) {
+        this(waitMillis, 200);
     }
 
     public AutoReleasePurpleIntakeCommand() {
