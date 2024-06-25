@@ -26,13 +26,13 @@ public class DepositTrajectories {
                     robot.intake.stopReadingColor();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
-                    robot.intake.setIntakePower(-1);
+                    robot.intake.setPower(-1);
                     robot.intake.dropdown.dropToAutoMidPos();
                     robot.outtake.lock();
                 })
 
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .splineToConstantHeading(new Vector2d(20, -12 * reflect), Math.toRadians(0))

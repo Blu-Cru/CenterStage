@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.common.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -53,7 +52,7 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
@@ -64,11 +63,11 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.dropdown.dropToAutoMidPos();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                 })
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
 
@@ -118,7 +117,7 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
@@ -129,11 +128,11 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.dropdown.dropToAutoMidPos();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                 })
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
 
@@ -185,7 +184,7 @@ public class Cycles {
                 // start and lower intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
                     robot.intake.dropToStack(stackHeight);
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
 
                 .setConstraints(Constraints.NORMAL_VEL, Constraints.NORMAL_ACCEL)
@@ -196,11 +195,11 @@ public class Cycles {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.outtake.lock();
                     robot.intake.dropdown.dropToAutoMidPos();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                 })
                 // stop outtaking and retract wrist
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
 
@@ -250,7 +249,7 @@ public class Cycles {
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
                 // drop intake
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.dropToStack(stackHeight))
@@ -263,11 +262,11 @@ public class Cycles {
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                     robot.intake.dropdown.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .waitSeconds(INTAKE_2_TIME)
@@ -320,7 +319,7 @@ public class Cycles {
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
                 // drop intake
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.dropToStack(stackHeight))
@@ -333,11 +332,11 @@ public class Cycles {
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                     robot.intake.dropdown.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .waitSeconds(INTAKE_2_TIME)
@@ -390,7 +389,7 @@ public class Cycles {
                 })
                 // start intake
                 .UNSTABLE_addTemporalMarkerOffset(START_INTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(1);
+                    robot.intake.setPower(1);
                 })
                 // drop intake
                 .UNSTABLE_addTemporalMarkerOffset(DROP_INTAKE_1_TIME, () -> robot.intake.dropToStack(stackHeight))
@@ -404,11 +403,11 @@ public class Cycles {
                 .lineTo(new Vector2d(Poses.STACK_SETUP_X, -12 * reflect))
                 .UNSTABLE_addTemporalMarkerOffset(LOCK_TIME, () -> {
                     robot.outtake.lock();
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.setPower(-0.7);
                     robot.intake.dropdown.dropToAutoMidPos();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(STOP_OUTTAKE_TIME, () -> {
-                    robot.intake.setIntakePower(0);
+                    robot.intake.setPower(0);
                     robot.intake.retractIntakeWrist();
                 })
                 .waitSeconds(INTAKE_2_TIME)

@@ -160,11 +160,11 @@ public class Duo extends BCLinearOpMode {
 
                     // REVERSE INTAKE
                 } else if(timeSince(intakeFullTime) < INTAKE_FULL_REVERSE_TIME || gamepad2.right_bumper) {
-                    intake.setIntakePower(-1);
+                    intake.setPower(-1);
                     intake.retractIntakeWrist();
                     outtake.lock();
                 } else {
-                    intake.setIntakePower(0);
+                    intake.setPower(0);
                 }
 
                 // RESET SLIDES
@@ -179,7 +179,7 @@ public class Duo extends BCLinearOpMode {
                     gamepad1.rumble(150);
                     intakeFullTime = currentTime();
                     robotState = RobotState.RETRACT;
-                    intake.setIntakePower(-1);
+                    intake.setPower(-1);
                     intake.retractIntakeWrist();
                     outtake.lock();
                 } else if(gamepad2.left_bumper) {
@@ -190,7 +190,7 @@ public class Duo extends BCLinearOpMode {
                     intake.dropToStack(3);
                 } else {
                     outtake.lock();
-                    intake.setIntakePower(0);
+                    intake.setPower(0);
                     intake.retractIntakeWrist();
                     robotState = RobotState.RETRACT;
                 }
@@ -214,9 +214,9 @@ public class Duo extends BCLinearOpMode {
 
                 // reverse intake
                 if(gamepad2.right_bumper) {
-                    intake.setIntakePower(-1);
+                    intake.setPower(-1);
                 } else {
-                    intake.setIntakePower(0);
+                    intake.setPower(0);
                 }
                 break;
             case OUTTAKING:
@@ -254,8 +254,8 @@ public class Duo extends BCLinearOpMode {
                 }
 
                 // reverse intake
-                if(gamepad2.right_bumper) intake.setIntakePower(-1);
-                else intake.setIntakePower(0);
+                if(gamepad2.right_bumper) intake.setPower(-1);
+                else intake.setPower(0);
 
                 if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
                 else if (gamepad2.dpad_right) outtake.lock.unlockAll();
@@ -295,9 +295,9 @@ public class Duo extends BCLinearOpMode {
 
                 // reverse intake
                 if(gamepad1.right_bumper) {
-                    intake.setIntakePower(-1);
+                    intake.setPower(-1);
                 } else {
-                    intake.setIntakePower(0);
+                    intake.setPower(0);
                 }
 
                 outtake.setDunkHeight(gamepad2.left_trigger);
@@ -318,9 +318,9 @@ public class Duo extends BCLinearOpMode {
 
                 // reverse intake
                 if(gamepad1.right_bumper) {
-                    intake.setIntakePower(-1);
+                    intake.setPower(-1);
                 } else {
-                    intake.setIntakePower(0);
+                    intake.setPower(0);
                 }
                 break;
         }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,11 +15,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Intake implements Subsystem {
     public static double
             MAX_POWER = 1,
-            JAM_CURRENT = 10.0; // if current exceeds this, unjam
+            kP = 0, kI = 0, kD = 0,
+            JAMMED_VELOCITY = 50;
 
     enum IntakeState {
         IDLE,
-        UNJAMMING
+        UNJAMMING,
+        PID
     }
 
     DcMotorEx intakeMotor;
@@ -28,11 +31,12 @@ public class Intake implements Subsystem {
 
     IntakeState intakeState;
     double intakePower;
-    double lastPower;
-    double powerBeforeUnjamming;
-    double intakeCurrent;
-    double startUnjamTime;
+    double lastPower, powerBeforeUnjam;
+    double startUnjamTime, startIntakeTime;
     boolean wasJustFull;
+    double currentPos, targetPos;
+    double velocity;
+    PIDController pid;
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
@@ -44,49 +48,65 @@ public class Intake implements Subsystem {
         dropdown = new Dropdown(hardwareMap); // instantiate intake wrist
         intakeColorSensors = new IntakeColorSensors(hardwareMap); // instantiate intake color sensors
         intakeState = IntakeState.IDLE;
+        pid = new PIDController(kP, kI, kD);
     }
 
     public void init() {
         dropdown.init();
         intakeColorSensors.init();
+        resetEncoder();
         //set all motors to zero power
         intakeRoller.setPower(0);
         lastPower = 0;
+        currentPos = 0;
+        targetPos = 0;
+        velocity = 0;
     }
 
     public void read() {
         dropdown.read();
         intakeColorSensors.read();
 
-//        if (intakePower > 0.5 || intakeState == IntakeState.UNJAMMING) {
-//            intakeCurrent = intakeMotor.getCurrent(CurrentUnit.AMPS);
-//        }
-
-//        if (intakeCurrent > JAM_CURRENT) {
-//            intakeState = IntakeState.UNJAMMING;
-//            intakePower = -1;
-//            startUnjamTime = System.currentTimeMillis();
-//
-//            if(intakeState != IntakeState.UNJAMMING) {
-//                powerBeforeUnjamming = intakePower;
-//            }
-//        }
+        currentPos = intakeMotor.getCurrentPosition();
+        velocity = intakeMotor.getVelocity();
     }
 
     public void write() {
         dropdown.write();
         intakeColorSensors.write();
 
-//        if(intakeState == IntakeState.UNJAMMING) {
-//            if(System.currentTimeMillis() - startUnjamTime > 500) {
-//                intakeState = IntakeState.IDLE; // unjamming for 500ms
-//                intakePower = powerBeforeUnjamming;
-//            } else {
-//                setPower(-1);
-//            }
-//        } else {
-            setPower(intakePower);
-//        }
+        switch (intakeState) {
+            case IDLE:
+                if(intakePower > 0.1 && lastPower < 0.1) {
+                    startIntakeTime = System.currentTimeMillis();
+                }
+
+                if(velocity < JAMMED_VELOCITY && System.currentTimeMillis() - startIntakeTime > 500) {
+                    intakeState = IntakeState.UNJAMMING;
+                    powerBeforeUnjam = intakePower;
+                    startUnjamTime = System.currentTimeMillis();
+                }
+                break;
+            case UNJAMMING:
+                if(System.currentTimeMillis() - startUnjamTime > 300) {
+                    intakeState = IntakeState.IDLE;
+                    intakePower = powerBeforeUnjam;
+                    break;
+                } else {
+                    intakePower = -1;
+                }
+                break;
+            case PID:
+                intakePower = pid.calculate(currentPos, targetPos);
+                break;
+        }
+
+        if(intakeState == IntakeState.IDLE && intakePower > 0.1 && lastPower < 0.1) {
+            startIntakeTime = System.currentTimeMillis();
+        }
+
+        setMotorPower(intakePower);
+        lastPower = intakePower;
     }
 
     public boolean isFull() {
@@ -105,8 +125,14 @@ public class Intake implements Subsystem {
         dropdown.dropToStack(stackHeight);
     }
 
-    public void setIntakePower(double power) {
+    public void setPower(double power) {
         intakePower = power * MAX_POWER;
+        intakeState = IntakeState.IDLE;
+    }
+
+    public void setTargetPosition(int position) {
+        targetPos = position;
+        intakeState = IntakeState.PID;
     }
 
     public double getIntakePower() {
@@ -114,11 +140,11 @@ public class Intake implements Subsystem {
     }
 
     public void intake() {
-        setIntakePower(1);
+        setPower(1);
         startReadingColor();
     }
 
-    private void setPower(double power) {
+    private void setMotorPower(double power) {
         power = Range.clip(power, -1, 1);
         // only update if power has changed
         if(Math.abs(power - lastPower) > 0.02) {
@@ -126,6 +152,11 @@ public class Intake implements Subsystem {
             intakeMotor.setPower(power);
             lastPower = power;
         }
+    }
+
+    public void resetEncoder() {
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     public double getIntakeRollersPower() {
@@ -146,8 +177,9 @@ public class Intake implements Subsystem {
     }
 
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("intake state", intakeState);
         telemetry.addData("intake power", intakePower);
-        telemetry.addData("intake current", intakeCurrent);
+        telemetry.addData("intake current pos", currentPos);
         intakeColorSensors.telemetry(telemetry);
     }
 }

@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 @TeleOp(name = "intake test", group = "test")
@@ -36,9 +33,9 @@ public class IntakeTest extends BCLinearOpMode {
 //        else drivetrain.driveScaled(horz, vert, rotate);
 
 
-        if(gamepad1.left_trigger > 0.1) intake.setIntakePower(gamepad1.left_trigger);
-        else if (gamepad1.right_trigger > 0.1) intake.setIntakePower(-gamepad1.right_trigger);
-        else intake.setIntakePower(0);
+        if(gamepad1.left_trigger > 0.1) intake.setPower(gamepad1.left_trigger);
+        else if (gamepad1.right_trigger > 0.1) intake.setPower(-gamepad1.right_trigger);
+        else intake.setPower(0);
 
         if(gamepad1.a) intake.dropToGround();
         else if(gamepad1.y) intake.dropToStack(stackHeight);

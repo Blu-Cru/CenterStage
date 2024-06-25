@@ -39,27 +39,27 @@ public class Solo extends BCLinearOpMode {
                 if(outtake.liftIntakeReady()){
                     if(gamepad1.a && gamepad1.left_bumper) {
                         intake.dropToStack(3);
-                        intake.setIntakePower(1);
+                        intake.setPower(1);
                         outtake.unlock();
                     } else if(gamepad1.a) {
                         intake.dropToGround();
-                        intake.setIntakePower(1);
+                        intake.setPower(1);
                         outtake.unlock();
                     } else if(gamepad1.left_trigger > 0.3) {
                         intake.retractIntakeWrist();
-                        intake.setIntakePower(gamepad1.left_trigger);
+                        intake.setPower(gamepad1.left_trigger);
                         outtake.unlock();
                     } else if(gamepad1.right_trigger > 0.3) {
                         intake.retractIntakeWrist();
-                        intake.setIntakePower(-gamepad1.right_trigger);
+                        intake.setPower(-gamepad1.right_trigger);
                         outtake.lock();
                     } else if(timeSince(stopIntakeTime) < REVERSE_INTAKE_TIME) {
                         intake.retractIntakeWrist();
-                        intake.setIntakePower(-1);
+                        intake.setPower(-1);
                         outtake.lock();
                     } else {
                         intake.retractIntakeWrist();
-                        intake.setIntakePower(0);
+                        intake.setPower(0);
                         outtake.lock();
                     }
                 }
@@ -84,7 +84,7 @@ public class Solo extends BCLinearOpMode {
             case LIFTING:
                 // stop intake
                 intake.retractIntakeWrist();
-                intake.setIntakePower(0);
+                intake.setPower(0);
 
                 if(outtake.liftWristClear()) {
 //                    outtake.wristRetracted = false;
@@ -97,8 +97,8 @@ public class Solo extends BCLinearOpMode {
                 if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
 // reverse intake
-                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
-                else intake.setIntakePower(0);
+                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setPower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+                else intake.setPower(0);
 
                 if(gamepad1.a && !lastA1) {
                     robotState = RobotState.RETRACT;
@@ -128,8 +128,8 @@ public class Solo extends BCLinearOpMode {
                 if(gamepad1.b) outtake.setTargetHeight(Outtake.HIGH_HEIGHT);
 
 // reverse intake
-                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setIntakePower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
-                else intake.setIntakePower(0);
+                if(gamepad1.right_trigger > 0.3 && gamepad1.left_trigger > 0.3) intake.setPower(-(gamepad1.right_trigger + gamepad1.left_trigger)/2);
+                else intake.setPower(0);
 
 // lock/unlock for depositing
                 if(gamepad1.left_bumper) outtake.unlockFrontLockBack();
@@ -148,7 +148,7 @@ public class Solo extends BCLinearOpMode {
             case OUTTAKE_WRIST_RETRACTED:
                 // stop intake
                 intake.retractIntakeWrist();
-                intake.setIntakePower(0);
+                intake.setPower(0);
 
                 // retract
                 if(gamepad1.a && !lastA1) {
@@ -178,7 +178,7 @@ public class Solo extends BCLinearOpMode {
             case RETRACTING:
                 // stop intake
                 intake.retractIntakeWrist();
-                intake.setIntakePower(0);
+                intake.setPower(0);
 
                 // retract wrist
                 if(timeSince(retractTime) > RETRACT_WRIST_DELAY && outtake.lift.getAbsPosError() < 30) {
