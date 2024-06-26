@@ -62,7 +62,7 @@ public class Lift implements Subsystem {
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "lift2");
         // set direction
         liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+        liftMotor2.setDirection(DcMotorEx.Direction.FORWARD);
 
         state = State.PID;
 

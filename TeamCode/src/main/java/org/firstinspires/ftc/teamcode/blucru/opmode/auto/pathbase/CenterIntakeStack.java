@@ -20,7 +20,7 @@ public class CenterIntakeStack extends PIDPathBuilder {
                         new LockResetCommand(),
                         new IntakeCommand(stackHeight-1)
                 ))
-                .waitMillis(1000)
+                .waitMillis(1400)
                 .setPower(0.35)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
