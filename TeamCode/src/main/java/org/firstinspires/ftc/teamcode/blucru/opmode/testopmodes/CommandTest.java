@@ -37,10 +37,6 @@ public class CommandTest extends BCLinearOpMode {
         if(gamepad1.right_stick_button) {
             drivetrain.resetHeading(Math.toRadians(90));
         }
-        if(gamepad1.a && !lastA) {
-            new AutoReleasePurpleIntakeCommand(300, (long) intakeTime).schedule();
-        }
-        lastA = gamepad1.a;
 
         if(gamepad1.b && !lastB) {
             CommandScheduler.getInstance().schedule(new IntakeStopCommand());

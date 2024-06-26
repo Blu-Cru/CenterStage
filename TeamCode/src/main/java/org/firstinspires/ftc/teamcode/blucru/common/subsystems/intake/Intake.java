@@ -18,10 +18,12 @@ public class Intake implements Subsystem {
             kP = 0, kI = 0, kD = 0,
             JAMMED_VELOCITY = 50;
 
+    public static int PURPLE_POS = -70;
+
     enum IntakeState {
         IDLE,
         UNJAMMING,
-        PID
+        RELEASING_PURPLE
     }
 
     DcMotorEx intakeMotor;
@@ -34,9 +36,8 @@ public class Intake implements Subsystem {
     double lastPower, powerBeforeUnjam;
     double startUnjamTime, startIntakeTime;
     boolean wasJustFull;
-    double currentPos, targetPos;
-    double velocity;
-    PIDController pid;
+    double targetPos, velocity;
+    public double currentPos;
 
     public Intake(HardwareMap hardwareMap) {
         intakeRoller = hardwareMap.get(CRServo.class, "intake roller");
@@ -48,7 +49,6 @@ public class Intake implements Subsystem {
         dropdown = new Dropdown(hardwareMap); // instantiate intake wrist
         intakeColorSensors = new IntakeColorSensors(hardwareMap); // instantiate intake color sensors
         intakeState = IntakeState.IDLE;
-        pid = new PIDController(kP, kI, kD);
     }
 
     public void init() {
@@ -81,7 +81,7 @@ public class Intake implements Subsystem {
                     startIntakeTime = System.currentTimeMillis();
                 }
 
-                if(velocity < JAMMED_VELOCITY && System.currentTimeMillis() - startIntakeTime > 500) {
+                if(velocity < JAMMED_VELOCITY && System.currentTimeMillis() - startIntakeTime > 500 && intakePower > 0.1) {
                     intakeState = IntakeState.UNJAMMING;
                     powerBeforeUnjam = intakePower;
                     startUnjamTime = System.currentTimeMillis();
@@ -96,8 +96,11 @@ public class Intake implements Subsystem {
                     intakePower = -1;
                 }
                 break;
-            case PID:
-                intakePower = pid.calculate(currentPos, targetPos);
+            case RELEASING_PURPLE:
+                if(currentPos < PURPLE_POS) {
+                    intakeState = IntakeState.IDLE;
+                    intakePower = 0;
+                }
                 break;
         }
 
@@ -130,9 +133,10 @@ public class Intake implements Subsystem {
         intakeState = IntakeState.IDLE;
     }
 
-    public void setTargetPosition(int position) {
-        targetPos = position;
-        intakeState = IntakeState.PID;
+    public void startReleasePurple() {
+        resetEncoder();
+        intakePower = -0.9;
+        intakeState = IntakeState.RELEASING_PURPLE;
     }
 
     public double getIntakePower() {
@@ -180,6 +184,7 @@ public class Intake implements Subsystem {
         telemetry.addData("intake state", intakeState);
         telemetry.addData("intake power", intakePower);
         telemetry.addData("intake current pos", currentPos);
+        telemetry.addData("intake velocity", velocity);
         intakeColorSensors.telemetry(telemetry);
     }
 }
