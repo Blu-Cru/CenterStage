@@ -27,7 +27,7 @@ public class CenterIntakeStack extends PIDPathBuilder {
                         new LockResetCommand(),
                         new IntakeCommand(0)
                 ))
-                .addMappedPoint(Field.INTAKE_X, 20 + yIncrement, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 15 + yIncrement, 160, 2.5)
                 .waitMillis(800);
     }
 

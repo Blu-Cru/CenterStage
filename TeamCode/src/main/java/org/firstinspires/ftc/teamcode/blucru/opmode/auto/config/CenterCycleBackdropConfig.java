@@ -226,7 +226,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
         intakePath = new CenterIntakeStack().build();
-        intakeAfterFailed1Path = new CenterIntakeStack(0,1,2).build();
+        intakeAfterFailed1Path = new CenterIntakeStack(0,3,2).build();
         depositPath = new DepositCenterCycle(2, 0).build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
 
