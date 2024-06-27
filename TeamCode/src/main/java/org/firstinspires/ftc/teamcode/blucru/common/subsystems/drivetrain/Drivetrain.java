@@ -36,7 +36,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             MAX_ACCEL_PID_DELTA = 2, // magnitude per second at power 1 for PID
 
             HEADING_DECELERATION = 10, // radians per second squared, for calculating new target heading after turning
-            HEADING_P = 1.5, HEADING_I = 0, HEADING_D = 0.07, // PID constants for heading
+            HEADING_P = 1.45, HEADING_I = 0, HEADING_D = 0.09, // PID constants for heading
             HEADING_PID_TOLERANCE = 0.05, // radians
             HEADING_AT_POSE_TOLERANCE = 0.15,
 
@@ -44,7 +44,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
             DISTANCE_PID_ANGLE_TOLERANCE = 0.5, // radians
             OUTTAKE_DISTANCE = 3.6, // correct distance for outtake for distance PID
 
-            TRANSLATION_P = 0.18, TRANSLATION_I = 0, TRANSLATION_D = 0.027, TRANSLATION_PID_TOLERANCE = 0, // PID constants for translation
+            TRANSLATION_P = 0.18, TRANSLATION_I = 0, TRANSLATION_D = 0.029, TRANSLATION_PID_TOLERANCE = 0, // PID constants for translation
             TRANSLATION_AT_POSE_TOLERANCE = 0.55,
 
             STATIC_TRANSLATION_VELOCITY_TOLERANCE = 25.0, // inches per second

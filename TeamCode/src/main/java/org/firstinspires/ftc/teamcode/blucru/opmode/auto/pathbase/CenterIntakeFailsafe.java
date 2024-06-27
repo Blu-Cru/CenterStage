@@ -19,6 +19,6 @@ public class CenterIntakeFailsafe extends PIDPathBuilder {
                         new DropdownPartialRetractCommand(),
                         new IntakePowerCommand(-1)
                 ))
-                .addMappedPoint(-42, 12, 180,6);
+                .addMappedPoint(-45, 12, 180,6);
     }
 }

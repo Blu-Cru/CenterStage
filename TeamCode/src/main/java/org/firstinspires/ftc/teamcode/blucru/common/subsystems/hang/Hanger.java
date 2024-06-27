@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.subsystems.hang;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -25,7 +26,7 @@ public class Hanger implements Subsystem {
     public Hanger(HardwareMap hardwareMap) {
         hangerMotor = hardwareMap.get(DcMotorEx.class, "hang");
 
-        hangerMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        hangerMotor.setDirection(DcMotorEx.Direction.FORWARD);
     }
 
     public void init() {

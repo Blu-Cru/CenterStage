@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
@@ -18,7 +19,7 @@ public class Intake implements Subsystem {
             kP = 0, kI = 0, kD = 0,
             JAMMED_VELOCITY = 100;
 
-    public static int PURPLE_POS = -70;
+    public static int PURPLE_POS = -77;
 
     enum IntakeState {
         IDLE,
@@ -116,6 +117,14 @@ public class Intake implements Subsystem {
         return intakeColorSensors.isFull();
     }
 
+    public boolean hasOne() {
+        return intakeColorSensors.hasOne();
+    }
+
+    public boolean isEmpty() {
+        return intakeColorSensors.empty();
+    }
+
     public void retractIntakeWrist() {
         dropdown.retract();
     }
@@ -135,7 +144,7 @@ public class Intake implements Subsystem {
 
     public void startReleasePurple() {
         resetEncoder();
-        intakePower = -0.9;
+        intakePower = Globals.correctPower(-0.8);
         intakeState = IntakeState.RELEASING_PURPLE;
     }
 

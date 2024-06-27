@@ -107,6 +107,14 @@ public class IntakeColorSensors implements Subsystem {
 
     }
 
+    public boolean empty() {
+        return frontSlotState == SlotState.EMPTY && backSlotState == SlotState.EMPTY;
+    }
+
+    public boolean hasOne() {
+        return frontSlotState != SlotState.EMPTY || backSlotState != SlotState.EMPTY;
+    }
+
     public SlotState getSlotState(double distance, SensorLocation sensorLocation, float[] hsv) {
         if(!inRange(distance, ranges.get(sensorLocation))) {
             return SlotState.EMPTY;

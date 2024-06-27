@@ -7,7 +7,7 @@ public class BackdropToStackCenter extends PIDPathBuilder {
         super();
         this.setPower(0.5)
                 .addMappedPoint(38, 12, 200, 6)
-//                .setPower(0.55)
-                .addMappedPoint(-33, 12, 180, 6);
+                .setPower(0.6)
+                .addMappedPoint(-33, 12, 180, 9);
     }
 }
