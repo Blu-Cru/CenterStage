@@ -147,13 +147,13 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .onEnter(() -> {
                     logTransitionTo(State.TO_BACKDROP);
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() < 28.5, State.DEPOSITING, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 27, State.DEPOSITING, () -> {
                     currentPath = depositPath.start();
                 })
-//                .transition(() -> currentPath.isDone() && (runtime.seconds() > 28.5 && runtime.seconds() < 29.3), State.DEPOSITING_BACKSTAGE, () -> {
-//                    currentPath = depositBackstagePath.start();
-//                })
-                .transition(() -> currentPath.isDone() && runtime.seconds() > 29.3, State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() && (runtime.seconds() > 27 && runtime.seconds() < 29), State.DEPOSITING_BACKSTAGE, () -> {
+                    currentPath = depositBackstagePath.start();
+                })
+                .transition(() -> currentPath.isDone() && runtime.seconds() > 29, State.PARKING, () -> {
                     currentPath = parkPath.start();
                 })
                 .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
@@ -182,12 +182,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .loop(() -> {
                     dt.updateAprilTags();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() < 24, State.TO_STACK, () -> {
-                    new OuttakeRetractCommand().schedule();
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 25, State.TO_STACK, () -> {
+                    new OuttakeRetractCommand(1.5).schedule();
                     currentPath = backdropToStackPath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() >= 24, State.PARKING, () -> {
-                    new OuttakeRetractCommand().schedule();
+                .transition(() -> currentPath.isDone() && runtime.seconds() >= 25, State.PARKING, () -> {
+                    new OuttakeRetractCommand(1.5).schedule();
                     currentPath = parkPath.start();
                 })
 
@@ -226,6 +226,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                     Globals.stackFarPixels -= 2;
                 })
 
+                .state(State.DEPOSITING_BACKSTAGE)
+                .onEnter(() -> logTransitionTo(State.DEPOSITING_BACKSTAGE))
+                .transition(() -> currentPath.isDone(), State.DONE)
+
                 .state(State.PARKING)
                 .onEnter(() -> {
                     logTransitionTo(State.PARKING);
@@ -251,7 +255,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         intakeFarStackPath = new CenterIntakeFarStack().build();
         intakeCenterStackPath = new CenterIntakeCenterStack().build();
 
-        intakeAfterFailed1Path = new CenterIntakeFarStack(0,3,30).build();
+        intakeAfterFailed1Path = new CenterIntakeFarStack(0,2,30).build();
         depositPath = new DepositCenterCycle().build();
         depositBackstagePath = new DepositCenterBackstage().build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 13, 220).build();

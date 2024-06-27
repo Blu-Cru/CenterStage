@@ -32,6 +32,6 @@ public class DepositCenterCycle extends PIDPathBuilder {
     }
 
     public DepositCenterCycle() {
-        this(2.5, -10);
+        this(1.3, -5);
     }
 }

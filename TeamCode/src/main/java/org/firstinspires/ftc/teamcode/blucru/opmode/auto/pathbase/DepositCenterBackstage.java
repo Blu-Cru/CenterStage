@@ -24,10 +24,9 @@ public class DepositCenterBackstage extends PIDPathBuilder {
                         new WaitCommand(150),
                         new OuttakeWristBackstageCommand()
                 ))
-                .addMappedPoint(Field.DEPOSIT_X, 12, 180, 5)
+                .addMappedPoint(42, 12, 180, 5)
                 .schedule(new SequentialCommandGroup(
                         new LockReleaseCommand(2),
-                        new WaitCommand(150),
                         new OuttakeRetractCommand()
                 ))
                 .waitMillis(400);

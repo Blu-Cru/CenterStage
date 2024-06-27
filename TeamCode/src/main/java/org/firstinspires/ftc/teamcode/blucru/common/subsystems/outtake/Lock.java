@@ -11,7 +11,7 @@ public class Lock implements Subsystem {
     public static double
             FLAT = 0.5,
             LOCKED_FRONT = FLAT - toTicks(40),
-            LOCK_BACK_POS = FLAT + toTicks(20),
+            LOCK_BACK_POS = FLAT + toTicks(35),
             PUSH_POS = FLAT + toTicks(150);
 
     public enum LockState {

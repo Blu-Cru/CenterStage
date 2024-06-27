@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
@@ -81,6 +83,7 @@ public class Auto extends BCLinearOpMode {
         optimizeTelemetry();
         stateMachine.setState(State.CONFIG);
         stateMachine.start();
+        enableFTCDashboard();
     }
 
     @Override
@@ -101,11 +104,13 @@ public class Auto extends BCLinearOpMode {
     @Override
     public void end() {
         Globals.startPose = drivetrain.pose;
+        Log.i("Auto", "start pose set to" + drivetrain.pose);
     }
 
     @Override
     public void telemetry() {
         telemetry.addData("Auto state: ", stateMachine.getState());
+        if(stateMachine.getState() == State.RUNNING) Globals.autoRunningTelemetry(telemetry);
         config.telemetry(telemetry);
     }
 }

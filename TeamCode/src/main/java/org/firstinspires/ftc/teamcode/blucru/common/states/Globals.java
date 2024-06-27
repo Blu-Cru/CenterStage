@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.states;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -51,6 +53,7 @@ public class Globals {
 
     public static void setVoltage(double voltage) {
         Globals.voltage = voltage;
+        Log.i("Globals", "set voltage to " + voltage);
     }
 
     public static double correctPower(double power) {
@@ -84,7 +87,10 @@ public class Globals {
         telemetry.addData("Park Type:", parkType);
     }
 
-    public static void runtimeTelemetry(Telemetry telemetry) {
+    public static void autoRunningTelemetry(Telemetry telemetry) {
         telemetry.addData("Runtime", Globals.runtime.seconds());
+        telemetry.addData("Far stack pixels", Globals.stackFarPixels);
+        telemetry.addData("Center stack pixels", Globals.stackCenterPixels);
+        telemetry.addData("Close stack pixels", Globals.stackClosePixels);
     }
 }

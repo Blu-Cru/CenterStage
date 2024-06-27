@@ -14,13 +14,13 @@ public class CenterIntakeCenterStack extends PIDPathBuilder {
         super();
         this.setPower(0.4)
                 .schedule(new IntakeCommand(Globals.stackCenterPixels-1))
-                .addMappedPoint(Field.INTAKE_X, 12, 160)
-                .addMappedPoint(Field.INTAKE_X, 22, 160)
+                .addMappedPoint(Field.INTAKE_X, 12, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X-0.5, 20, 160, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new LockResetCommand(),
                         new IntakeCommand(Globals.stackCenterPixels-1),
-                        new WaitCommand(600),
+                        new WaitCommand(300),
                         new LockResetCommand(),
                         new IntakeCommand(0)
                 ))

@@ -18,14 +18,13 @@ public class BackdropCenterPreload extends PIDPathBuilder {
         super();
         this.setPower(0.8)
                 .addMappedPoint(24, 48, 120, 6)
-                .schedule(new DropdownCommand(4))
-                .addMappedPoint(26, 28,190)
+                .schedule(new DropdownFullRetractCommand())
+                .addMappedPoint(26, 28.5,190)
 
                 .schedule(
                         new SequentialCommandGroup(
                                 new AutoReleasePurpleIntakeCommand(),
                                 new WaitCommand(250),
-                                new DropdownFullRetractCommand(),
                                 new OuttakeExtendCommand(-1),
                                 new TurretGlobalYCommand(36)
                         )
