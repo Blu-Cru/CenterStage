@@ -2,15 +2,21 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.OuttakeWristBackstageCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
 //@Disabled
@@ -58,6 +64,23 @@ public class CommandTest extends BCLinearOpMode {
         }
         lastY = gamepad1.y;
 
-        CommandScheduler.getInstance().run();
+        if(stickyG1.dpad_up) {
+            new SequentialCommandGroup(
+                    new LockCommand(),
+                    new InstantCommand(
+                            () -> Robot.getInstance().outtake.setTargetPixelHeight(-1)
+                    ),
+                    new WaitCommand(150),
+                    new OuttakeWristBackstageCommand()
+            ).schedule();
+        }
+
+        if(stickyG1.dpad_down) {
+            new SequentialCommandGroup(
+                    new LockReleaseCommand(2),
+                    new WaitCommand(150),
+                    new OuttakeRetractCommand()
+            ).schedule();
+        }
     }
 }

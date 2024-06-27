@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -115,6 +117,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
         end();
         Robot.kill();
+        Log.i("BCLinearOpMode", "OpMode Stopped");
     }
 
     // methods to be overriden

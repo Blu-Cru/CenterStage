@@ -19,8 +19,7 @@ public class CenterIntakeFarStack extends PIDPathBuilder {
                         new WaitCommand(300),
                         new LockResetCommand(),
                         new IntakeCommand(stackHeight-1),
-                        new WaitCommand(600),
-                        new LockResetCommand(),
+                        new WaitCommand(400),
                         new IntakeCommand(0)
                 ))
                 .waitMillis(900)

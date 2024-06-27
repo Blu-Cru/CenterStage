@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.util.Angle;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStac
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterDepositFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeCenterStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFailsafe;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterBackstage;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFarStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
@@ -42,7 +44,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
             crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
     Path intakeFarStackPath, intakeCenterStackPath, intakeAfterFailed1Path;
-    Path depositPath;
+    Path depositPath, depositBackstagePath;
     Path parkPath;
 
     Drivetrain dt;
@@ -56,6 +58,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         INTAKING,
         TO_BACKDROP,
         DEPOSITING,
+        DEPOSITING_BACKSTAGE,
         PARKING,
         DONE,
 
@@ -63,8 +66,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         DEPOSIT_FAILSAFE,
         CRASH_TO_STACK_FAILSAFE,
         CRASH_TO_BACKDROP_FAILSAFE,
-        INTAKE_FAILSAFE,
-        STACK_TO_BACKDROP_PARK
+        INTAKE_FAILSAFE
     }
 
     Path currentPath;
@@ -129,11 +131,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                     currentPath = intakeFailsafePath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
+                    CommandScheduler.getInstance().cancelAll();
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
                 })
-                .transition(() -> runtime.seconds() > 27.0, State.STACK_TO_BACKDROP_PARK, () -> {
+                .transition(() -> runtime.seconds() > 27.0, State.TO_BACKDROP, () -> {
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                 })
@@ -143,10 +146,15 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .state(State.TO_BACKDROP)
                 .onEnter(() -> {
                     logTransitionTo(State.TO_BACKDROP);
-                    Robot.getInstance().intake.stopReadingColor();
                 })
-                .transition(() -> currentPath.isDone(), State.DEPOSITING, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 28.5, State.DEPOSITING, () -> {
                     currentPath = depositPath.start();
+                })
+//                .transition(() -> currentPath.isDone() && (runtime.seconds() > 28.5 && runtime.seconds() < 29.3), State.DEPOSITING_BACKSTAGE, () -> {
+//                    currentPath = depositBackstagePath.start();
+//                })
+                .transition(() -> currentPath.isDone() && runtime.seconds() > 29.3, State.PARKING, () -> {
+                    currentPath = parkPath.start();
                 })
                 .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
                         && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_BACKDROP_FAILSAFE, () -> {
@@ -169,6 +177,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .state(State.DEPOSITING)
                 .onEnter(() -> {
                     logTransitionTo(State.DEPOSITING);
+                    Robot.getInstance().intake.stopReadingColor();
                 })
                 .loop(() -> {
                     dt.updateAprilTags();
@@ -207,26 +216,14 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
                     currentPath = intakeAfterFailed1Path.start();
                 })
-                .transition(() -> runtime.seconds()>27, State.STACK_TO_BACKDROP_PARK, () -> {
+                .transition(() -> runtime.seconds()>27, State.TO_BACKDROP, () -> {
                     currentPath = stackToBackdropPath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
+                    CommandScheduler.getInstance().cancelAll();
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
-                })
-
-                .state(State.STACK_TO_BACKDROP_PARK)
-                .onEnter(() -> logTransitionTo(State.STACK_TO_BACKDROP_PARK))
-
-                // TODO: backstage failsafe
-//                .transition(() -> currentPath.isDone() && !Robot.getInstance().intake.isEmpty(),
-//                        State.DEPOSITING_BACKSTAGE, () -> {
-//                    currentPath = depositBackstagePath.start();
-//                })
-                // TODO: make this if empty
-                .transition(() -> currentPath.isDone(), State.PARKING, () -> {
-                    currentPath = parkPath.start();
                 })
 
                 .state(State.PARKING)
@@ -254,8 +251,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         intakeFarStackPath = new CenterIntakeFarStack().build();
         intakeCenterStackPath = new CenterIntakeCenterStack().build();
 
-        intakeAfterFailed1Path = new CenterIntakeFarStack(0,3,2).build();
+        intakeAfterFailed1Path = new CenterIntakeFarStack(0,3,30).build();
         depositPath = new DepositCenterCycle().build();
+        depositBackstagePath = new DepositCenterBackstage().build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 13, 220).build();
 
         intakeFailsafePath = new CenterIntakeFailsafe().build();
