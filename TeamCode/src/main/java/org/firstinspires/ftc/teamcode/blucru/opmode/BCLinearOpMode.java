@@ -54,6 +54,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public final void runOpMode() throws InterruptedException {
         Globals.runtime = new ElapsedTime();
+        CommandScheduler.getInstance().cancelAll();
         alliance = Globals.alliance;
         stickyG1 = new StickyGamepad(gamepad1);
         stickyG2 = new StickyGamepad(gamepad2);
