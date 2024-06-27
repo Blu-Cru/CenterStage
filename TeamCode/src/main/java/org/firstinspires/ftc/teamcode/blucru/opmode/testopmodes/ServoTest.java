@@ -23,6 +23,7 @@ public class ServoTest extends LinearOpMode {
         while(opModeIsActive()) {
             test = hardwareMap.get(ServoImplEx.class, name);
             if(reversed) test.setDirection(Servo.Direction.REVERSE);
+            else test.setDirection(Servo.Direction.FORWARD);
             test.setPwmRange(new PwmControl.PwmRange(500, 2500));
             controller = (ServoControllerEx) test.getController();
 

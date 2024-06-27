@@ -16,6 +16,7 @@ public class MotorTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DcMotorEx test = hardwareMap.get(DcMotorEx.class, name);
         if(reversed) test.setDirection(DcMotorSimple.Direction.REVERSE);
+        else test.setDirection(DcMotorSimple.Direction.FORWARD);
         test.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         test.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double vert;

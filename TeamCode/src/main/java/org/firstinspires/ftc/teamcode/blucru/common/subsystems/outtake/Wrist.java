@@ -15,7 +15,7 @@ public class Wrist implements Subsystem {
         BACKSTAGE
     }
 
-    public static double WRIST_RETRACT = 0.33,
+    public static double WRIST_RETRACT = 0.34,
             WRIST_OUTTAKE = WRIST_RETRACT + 0.44,
             WRIST_BACKSTAGE = WRIST_RETRACT + 0.6;
 
