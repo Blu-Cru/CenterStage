@@ -22,9 +22,10 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropFarPre
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenterAfterPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterDepositFailsafe;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeCenterStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeStack;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFarStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     Path crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
             crashTrussMiddleFailsafeToIntakePath, crashTrussMiddleFailsafeToBackdropPath;
     Path crashToStackRecoveryPath, crashToBackdropRecoveryPath;
-    Path intakePath, intakeAfterFailed1Path;
+    Path intakeFarStackPath, intakeCenterStackPath, intakeAfterFailed1Path;
     Path depositPath;
     Path parkPath;
 
@@ -101,7 +102,8 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 //                dt.updateAprilTags();
                 })
                 .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
-                    currentPath = intakePath.start();
+                    if(Globals.stackFarPixels > 1) currentPath = intakeFarStackPath.start();
+                    else currentPath = intakeCenterStackPath.start();
                 })
                 .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
                         && dt.pose.getX() < 20 && dt.pose.getX() > -30, State.CRASH_TO_STACK_FAILSAFE, () -> {
@@ -180,7 +182,6 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                     currentPath = parkPath.start();
                 })
 
-
                 // CRASH FAILSAFE STATE
 
                 .state(State.CRASH_TO_STACK_FAILSAFE)
@@ -205,6 +206,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 })
                 .transition(() -> currentPath.isDone(), State.INTAKING, () -> {
                     currentPath = intakeAfterFailed1Path.start();
+                })
+                .transition(() -> runtime.seconds()>27, State.STACK_TO_BACKDROP_PARK, () -> {
+                    currentPath = stackToBackdropPath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
                     currentPath = stackToBackdropPath.start();
@@ -247,8 +251,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
-        intakePath = new CenterIntakeStack().build();
-        intakeAfterFailed1Path = new CenterIntakeStack(0,3,2).build();
+        intakeFarStackPath = new CenterIntakeFarStack().build();
+        intakeCenterStackPath = new CenterIntakeCenterStack().build();
+
+        intakeAfterFailed1Path = new CenterIntakeFarStack(0,3,2).build();
         depositPath = new DepositCenterCycle().build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 13, 220).build();
 

@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStac
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterDepositFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeStack;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeFarStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
 import java.util.HashMap;
 
@@ -97,7 +97,7 @@ public class CenterCycleAudienceConfig extends AutoConfig {
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
-        intakePath = new CenterIntakeStack().build();
+        intakePath = new CenterIntakeFarStack().build();
         depositPath = new DepositCenterCycle().build();
         parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
 

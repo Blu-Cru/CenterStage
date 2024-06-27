@@ -9,33 +9,32 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-public class CenterIntakeStack extends PIDPathBuilder {
-    public CenterIntakeStack(int stackHeight, double xIncrement, double yIncrement) {
+public class CenterIntakeFarStack extends PIDPathBuilder {
+    public CenterIntakeFarStack(int stackHeight, double xIncrement, double wiggleAngleDeg) {
         super();
-        this.setPower(0.5)
+        this.setPower(0.4)
                 .schedule(new IntakeCommand(stackHeight, 1))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 2)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new LockResetCommand(),
-                        new IntakeCommand(stackHeight-1)
-                ))
-                .waitMillis(800)
-                .setPower(0.35)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
+                        new IntakeCommand(stackHeight-1),
+                        new WaitCommand(600),
                         new LockResetCommand(),
                         new IntakeCommand(0)
                 ))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 12 + yIncrement, 170, 2.5)
-                .waitMillis(800);
+                .waitMillis(900)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180-wiggleAngleDeg, 2.5)
+                .waitMillis(400)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180 + wiggleAngleDeg)
+                .waitMillis(400);
     }
 
-    public CenterIntakeStack() {
-        this(Globals.stackCenterPixels-1, 0, 0);
+    public CenterIntakeFarStack() {
+        this(Globals.stackCenterPixels-1, 0, 15);
     }
 
-    public CenterIntakeStack(double xIncrement, double yIncrement) {
-        this(Globals.stackCenterPixels-1, xIncrement, yIncrement);
+    public CenterIntakeFarStack(double xIncrement, double wiggleAngleDeg) {
+        this(Globals.stackCenterPixels-1, xIncrement, wiggleAngleDeg);
     }
 }

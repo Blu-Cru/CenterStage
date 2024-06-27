@@ -58,6 +58,7 @@ public class Intake implements Subsystem {
         resetEncoder();
         //set all motors to zero power
         intakeRoller.setPower(0);
+        intakePower = 0;
         lastPower = 0;
         currentPos = 0;
         targetPos = 0;
