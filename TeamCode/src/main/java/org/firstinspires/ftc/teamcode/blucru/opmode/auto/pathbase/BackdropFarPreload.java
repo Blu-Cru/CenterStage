@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownFullRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
@@ -21,15 +22,16 @@ public class BackdropFarPreload extends PIDPathBuilder {
                 .schedule(new DropdownCommand(4))
                 .addPoint(Globals.mapPose(10, 39, 180))
                 .setPower(0.35)
-                .schedule(new AutoReleasePurpleIntakeCommand())
-                .waitMillis(300)
                 .schedule(
                         new SequentialCommandGroup(
+                                new AutoReleasePurpleIntakeCommand(),
                                 new WaitCommand(500),
+                                new DropdownFullRetractCommand(),
                                 new OuttakeExtendCommand(-1),
                                 new TurretGlobalYCommand(30)
                         )
                 )
+                .waitMillis(300)
                 .addPoint(Globals.mapPose(Field.DEPOSIT_X, 32, 180), 2.5)
                 .schedule(
                         new SequentialCommandGroup(

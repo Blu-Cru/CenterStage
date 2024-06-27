@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownFullRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
@@ -24,6 +25,7 @@ public class BackdropCenterPreload extends PIDPathBuilder {
                         new SequentialCommandGroup(
                                 new AutoReleasePurpleIntakeCommand(),
                                 new WaitCommand(250),
+                                new DropdownFullRetractCommand(),
                                 new OuttakeExtendCommand(-1),
                                 new TurretGlobalYCommand(36)
                         )
