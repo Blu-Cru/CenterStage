@@ -147,10 +147,10 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                 .onEnter(() -> {
                     logTransitionTo(State.TO_BACKDROP);
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() < 27, State.DEPOSITING, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 27.5, State.DEPOSITING, () -> {
                     currentPath = depositPath.start();
                 })
-                .transition(() -> currentPath.isDone() && (runtime.seconds() > 27 && runtime.seconds() < 29), State.DEPOSITING_BACKSTAGE, () -> {
+                .transition(() -> currentPath.isDone() && (runtime.seconds() > 27.5 && runtime.seconds() < 29), State.DEPOSITING_BACKSTAGE, () -> {
                     currentPath = depositBackstagePath.start();
                 })
                 .transition(() -> currentPath.isDone() && runtime.seconds() > 29, State.PARKING, () -> {

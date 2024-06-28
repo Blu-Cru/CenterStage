@@ -30,16 +30,16 @@ public class Auto extends BCLinearOpMode {
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.CONFIG)
             .loop(() -> {
-                if(stickyG1.y) Globals.setAlliance(Globals.alliance.flip());
-                if(stickyG1.b) Globals.side = Globals.side.flip();
-                if(stickyG1.a) Globals.autoType = Globals.autoType.cycle();
-                if(stickyG1.x) Globals.parkType = Globals.parkType.cycle();
+                if(stickyG1.y || stickyG2.y) Globals.setAlliance(Globals.alliance.flip());
+                if(stickyG1.b || stickyG2.b) Globals.side = Globals.side.flip();
+                if(stickyG1.a || stickyG2.a) Globals.autoType = Globals.autoType.cycle();
+                if(stickyG1.x || stickyG2.x) Globals.parkType = Globals.parkType.cycle();
 
                 if(opModeIsActive()) requestOpModeStop();
 
                 Globals.autoConfigTelemetry(telemetry);
             })
-            .transition(() -> stickyG1.right_stick_button, State.DETECTION, () -> {
+            .transition(() -> stickyG1.right_stick_button || stickyG2.right_stick_button, State.DETECTION, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 telemetry.addLine("Building Paths . . .");
@@ -60,7 +60,7 @@ public class Auto extends BCLinearOpMode {
                 cvMaster.propDetector.telemetry(telemetry);
                 Globals.autoConfigStatus(telemetry);
             })
-            .transition(() -> stickyG1.left_stick_button, State.CONFIG, () -> {
+            .transition(() -> stickyG1.left_stick_button || stickyG2.left_stick_button, State.CONFIG, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 cvMaster.stop();
@@ -87,7 +87,6 @@ public class Auto extends BCLinearOpMode {
         addDrivetrain(false);
         addIntake();
         addOuttake();
-        addPurplePixelHolder();
         optimizeTelemetry();
         stateMachine.setState(State.CONFIG);
         stateMachine.start();

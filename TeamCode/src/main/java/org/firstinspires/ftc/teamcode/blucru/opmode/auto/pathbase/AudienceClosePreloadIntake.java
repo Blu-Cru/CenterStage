@@ -26,11 +26,10 @@ public class AudienceClosePreloadIntake extends PIDPathBuilder {
                         new IntakeCommand(4, 1),
                         new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X, 24, 180)
-                .schedule(new SequentialCommandGroup(
-                        new WaitCommand(200),
-                        new DropdownCommand(3)
-                ))
-                .waitMillis(1000);
+                .addMappedPoint(Field.INTAKE_X, 24, 180, 2)
+                .waitMillis(600)
+                .schedule(new DropdownCommand(3))
+                .waitMillis(600)
+                .schedule(new DropdownCommand(0));
     }
 }

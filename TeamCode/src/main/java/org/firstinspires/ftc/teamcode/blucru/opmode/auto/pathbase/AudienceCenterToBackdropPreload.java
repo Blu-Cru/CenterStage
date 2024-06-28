@@ -23,8 +23,8 @@ public class AudienceCenterToBackdropPreload extends PIDPathBuilder {
                 ))
                 .addMappedPoint(-52, 12, 180, 3)
                 .setPower(0.75)
-                .addMappedPoint(-12, 12, 180, 6)
+                .addMappedPoint(12, 12, 180, 6)
                 .setPower(0.5)
-                .addMappedPoint(35, 20, 215,2);
+                .addMappedPoint(35, 16, 215,2);
     }
 }
