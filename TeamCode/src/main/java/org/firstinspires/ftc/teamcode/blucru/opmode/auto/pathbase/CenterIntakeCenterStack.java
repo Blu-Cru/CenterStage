@@ -23,7 +23,7 @@ public class CenterIntakeCenterStack extends PIDPathBuilder {
                         new LockResetCommand()
                 ))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 160, 2.5)
-                .addMappedPoint(Field.INTAKE_X - xIncrement - 1, 22.5, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement - 1, 22, 160, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(300),
                         new IntakeCommand(Globals.stackCenterPixels-2),

@@ -156,7 +156,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                         !Robot.getInstance().intake.isEmpty(), State.DEPOSITING_BACKSTAGE, () -> {
                     currentPath = depositBackstagePath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() > 29.3 && Robot.getInstance().intake.isEmpty(), State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() && (runtime.seconds() > 29.3 || runtime.seconds() > 27.7 && Robot.getInstance().intake.isEmpty()), State.PARKING, () -> {
                     currentPath = parkPath.start();
                 })
                 .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
@@ -260,7 +260,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         intakeFarStackPath = new CenterIntakeFarStack().build();
         intakeCenterStackPath = new CenterIntakeCenterStack().build();
 
-        intakeFarAfterFailedPath = new CenterIntakeFarStack(0,2,30).build();
+        intakeFarAfterFailedPath = new CenterIntakeFarStack(0,1.5,30).build();
         depositPath = new DepositCenterCycle().build();
         depositBackstagePath = new DepositCenterBackstage().build();
         parkPath = new PIDPathBuilder().addMappedPoint(43, 14, 220).build();

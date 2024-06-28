@@ -19,7 +19,7 @@ public class CenterIntakeFarStack extends PIDPathBuilder {
                         new IntakePowerCommand(1),
                         new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 2)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 3.5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(stackHeight),
                         new WaitCommand(400),
