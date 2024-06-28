@@ -21,15 +21,16 @@ public class AudienceClosePreloadIntake extends PIDPathBuilder {
                         new PurplePixelRetractCommand()
                 ))
                 .waitMillis(200)
-                .addMappedPoint(-44, 30, 160, 5)
+                .addMappedPoint(-44, 30, 190, 5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(4, 1),
                         new LockResetCommand()
                 ))
                 .addMappedPoint(Field.INTAKE_X, 24, 180, 2)
-                .waitMillis(600)
+                .waitMillis(400)
                 .schedule(new DropdownCommand(3))
-                .waitMillis(600)
-                .schedule(new DropdownCommand(0));
+                .waitMillis(400)
+                .schedule(new DropdownCommand(0))
+                .waitMillis(300);
     }
 }

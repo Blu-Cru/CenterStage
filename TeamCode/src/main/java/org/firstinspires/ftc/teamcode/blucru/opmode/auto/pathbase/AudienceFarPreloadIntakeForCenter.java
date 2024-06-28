@@ -34,6 +34,7 @@ public class AudienceFarPreloadIntakeForCenter extends PIDPathBuilder {
                 .waitMillis(400)
                 .schedule(new DropdownCommand(3))
                 .waitMillis(400)
-                .schedule(new DropdownCommand(0));
+                .schedule(new DropdownCommand(0))
+                .waitMillis(300);
     }
 }

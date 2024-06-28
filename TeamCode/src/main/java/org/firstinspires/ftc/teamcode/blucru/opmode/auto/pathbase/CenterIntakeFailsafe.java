@@ -15,7 +15,7 @@ public class CenterIntakeFailsafe extends PIDPathBuilder {
         super();
         this.setPower(0.5)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(300),
                         new DropdownPartialRetractCommand(),
                         new IntakePowerCommand(-1)
                 ))

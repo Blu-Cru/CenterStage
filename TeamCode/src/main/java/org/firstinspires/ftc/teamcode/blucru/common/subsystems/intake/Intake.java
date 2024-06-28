@@ -16,8 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Intake implements Subsystem {
     public static double
             MAX_POWER = 1,
-            kP = 0, kI = 0, kD = 0,
-            JAMMED_VELOCITY = 100;
+            JAMMED_VELOCITY = 300;
 
     public static int PURPLE_POS = -77;
 

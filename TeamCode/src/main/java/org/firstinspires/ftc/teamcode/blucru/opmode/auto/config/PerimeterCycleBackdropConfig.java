@@ -14,6 +14,12 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropCenterPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropClosePreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropFarPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenterAfterPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeterAfterPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropPerimeter;
 
 import java.util.HashMap;
 
@@ -54,6 +60,12 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
         preloadPaths.put(Randomization.FAR, new BackdropFarPreload().build());
         preloadPaths.put(Randomization.CENTER, new BackdropCenterPreload().build());
         preloadPaths.put(Randomization.CLOSE, new BackdropClosePreload().build());
+
+        preloadBackdropToStackPath = new BackdropToStackPerimeterAfterPreload().build();
+        backdropToStackPath = new BackdropToStackPerimeter().build();
+        stackToBackdropPath = new StackToBackdropPerimeter().build();
+//        intakeCloseStackPath =
+
     }
 
     public PerimeterCycleBackdropConfig() {
