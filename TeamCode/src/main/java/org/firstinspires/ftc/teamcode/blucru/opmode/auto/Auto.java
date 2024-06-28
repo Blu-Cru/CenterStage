@@ -2,10 +2,16 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
@@ -67,6 +73,8 @@ public class Auto extends BCLinearOpMode {
                 Globals.startAuto();
                 config.start(Globals.getRandomization(propPosition));
                 cvMaster.detectTag();
+                new SequentialCommandGroup(new WaitCommand(200), new InstantCommand(() -> cvMaster.setCameraFocus(1))).schedule();
+                FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
             })
             .state(State.RUNNING)
             .loop(() -> {

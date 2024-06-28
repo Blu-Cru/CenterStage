@@ -22,6 +22,8 @@ public class AprilTagTest extends BCLinearOpMode {
     boolean lastA = false;
     boolean lastX = false;
 
+    boolean exposure, focus, gain;
+
     State state = State.IDLE;
 
     @Override
@@ -29,12 +31,16 @@ public class AprilTagTest extends BCLinearOpMode {
         addDrivetrain(true);
         addCVMaster();
         enableFTCDashboard();
+
+        exposure = false;
+        focus = false;
+        gain = false;
     }
 
     public void initLoop() {
-        cvMaster.setCameraExposure(CAMERA_EXPOSURE);
-        cvMaster.setCameraGain(CAMERA_GAIN);
-        cvMaster.setCameraFocus(CAMERA_FOCUS);
+        exposure = cvMaster.setCameraExposure(CAMERA_EXPOSURE);
+        gain = cvMaster.setCameraGain(CAMERA_GAIN);
+        focus = cvMaster.setCameraFocus(CAMERA_FOCUS);
 
         if (gamepad1.a && !lastA) {
             cvMaster.detectTag();
@@ -60,5 +66,8 @@ public class AprilTagTest extends BCLinearOpMode {
 
     public void telemetry() {
         telemetry.addData("state:", state);
+        telemetry.addData("exposure", exposure);
+        telemetry.addData("gain", gain);
+        telemetry.addData("focus", focus);
     }
 }

@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
@@ -40,6 +42,7 @@ public class AprilTagHistoryTest extends BCLinearOpMode {
                     state = State.SCANNING;
                     Log.i("TagHistoryTest", "started scanning");
                     cvMaster.detectTag();
+                    FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
                 }
                 lastA = gamepad1.a;
 

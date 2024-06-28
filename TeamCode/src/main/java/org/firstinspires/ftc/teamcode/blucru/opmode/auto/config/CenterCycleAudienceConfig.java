@@ -92,10 +92,10 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .state(State.WAITING_FOR_PRELOAD_DEPOSIT)
                 .onEnter(() -> logTransitionTo(State.WAITING_FOR_PRELOAD_DEPOSIT))
                 .loop(() -> {
-//                    dt.updateAprilTags();
+                    dt.updateAprilTags();
                 })
 
-                .transition(() -> robot.cvMaster.tagDetector.getDetections().size() > 2, State.PRELOAD_DEPOSITING, () -> {
+                .transition(() -> robot.cvMaster.numDetections > 2, State.PRELOAD_DEPOSITING, () -> {
                     currentPath = preloadDepositPaths.get(randomization).start();
                 })
                 .transitionTimed(3, State.PRELOAD_DEPOSITING, () -> {
@@ -151,7 +151,6 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     public void run() {
         stateMachine.update();
         currentPath.run();
-        Log.i("CenterCycleAudienceConfig", "Detections size" + robot.cvMaster.tagDetector.getDetections().size());
     }
 
     public void telemetry(Telemetry telemetry) {

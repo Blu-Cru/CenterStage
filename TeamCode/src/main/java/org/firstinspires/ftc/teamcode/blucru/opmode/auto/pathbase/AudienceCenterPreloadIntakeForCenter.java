@@ -28,9 +28,9 @@ public class AudienceCenterPreloadIntakeForCenter extends PIDPathBuilder {
                 ))
                 .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
+                        new WaitCommand(600),
                         new DropdownCommand(3),
-                        new WaitCommand(400),
+                        new WaitCommand(1000),
                         new DropdownCommand(0)
                 ))
                 .waitMillis(1000);

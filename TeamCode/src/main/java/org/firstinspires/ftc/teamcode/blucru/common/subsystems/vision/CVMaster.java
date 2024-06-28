@@ -37,6 +37,8 @@ public class CVMaster implements Subsystem {
     public PropDetectionProcessor propDetector;
     public AprilTagProcessor tagDetector;
 
+    public int numDetections;
+
     public CVMaster(HardwareMap hardwareMap, Alliance alliance) {
         this.propDetector = new PropDetectionProcessor(alliance);
 
@@ -73,14 +75,17 @@ public class CVMaster implements Subsystem {
         exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         gainControl = visionPortal.getCameraControl(GainControl.class);
         focusControl = visionPortal.getCameraControl(FocusControl.class);
+
+        numDetections = 0;
     }
 
     public void init() {
-
+        numDetections = 0;
     }
 
     public void read() {
-
+        if(visionPortal.getProcessorEnabled(tagDetector)) numDetections = tagDetector.getDetections().size();
+        else numDetections = 0;
     }
 
     public void write() {
@@ -95,7 +100,7 @@ public class CVMaster implements Subsystem {
         }
         telemetry.addData("Tag detector enabled", visionPortal.getProcessorEnabled(tagDetector));
         if(visionPortal.getProcessorEnabled(tagDetector)) {
-            telemetry.addData("# tags visible: ", tagDetector.getDetections().size());
+            telemetry.addData("# tags visible: ", numDetections);
             telemetry.addData("Detection processing time", tagDetector.getPerTagAvgPoseSolveTime());
         }
     }
@@ -118,7 +123,8 @@ public class CVMaster implements Subsystem {
         exposureControl.setMode(ExposureControl.Mode.Manual);
         exposureControl.setExposure(EXPOSURE, TimeUnit.MILLISECONDS);
         gainControl.setGain(GAIN);
-        focusControl.setFocusLength(FOCUS);
+        focusControl.setMode(FocusControl.Mode.Fixed);
+        setCameraFocus(FOCUS);
     }
 
     public void stop() {
@@ -127,15 +133,15 @@ public class CVMaster implements Subsystem {
         visionPortal.stopStreaming();
     }
 
-    public void setCameraExposure(double exposure) {
-        exposureControl.setExposure((long) exposure, TimeUnit.MILLISECONDS);
+    public boolean setCameraExposure(double exposure) {
+        return exposureControl.setExposure((long) exposure, TimeUnit.MILLISECONDS);
     }
 
-    public void setCameraGain(double gain) {
-        gainControl.setGain((int) gain);
+    public boolean setCameraGain(double gain) {
+        return gainControl.setGain((int) gain);
     }
 
-    public void setCameraFocus(double focus) {
-        focusControl.setFocusLength(focus);
+    public boolean setCameraFocus(double focus) {
+        return focusControl.setFocusLength(focus);
     }
 }

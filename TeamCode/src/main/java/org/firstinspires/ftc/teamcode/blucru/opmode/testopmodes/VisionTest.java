@@ -64,10 +64,11 @@ public class VisionTest extends LinearOpMode {
                     List<AprilTagDetection> currentDetections = cvMaster.tagDetector.getDetections();
 
                     AprilTagDetection closestDetection;
+
+                    telemetry.addData("# of detections", cvMaster.tagDetector.getDetections().size());
                     double closestDistance = Double.MAX_VALUE;
                     if(currentDetections.size() > 0) {
                         closestDetection = currentDetections.get(0);
-                        telemetry.addData("# of detections", cvMaster.tagDetector.getDetections().size());
                         closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);
 
                         for (AprilTagDetection detection : currentDetections) {
