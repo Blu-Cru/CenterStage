@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
-import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
@@ -67,6 +67,7 @@ public class VisionTest extends LinearOpMode {
                     double closestDistance = Double.MAX_VALUE;
                     if(currentDetections.size() > 0) {
                         closestDetection = currentDetections.get(0);
+                        telemetry.addData("# of detections", cvMaster.tagDetector.getDetections().size());
                         closestDistance = Math.hypot(closestDetection.ftcPose.x, closestDetection.ftcPose.y);
 
                         for (AprilTagDetection detection : currentDetections) {

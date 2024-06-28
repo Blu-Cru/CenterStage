@@ -1,22 +1,19 @@
-package org.firstinspires.ftc.teamcode.blucru.common.vision;
+package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
-import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class PropDetectionProcessor implements VisionProcessor {
+@Config
+public class PropDetectionPipeline extends OpenCvPipeline {
     private Alliance alliance;
 
 
@@ -34,12 +31,12 @@ public class PropDetectionProcessor implements VisionProcessor {
          0                                       1
                              x
      rectangle positions */
-    public static double rect0x = 0.04;
-    public static double rect0y = 0.75;
-    public static double rect1x = 0.36;
-    public static double rect1y = 0.71;
-    public static double rect2x = 0.75;
-    public static double rect2y = 0.75;
+    public static double rect0x = 0.15;
+    public static double rect0y = 0.7;
+    public static double rect1x = 0.55;
+    public static double rect1y = 0.7;
+    public static double rect2x = 0.95;
+    public static double rect2y = 0.7;
 
     // hues for blue
     public static double blueLowH = 80;
@@ -67,27 +64,20 @@ public class PropDetectionProcessor implements VisionProcessor {
     public static double strictHighS = 255; // high saturation value for strict HSV filter
     public int position = 1;
 
-    public static Paint green = new Paint();
+    public PropDetectionPipeline(int camWidth, int camHeight, Alliance alliance) {
+        // initialize frameList (not used)
+        // frameList = new ArrayList<double[]>();
 
-    public PropDetectionProcessor(Alliance alliance) {
-        green.setColor(Color.rgb(0, 255, 0));
-        green.setStyle(Paint.Style.STROKE);
-        green.setStrokeWidth(5);
-        green.setAntiAlias(true);
-
+        // set strict HSV values based on alliance
         this.alliance = alliance;
     }
+    @Override
+    public Mat processFrame(Mat input) {
+        Mat mat = new Mat();
 
-    public void init(int width, int height, CameraCalibration cameraCalibration) {
-
-    }
-
-    public Mat processFrame(Mat inputRGB, long captureTime) {
-        Mat inputHSV = new Mat();
-
-        Imgproc.cvtColor(inputRGB, inputHSV, Imgproc.COLOR_RGB2HSV);
-        if(inputHSV.empty()) {
-            return inputRGB;
+        Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
+        if(mat.empty()) {
+            return input;
         }
 
         Mat thresh = new Mat();
@@ -98,7 +88,7 @@ public class PropDetectionProcessor implements VisionProcessor {
             Scalar lower = new Scalar(blueLowH,40,20);
             Scalar upper = new Scalar(blueHighH, 255, 255);
 
-            Core.inRange(inputHSV, lower, upper, thresh);
+            Core.inRange(mat, lower, upper, thresh);
         } else {
             Scalar lower1 = new Scalar(redLowH1, 40, 20);
             Scalar upper1 = new Scalar(redHighH1, 255, 255);
@@ -109,8 +99,8 @@ public class PropDetectionProcessor implements VisionProcessor {
             Mat thresh1 = new Mat();
             Mat thresh2 = new Mat();
 
-            Core.inRange(inputHSV, lower2, upper2, thresh2);
-            Core.inRange(inputHSV, lower1, upper1, thresh1);
+            Core.inRange(mat, lower2, upper2, thresh2);
+            Core.inRange(mat, lower1, upper1, thresh1);
 
             // combine the 2 red threshes
             Core.bitwise_or(thresh1, thresh2, thresh);
@@ -123,7 +113,7 @@ public class PropDetectionProcessor implements VisionProcessor {
 
 
         Mat masked = new Mat();
-        Core.bitwise_and(inputHSV, inputHSV, masked, thresh);
+        Core.bitwise_and(mat, mat, masked, thresh);
 
 
         //calculate average HSV values of the white thresh values
@@ -176,7 +166,7 @@ public class PropDetectionProcessor implements VisionProcessor {
         // input.release();
         //scaledThresh.release();
         scaledMask.release();
-        inputHSV.release();
+        mat.release();
         masked.release();
         thresh.release();
         //change the return to whatever mat you want in camera stream
@@ -187,21 +177,6 @@ public class PropDetectionProcessor implements VisionProcessor {
         return scaledThresh;
     }
 
-    public void onDrawFrame(Canvas canvas,
-                            int width,
-                            int height,
-                            float bmpToCanvasPx,
-                            float bmpDensity,
-                            Object userContext) {
-        canvas.drawRect(rect0.x * bmpToCanvasPx, rect0.y * bmpToCanvasPx, (rect0.x + rect0.width) * bmpToCanvasPx, (rect0.y + rect0.height) * bmpToCanvasPx, green);
-        canvas.drawRect(rect1.x * bmpToCanvasPx, rect1.y * bmpToCanvasPx, (rect1.x + rect1.width) * bmpToCanvasPx, (rect1.y + rect1.height) * bmpToCanvasPx, green);
-        canvas.drawRect(rect2.x * bmpToCanvasPx, rect2.y * bmpToCanvasPx, (rect2.x + rect2.width) * bmpToCanvasPx, (rect2.y + rect2.height) * bmpToCanvasPx, green);
-    }
-
-    public void setAlliance(Alliance alliance) {
-        this.alliance = alliance;
-    }
-
     public static Rect getRect(double centerx, double centery, int width, int height, int camWidth, int camHeight) {
         int subMatRectX = (int)(camWidth * centerx) - (width / 2);
         int subMatRectY = (int)(camHeight * centery) - (height / 2);
@@ -210,12 +185,5 @@ public class PropDetectionProcessor implements VisionProcessor {
 
         Rect subMatRect = new Rect(subMatRectX, subMatRectY, subMatRectWidth, subMatRectHeight);
         return subMatRect;
-    }
-
-    public void telemetry(Telemetry telemetry) {
-        telemetry.addData("average 0", average0);
-        telemetry.addData("average 1", average1);
-        telemetry.addData("average 2", average2);
-        telemetry.addData("POSITION", position);
     }
 }

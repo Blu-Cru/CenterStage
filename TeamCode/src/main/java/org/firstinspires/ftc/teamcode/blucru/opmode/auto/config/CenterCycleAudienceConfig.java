@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenter
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterToBackdropPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadDeposit;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadIntake;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceFarPreloadDeposit;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceFarPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterDepositFailsafe;
@@ -65,15 +66,18 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     ElapsedTime runtime;
     StateMachine stateMachine;
     Drivetrain dt;
+    Robot robot;
 
     public CenterCycleAudienceConfig() {
-        dt = Robot.getInstance().drivetrain;
         preloadIntakePaths = new HashMap<>();
         preloadDepositPaths = new HashMap<>();
         stateMachine = new StateMachineBuilder()
                 .state(State.PRELOAD_INTAKING)
                 .onEnter(() -> logTransitionTo(State.PRELOAD_INTAKING))
                 .transition(() -> currentPath.isDone(), State.TO_BACKDROP_PRELOAD, () -> {
+                    currentPath = toBackdropPreloadPath.start();
+                })
+                .transition(() -> robot.intake.isFull(), State.TO_BACKDROP_PRELOAD, () -> {
                     currentPath = toBackdropPreloadPath.start();
                 })
 
@@ -88,18 +92,28 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .state(State.WAITING_FOR_PRELOAD_DEPOSIT)
                 .onEnter(() -> logTransitionTo(State.WAITING_FOR_PRELOAD_DEPOSIT))
                 .loop(() -> {
-                    dt.updateAprilTags();
+//                    dt.updateAprilTags();
                 })
 
-                // TODO: create preload deposit transition
-                .transition(() -> Robot.getInstance().cvMaster.tagDetector.getDetections().size() > 2, State.PRELOAD_DEPOSITING, () -> {
+                .transition(() -> robot.cvMaster.tagDetector.getDetections().size() > 2, State.PRELOAD_DEPOSITING, () -> {
                     currentPath = preloadDepositPaths.get(randomization).start();
                 })
-                // TODO: create preload deposit path
-                .transitionTimed(3, State.PRELOAD_DEPOSITING)
+                .transitionTimed(3, State.PRELOAD_DEPOSITING, () -> {
+                    currentPath = preloadDepositPaths.get(randomization).start();
+                })
 
                 .state(State.PRELOAD_DEPOSITING)
-//                .transition()
+                .onEnter(() -> logTransitionTo(State.PRELOAD_DEPOSITING))
+                .loop(() -> dt.updateAprilTags())
+                .transition(() -> currentPath.isDone(), State.PARKING, () -> {
+                    currentPath = parkPath.start();
+                })
+
+                .state(State.PARKING)
+                .onEnter(() -> logTransitionTo(State.PARKING))
+                .transition(() -> currentPath.isDone(), State.DONE)
+
+                .state(State.DONE)
                 .build();
     }
 
@@ -110,9 +124,9 @@ public class CenterCycleAudienceConfig extends AutoConfig {
 
         toBackdropPreloadPath = new AudienceCenterToBackdropPreload().build();
 
-        preloadDepositPaths.put(Randomization.CLOSE, new AudienceClosePreloadDeposit().build());
+        preloadDepositPaths.put(Randomization.CLOSE, AudienceClosePreloadDeposit.get().build());
         preloadDepositPaths.put(Randomization.CENTER, AudienceCenterPreloadDeposit.get().build());
-        // TODO: finish preload deposit paths
+        preloadDepositPaths.put(Randomization.FAR, AudienceFarPreloadDeposit.get().build());
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
@@ -125,6 +139,8 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     }
 
     public void start(Randomization randomization) {
+        dt = Robot.getInstance().drivetrain;
+        robot = Robot.getInstance();
         this.randomization = randomization;
         currentPath = preloadIntakePaths.get(randomization);
         stateMachine.start();
@@ -135,6 +151,7 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     public void run() {
         stateMachine.update();
         currentPath.run();
+        Log.i("CenterCycleAudienceConfig", "Detections size" + robot.cvMaster.tagDetector.getDetections().size());
     }
 
     public void telemetry(Telemetry telemetry) {

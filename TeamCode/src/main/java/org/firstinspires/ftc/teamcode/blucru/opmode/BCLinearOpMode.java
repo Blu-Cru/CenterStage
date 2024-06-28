@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixe
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Turret;
 import org.firstinspires.ftc.teamcode.blucru.common.util.wrappers.StickyGamepad;
-import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
 
 public abstract class BCLinearOpMode extends LinearOpMode {
     public Alliance alliance;

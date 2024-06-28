@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.PurplePixelRetractCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockResetCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
@@ -21,7 +22,10 @@ public class AudienceClosePreloadIntake extends PIDPathBuilder {
                 ))
                 .waitMillis(200)
                 .addMappedPoint(-44, 30, 160, 5)
-                .schedule(new IntakeCommand(4, 1))
+                .schedule(new SequentialCommandGroup(
+                        new IntakeCommand(4, 1),
+                        new LockResetCommand()
+                ))
                 .addMappedPoint(Field.INTAKE_X, 24, 180)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(200),

@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
@@ -33,11 +34,13 @@ public class AudienceClosePreloadDeposit extends PIDPathBuilder {
                         new WaitCommand(100),
                         new TurretGlobalYCommand(globalYYellow),
                         new WaitCommand(100),
-                        new OuttakeExtendCommand(-1),
+                        new OuttakeExtendCommand(0),
                         new WaitCommand(200),
-                        new LockReleaseCommand(2)
+                        new LockReleaseCommand(2),
+                        new WaitCommand(200),
+                        new OuttakeRetractCommand(2)
                 ))
-                .waitMillis(1000);
+                .waitMillis(2500);
     }
 
     public static AudienceClosePreloadDeposit get() {

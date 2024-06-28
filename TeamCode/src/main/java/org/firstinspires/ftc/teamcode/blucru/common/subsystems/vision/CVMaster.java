@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.vision;
+package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision;
 
 import static java.lang.Thread.sleep;
 
@@ -95,6 +95,7 @@ public class CVMaster implements Subsystem {
         }
         telemetry.addData("Tag detector enabled", visionPortal.getProcessorEnabled(tagDetector));
         if(visionPortal.getProcessorEnabled(tagDetector)) {
+            telemetry.addData("# tags visible: ", tagDetector.getDetections().size());
             telemetry.addData("Detection processing time", tagDetector.getPerTagAvgPoseSolveTime());
         }
     }

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
-import org.firstinspires.ftc.teamcode.blucru.common.vision.CVMaster;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
 
 import java.util.ArrayList;
 

@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
@@ -13,8 +14,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class AudienceFarPreloadDeposit extends PIDPathBuilder {
     public static AudienceFarPreloadDeposit get(AutoType autoType) {
-        if(autoType == AutoType.CENTER_CYCLE) return new AudienceFarPreloadDeposit(36, 32);
-        else return new AudienceFarPreloadDeposit(36, 32);
+        if(autoType == AutoType.CENTER_CYCLE) return new AudienceFarPreloadDeposit(36, 30);
+        else return new AudienceFarPreloadDeposit(36, 30);
     }
 
     private AudienceFarPreloadDeposit(double globalYWhite, double globalYYellow) {
@@ -30,14 +31,15 @@ public class AudienceFarPreloadDeposit extends PIDPathBuilder {
                         new LockReleaseCommand(1),
                         new WaitCommand(200),
                         new OuttakeExtendCommand(1),
-                        new WaitCommand(100),
+                        new WaitCommand(50),
                         new TurretGlobalYCommand(globalYYellow),
-                        new WaitCommand(100),
-                        new OuttakeExtendCommand(-1),
+                        new OuttakeExtendCommand(-0.2),
+                        new WaitCommand(120),
+                        new LockReleaseCommand(2),
                         new WaitCommand(200),
-                        new LockReleaseCommand(2)
+                        new OuttakeRetractCommand(2)
                 ))
-                .waitMillis(1000);
+                .waitMillis(2000);
     }
 
     public static AudienceFarPreloadDeposit get() {

@@ -36,6 +36,7 @@ public class Turret implements Subsystem {
     }
 
     public void init() {
+        position = toTicks(270);
         turretServo.setPosition(position);
     }
 
