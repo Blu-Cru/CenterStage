@@ -11,20 +11,20 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-public class AudienceClosePreloadDeposit extends PIDPathBuilder {
-    public static AudienceClosePreloadDeposit get(AutoType autoType) {
-        if(autoType == AutoType.CENTER_CYCLE) return new AudienceClosePreloadDeposit(36, 40);
-        else return new AudienceClosePreloadDeposit(36, 40);
+public class AudienceFarPreloadDeposit extends PIDPathBuilder {
+    public static AudienceFarPreloadDeposit get(AutoType autoType) {
+        if(autoType == AutoType.CENTER_CYCLE) return new AudienceFarPreloadDeposit(36, 32);
+        else return new AudienceFarPreloadDeposit(36, 32);
     }
 
-    private AudienceClosePreloadDeposit(double globalYWhite, double globalYYellow) {
+    private AudienceFarPreloadDeposit(double globalYWhite, double globalYYellow) {
         super();
         this.setPower(0.35)
                 .schedule(new SequentialCommandGroup(
                         new OuttakeExtendCommand(-1),
                         new TurretGlobalYCommand(globalYWhite)
                 ))
-                .addMappedPoint(Field.DEPOSIT_X, 39, 180, 2.5)
+                .addMappedPoint(Field.DEPOSIT_X, 33, 180, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(100),
                         new LockReleaseCommand(1),
@@ -40,7 +40,7 @@ public class AudienceClosePreloadDeposit extends PIDPathBuilder {
                 .waitMillis(1000);
     }
 
-    public static AudienceClosePreloadDeposit get() {
+    public static AudienceFarPreloadDeposit get() {
         return get(Globals.autoType);
     }
 }

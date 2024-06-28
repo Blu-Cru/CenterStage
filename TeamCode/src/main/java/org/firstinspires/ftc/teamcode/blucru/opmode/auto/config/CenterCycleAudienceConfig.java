@@ -2,15 +2,19 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.path.Path;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterPreloadDeposit;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterPreloadIntakeForCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceCenterToBackdropPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.AudienceClosePreloadDeposit;
@@ -43,6 +47,8 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         INTAKE_FAILSAFE,
     }
 
+    Randomization randomization;
+
     HashMap<Randomization, Path> preloadIntakePaths;
     HashMap<Randomization, Path> preloadDepositPaths;
     Path backdropToStackPath, stackToBackdropPath,
@@ -56,16 +62,20 @@ public class CenterCycleAudienceConfig extends AutoConfig {
             crashToStackRecoveryPath, crashToBackdropRecoveryPath;
 
     Path currentPath;
-
+    ElapsedTime runtime;
     StateMachine stateMachine;
+    Drivetrain dt;
 
     public CenterCycleAudienceConfig() {
+        dt = Robot.getInstance().drivetrain;
         preloadIntakePaths = new HashMap<>();
         preloadDepositPaths = new HashMap<>();
         stateMachine = new StateMachineBuilder()
                 .state(State.PRELOAD_INTAKING)
                 .onEnter(() -> logTransitionTo(State.PRELOAD_INTAKING))
-                .transition(() -> currentPath.isDone(), State.TO_BACKDROP_PRELOAD, () -> currentPath = toBackdropPreloadPath.start())
+                .transition(() -> currentPath.isDone(), State.TO_BACKDROP_PRELOAD, () -> {
+                    currentPath = toBackdropPreloadPath.start();
+                })
 
                 // TODO: create failsafe for if intake fails
 
@@ -77,11 +87,19 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 // WAITING FOR PRELOAD DEPOSIT
                 .state(State.WAITING_FOR_PRELOAD_DEPOSIT)
                 .onEnter(() -> logTransitionTo(State.WAITING_FOR_PRELOAD_DEPOSIT))
+                .loop(() -> {
+                    dt.updateAprilTags();
+                })
 
                 // TODO: create preload deposit transition
-                .transition(() -> Robot.getInstance().cvMaster.tagDetector.getDetections().size() > 2, State.PRELOAD_DEPOSITING)
+                .transition(() -> Robot.getInstance().cvMaster.tagDetector.getDetections().size() > 2, State.PRELOAD_DEPOSITING, () -> {
+                    currentPath = preloadDepositPaths.get(randomization).start();
+                })
                 // TODO: create preload deposit path
-                .transitionTimed(5, State.PRELOAD_DEPOSITING)
+                .transitionTimed(3, State.PRELOAD_DEPOSITING)
+
+                .state(State.PRELOAD_DEPOSITING)
+//                .transition()
                 .build();
     }
 
@@ -93,7 +111,8 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         toBackdropPreloadPath = new AudienceCenterToBackdropPreload().build();
 
         preloadDepositPaths.put(Randomization.CLOSE, new AudienceClosePreloadDeposit().build());
-//        preloadDepositPaths.put(Randomization.CENTER, )
+        preloadDepositPaths.put(Randomization.CENTER, AudienceCenterPreloadDeposit.get().build());
+        // TODO: finish preload deposit paths
 
         backdropToStackPath = new BackdropToStackCenter().build();
         stackToBackdropPath = new StackToBackdropCenter().build();
@@ -106,16 +125,21 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     }
 
     public void start(Randomization randomization) {
+        this.randomization = randomization;
         currentPath = preloadIntakePaths.get(randomization);
+        stateMachine.start();
+        stateMachine.setState(State.PRELOAD_INTAKING);
+        runtime = Globals.runtime;
     }
 
     public void run() {
-
+        stateMachine.update();
+        currentPath.run();
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addLine("Audience Center Cycle");
-//        telemetry.addData("State", stateMachine.getState());
+        telemetry.addData("State", stateMachine.getState());
     }
 
     public void logTransitionTo(Enum to) {

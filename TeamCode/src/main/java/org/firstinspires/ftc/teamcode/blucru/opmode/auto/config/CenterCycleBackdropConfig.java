@@ -289,7 +289,6 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     public void telemetry(Telemetry telemetry) {
         telemetry.addLine("Backdrop Center Cycle");
         telemetry.addData("State", stateMachine.getState());
-        telemetry.addData("Runtime: ", runtime.seconds());
     }
 
     public void logTransitionTo(Enum to) {

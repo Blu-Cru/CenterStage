@@ -18,7 +18,6 @@ public class OuttakeExtendCommand extends SequentialCommandGroup {
     public OuttakeExtendCommand(double pixelHeight) {
         super(
                 new SequentialCommandGroup(
-                        new LockCommand(),
                         new InstantCommand(
                                 () -> {
                                     Robot.getInstance().outtake.setTargetPixelHeight(pixelHeight);
