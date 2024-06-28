@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.path.Path;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
@@ -18,6 +19,9 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStac
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenterAfterPreload;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeterAfterPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterBackstage;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterCycle;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.PerimeterIntakeCloseStack;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropPerimeter;
 
@@ -48,7 +52,7 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
         intakeCloseStackPath, intakeCenterStackPath,
         depositPath, depositBackstagePath, parkPath,
 
-        intakeFailsafePath, intakeAfterFailedPath,
+        intakeFailsafePath, intakeCloseAfterFailedPath,
         crashTrussBackdropFailsafePath, crashTrussStackFailsafePath,
         crashTrussMiddleToStackPath, crashTrussMiddleToBackdropPath;
     Path currentPath;
@@ -64,7 +68,14 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
         preloadBackdropToStackPath = new BackdropToStackPerimeterAfterPreload().build();
         backdropToStackPath = new BackdropToStackPerimeter().build();
         stackToBackdropPath = new StackToBackdropPerimeter().build();
-//        intakeCloseStackPath =
+        intakeCloseStackPath = new PerimeterIntakeCloseStack().build();
+        depositPath = new DepositPerimeterCycle().build();
+        depositBackstagePath = new DepositPerimeterBackstage().build();
+
+        intakeCloseAfterFailedPath = new PerimeterIntakeCloseStack(0, 2, 25).build();
+
+        parkPath = new PIDPathBuilder().addMappedPoint(42, 62, 180).build();
+
 
     }
 

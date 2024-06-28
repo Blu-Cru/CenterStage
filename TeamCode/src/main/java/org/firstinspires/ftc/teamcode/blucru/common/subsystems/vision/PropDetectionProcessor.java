@@ -36,7 +36,7 @@ public class PropDetectionProcessor implements VisionProcessor {
      rectangle positions */
     public static double rect0x = 0.04;
     public static double rect0y = 0.75;
-    public static double rect1x = 0.36;
+    public static double rect1x = 0.37;
     public static double rect1y = 0.71;
     public static double rect2x = 0.75;
     public static double rect2y = 0.75;

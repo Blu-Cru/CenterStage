@@ -42,10 +42,12 @@ public class Auto extends BCLinearOpMode {
             .transition(() -> stickyG1.right_stick_button || stickyG2.right_stick_button, State.DETECTION, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
+                telemetry.update();
                 telemetry.addLine("Building Paths . . .");
                 telemetry.update();
                 config = AutoConfig.config();
                 config.build();
+                telemetry.update();
                 telemetry.addData("Initializing CV . . .", "");
                 telemetry.update();
                 Globals.setAutoStartPose();

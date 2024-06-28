@@ -9,11 +9,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.OuttakeWristBackstageCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 
-public class DepositCenterBackstage extends PIDPathBuilder {
-    public DepositCenterBackstage() {
+public class DepositPerimeterBackstage extends PIDPathBuilder {
+    public DepositPerimeterBackstage() {
         super();
         this.setPower(0.7)
                 .schedule(new SequentialCommandGroup(
@@ -24,7 +23,7 @@ public class DepositCenterBackstage extends PIDPathBuilder {
                         new WaitCommand(10),
                         new OuttakeWristBackstageCommand()
                 ))
-                .addMappedPoint(42, 12, 180, 6)
+                .addMappedPoint(42, 60, 180, 5)
                 .schedule(new SequentialCommandGroup(
                         new LockReleaseCommand(2),
                         new OuttakeRetractCommand()

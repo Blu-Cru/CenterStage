@@ -5,13 +5,10 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.IntakePowerCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
-import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-public class CenterIntakeFailsafe extends PIDPathBuilder {
-    public CenterIntakeFailsafe() {
+public class PerimeterIntakeFailsafe extends PIDPathBuilder {
+    public PerimeterIntakeFailsafe() {
         super();
         this.setPower(0.6)
                 .schedule(new SequentialCommandGroup(
@@ -19,6 +16,6 @@ public class CenterIntakeFailsafe extends PIDPathBuilder {
                         new DropdownPartialRetractCommand(),
                         new IntakePowerCommand(-1)
                 ))
-                .addMappedPoint(-45, 12, 180,6);
+                .addMappedPoint(-48, 50, 170,6);
     }
 }

@@ -10,18 +10,22 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Ou
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-public class DepositCenterCycle extends PIDPathBuilder {
-    public DepositCenterCycle(double pixelHeight, double turretAngle) {
+public class DepositPerimeterCycle extends PIDPathBuilder {
+    public DepositPerimeterCycle() {
+        this(1.8, 4);
+    }
+
+    public DepositPerimeterCycle(double pixelHeight, double turretAngle) {
         super();
         this.setPower(0.32)
-                .addMappedPoint(30, 16, 210, 4)
+                .addMappedPoint(30, 56, 150, 4)
                 .schedule(new SequentialCommandGroup(
                         new LockCommand(),
                         new OuttakeExtendCommand(pixelHeight),
                         new WaitCommand(500),
                         new TurretTurnCommand(270 + turretAngle * Globals.reflect)
                 ))
-                .addMappedPoint(50.3, 24, 200, 3)
+                .addMappedPoint(50.3, 48, 160, 3)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(400),
                         new LockReleaseCommand(1),
@@ -29,9 +33,5 @@ public class DepositCenterCycle extends PIDPathBuilder {
                         new LockReleaseCommand(2)
                 ))
                 .waitMillis(700);
-    }
-
-    public DepositCenterCycle() {
-        this(1.8, -4);
     }
 }

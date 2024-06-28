@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockResetCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
@@ -11,22 +12,31 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class PerimeterIntakeCloseStack extends PIDPathBuilder {
-    public PerimeterIntakeCloseStack () {
+    public PerimeterIntakeCloseStack() {
+        this(Globals.stackClosePixels -1, 0, 18);
+    }
+
+    public PerimeterIntakeCloseStack (int stackHeight, double xIncrement, double wiggleAngleDeg) {
         super();
-        this.setPower(0.4)
+        this.setPower(0.5)
                 .schedule(new SequentialCommandGroup(
-                        new IntakeCommand(Globals.stackClosePixels-1),
+                        new IntakePowerCommand(1),
                         new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X, 44, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 44, 160, 4)
                 .setPower(0.35)
-                .addMappedPoint(Field.INTAKE_X-0.5, 40, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement - 0.5, 40, 160, 2.5)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(300),
-                        new IntakeCommand(Globals.stackClosePixels-2),
-                        new WaitCommand(300),
-                        new DropdownCommand(0)
+                        new IntakeCommand(stackHeight),
+                        new WaitCommand(400),
+                        new IntakeCommand(stackHeight-1),
+                        new WaitCommand(350),
+                        new IntakeCommand(0)
                 ))
-                .waitMillis(900);
+                .waitMillis(700)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-0.5, 40, 160-wiggleAngleDeg, 2.5)
+                .waitMillis(250)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-0.5, 12, 160 + wiggleAngleDeg, 2.5)
+                .waitMillis(250);
     }
 }
