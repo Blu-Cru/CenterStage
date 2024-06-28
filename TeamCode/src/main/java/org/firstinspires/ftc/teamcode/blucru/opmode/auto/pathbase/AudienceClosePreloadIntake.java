@@ -27,9 +27,9 @@ public class AudienceClosePreloadIntake extends PIDPathBuilder {
                         new LockResetCommand()
                 ))
                 .addMappedPoint(Field.INTAKE_X, 24, 180, 2)
-                .waitMillis(400)
+                .waitMillis(500)
                 .schedule(new DropdownCommand(3))
-                .waitMillis(400)
+                .waitMillis(800)
                 .schedule(new DropdownCommand(0))
                 .waitMillis(300);
     }

@@ -19,21 +19,21 @@ public class AudienceFarPreloadIntakeForCenter extends PIDPathBuilder {
                 .addMappedPoint(-54, 42, 135,6)
                 .addMappedPoint(-57, 30, 180, 3)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(400),
-                        new PurplePixelRetractCommand(),
                         new DropdownPartialRetractCommand()
                 ))
                 .addMappedPoint(-52, 21, 220,2)
-
-                .waitMillis(350)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(4, 1),
-                        new LockResetCommand()
+                        new LockResetCommand(),
+                        new WaitCommand(20),
+                        new PurplePixelRetractCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
-                .waitMillis(400)
+                .waitMillis(200)
+
+                .addMappedPoint(55, 14, 210, 3)
+                .waitMillis(500)
                 .schedule(new DropdownCommand(3))
-                .waitMillis(400)
+                .waitMillis(600)
                 .schedule(new DropdownCommand(0))
                 .waitMillis(300);
     }
