@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 @Config
 @Autonomous(name = "Auto", group = "1")
 public class Auto extends BCLinearOpMode {
-    public static double DELAY_SECS = 15;
+    public static double DELAY_SECS = 0;
 
     private enum State {
         CONFIG,

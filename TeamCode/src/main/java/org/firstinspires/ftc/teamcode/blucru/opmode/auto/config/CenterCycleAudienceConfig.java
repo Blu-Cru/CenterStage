@@ -114,10 +114,10 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .state(State.PRELOAD_DEPOSITING)
                 .onEnter(() -> logTransitionTo(State.PRELOAD_DEPOSITING))
                 .loop(() -> dt.updateAprilTags())
-                .transition(() -> currentPath.isDone() && runtime.seconds() < 23, State.TO_STACK, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 23.5, State.TO_STACK, () -> {
                     currentPath = backdropToStackPath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() > 23, State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() > 23.5, State.PARKING, () -> {
                     currentPath = parkPath.start();
                 })
 
