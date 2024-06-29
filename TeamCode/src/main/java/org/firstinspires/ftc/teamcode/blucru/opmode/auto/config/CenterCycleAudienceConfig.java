@@ -154,10 +154,11 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .transition(() -> currentPath.isDone() && runtime.seconds() < 27.5, State.DEPOSITING, () -> {
                     currentPath = depositPath.start();
                 })
-                .transition(() -> currentPath.isDone() && (runtime.seconds() > 27.5 && runtime.seconds() < 29), State.DEPOSITING_BACKSTAGE, () -> {
+                .transition(() -> currentPath.isDone() && (runtime.seconds() > 27.7 && runtime.seconds() < 29.3) &&
+                        !robot.intake.isEmpty(), State.DEPOSITING_BACKSTAGE, () -> {
                     currentPath = depositBackstagePath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() > 29, State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() && (runtime.seconds() > 29.3 || (robot.intake.isEmpty() && runtime.seconds() > 27.7)), State.PARKING, () -> {
                     currentPath = parkPath.start();
                 })
 
@@ -230,7 +231,7 @@ public class CenterCycleAudienceConfig extends AutoConfig {
         intakeCenterStackPath = new CenterIntakeCenterStack().build();
         depositPath = new DepositCenterCycle().build();
         depositBackstagePath = new DepositCenterBackstage().build();
-        parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 220).build();
+        parkPath = new PIDPathBuilder().addMappedPoint(42, 10, 200).build();
 
         intakeFailsafePath = new CenterIntakeFailsafe().build();
         depositFailsafePath = new CenterDepositFailsafe().build();
