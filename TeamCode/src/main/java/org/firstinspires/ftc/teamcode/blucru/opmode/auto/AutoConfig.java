@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.CenterCycleAudienceConfig;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.CenterCycleBackdropConfig;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.config.PerimeterCycleBackdropConfig;
 
 public abstract class AutoConfig {
     public abstract void build();
@@ -29,7 +30,7 @@ public abstract class AutoConfig {
             if(Globals.autoType == AutoType.CENTER_CYCLE)
                 return new CenterCycleBackdropConfig();
             else if(Globals.autoType == AutoType.PERIMETER_CYCLE){
-//                return new PerimeterCycleBackdropConfig();
+                return new PerimeterCycleBackdropConfig();
             } else if(Globals.autoType == AutoType.PRELOAD) {
 //                return new PreloadBackdropConfig();
             }

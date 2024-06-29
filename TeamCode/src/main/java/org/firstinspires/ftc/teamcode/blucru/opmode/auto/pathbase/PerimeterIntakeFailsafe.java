@@ -16,6 +16,6 @@ public class PerimeterIntakeFailsafe extends PIDPathBuilder {
                         new DropdownPartialRetractCommand(),
                         new IntakePowerCommand(-1)
                 ))
-                .addMappedPoint(-48, 50, 170,6);
+                .addMappedPoint(-48, 50, 190,6);
     }
 }

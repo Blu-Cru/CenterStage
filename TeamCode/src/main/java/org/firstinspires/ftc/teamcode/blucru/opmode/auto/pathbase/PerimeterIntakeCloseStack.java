@@ -23,9 +23,9 @@ public class PerimeterIntakeCloseStack extends PIDPathBuilder {
                         new IntakePowerCommand(1),
                         new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 44, 160, 4)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 48, 200, 4)
                 .setPower(0.35)
-                .addMappedPoint(Field.INTAKE_X - xIncrement - 0.5, 40, 160, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement - 2.5, 42, 210, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(stackHeight),
                         new WaitCommand(400),
@@ -34,9 +34,9 @@ public class PerimeterIntakeCloseStack extends PIDPathBuilder {
                         new IntakeCommand(0)
                 ))
                 .waitMillis(700)
-                .addMappedPoint(Field.INTAKE_X - xIncrement-0.5, 40, 160-wiggleAngleDeg, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-2.5, 43, 210-wiggleAngleDeg, 2.5)
                 .waitMillis(250)
-                .addMappedPoint(Field.INTAKE_X - xIncrement-0.5, 12, 160 + wiggleAngleDeg, 2.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-2.5, 43, 210 + wiggleAngleDeg, 2.5)
                 .waitMillis(250);
     }
 }

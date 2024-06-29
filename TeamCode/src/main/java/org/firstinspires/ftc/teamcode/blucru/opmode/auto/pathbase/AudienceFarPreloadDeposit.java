@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class AudienceFarPreloadDeposit extends PIDPathBuilder {
     public static AudienceFarPreloadDeposit get(AutoType autoType) {
-        if(autoType == AutoType.CENTER_CYCLE) return new AudienceFarPreloadDeposit(38, 29);
-        else return new AudienceFarPreloadDeposit(38, 29);
+        if(autoType == AutoType.CENTER_CYCLE) return new AudienceFarPreloadDeposit(38, 30.5);
+        else return new AudienceFarPreloadDeposit(38, 30.5);
     }
 
     private AudienceFarPreloadDeposit(double globalYWhite, double globalYYellow) {
@@ -26,7 +26,7 @@ public class AudienceFarPreloadDeposit extends PIDPathBuilder {
                         new OuttakeExtendCommand(0),
                         new TurretGlobalYCommand(globalYWhite)
                 ))
-                .addMappedPoint(Field.DEPOSIT_X, 33, 180, 2.5)
+                .addMappedPoint(Field.DEPOSIT_X, 32, 180, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new WaitCommand(100),
                         new LockReleaseCommand(1),

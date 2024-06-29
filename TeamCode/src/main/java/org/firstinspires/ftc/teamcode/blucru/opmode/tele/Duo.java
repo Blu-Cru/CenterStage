@@ -95,6 +95,7 @@ public class Duo extends BCLinearOpMode {
 
         // add subsystems
         addDrivetrain(true);
+        addPurplePixelHolder();
         addOuttake();
         addIntake();
         addHanger();
@@ -104,6 +105,11 @@ public class Duo extends BCLinearOpMode {
 
         scoringHeading = alliance == Alliance.RED ? Math.toRadians(180) : 0; // set the heading to score on the backboard
         intake.startReadingColor();
+    }
+
+    @Override
+    public void onStart() {
+        drivetrain.initializePose();
     }
 
     public void periodic() {

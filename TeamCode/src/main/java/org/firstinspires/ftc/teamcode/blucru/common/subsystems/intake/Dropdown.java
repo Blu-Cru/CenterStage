@@ -22,12 +22,12 @@ public class Dropdown implements Subsystem {
             THETA3 = Math.atan(P3tangential/P3axial),
 
             PIXEL_HEIGHT = 12.7,
-            STACK_1_HEIGHT = 27,
+            STACK_1_HEIGHT = 40,
             RETRACT_HEIGHT = 130,
 
             AUTO_MID_HEIGHT = 110,
 
-            GROUND_HEIGHT = 20;
+            GROUND_HEIGHT = 27;
 
     static Point2d P1 = new Point2d(79.95, 50);
 

@@ -133,7 +133,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                     currentPath = intakeFailsafePath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
@@ -225,7 +227,9 @@ public class CenterCycleBackdropConfig extends AutoConfig {
                     currentPath = new StackToBackdropCenter(true).build().start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
@@ -268,12 +272,12 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         intakeFailsafePath = new CenterIntakeFailsafe().build();
         depositFailsafePath = new CenterDepositFailsafe().build();
 
-        crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(6, 12, 180).build();
+        crashTrussBackdropFailsafePath = new PIDPathBuilder().addMappedPoint(14, 12, 180).build();
         crashTrussStackFailsafePath = new PIDPathBuilder().addMappedPoint(-38, 12, 180).build();
-        crashTrussMiddleFailsafeToIntakePath = new PIDPathBuilder().addMappedPoint(-10, 12, 210)
-                .addMappedPoint(-10, 12, 180).build();
-        crashTrussMiddleFailsafeToBackdropPath = new PIDPathBuilder().addMappedPoint(-10, 12, 150)
-                .addMappedPoint(-10, 12, 180).build();
+        crashTrussMiddleFailsafeToIntakePath = new PIDPathBuilder().addMappedPoint(-12, 12, 210)
+                .addMappedPoint(-8, 12, 180).build();
+        crashTrussMiddleFailsafeToBackdropPath = new PIDPathBuilder().addMappedPoint(-12, 12, 150)
+                .addMappedPoint(-16, 12, 180).build();
 
         crashToStackRecoveryPath = new PIDPathBuilder().addMappedPoint(-34, 12, 180).build();
         crashToBackdropRecoveryPath = new PIDPathBuilder().addMappedPoint(10, 12, 180).build();

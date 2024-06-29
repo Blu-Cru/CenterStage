@@ -21,14 +21,14 @@ public class DepositCenterCycle extends PIDPathBuilder {
                         new WaitCommand(500),
                         new TurretTurnCommand(270 + turretAngle * Globals.reflect)
                 ))
-                .addMappedPoint(50.3, 24, 200, 3)
+                .addMappedPoint(50.7, 25, 195, 3.5)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(400),
+                        new WaitCommand(450),
                         new LockReleaseCommand(1),
                         new WaitCommand(150),
                         new LockReleaseCommand(2)
                 ))
-                .waitMillis(700);
+                .waitMillis(800);
     }
 
     public DepositCenterCycle() {

@@ -15,7 +15,7 @@ public class AudienceCenterPreloadIntakeForCenter extends PIDPathBuilder {
     public AudienceCenterPreloadIntakeForCenter() {
         super();
         this.setPower(0.45)
-                .addMappedPoint(-40, 30, 135,6)
+                .addMappedPoint(-40, 35, 135,6)
                 .addMappedPoint(-48, 25, 180, 2)
                 .schedule(new SequentialCommandGroup(
                         new PurplePixelRetractCommand(),

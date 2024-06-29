@@ -22,12 +22,12 @@ public class CenterIntakeFarStack extends PIDPathBuilder {
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 3.5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(stackHeight),
-                        new WaitCommand(400),
+                        new WaitCommand(200),
                         new IntakeCommand(stackHeight-1),
-                        new WaitCommand(350),
+                        new WaitCommand(200),
                         new IntakeCommand(0)
                 ))
-                .waitMillis(700)
+                .waitMillis(500)
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180-wiggleAngleDeg, 2.5)
                 .waitMillis(250)
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180 + wiggleAngleDeg, 2.5)

@@ -6,8 +6,8 @@ public class BackdropToStackPerimeter extends PIDPathBuilder {
     public BackdropToStackPerimeter() {
         super();
         this.setPower(0.5)
-                .addMappedPoint(38, 60, 200, 5)
+                .addMappedPoint(38, 60, 160, 5)
                 .setPower(0.6)
-                .addMappedPoint(-28, 60, 180, 10);
+                .addMappedPoint(-35, 60, 180, 10);
     }
 }

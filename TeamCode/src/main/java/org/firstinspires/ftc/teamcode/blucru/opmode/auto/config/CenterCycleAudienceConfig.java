@@ -135,7 +135,9 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                     currentPath = intakeFailsafePath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
@@ -189,7 +191,9 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                     currentPath = stackToBackdropPath.start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;

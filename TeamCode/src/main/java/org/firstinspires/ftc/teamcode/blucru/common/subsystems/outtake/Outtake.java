@@ -15,7 +15,7 @@ public class Outtake implements Subsystem {
 
             PIXEL_HEIGHT = 2.6, // inches
             DUNK_HEIGHT = PIXEL_HEIGHT * 0.5,
-            LOW_HEIGHT = 3.2, // inches
+            LOW_HEIGHT = 3.6, // inches
             MED_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 2, // inches
             HIGH_HEIGHT = LOW_HEIGHT + PIXEL_HEIGHT * 4,
 

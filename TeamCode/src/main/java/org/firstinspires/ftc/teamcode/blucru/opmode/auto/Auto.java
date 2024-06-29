@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -12,6 +14,7 @@ import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
+import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
@@ -112,8 +115,9 @@ public class Auto extends BCLinearOpMode {
 
     @Override
     public void end() {
-        Globals.startPose = drivetrain.pose;
-        Log.i("Auto", "start pose set to" + drivetrain.pose);
+        if(Globals.alliance == Alliance.RED) Globals.startPose = drivetrain.pose;
+        else Globals.startPose = new Pose2d(drivetrain.pose.vec(), Angle.norm(drivetrain.pose.getHeading() + Math.PI));
+        Log.i("Auto", "start pose set to" + Globals.startPose);
     }
 
     @Override

@@ -18,6 +18,8 @@ public class StackToBackdropAudienceCenterPreload extends PIDPathBuilder {
                         new DropdownFullRetractCommand(),
                         new WaitCommand(100),
                         new LockCommand(),
+                        new IntakePowerCommand(-1),
+                        new WaitCommand(800),
                         new IntakeStopCommand()
                 ))
                 .addMappedPoint(-52, 12, 180, 3)

@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterC
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterBackstage;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterCycle;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.PerimeterIntakeCloseStack;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.PerimeterIntakeFailsafe;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropPerimeter;
 
@@ -79,9 +80,10 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
         depositPath = new DepositPerimeterCycle().build();
         depositBackstagePath = new DepositPerimeterBackstage().build();
 
+        intakeFailsafePath = new PerimeterIntakeFailsafe().build();
         intakeCloseAfterFailedPath = new PerimeterIntakeCloseStack(0, 2, 25).build();
 
-        parkPath = new PIDPathBuilder().addMappedPoint(42, 62, 160).build();
+        parkPath = new PIDPathBuilder().addMappedPoint(42, 61, 180).build();
     }
 
     public PerimeterCycleBackdropConfig() {
@@ -142,7 +144,9 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
                     currentPath = intakeFailsafePath.start();
                 })
                 .transition(() -> robot.intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     robot.outtake.lock();
                     Globals.stackFarPixels -= 2;
@@ -162,10 +166,12 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
                 })
                 .transition(() -> currentPath.isDone() &&
                         (runtime.seconds() > 27.7 && runtime.seconds() < 29.3) &&
-                        !Robot.getInstance().intake.isEmpty(), State.DEPOSITING_BACKSTAGE, () -> {
+                        !robot.intake.isEmpty(), State.DEPOSITING_BACKSTAGE, () -> {
                     currentPath = depositBackstagePath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() > 29.3 && Robot.getInstance().intake.isEmpty(), State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() &&
+                        (runtime.seconds() > 29.3 || (robot.intake.isEmpty() && runtime.seconds() > 27.7)),
+                        State.PARKING, () -> {
                     currentPath = parkPath.start();
                 })
 //                .transition(() -> dt.getAbsHeadingError(Math.PI) > TRUSS_HEADING_FAILSAFE_TOLERANCE
@@ -233,7 +239,9 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
                     currentPath = new StackToBackdropPerimeter().build().start();
                 })
                 .transition(() -> Robot.getInstance().intake.isFull(), State.TO_BACKDROP, () -> {
-                    CommandScheduler.getInstance().cancelAll();
+                    try{
+                        CommandScheduler.getInstance().cancelAll();
+                    } catch (Exception e){}
                     currentPath = stackToBackdropPath.start();
                     Robot.getInstance().outtake.lock();
                     Globals.stackFarPixels -= 2;
@@ -263,8 +271,9 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
 
     public void start(Randomization randomization) {
         robot = Robot.getInstance();
+        currentPath = preloadPaths.get(randomization);
         stateMachine.start();
-//        stateMachine.setState(starting state)
+        stateMachine.setState(State.PLACING_PRELOADS);
         runtime = Globals.runtime;
     }
 
