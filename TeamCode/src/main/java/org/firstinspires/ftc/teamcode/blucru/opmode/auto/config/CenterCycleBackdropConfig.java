@@ -80,6 +80,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         depositCount = 0;
         intakeFailThisCycleCount = 0;
         depositFailThisCycleCount = 0;
+        runtime = Globals.runtime;
 
         stateMachine = new StateMachineBuilder()
                 // PRELOADS
@@ -264,7 +265,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
         intakeFarStackPath = new CenterIntakeFarStack().build();
         intakeCenterStackPath = new CenterIntakeCenterStack().build();
 
-        intakeFarAfterFailedPath = new CenterIntakeFarStack(0,1.5,30).build();
+        intakeFarAfterFailedPath = new CenterIntakeFarStack(0,2,30).build();
         depositPath = new DepositCenterCycle().build();
         depositBackstagePath = new DepositCenterBackstage().build();
         parkPath = new PIDPathBuilder().addMappedPoint(43, 14, 200).build();
@@ -298,6 +299,7 @@ public class CenterCycleBackdropConfig extends AutoConfig {
     public void telemetry(Telemetry telemetry) {
         telemetry.addLine("Backdrop Center Cycle");
         telemetry.addData("State", stateMachine.getState());
+        telemetry.addData("runtime", runtime.seconds());
     }
 
     public void logTransitionTo(Enum to) {

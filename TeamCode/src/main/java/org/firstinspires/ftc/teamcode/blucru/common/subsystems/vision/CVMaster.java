@@ -25,14 +25,15 @@ public class CVMaster implements Subsystem {
     public static double fy = 1059.73;
     public static double cx = 625.979;
     public static double cy = 362.585;
-    public static int GAIN = 10;
-    public static long EXPOSURE = 8; // ms
+    public static int GAIN = 0;
+    public static long EXPOSURE = 5; // ms
     public static double FOCUS = 1;
 
     ExposureControl exposureControl;
     GainControl gainControl;
     FocusControl focusControl;
 
+    public Alliance alliance;
     public VisionPortal visionPortal;
     public PropDetectionProcessor propDetector;
     public AprilTagProcessor tagDetector;
@@ -40,6 +41,7 @@ public class CVMaster implements Subsystem {
     public int numDetections;
 
     public CVMaster(HardwareMap hardwareMap, Alliance alliance) {
+        this.alliance = alliance;
         this.propDetector = new PropDetectionProcessor(alliance);
 
         this.tagDetector = new AprilTagProcessor.Builder()

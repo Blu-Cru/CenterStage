@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
@@ -14,10 +16,11 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
+@Config
 @TeleOp(name="vision test", group="test")
 public class VisionTest extends LinearOpMode {
+    public static boolean isRed = true;
     CVMaster cvMaster;
-    Alliance alliance = Alliance.BLUE;
 
     String status;
 
@@ -25,7 +28,8 @@ public class VisionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
+        if(isRed) cvMaster = new CVMaster(hardwareMap, Alliance.RED);
+        else cvMaster = new CVMaster(hardwareMap, Alliance.BLUE);
 
         telemetry.addLine("camera starting");
         telemetry.update();
@@ -54,7 +58,7 @@ public class VisionTest extends LinearOpMode {
 
             switch (status) {
                 case "detecting prop":
-                    telemetry.addData("alliance", alliance);
+                    telemetry.addData("alliance", cvMaster.alliance);
                     telemetry.addData("Average0", cvMaster.propDetector.average0);
                     telemetry.addData("Average1", cvMaster.propDetector.average1);
                     telemetry.addData("Average2", cvMaster.propDetector.average2);

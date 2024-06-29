@@ -18,7 +18,7 @@ public class Intake implements Subsystem {
             MAX_POWER = 1,
             JAMMED_VELOCITY = 600;
 
-    public static int PURPLE_POS = -77;
+    public static int PURPLE_POS = -90;
 
     enum IntakeState {
         IDLE,

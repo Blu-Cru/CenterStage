@@ -77,6 +77,7 @@ public class CenterCycleAudienceConfig extends AutoConfig {
     Robot robot;
 
     public CenterCycleAudienceConfig() {
+        runtime = Globals.runtime;
         preloadIntakePaths = new HashMap<>();
         preloadDepositPaths = new HashMap<>();
         stateMachine = new StateMachineBuilder()
@@ -113,8 +114,11 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .state(State.PRELOAD_DEPOSITING)
                 .onEnter(() -> logTransitionTo(State.PRELOAD_DEPOSITING))
                 .loop(() -> dt.updateAprilTags())
-                .transition(() -> currentPath.isDone(), State.TO_STACK, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 23, State.TO_STACK, () -> {
                     currentPath = backdropToStackPath.start();
+                })
+                .transition(() -> currentPath.isDone() && runtime.seconds() > 23, State.PARKING, () -> {
+                    currentPath = parkPath.start();
                 })
 
                 .state(State.TO_STACK)
@@ -172,11 +176,11 @@ public class CenterCycleAudienceConfig extends AutoConfig {
                 .loop(() -> {
                     dt.updateAprilTags();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() < 25, State.TO_STACK, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() < 23, State.TO_STACK, () -> {
                     new OuttakeRetractCommand(1.5).schedule();
                     currentPath = backdropToStackPath.start();
                 })
-                .transition(() -> currentPath.isDone() && runtime.seconds() >= 25, State.PARKING, () -> {
+                .transition(() -> currentPath.isDone() && runtime.seconds() >= 23, State.PARKING, () -> {
                     new OuttakeRetractCommand(1.5).schedule();
                     currentPath = parkPath.start();
                 })

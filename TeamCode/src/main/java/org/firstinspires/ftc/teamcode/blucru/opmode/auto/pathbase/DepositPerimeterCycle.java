@@ -25,9 +25,9 @@ public class DepositPerimeterCycle extends PIDPathBuilder {
                         new WaitCommand(500),
                         new TurretTurnCommand(270 + turretAngle * Globals.reflect)
                 ))
-                .addMappedPoint(50.5, 47, 165, 3)
+                .addMappedPoint(50.7, 47, 165, 3)
                 .schedule(new SequentialCommandGroup(
-                        new WaitCommand(400),
+                        new WaitCommand(450),
                         new LockReleaseCommand(1),
                         new WaitCommand(150),
                         new LockReleaseCommand(2)

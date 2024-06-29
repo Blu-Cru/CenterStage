@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -19,13 +20,17 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
 
+@Config
 @Autonomous(name = "Auto", group = "1")
 public class Auto extends BCLinearOpMode {
+    public static double DELAY_SECS = 15;
+
     private enum State {
         CONFIG,
         BUILD,
         DETECTION,
         RUNNING,
+        PAUSING,
         END
     }
     AutoConfig config;
@@ -71,15 +76,17 @@ public class Auto extends BCLinearOpMode {
                 cvMaster.stop();
                 cvMaster = null;
             })
-            .transition(this::opModeIsActive, State.RUNNING, () -> {
+            .transition(this::opModeIsActive, State.PAUSING, () -> {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 drivetrain.initializePose();
                 Globals.startAuto();
-                config.start(Globals.getRandomization(propPosition));
                 cvMaster.detectTag();
-                new SequentialCommandGroup(new WaitCommand(200), new InstantCommand(() -> cvMaster.setCameraFocus(1))).schedule();
                 FtcDashboard.getInstance().startCameraStream((CameraStreamSource) cvMaster.visionPortal, 30);
+            })
+            .state(State.PAUSING)
+            .transitionTimed(DELAY_SECS, State.RUNNING, () -> {
+                config.start(Globals.getRandomization(propPosition));
             })
             .state(State.RUNNING)
             .loop(() -> {

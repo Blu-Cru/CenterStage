@@ -68,13 +68,13 @@ public class FusedLocalizer {
         Pose2d currentPose = deadWheels.getPoseEstimate();
         double heading = Angle.norm(currentPose.getHeading());
         if(heading < Math.PI/2 || heading > 3*Math.PI/2) {
-            Log.e("FusedLocalizer", "Not updating tags, robot is facing the wrong way");
+            Log.v("FusedLocalizer", "Not updating tags, robot is facing the wrong way");
             return;
         }
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
         if(detections.size() < 1) {
-            Log.e("FusedLocalizer", "No tags found");
+            Log.v("FusedLocalizer", "No tags found");
             return;
         }
 

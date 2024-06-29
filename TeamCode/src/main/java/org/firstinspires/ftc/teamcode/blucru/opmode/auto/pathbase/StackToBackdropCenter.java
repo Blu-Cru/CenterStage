@@ -21,7 +21,7 @@ public class StackToBackdropCenter extends PIDPathBuilder {
                 .schedule(new SequentialCommandGroup(
                         new IntakePowerCommand(1)
                 ))
-                .addMappedPoint(-50, 12, 180, 4)
+                .addMappedPoint(-45, 12, 180, 4)
                 .setPower(0.9)
                 .schedule(new ConditionalCommand(
                         new SequentialCommandGroup(

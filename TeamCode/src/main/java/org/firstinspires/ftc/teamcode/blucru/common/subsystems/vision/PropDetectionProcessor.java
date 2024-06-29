@@ -42,7 +42,7 @@ public class PropDetectionProcessor implements VisionProcessor {
     public static double rect2y = 0.75;
 
     // hues for blue
-    public static double blueLowH = 80;
+    public static double blueLowH = 90;
     public static double blueHighH = 140;
 
     // hues for red

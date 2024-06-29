@@ -88,6 +88,7 @@ public class PerimeterCycleBackdropConfig extends AutoConfig {
 
     public PerimeterCycleBackdropConfig() {
 
+        runtime = Globals.runtime;
         preloadPaths = new HashMap<>();
 
         depositCount = 0;
