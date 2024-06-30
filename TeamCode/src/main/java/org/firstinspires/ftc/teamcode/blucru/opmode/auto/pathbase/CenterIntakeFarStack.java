@@ -16,22 +16,22 @@ public class CenterIntakeFarStack extends PIDPathBuilder {
         super();
         this.setPower(0.4)
                 .schedule(new SequentialCommandGroup(
-                        new IntakePowerCommand(1),
-                        new LockResetCommand()
+                        new LockResetCommand(),
+                        new IntakePowerCommand(1)
                 ))
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 3.5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(stackHeight),
-                        new WaitCommand(200),
+                        new WaitCommand(150),
                         new IntakeCommand(stackHeight-1),
-                        new WaitCommand(200),
+                        new WaitCommand(150),
                         new IntakeCommand(0)
                 ))
                 .waitMillis(450)
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180-wiggleAngleDeg, 2.5)
-                .waitMillis(250)
+                .waitMillis(150)
                 .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180 + wiggleAngleDeg, 2.5)
-                .waitMillis(250);
+                .waitMillis(300);
     }
 
     public CenterIntakeFarStack() {

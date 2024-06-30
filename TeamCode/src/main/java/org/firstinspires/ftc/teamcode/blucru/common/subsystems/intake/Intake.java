@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Intake implements Subsystem {
     public static double
             MAX_POWER = 1,
-            JAMMED_VELOCITY = 600;
+            JAMMED_VELOCITY = 700;
 
     public static int PURPLE_POS = -90;
 
@@ -89,7 +89,7 @@ public class Intake implements Subsystem {
                 }
                 break;
             case UNJAMMING:
-                if(System.currentTimeMillis() - startUnjamTime > 300) {
+                if(System.currentTimeMillis() - startUnjamTime > 600) {
                     intakeState = IntakeState.IDLE;
                     intakePower = powerBeforeUnjam;
                     break;

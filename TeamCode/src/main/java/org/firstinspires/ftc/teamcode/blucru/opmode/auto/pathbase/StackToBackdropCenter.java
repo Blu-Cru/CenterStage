@@ -6,6 +6,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.IntakePowerCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockResetCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Intake;
@@ -19,6 +21,7 @@ public class StackToBackdropCenter extends PIDPathBuilder {
         super();
         this.setPower(0.7)
                 .schedule(new SequentialCommandGroup(
+                        new LockResetCommand(),
                         new IntakePowerCommand(1)
                 ))
                 .addMappedPoint(-45, 12, 180, 4)

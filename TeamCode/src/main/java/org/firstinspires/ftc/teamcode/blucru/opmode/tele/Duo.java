@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.tele;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.UnlockAllCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
@@ -263,8 +264,9 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.right_bumper) intake.setPower(-1);
                 else intake.setPower(0);
 
-                if(stickyG1.dpad_left) outtake.lock.unlockFrontLockBack();
-                else if (stickyG2.dpad_right) outtake.lock.unlockAll();
+                if(stickyG2.dpad_left) outtake.lock.unlockFrontLockBack();
+//                else if (stickyG2.dpad_right) outtake.lock.unlockAll();
+                else if(stickyG2.dpad_right) new UnlockAllCommand().schedule();
 
                 outtake.setDunkHeight(gamepad2.left_trigger);
                 break;

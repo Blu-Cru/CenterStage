@@ -31,7 +31,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Config
 public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     public static double
-            MAX_ACCEL_DRIVE_DELTA = 5.5,
+            MAX_ACCEL_DRIVE_DELTA = 6.5,
             MAX_DECEL_DRIVE_DELTA = 20.0, // magnitude per second at power 1 for slew rate limiter
             MAX_ACCEL_PID_DELTA = 2, // magnitude per second at power 1 for PID
 

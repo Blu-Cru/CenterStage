@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
 public class AudienceCenterPreloadDeposit extends PIDPathBuilder {
     public static AudienceCenterPreloadDeposit get(AutoType autoType) {
-        if(autoType == AutoType.CENTER_CYCLE) return new AudienceCenterPreloadDeposit(29, 36);
-        else return new AudienceCenterPreloadDeposit(43, 36);
+        if(autoType == AutoType.CENTER_CYCLE) return new AudienceCenterPreloadDeposit(31, 36);
+        else return new AudienceCenterPreloadDeposit(41, 36);
     }
 
     private AudienceCenterPreloadDeposit(double globalYWhite, double globalYYellow) {

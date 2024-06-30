@@ -80,8 +80,8 @@ public class IntakeColorSensors implements Subsystem {
 
     public void read() {
         if(reading) {
-            frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
             backDistance = backSensor.getDistance(DistanceUnit.INCH);
+            frontDistance = frontSensor.getDistance(DistanceUnit.INCH);
 
             frontRGBA = frontSensor.getNormalizedColors();
             backRGBA = backSensor.getNormalizedColors();
