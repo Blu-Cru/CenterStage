@@ -31,10 +31,10 @@ public class BackdropFarPreload extends PIDPathBuilder {
                         )
                 )
                 .waitMillis(300)
-                .addPoint(Globals.mapPose(Field.DEPOSIT_X, 32, 180), 2.5)
+                .addPoint(Globals.mapPose(Field.DEPOSIT_X, 32, 180), 3)
                 .schedule(
                         new SequentialCommandGroup(
-                                new WaitCommand(250),
+                                new WaitCommand(300),
                                 new LockReleaseCommand(2),
                                 new WaitCommand(300),
                                 new OuttakeRetractCommand(2)

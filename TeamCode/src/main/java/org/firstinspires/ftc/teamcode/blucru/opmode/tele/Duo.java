@@ -263,8 +263,8 @@ public class Duo extends BCLinearOpMode {
                 if(gamepad2.right_bumper) intake.setPower(-1);
                 else intake.setPower(0);
 
-                if(gamepad2.dpad_left) outtake.lock.unlockFrontLockBack();
-                else if (gamepad2.dpad_right) outtake.lock.unlockAll();
+                if(stickyG1.dpad_left) outtake.lock.unlockFrontLockBack();
+                else if (stickyG2.dpad_right) outtake.lock.unlockAll();
 
                 outtake.setDunkHeight(gamepad2.left_trigger);
                 break;
