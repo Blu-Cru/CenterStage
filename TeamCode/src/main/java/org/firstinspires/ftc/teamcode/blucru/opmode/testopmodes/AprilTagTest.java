@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name="April Tag Test", group="test")
-public class AprilTagTest extends BCLinearOpMode {
+public class AprilTagTest extends KLinearOpMode {
     private enum State {
         IDLE,
         DETECTING

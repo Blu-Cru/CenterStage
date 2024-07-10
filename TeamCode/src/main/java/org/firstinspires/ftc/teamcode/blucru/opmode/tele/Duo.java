@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Un
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 
 /*
@@ -68,7 +68,7 @@ outtaking state:
     - left trigger: dunk
  */
 @TeleOp(name = "Main TeleOp", group = "1")
-public class Duo extends BCLinearOpMode {
+public class Duo extends KLinearOpMode {
     // timer variables
     public static double OUTTAKE_TURN_TURRET_DELAY = 300,
             RETRACT_WRIST_DELAY = 250,

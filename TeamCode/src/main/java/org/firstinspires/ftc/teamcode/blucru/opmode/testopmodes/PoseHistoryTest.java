@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
-public class PoseHistoryTest extends BCLinearOpMode {
+public class PoseHistoryTest extends KLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(true);

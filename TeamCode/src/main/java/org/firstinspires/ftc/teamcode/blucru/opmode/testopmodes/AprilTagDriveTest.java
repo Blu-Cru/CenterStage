@@ -8,11 +8,11 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.AprilTagPoseGetter;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Disabled
 @TeleOp(name = "April tag drive test", group = "test")
-public class AprilTagDriveTest extends BCLinearOpMode {
+public class AprilTagDriveTest extends KLinearOpMode {
     private enum State {
         DRIVER_CONTROL,
         DRIVE_TO_POSITION

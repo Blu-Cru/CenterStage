@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name = "Turret ivk test", group = "test")
-public class TurretIVKTest extends BCLinearOpMode {
+public class TurretIVKTest extends KLinearOpMode {
     public static double TARGET_Y = 36;
     boolean retracted;
     @Override
