@@ -14,8 +14,9 @@ import java.util.ArrayList;
 // UNUSED
 /*
     i used this class to organize my roadrunner trajectories for the first qual and states for center stage
-    I stopped using roadrunner after 4/24, switching to PID, which can be found under common.path
+    I stopped using roadrunner after 4/24, switching to PID, under common.path
     the entire package common.trajectories isnt used anymore since 5/24
+    It's just here for reference in case I need to look back at how I organized my roadrunner trajectories
  */
 public class Trajectories {
     static double reflect = 1;
