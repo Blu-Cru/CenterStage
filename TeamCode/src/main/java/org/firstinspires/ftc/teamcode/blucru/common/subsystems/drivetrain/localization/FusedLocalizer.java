@@ -51,7 +51,8 @@ public class FusedLocalizer {
         //Log.v("Marker Entry", "Pos" + currentPose);
         poseHistory.add(currentPose, deadWheels.getPoseVelocity());
 
-        if(System.currentTimeMillis() - lastImuUpdateMillis > 100 && usingIMU) {
+        // update IMU every 300ms
+        if(System.currentTimeMillis() - lastImuUpdateMillis > 300 && usingIMU) {
             lastImuUpdateMillis = System.currentTimeMillis();
 
             ypr = imu.getRobotYawPitchRollAngles();
@@ -62,27 +63,27 @@ public class FusedLocalizer {
         }
     }
 
-    public void updateAprilTags(AprilTagProcessor tagProcessor) {
-        if(System.currentTimeMillis() - lastTagUpdateMillis < TAG_UPDATE_DELAY) return; // only update every TAG_UPDATE_DELAY ms
+    public boolean updateAprilTags(AprilTagProcessor tagProcessor) {
+        if(System.currentTimeMillis() - lastTagUpdateMillis < TAG_UPDATE_DELAY) return false; // only update every TAG_UPDATE_DELAY ms
 
         Pose2d currentPose = deadWheels.getPoseEstimate();
         double heading = Angle.norm(currentPose.getHeading());
         if(heading < Math.PI/2 || heading > 3*Math.PI/2) {
             Log.v("FusedLocalizer", "Not updating tags, robot is facing the wrong way");
-            return;
+            return false;
         }
 
         ArrayList<AprilTagDetection> detections = tagProcessor.getDetections();
         if(detections.size() < 1) {
             Log.v("FusedLocalizer", "No tags found");
-            return;
+            return false;
         }
 
         // get odo pose at the time of the tag pose
         long timeOfFrame = detections.get(0).frameAcquisitionNanoTime;
         if(timeOfFrame==lastFrameTime) {
             Log.i("FusedLocalizer", "Already updated with this frame");
-            return;
+            return false;
         }
         PoseMarker poseMarkerAtFrame = poseHistory.getPoseAtTime(timeOfFrame);
         Pose2d poseAtFrame = poseMarkerAtFrame.pose;
@@ -99,7 +100,7 @@ public class FusedLocalizer {
         try {
             tagPose = AprilTagPoseGetter.getRobotPoseAtTimeOfFrame(detections, poseAtFrame.getHeading());
         } catch(Exception e) {
-            return;
+            return false;
         }
 
         double weight = getWeight(velocityAtFrame);
@@ -108,7 +109,7 @@ public class FusedLocalizer {
 
         if(weight == 0) {
             Log.e("FusedLocalizer", "Weight is 0, not updating");
-            return;
+            return false;
         }
 
         // calculate change from old odo pose to current pose
@@ -135,6 +136,7 @@ public class FusedLocalizer {
         // add tag - odo to pose history
         poseHistory.offset(weightedCorrection);
         lastFrameTime = timeOfFrame;
+        return true;
     }
 
     public void init() {
@@ -157,7 +159,8 @@ public class FusedLocalizer {
 
         double totalVel = Math.hypot(vel, angVel * 12);
 
-        // TODO: tune this function
+        // this function determines the weight of the update based on the velocity of the robot
+        // put it into desmos to visualize
         return Range.clip(-0.75*Math.atan(.07 * totalVel-5), 0, 1);
     }
 }

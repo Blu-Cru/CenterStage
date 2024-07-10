@@ -138,8 +138,7 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addIntake() {intake = robot.addIntake();}
 
-    public void addDropdown() {
-        dropdown = robot.addDropdown();}
+    public void addDropdown() {dropdown = robot.addDropdown();}
 
     public void addIntakeColorSensors() {intakeColorSensors = robot.addIntakeColorSensors();}
 
@@ -153,8 +152,14 @@ public abstract class BCLinearOpMode extends LinearOpMode {
 
     public void addBlinkin() {blinkin = robot.addBlinkin();}
 
+    /*
+    this method is used to enable the FTC Dashboard telemetry and field overlay
+     */
     public void enableFTCDashboard() {telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);}
 
+    /*
+    this method is used to optimize telemetry by not updating telemetry every loop
+     */
     public void optimizeTelemetry() {telemetryOptimized = true;}
 
     public double currentSecs() {return runtime.seconds();}

@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
+// auto for CHS Champs
 @Autonomous(name ="CHS Auto", group = "2")
 public class CHSAuto extends LinearOpMode {
     ArrayList<TrajectorySequence> trajectoryList;

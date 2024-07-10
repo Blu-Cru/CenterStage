@@ -89,15 +89,18 @@ public class Intake implements Subsystem {
                 }
                 break;
             case UNJAMMING:
-                if(System.currentTimeMillis() - startUnjamTime > 600) {
+                // if unjamming time has passed, go back to IDLE
+                if(System.currentTimeMillis() - startUnjamTime > 250) {
                     intakeState = IntakeState.IDLE;
                     intakePower = powerBeforeUnjam;
                     break;
                 } else {
+                    // reverse intake to unjam
                     intakePower = -1;
                 }
                 break;
             case RELEASING_PURPLE:
+                // if encoder has passed tick for purple, stop intake
                 if(currentPos < PURPLE_POS) {
                     intakeState = IntakeState.IDLE;
                     intakePower = 0;

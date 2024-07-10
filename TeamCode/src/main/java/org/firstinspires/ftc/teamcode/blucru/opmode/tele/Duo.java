@@ -61,11 +61,11 @@ outtaking state:
     - b: lift to high
     - right bumper: reverse intake
     - right stick y: increment outtake height by one pixel
+    - right stick x: turn turret
     - share: reset slides
-    - dpad left: unlock front lock
-    - dpad right: unlock all locks
-
-
+    - dpad left: release one pixel
+    - dpad right: release both pixels
+    - left trigger: dunk
  */
 @TeleOp(name = "Main TeleOp", group = "1")
 public class Duo extends BCLinearOpMode {
