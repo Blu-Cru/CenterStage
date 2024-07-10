@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.common.subsystems.intake.Dropdown;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "Dropdown Test", group = "test")
-public class DropdownTest extends BCLinearOpMode {
+public class DropdownTest extends KLinearOpMode {
     int stackHeight = 0;
     @Override
     public void initialize() {

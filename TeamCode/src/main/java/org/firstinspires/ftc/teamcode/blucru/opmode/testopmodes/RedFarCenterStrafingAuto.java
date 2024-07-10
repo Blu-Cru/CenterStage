@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajector
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
 @Autonomous(name = "red far center strafing auto", group = "test")
-public class RedFarCenterStrafingAuto extends BCLinearOpMode {
+public class RedFarCenterStrafingAuto extends KLinearOpMode {
     AutoState state = AutoState.RUNNING;
     Poses poses;
 

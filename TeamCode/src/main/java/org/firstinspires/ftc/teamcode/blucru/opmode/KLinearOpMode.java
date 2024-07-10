@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Turret;
 import org.firstinspires.ftc.teamcode.blucru.common.util.wrappers.StickyGamepad;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
 
-public abstract class BCLinearOpMode extends LinearOpMode {
+public abstract class KLinearOpMode extends LinearOpMode {
     public Alliance alliance;
     public Robot robot;
     public Drivetrain drivetrain;

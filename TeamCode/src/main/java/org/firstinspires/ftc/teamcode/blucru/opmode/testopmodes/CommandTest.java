@@ -11,18 +11,16 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockReleaseCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.OuttakeWristBackstageCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.TurretGlobalYCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeExtendCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 //@Disabled
 @Config
 @TeleOp(name = "Command test", group = "test")
-public class CommandTest extends BCLinearOpMode {
+public class CommandTest extends KLinearOpMode {
     public static double intakeTime = 150;
     boolean lastA = false,
             lastB = false,

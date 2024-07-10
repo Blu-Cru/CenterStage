@@ -6,11 +6,11 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name = "lift test", group = "test")
-public class LiftTest extends BCLinearOpMode {
+public class LiftTest extends KLinearOpMode {
     public static double maxVelocity = 10000.0;
     public static double maxAcceleration = 7000.0;
     public static int xI = 500;

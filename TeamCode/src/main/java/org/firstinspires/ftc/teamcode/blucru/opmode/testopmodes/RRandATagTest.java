@@ -7,11 +7,11 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @TeleOp(name = "RR with AprilTag test", group = "test")
-public class RRandATagTest extends BCLinearOpMode {
+public class RRandATagTest extends KLinearOpMode {
     private enum State {
         RUNNING,
         IDLE,

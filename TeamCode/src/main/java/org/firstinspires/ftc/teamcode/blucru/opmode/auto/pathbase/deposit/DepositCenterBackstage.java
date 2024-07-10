@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.deposit;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;

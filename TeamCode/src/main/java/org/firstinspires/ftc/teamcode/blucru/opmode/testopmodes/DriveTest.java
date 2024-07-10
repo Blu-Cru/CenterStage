@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "Drive test", group = "test")
-public class DriveTest extends BCLinearOpMode {
+public class DriveTest extends KLinearOpMode {
     double vert, horz, rotate;
 
     @Override

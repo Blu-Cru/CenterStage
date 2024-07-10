@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Disabled
 @TeleOp(name = "Drive static friction test", group = "test")
-public class DriveStaticFrictionTest extends BCLinearOpMode {
+public class DriveStaticFrictionTest extends KLinearOpMode {
     boolean lastA = false;
     private enum DriveType {
         RAW,

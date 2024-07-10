@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Disabled
 @TeleOp(name = "imu drive test", group = "test")
-public class ImuUpdateTest extends BCLinearOpMode {
+public class ImuUpdateTest extends KLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain(true);

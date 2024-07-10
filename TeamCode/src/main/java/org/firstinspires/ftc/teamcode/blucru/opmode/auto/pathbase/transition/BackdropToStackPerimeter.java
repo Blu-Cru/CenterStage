@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.transition;
 
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 

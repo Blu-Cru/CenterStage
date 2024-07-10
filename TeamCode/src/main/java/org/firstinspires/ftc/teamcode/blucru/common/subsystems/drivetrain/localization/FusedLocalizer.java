@@ -89,9 +89,6 @@ public class FusedLocalizer {
         Pose2d poseAtFrame = poseMarkerAtFrame.pose;
         Pose2d velocityAtFrame = poseMarkerAtFrame.velocity;
 
-
-
-
         long timeSinceFrame = System.nanoTime() - timeOfFrame;
         Log.v("FusedLocalizer", "Time since frame:" + timeSinceFrame);
 

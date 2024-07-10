@@ -5,11 +5,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.DrivetrainState;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name="Drive To Position Test", group="test")
-public class DriveToPositionTest extends BCLinearOpMode {
+public class DriveToPositionTest extends KLinearOpMode {
     public static double p = 0, i = 0, d = 0;
     public static double targetX = 0, targetY = 0, targetHeading = Math.toRadians(90);
     public static double power = 0.5;

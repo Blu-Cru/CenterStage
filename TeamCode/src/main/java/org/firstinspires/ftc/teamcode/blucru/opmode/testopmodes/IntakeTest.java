@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "intake test", group = "test")
-public class IntakeTest extends BCLinearOpMode {
+public class IntakeTest extends KLinearOpMode {
     public static int stackHeight = 4;
     double horz, vert, rotate;
 

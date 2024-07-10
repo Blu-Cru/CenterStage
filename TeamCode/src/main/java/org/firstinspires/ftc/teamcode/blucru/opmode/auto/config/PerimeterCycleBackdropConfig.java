@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.auto.config;
 
 import android.util.Log;
 
-import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
@@ -16,21 +15,16 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Randomization;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.AutoConfig;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropCenterPreload;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropClosePreload;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropFarPreload;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenter;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackCenterAfterPreload;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeter;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.BackdropToStackPerimeterAfterPreload;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.CenterIntakeCenterStack;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositCenterCycle;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterBackstage;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.DepositPerimeterCycle;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.PerimeterIntakeCloseStack;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.PerimeterIntakeFailsafe;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropCenter;
-import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.StackToBackdropPerimeter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload.BackdropCenterPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload.BackdropClosePreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload.BackdropFarPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.transition.BackdropToStackPerimeter;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload.BackdropToStackPerimeterAfterPreload;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.deposit.DepositPerimeterBackstage;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.deposit.DepositPerimeterCycle;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.intake.PerimeterIntakeCloseStack;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.intake.PerimeterIntakeFailsafe;
+import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.transition.StackToBackdropPerimeter;
 
 import java.util.HashMap;
 

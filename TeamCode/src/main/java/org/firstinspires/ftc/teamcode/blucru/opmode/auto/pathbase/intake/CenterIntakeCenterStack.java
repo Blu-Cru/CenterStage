@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.intake;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;

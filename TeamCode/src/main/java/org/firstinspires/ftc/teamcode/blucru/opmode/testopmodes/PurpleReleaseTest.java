@@ -4,11 +4,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.AutoReleasePurpleIntakeCommand;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name = "Purple Release Test", group = "test")
-public class PurpleReleaseTest extends BCLinearOpMode {
+public class PurpleReleaseTest extends KLinearOpMode {
     public static double power = 0.8;
     public static int position = 50;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.intake;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -11,34 +11,32 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-public class CenterIntakeFarStack extends PIDPathBuilder {
-    public CenterIntakeFarStack(int stackHeight, double xIncrement, double wiggleAngleDeg) {
+public class PerimeterIntakeCloseStack extends PIDPathBuilder {
+    public PerimeterIntakeCloseStack() {
+        this(Globals.stackClosePixels -1, 0, 18);
+    }
+
+    public PerimeterIntakeCloseStack (int stackHeight, double xIncrement, double wiggleAngleDeg) {
         super();
-        this.setPower(0.4)
+        this.setPower(0.5)
                 .schedule(new SequentialCommandGroup(
-                        new LockResetCommand(),
-                        new IntakePowerCommand(1)
+                        new IntakePowerCommand(1),
+                        new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180, 3.5)
+                .addMappedPoint(Field.INTAKE_X - xIncrement, 48, 200, 4)
+                .setPower(0.35)
+                .addMappedPoint(Field.INTAKE_X - xIncrement - 2.5, 42, 210, 2.5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(stackHeight),
-                        new WaitCommand(150),
+                        new WaitCommand(400),
                         new IntakeCommand(stackHeight-1),
-                        new WaitCommand(150),
+                        new WaitCommand(350),
                         new IntakeCommand(0)
                 ))
-                .waitMillis(450)
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180-wiggleAngleDeg, 2.5)
-                .waitMillis(150)
-                .addMappedPoint(Field.INTAKE_X - xIncrement, 12, 180 + wiggleAngleDeg, 2.5)
-                .waitMillis(300);
-    }
-
-    public CenterIntakeFarStack() {
-        this(Globals.stackCenterPixels-1, 0, 18);
-    }
-
-    public CenterIntakeFarStack(double xIncrement, double wiggleAngleDeg) {
-        this(Globals.stackCenterPixels-1, xIncrement, wiggleAngleDeg);
+                .waitMillis(700)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-2.5, 43, 210-wiggleAngleDeg, 2.5)
+                .waitMillis(250)
+                .addMappedPoint(Field.INTAKE_X - xIncrement-2.5, 43, 210 + wiggleAngleDeg, 2.5)
+                .waitMillis(250);
     }
 }

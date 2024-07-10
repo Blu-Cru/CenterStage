@@ -1,35 +1,35 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase;
+package org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownCommand;
-import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.intake.DropdownPartialRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.PurplePixelRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.subsystemcommand.outtake.LockResetCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPathBuilder;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Field;
 
-public class AudienceCenterPreloadIntakeForCenter extends PIDPathBuilder {
-    public AudienceCenterPreloadIntakeForCenter() {
+public class AudienceClosePreloadIntake extends PIDPathBuilder {
+    public AudienceClosePreloadIntake() {
         super();
         this.setPower(0.45)
-                .addMappedPoint(-40, 35, 135,6)
-                .addMappedPoint(-48, 25, 180, 2)
+                .addMappedPoint(-38, 45, 120,6)
+                .addMappedPoint(-33, 36, 160, 2)
                 .schedule(new SequentialCommandGroup(
-                        new PurplePixelRetractCommand(),
-                        new DropdownPartialRetractCommand()
+                        new WaitCommand(20),
+                        new PurplePixelRetractCommand()
                 ))
                 .waitMillis(200)
+                .addMappedPoint(-44, 30, 190, 5)
                 .schedule(new SequentialCommandGroup(
                         new IntakeCommand(4, 1),
                         new LockResetCommand()
                 ))
-                .addMappedPoint(Field.INTAKE_X, 12, 180, 3)
-                .waitMillis(600)
+                .addMappedPoint(Field.INTAKE_X, 24, 180, 2)
+                .waitMillis(500)
                 .schedule(new DropdownCommand(3))
-                .waitMillis(600)
+                .waitMillis(700)
                 .schedule(new DropdownCommand(0))
                 .waitMillis(700);
     }

@@ -11,11 +11,11 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Ou
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Config
 @TeleOp(name = "Deposit position test", group = "test")
-public class DepositPositionTest extends BCLinearOpMode {
+public class DepositPositionTest extends KLinearOpMode {
     public static double depositX = 0;
     public static double depositY = 0;
     public static double depositHeading = 0;

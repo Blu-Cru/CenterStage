@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "raw drive test", group = "test")
-public class RawDriveTest extends BCLinearOpMode {
+public class RawDriveTest extends KLinearOpMode {
     double vert, horz, rotate;
     @Override
     public void initialize() {

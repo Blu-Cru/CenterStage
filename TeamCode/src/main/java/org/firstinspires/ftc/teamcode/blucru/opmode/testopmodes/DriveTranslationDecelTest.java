@@ -6,12 +6,10 @@ import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
-
-import java.util.Vector;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "Drive Translational Decel test", group = "test")
-public class DriveTranslationDecelTest extends BCLinearOpMode {
+public class DriveTranslationDecelTest extends KLinearOpMode {
     private enum State {
         DRIVING,
         STOPPING,

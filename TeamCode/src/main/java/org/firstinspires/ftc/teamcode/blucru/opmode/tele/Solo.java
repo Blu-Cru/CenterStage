@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.RobotState;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @Disabled
 @TeleOp(name = "Solo", group = "2")
 // this doesnt wrok
-public class Solo extends BCLinearOpMode {
+public class Solo extends KLinearOpMode {
     public static double OUTTAKE_TURN_TURRET_DELAY = 300;
     public static double REVERSE_INTAKE_TIME = 1000;
     public static double RETRACT_WRIST_DELAY = 250;

@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "color sensor test", group = "test")
-public class ColorSensorTest extends BCLinearOpMode {
+public class ColorSensorTest extends KLinearOpMode {
     public void periodic() {
         if(stickyG1.a) {
             if(intakeColorSensors.isReading()) {

@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
-import org.firstinspires.ftc.teamcode.blucru.opmode.BCLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
 
 @TeleOp(name = "April tag history test", group = "test")
-public class AprilTagHistoryTest extends BCLinearOpMode {
+public class AprilTagHistoryTest extends KLinearOpMode {
     private enum State {
         IDLE,
         SCANNING,
