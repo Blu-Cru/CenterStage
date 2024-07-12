@@ -1,8 +1,23 @@
 # Road Runner Quickstart
 
-Check out the [docs](https://rr.brott.dev/docs/v1-0/tuning/).
+Check out the roadrunner [docs](https://rr.brott.dev/docs/v1-0/tuning/).
 
-states controls:
+## hi this is blu crew center stage 2023-2024
+
+### Installation:
+- Clone the repository
+- Open the project in Android Studio
+
+### Build:
+- Connect to the control hub (usb or wifi through REV hardware client)
+- Build and run on Android Studio
+
+### Code:
+
+Our code is in the `TeamCode/src/main/java/org/firstinspires/ftc/teamcode` directory.
+OpModes are in the `blucru/opmodes` directory.
+
+### Controls:
 
 driver 1:
 
@@ -13,7 +28,6 @@ driver 1:
         - left trigger: slow mode
         - right trigger: fast mode
 
-    alignment controls (hold left bumper to activate distance sensor): 
         - b (circle): turn to face robot front to the left
         - x (square): turn to face robot front to the right
 
