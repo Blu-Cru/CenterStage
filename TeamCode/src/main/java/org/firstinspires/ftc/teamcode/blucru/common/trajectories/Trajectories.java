@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.AutoType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.ParkType;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 

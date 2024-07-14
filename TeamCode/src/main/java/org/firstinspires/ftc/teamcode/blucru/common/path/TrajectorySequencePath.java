@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.blucru.common.path;
 
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class TrajectorySequencePath implements Path {
     TrajectorySequence sequence;

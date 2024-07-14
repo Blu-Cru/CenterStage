@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixe
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
