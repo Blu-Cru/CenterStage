@@ -17,17 +17,17 @@ public class Dropdown implements Subsystem {
             L2 = 96,
             P3axial = 48,
             P3tangential = 12,
-            DROPDOWN_LENGTH = 144,
+            DROPDOWN_LENGTH = 96,
             P3toOrigin = Math.hypot(P3axial, P3tangential), // origin is the axle where the dropdown rotates about
             THETA3 = Math.atan(P3tangential/P3axial),
 
             PIXEL_HEIGHT = 12.7,
-            STACK_1_HEIGHT = 40,
-            RETRACT_HEIGHT = 130,
+            STACK_1_HEIGHT = 18,
+            RETRACT_HEIGHT = 90,
 
             AUTO_MID_HEIGHT = 110,
 
-            GROUND_HEIGHT = 27;
+            GROUND_HEIGHT = 20;
 
     static Point2d P1 = new Point2d(79.95, 50);
 

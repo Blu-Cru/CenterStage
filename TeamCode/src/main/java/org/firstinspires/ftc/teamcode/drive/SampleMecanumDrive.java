@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.teamcode.blucru.common.trajectories.BCTrajectorySequenceBuilder;
+//import org.firstinspires.ftc.teamcode.blucru.common.trajectories.BCTrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -171,13 +171,13 @@ public class SampleMecanumDrive extends MecanumDrive {
         );
     }
 
-    public BCTrajectorySequenceBuilder KTrajectorySequenceBuilder(Pose2d startPose) {
-        return new BCTrajectorySequenceBuilder(
-                startPose,
-                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                MAX_ANG_VEL, MAX_ANG_ACCEL
-        );
-    }
+//    public BCTrajectorySequenceBuilder KTrajectorySequenceBuilder(Pose2d startPose) {
+//        return new BCTrajectorySequenceBuilder(
+//                startPose,
+//                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
+//                MAX_ANG_VEL, MAX_ANG_ACCEL
+//        );
+//    }
 
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
