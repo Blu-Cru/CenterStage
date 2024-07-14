@@ -31,12 +31,12 @@ public class Dropdown implements Subsystem {
 
     static Point2d P1 = new Point2d(79.95, 50);
 
-    Servo wrist;
+    Servo pivotServo;
     private double position;
 
     public Dropdown(HardwareMap hardwareMap) {
-        wrist = hardwareMap.get(Servo.class, "dropdown");
-        wrist.setDirection(Servo.Direction.REVERSE);
+        pivotServo = hardwareMap.get(Servo.class, "dropdown");
+        pivotServo.setDirection(Servo.Direction.REVERSE);
         position = VERTICAL_POS;
     }
 
@@ -46,7 +46,7 @@ public class Dropdown implements Subsystem {
 
     public void init() {
         setTargetHeight(DROPDOWN_LENGTH);
-        wrist.setPosition(position);
+        pivotServo.setPosition(position);
     }
 
     public void read() {
@@ -54,8 +54,8 @@ public class Dropdown implements Subsystem {
     }
 
     public void write() {
-        if(wrist.getPosition() != position) {
-            wrist.setPosition(position);
+        if(pivotServo.getPosition() != position) {
+            pivotServo.setPosition(position);
         }
     }
 
