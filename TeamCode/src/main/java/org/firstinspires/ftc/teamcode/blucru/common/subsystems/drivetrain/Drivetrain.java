@@ -23,9 +23,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.drivetrain.localization.FusedLocalizer;
 import org.firstinspires.ftc.teamcode.blucru.common.util.DrivetrainTranslationPID;
 import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.roadrunner.util.DashboardUtil;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Config
@@ -179,7 +179,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     public void driveScaled(double x, double y, double rotate) {
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+        Vector2d driveVector = rotateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = scaleByDrivePower(new Pose2d(driveVector, rotate));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
@@ -207,7 +207,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotate(heading, targetHeading);
 
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+        Vector2d driveVector = rotateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = new Pose2d(driveVector.times(drivePower), Range.clip(rotate, -drivePower, drivePower));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
@@ -219,7 +219,7 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
         this.targetHeading = targetHeading;
         double rotate = getPIDRotateDecel(targetHeading);
 
-        Vector2d driveVector = calculateDriveVector(new Vector2d(x, y));
+        Vector2d driveVector = rotateDriveVector(new Vector2d(x, y));
 
         Pose2d drivePose = new Pose2d(driveVector.times(drivePower), Range.clip(rotate, -drivePower, drivePower));
         Pose2d staticDrivePose = processStaticFriction(drivePose);
@@ -235,12 +235,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     // apply slew rate limiter to drive vector
-    private Vector2d calculateDriveVector(Vector2d input) {
-        if (fieldCentric)
-            input = input.rotated(-heading); // rotate input vector to match robot heading if field centric
-        else
-            input = input.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
-
+    // used to use, but too computationally intensive and slows robot too much i think
+    private Vector2d slewRateLimit(Vector2d input) {
         // scale acceleration to match drive power
         // maximum change in the drive vector per second at the drive power
         double scaledMaxAccelVectorDelta = MAX_ACCEL_DRIVE_DELTA / drivePower;
@@ -272,8 +268,13 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
 
         // record the drive vector for the next loop
         lastDriveVector = driveVector;
-        
+
         return driveVector; // return the new drive vector
+    }
+
+    private Vector2d rotateDriveVector(Vector2d input) {
+        if (fieldCentric) return input.rotated(-heading); // rotate input vector to match robot heading if field centric
+        else return input.rotated(Math.toRadians(-90)); // rotate to match robot coordinates (x forward, y left)
     }
 
     private Vector2d limitPIDDriveVector(Vector2d input) {
