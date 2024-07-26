@@ -14,11 +14,11 @@ import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 
 @Config
 @Autonomous(name = "Auto", group = "1")
-public class Auto extends KLinearOpMode {
+public class Auto extends BluLinearOpMode {
     public static double DELAY_SECS = 0;
 
     private enum State {

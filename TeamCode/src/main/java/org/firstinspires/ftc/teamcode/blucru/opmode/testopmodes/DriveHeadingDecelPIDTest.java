@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 
-public class DriveHeadingDecelPIDTest extends KLinearOpMode {
+public class DriveHeadingDecelPIDTest extends BluLinearOpMode {
     public void initialize() {
         enableFTCDashboard();
         addDrivetrain(false);

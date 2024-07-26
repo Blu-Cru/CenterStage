@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.blucru.common.path.PIDPath;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Alliance;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 import org.firstinspires.ftc.teamcode.blucru.opmode.auto.pathbase.preload.BackdropClosePreload;
 
 @TeleOp(name = "PID Path test", group = "2")
-public class PIDPathTest extends KLinearOpMode {
+public class PIDPathTest extends BluLinearOpMode {
     private enum State {
         RESETTING,
         FOLLOWING_TRAJECTORY,

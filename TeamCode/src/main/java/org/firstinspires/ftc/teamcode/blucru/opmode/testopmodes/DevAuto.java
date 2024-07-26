@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.IntakeTrajector
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.PreloadDeposits;
 import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Trajectories;
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 import java.util.ArrayList;
 
 @Autonomous(name = "dev auto", group = "test")
-public class DevAuto extends KLinearOpMode {
+public class DevAuto extends BluLinearOpMode {
     AutoState state = AutoState.RUNNING;
 
     Trajectories trajectories;

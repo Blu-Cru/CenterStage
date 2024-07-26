@@ -31,6 +31,8 @@ public class Dropdown implements Subsystem {
 
     static Point2d P1 = new Point2d(79.95, 50);
 
+    double[] positionsForHeights = new double[6];
+
     Servo pivotServo;
     private double position;
 
@@ -40,13 +42,13 @@ public class Dropdown implements Subsystem {
         position = VERTICAL_POS;
     }
 
-    public Dropdown() {
-
-    }
+    // default constructor for unit testing
+    public Dropdown() {}
 
     public void init() {
         setTargetHeight(DROPDOWN_LENGTH);
         pivotServo.setPosition(position);
+//        calculatePositionsForHeights(); // TODO: for next time, cache positions instead of calculating every time
     }
 
     public void read() {
@@ -107,6 +109,12 @@ public class Dropdown implements Subsystem {
     private double toTicks(double angle) {
         double rawTicks = ((angle - Math.PI/2) / Math.toRadians(270)) + VERTICAL_POS;
         return Range.clip(rawTicks, 0.0, 1.0);
+    }
+
+    public void calculatePositionsForHeights() {
+        for(int i = 0; i < 6; i++) {
+            positionsForHeights[i] = toTicks(getServoAngle(getP3(getDropdownAngle(getTargetHeight(i)))));
+        }
     }
 
     public void telemetry(Telemetry telemetry) {
