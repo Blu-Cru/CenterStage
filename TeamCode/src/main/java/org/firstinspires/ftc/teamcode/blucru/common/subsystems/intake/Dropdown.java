@@ -14,7 +14,7 @@ public class Dropdown implements Subsystem {
     public static double
             VERTICAL_POS = 0.24,
             L1 = 40,
-            L2 = 96,
+            L2 = 98,
             P3axial = 48,
             P3tangential = 12,
             DROPDOWN_LENGTH = 96,
@@ -22,12 +22,12 @@ public class Dropdown implements Subsystem {
             THETA3 = Math.atan(P3tangential/P3axial),
 
             PIXEL_HEIGHT = 12.7,
-            STACK_1_HEIGHT = 18,
+            STACK_1_HEIGHT = 38,
             RETRACT_HEIGHT = 90,
 
             AUTO_MID_HEIGHT = 110,
 
-            GROUND_HEIGHT = 20;
+            GROUND_HEIGHT = 15;
 
     static Point2d P1 = new Point2d(79.95, 50);
 
