@@ -92,7 +92,6 @@ public class PropDetectionProcessor implements VisionProcessor {
 
         Mat thresh = new Mat();
 
-
         //apply HSV filter
         if(alliance == Alliance.BLUE) {
             Scalar lower = new Scalar(blueLowH,40,20);
@@ -115,16 +114,13 @@ public class PropDetectionProcessor implements VisionProcessor {
             // combine the 2 red threshes
             Core.bitwise_or(thresh1, thresh2, thresh);
 
-            // release thresh1 and thresh2 to save processing power
+            // release thresh1 and thresh2 to save memory
             thresh1.release();
             thresh2.release();
         }
 
-
-
         Mat masked = new Mat();
         Core.bitwise_and(inputHSV, inputHSV, masked, thresh);
-
 
         //calculate average HSV values of the white thresh values
         Scalar average = Core.mean(masked, thresh);
