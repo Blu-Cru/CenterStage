@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.opmode.hardwaretest;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,18 +14,21 @@ public class ServoTest extends LinearOpMode {
     public static double position = 0.5;
     public static String name = "wrist";
     public static boolean reversed = false;
+    ServoImplEx test;
+    ServoControllerEx controller;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        ServoImplEx test = hardwareMap.get(ServoImplEx.class, name);
-        ServoControllerEx controller = (ServoControllerEx) test.getController();
-        controller.setServoPwmDisable(test.getPortNumber());
+        updateName();
+        updateDirection();
+        updateController();
+        disable();
         waitForStart();
         while(opModeIsActive()) {
-            test = hardwareMap.get(ServoImplEx.class, name);
-            if(reversed) test.setDirection(Servo.Direction.REVERSE);
-            else test.setDirection(Servo.Direction.FORWARD);
-            test.setPwmRange(new PwmControl.PwmRange(500, 2500));
-            controller = (ServoControllerEx) test.getController();
+            updateName();
+            updateDirection();
+//            test.setPwmRange(new PwmControl.PwmRange(500, 2500));
+            updateController();
 
             if(gamepad1.a) {
                 controller.pwmEnable();
@@ -38,5 +41,28 @@ public class ServoTest extends LinearOpMode {
             telemetry.addData("position", test.getPosition());
             telemetry.update();
         }
+    }
+
+    public void updateName() {
+        try {
+            test = hardwareMap.get(ServoImplEx.class, name);
+        } catch (Exception e) {
+            telemetry.addLine("ERROR: servo " + name + " not found");
+        }
+    }
+
+    public void updateDirection() {
+        try {
+            if(reversed) test.setDirection(Servo.Direction.REVERSE);
+            else test.setDirection(Servo.Direction.FORWARD);
+        } catch (Exception e) {}
+    }
+
+    public void updateController() {
+        controller = (ServoControllerEx) test.getController();
+    }
+
+    public void disable() {
+        controller.setServoPwmDisable(test.getPortNumber());
     }
 }

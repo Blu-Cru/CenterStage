@@ -23,10 +23,10 @@ import org.firstinspires.ftc.teamcode.blucru.common.subsystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.purple.PurplePixelHolder;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.outtake.Turret;
-import org.firstinspires.ftc.teamcode.blucru.common.util.wrappers.StickyGamepad;
+import org.firstinspires.ftc.teamcode.blucru.common.hardware.StickyGamepad;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.CVMaster;
 
-public abstract class KLinearOpMode extends LinearOpMode {
+public abstract class BluLinearOpMode extends LinearOpMode {
     public Alliance alliance;
     public Robot robot;
     public Drivetrain drivetrain;

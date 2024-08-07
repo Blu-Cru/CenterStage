@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 
 @TeleOp(name = "Blinkin test", group = "test")
-public class BlinkinTest extends KLinearOpMode {
+public class BlinkinTest extends BluLinearOpMode {
     int patternIndex = 0;
     @Override
     public void initialize() {

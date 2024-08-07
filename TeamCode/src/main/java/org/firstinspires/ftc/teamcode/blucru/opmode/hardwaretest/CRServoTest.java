@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.opmode.testopmodes;
+package org.firstinspires.ftc.teamcode.blucru.opmode.hardwaretest;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

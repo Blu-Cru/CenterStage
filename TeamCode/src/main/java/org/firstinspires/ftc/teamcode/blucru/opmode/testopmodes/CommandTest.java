@@ -15,12 +15,12 @@ import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.Ou
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.OuttakeRetractCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.commandbase.systemcommand.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.blucru.common.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.blucru.opmode.KLinearOpMode;
+import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 
 //@Disabled
 @Config
 @TeleOp(name = "Command test", group = "test")
-public class CommandTest extends KLinearOpMode {
+public class CommandTest extends BluLinearOpMode {
     public static double intakeTime = 150;
     boolean lastA = false,
             lastB = false,

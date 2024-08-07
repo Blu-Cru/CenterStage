@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.util.wrappers;
+package org.firstinspires.ftc.teamcode.blucru.common.hardware;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
