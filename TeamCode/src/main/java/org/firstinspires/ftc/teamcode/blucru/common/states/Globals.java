@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.states;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,6 +12,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.trajectories.Poses;
 public class Globals {
     // default pose for the robot, will be changed at the end of auto
     public static Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
+    public static HardwareMap hwMap; // global reference to current hwmap
+    public static Telemetry tele; // global reference to current telemetry
 
     public static double reflect = -1;
 
