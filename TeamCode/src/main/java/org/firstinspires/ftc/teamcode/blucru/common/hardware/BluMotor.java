@@ -7,21 +7,20 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-// TODO: write builder class
 public class BluMotor extends DcMotorImpl implements BluHardwareDevice {
     public static double RING_BUFFER_MILLIS = 30;
 
     String name;
-    double power = 0, lastPower = 0, conversionFactor = 1;
+    double power = 0, lastPower = 0;
     double encoderTicks = 0, vel = 0;
     double offsetTicks = 0;
     boolean useEncoder = false;
 
-    public BluMotor(String name, DcMotor motor, Direction direction, boolean useEncoder, double conversionFactor) {
+    public BluMotor(String name, DcMotor motor, Direction direction, boolean useEncoder, ZeroPowerBehavior zeroPowerBehavior) {
         super(motor.getController(), motor.getPortNumber(), direction);
         this.name = name;
         this.useEncoder = useEncoder;
-        this.conversionFactor = conversionFactor;
+        super.setZeroPowerBehavior(zeroPowerBehavior);
     }
 
     public void setPower(double power) {
@@ -31,6 +30,7 @@ public class BluMotor extends DcMotorImpl implements BluHardwareDevice {
 
     public void init() {
         super.setPower(0);
+        resetEncoder();
         offsetTicks = 0;
     }
 
