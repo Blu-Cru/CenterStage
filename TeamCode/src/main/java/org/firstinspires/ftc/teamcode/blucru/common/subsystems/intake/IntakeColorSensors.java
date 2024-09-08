@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 import java.util.HashMap;
 
+// in the end, i didnt even use the color functionality, only used distance to detect the pixels
+// so anything with rgb or hsv is not used
 public class IntakeColorSensors implements Subsystem {
     private enum SensorLocation {
         FRONT,

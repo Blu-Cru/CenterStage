@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Queue;
 
+// this class stores a history of poses and their timestamps for dead reckoning
 public class PoseHistory {
     static double STORAGE_NANOSECONDS = 1.0 * Math.pow(10.0, 9.0); // 1 second
 

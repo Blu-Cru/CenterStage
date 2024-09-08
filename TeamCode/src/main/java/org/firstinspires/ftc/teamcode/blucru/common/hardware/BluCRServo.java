@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
+// all the hardware wrapper classes need testing
 public class BluCRServo extends CRServoImpl implements BluHardwareDevice{
     String name;
     double power, lastPower;

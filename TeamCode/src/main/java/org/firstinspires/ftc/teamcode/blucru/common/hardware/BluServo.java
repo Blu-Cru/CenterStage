@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 
-// TODO: write class and builder class
+// prob no need for builder
 public class BluServo extends ServoImpl implements BluHardwareDevice {
     String name;
     ServoController controller;

@@ -12,7 +12,7 @@ public class Lock implements Subsystem {
             FLAT = 0.5,
             LOCKED_FRONT = FLAT - toTicks(40),
             LOCK_BACK_POS = FLAT + toTicks(35),
-            PUSH_POS = FLAT + toTicks(150);
+            PUSH_POS = FLAT + toTicks(150); // lock is overturned to push out the last pixel
 
     public enum LockState {
         LOCKED_FRONT,

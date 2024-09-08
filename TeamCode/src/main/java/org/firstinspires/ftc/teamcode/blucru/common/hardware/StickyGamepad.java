@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.blucru.common.hardware;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+// StickyGamepad is a copy pasted class that does rising edge detection for the buttons
 public class StickyGamepad {
     private final Gamepad gamepad;
 

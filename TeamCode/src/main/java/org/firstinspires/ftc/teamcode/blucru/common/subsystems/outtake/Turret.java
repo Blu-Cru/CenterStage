@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Turret implements Subsystem {
     enum State {
         IDLE,
-        IVK
+        IVK // inverse kinematics
     }
 
     public static final double

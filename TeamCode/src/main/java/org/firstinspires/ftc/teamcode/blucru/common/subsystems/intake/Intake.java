@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 public class Intake implements Subsystem {
     public static double
             MAX_POWER = 1,
-            JAMMED_VELOCITY = 700;
+            JAMMED_VELOCITY = 700; // if velocity is less than this, intake is jammed
 
-    public static int PURPLE_POS = -90;
+    public static int PURPLE_POS = -90; // encoder position to release purple
 
     enum IntakeState {
         IDLE,

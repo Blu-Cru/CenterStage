@@ -5,6 +5,7 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+// this class is used for a single marker with pose, velocity, and timestamp for the PoseHistory class
 public class PoseMarker {
     long nanoTime;
     Pose2d pose, velocity;

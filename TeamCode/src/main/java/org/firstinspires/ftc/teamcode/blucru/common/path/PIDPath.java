@@ -34,7 +34,7 @@ public class PIDPath implements Path {
             }
         } catch (NullPointerException ignored) {}
 
-        return this;
+        return this; // return the path so i can do currentPath = this.start();
     }
 
     public void run() {

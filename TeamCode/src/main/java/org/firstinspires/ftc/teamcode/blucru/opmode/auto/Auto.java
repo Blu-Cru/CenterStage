@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.states.Globals;
 import org.firstinspires.ftc.teamcode.blucru.common.states.Side;
 import org.firstinspires.ftc.teamcode.blucru.opmode.BluLinearOpMode;
 
+// this class is responsible for initialization, detection, running, and stopping the auto
 @Config
 @Autonomous(name = "Auto", group = "1")
 public class Auto extends BluLinearOpMode {
@@ -29,11 +30,12 @@ public class Auto extends BluLinearOpMode {
         PAUSING,
         END
     }
-    AutoConfig config;
+    AutoConfig config; // config has paths, parameters and stuff
     int propPosition;
     StateMachine stateMachine = new StateMachineBuilder()
             .state(State.CONFIG)
             .loop(() -> {
+                // controls to configure the type of auto running
                 if(stickyG1.y || stickyG2.y) Globals.setAlliance(Globals.alliance.flip());
                 if(stickyG1.b || stickyG2.b) Globals.side = Globals.side.flip();
                 if(stickyG1.a || stickyG2.a) Globals.autoType = Globals.autoType.cycle();
@@ -47,13 +49,16 @@ public class Auto extends BluLinearOpMode {
                 gamepad1.rumble(200);
                 gamepad2.rumble(200);
                 telemetry.update();
+
                 telemetry.addLine("Building Paths . . .");
                 telemetry.update();
                 config = AutoConfig.config();
                 config.build();
+
                 telemetry.update();
-                telemetry.addData("Initializing CV . . .", "");
+                telemetry.addLine("Initializing CV . . .");
                 telemetry.update();
+
                 Globals.setAutoStartPose();
                 if(Globals.side == Side.AUDIENCE) addPurplePixelHolder();
                 addCVMaster();
@@ -82,10 +87,15 @@ public class Auto extends BluLinearOpMode {
             })
             .state(State.PAUSING)
             .transitionTimed(DELAY_SECS, State.RUNNING, () -> {
+
+                // STARTS AUTO
+
                 config.start(Globals.getRandomization(propPosition));
             })
             .state(State.RUNNING)
             .loop(() -> {
+
+                // RUNS AUTO
                 config.run();
             })
             .build();
