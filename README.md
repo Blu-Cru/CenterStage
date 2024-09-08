@@ -1,10 +1,7 @@
-# Road Runner Quickstart
-
-
 ## hi this is blu crew center stage 2023-2024
-## good season team, we did it!!!! 
-## we are the best team in the world
+## good season team, we did it!!!!
 ## archived 9/8/2024 😃👍
+### miss u cat and siju :(
 
 Check out the roadrunner [docs](https://rr.brott.dev/docs/v1-0/tuning/).
 
