@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision;
+package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.prop;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

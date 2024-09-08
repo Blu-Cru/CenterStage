@@ -12,12 +12,13 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.atag.AprilTagPoseGetter;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
+// this class combines odometry, IMU, and AprilTags with weighted updates
 public class FusedLocalizer {
     public static double TAG_UPDATE_DELAY = 100; // ms between tag updates
     Localizer deadWheels;

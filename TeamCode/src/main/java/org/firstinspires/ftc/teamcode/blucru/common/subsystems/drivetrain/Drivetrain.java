@@ -235,7 +235,8 @@ public class Drivetrain extends SampleMecanumDrive implements Subsystem {
     }
 
     // apply slew rate limiter to drive vector
-    // used to use, but too computationally intensive and slows robot too much i think
+    // i used it before, but too computationally intensive and slows robot too much i think
+    // also theres def a better way to do this, doing it before scaling to drive power makes it so much worse
     private Vector2d slewRateLimit(Vector2d input) {
         // scale acceleration to match drive power
         // maximum change in the drive vector per second at the drive power

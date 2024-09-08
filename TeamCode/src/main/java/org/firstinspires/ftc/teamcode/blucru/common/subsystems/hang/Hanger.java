@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.blucru.common.util.Subsystem;
 
 @Config
 public class Hanger implements Subsystem {
-    public static double p = 0.005, i = 0, d = 0; // PID values
+    public static double p = 0.005, i = 0, d = 0; // PID values (never used pid)
 
     DcMotorEx hangerMotor;
 
@@ -39,7 +39,7 @@ public class Hanger implements Subsystem {
     }
 
     public void read() {
-//        currentPos = hangerMotor.getCurrentPosition();
+//        currentPos = hangerMotor.getCurrentPosition(); never used encoder
     }
 
     public void write() {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision;
+package org.firstinspires.ftc.teamcode.blucru.common.subsystems.vision.prop;
 
 import com.acmerobotics.dashboard.config.Config;
 
