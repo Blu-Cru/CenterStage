@@ -1,8 +1,12 @@
 # Road Runner Quickstart
 
-Check out the roadrunner [docs](https://rr.brott.dev/docs/v1-0/tuning/).
 
 ## hi this is blu crew center stage 2023-2024
+## good season team, we did it!!!! 
+## we are the best team in the world
+## archived 9/8/2024 😃👍
+
+Check out the roadrunner [docs](https://rr.brott.dev/docs/v1-0/tuning/).
 
 ### Installation:
 - Clone the repository
